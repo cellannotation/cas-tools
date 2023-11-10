@@ -5,6 +5,14 @@ from typing import Optional
 import anndata
 import pandas as pd
 
+LABELSET_NAME = 'name'
+
+LABELSET = 'labelset'
+
+ANNOTATIONS = "annotations"
+
+CELL_IDS = "cell_ids"
+
 
 def read_json_file(file_path):
     """
@@ -30,7 +38,6 @@ def read_json_file(file_path):
             data = json.load(file)
             return data
     except (FileNotFoundError, json.JSONDecodeError) as e:
-        # Handle exceptions like file not found or invalid JSON format
         print(f"Error reading JSON file: {e}")
         return None
 
@@ -86,26 +93,27 @@ if __name__ == "__main__":
     input_anndata = read_anndata_file(anndata_file_path)
 
     # obs
-    annotations = input_json["annotations"]
+    annotations = input_json[ANNOTATIONS]
     result_df = pd.DataFrame()
 
     for ann in annotations:
-        cell_ids = ann.get("cell_ids", [])
-        altered_json = {}
+        cell_ids = ann.get(CELL_IDS, [])
 
         for k, v in ann.items():
-            key = f"{k}-{ann['labelset']}"
+            if k == CELL_IDS:
+                continue
+            key = f"{k}-{ann[LABELSET]}"
             value = v if not isinstance(v, list) else ", ".join(sorted(v))
 
             input_anndata.obs[key] = ""
 
-            for index_to_insert in ann["cell_ids"]:
+            for index_to_insert in ann[CELL_IDS]:
                 input_anndata.obs.at[index_to_insert, key] = value
 
     # uns
     uns_json = {}
     root_keys = list(input_json.keys())
-    root_keys.remove("annotations")
+    root_keys.remove(ANNOTATIONS)
     for key in root_keys:
         value = input_json[key]
         if is_list_of_strings(value):
@@ -115,7 +123,9 @@ if __name__ == "__main__":
         else:
             for labelset in value:
                 for k, v in labelset.items():
-                    new_key = f"{labelset.get('name', '')}-{k}"
+                    if k == LABELSET_NAME:
+                        continue
+                    new_key = f"{labelset.get(LABELSET_NAME, '')}-{k}"
                     uns_json.update({new_key: v})
 
     input_anndata.uns.update(uns_json)
