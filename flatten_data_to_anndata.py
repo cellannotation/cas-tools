@@ -3,7 +3,6 @@ import json
 from typing import Optional
 
 import anndata
-import pandas as pd
 
 LABELSET_NAME = 'name'
 
@@ -94,7 +93,6 @@ if __name__ == "__main__":
 
     # obs
     annotations = input_json[ANNOTATIONS]
-    result_df = pd.DataFrame()
 
     for ann in annotations:
         cell_ids = ann.get(CELL_IDS, [])
