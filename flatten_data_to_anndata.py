@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 """
 Script Description:
 This script processes and integrates information from a JSON file and an AnnData (Annotated Data) file,
@@ -13,6 +14,7 @@ Key Features:
 Usage:
 python script.py --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --output path/to/output_file.h5ad
 """
+
 import argparse
 import json
 from typing import Optional
@@ -103,6 +105,9 @@ if __name__ == "__main__":
     anndata_file_path = args.anndata
     output_file_path = args.output
 
+    if anndata_file_path == output_file_path:
+        raise ValueError("--anndata and --output cannot be the same")
+
     input_json = read_json_file(json_file_path)
     input_anndata = read_anndata_file(anndata_file_path)
 
@@ -115,7 +120,7 @@ if __name__ == "__main__":
         for k, v in ann.items():
             if k == CELL_IDS:
                 continue
-            key = f"{k}-{ann[LABELSET]}"
+            key = f"{ann[LABELSET]}--{k}"
             value = v if not isinstance(v, list) else ", ".join(sorted(v))
 
             input_anndata.obs[key] = ""
@@ -138,8 +143,10 @@ if __name__ == "__main__":
                 for k, v in labelset.items():
                     if k == LABELSET_NAME:
                         continue
-                    new_key = f"{labelset.get(LABELSET_NAME, '')}-{k}"
+                    new_key = f"{labelset.get(LABELSET_NAME, '')}--{k}"
                     uns_json.update({new_key: v})
 
     input_anndata.uns.update(uns_json)
+    # Close the AnnData file to prevent blocking
+    input_anndata.file.close()
     input_anndata.write(output_file_path)
