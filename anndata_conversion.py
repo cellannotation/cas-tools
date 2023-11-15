@@ -133,6 +133,9 @@ if __name__ == "__main__":
     output_file_path = args.output
     validate = args.validate
 
+    if anndata_file_path == output_file_path:
+        raise ValueError("--anndata and --output cannot be the same")
+
     input_json = read_json_file(json_file_path)
     input_anndata = read_anndata_file(anndata_file_path)
 
@@ -210,4 +213,6 @@ if __name__ == "__main__":
         ],
     }
     input_anndata.uns.update({"cas": json.dumps(json_without_cell_ids)})
+    # Close the AnnData file to prevent blocking
+    input_anndata.file.close()
     input_anndata.write(output_file_path)
