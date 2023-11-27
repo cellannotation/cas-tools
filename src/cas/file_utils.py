@@ -40,7 +40,7 @@ def write_json_file(cas, out_file, print_undefined=False):
     :param out_file: output file path.
     :param print_undefined: prints null values to the output json if true. Omits undefined values from the json output if
     """
-    cas.exclude_none_values = not print_undefined
+    cas.set_exclude_none_values(not print_undefined)
 
     output_data = cas.to_json(indent=2)
     with open(out_file, "w") as out_file:

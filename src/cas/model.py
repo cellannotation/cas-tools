@@ -209,3 +209,7 @@ class CellTypeAnnotation(EncoderMixin):
         :param obj: Annotation object to add
         """
         self.annotations.append(obj)
+
+    def set_exclude_none_values(self, value):
+        global exclude_none_values
+        exclude_none_values = value
