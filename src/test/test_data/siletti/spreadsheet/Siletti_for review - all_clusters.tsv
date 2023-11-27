@@ -1,0 +1,462 @@
+Cluster ID	Cluster name	Supercluster	Class auto-annotation	Subtype auto-annotation	Transferred MTG Label	CELL_ONTOLOGY_TERM_ID	CELL_ONTOLOGY_TERM	RATIONALE	RATIONALE_DOI	POSITIVE_GENE_EVIDENCE	Notes on cluster mapping	
+0	Bcell_0	Miscellaneous	BCELL		N/A	CL:0000236	B cell	 PAX5:    https://doi.org/10.1016/j.immuni.2007.05.019 FCRL1:  https://doi.org/10.1182/blood-2004-06-2344               https://doi.org/10.4049/jimmunol.1501027  Also express: MS4A1 CD79A CD79B	https://doi.org/10.1016/j.immuni.2007.05.019, https://doi.org/10.1182/blood-2004-06-2344, https://doi.org/10.4049/jimmunol.1501027	DOCK8, PAX5, FCRL1		
+1	Tcell_1	Miscellaneous	TCELL		N/A	CL:0000084	T cell	DOCK8: https://doi.org/10.1084%2Fjem.20110345 CD8: https://doi.org/10.1038 CD3: https://doi.org/10.1038/s41593-018-0290-2  Also express: TRAC CD3E	https://doi.org/10.1084%2Fjem.20110345, https://doi.org/10.1038, https://doi.org/10.1038/s41593-018-0290-2	DOCK8, CD8A, CD3G
+2	Nkcell_2	Miscellaneous	NK		N/A	CL:0000623	natural killer cell	NCAM1: Bottcher et al. 2019 Adult human data + wikipedia pages for GZMB, natural killer cells  Also express: KLRF1	https://doi.org/10.1038/s41593-018-0290-2	NCAM1, GZMB		
+3	Mono_3	Miscellaneous	MONO		N/A	CL:0000576	monocyte	https://doi.org/10.1038/s41467-018-04985-0: We then analyzed differentially expressed genes between clusters (Fig. 1c and Supplementary Fig. 1). Cluster 1 displayed high expression of monocyte genes such as CTSS, FCN1, S100A9, LYZ, VCAN. Clusters 2 and 3 shared high expression of macrophage genes such as LGMN, CTSB, CD14, APOE, C1QB, MARCO, CD163, FCGR3A. Cluster 4 expressed high levels of monocyte and macrophage-related genes such as FCN1, S100A9, VCAN, S100A8, MAFB. Clusters 5 and 6 expressed monocyte-related genes such as FCN1, S100A9, VCAN, FCGR1A, FCGR1B, as well as DC genes including CD1C, FCER1A, IFITM2, CLEC10A, FCGR2B.   https://singlecell.broadinstitute.org/single_cell/study/SCP424/single-cell-comparison-pbmc-data#study-visualize VCAN is not expressed much in CD16+ monocytes  Took TYROBP from the 10X single-cell PBMC data FCN1 may also mark dendritic cells  CD14 expression seems too low to use as a marker	https://doi.org/10.1038/s41467-018-04985-0	TYROBP, FCN1, LYZ		
+4	Mgl_4	Microglia	MGL		Micro-PVM							
+5	Mgl_5	Microglia	MGL		Micro-PVM							
+6	Mgl_6	Microglia	MGL		Micro-PVM							
+7	Mgl_7	Microglia	MGL		Micro-PVM							
+8	Mgl_8	Microglia	MGL		Micro-PVM							
+9	Mgl_9	Microglia	MGL		Micro-PVM							
+10	Mgl_10	Microglia	MGL		Micro-PVM							
+11	Mgl_11	Microglia	MGL		Micro-PVM							
+12	Mgl_12	Microglia	MAC		Micro-PVM							
+13	VendPLVAP_13	Vascular	CHRP ENDO		N/A							
+14	VendAC_14	Vascular	ENDO	ARTERIOLE CAP	Endo						We don't have general term to cover endotheial cell of arteriole and cappillary - may be we should	
+15	VendC_15	Vascular	ENDO	CAP	Endo	CL:0002144	capillary endothelial cell	BMX = large artery		FLT1, CLDN5, PECAM1, MFSD2A		
+16	VendVC_16	Vascular	ENDO	CAP	Endo	CL:0002144	capillary endothelial cell					
+17	VendV_17	Vascular	ENDO	VENOUS	Endo	CL:0002543	vein endothelial cell					
+18	VendA_18	Vascular	ENDO	ARTERIOLE ARTERY	N/A	CL:1000413	endothelial cell of artery			FLT1, CLDN5, PECAM1, BMX, VEGFC, JUNB		
+19	Vsmc_19	Vascular	ENDO VSMC	FIBMYO	N/A							
+20	Vsmc_20	Vascular	VSMC		N/A	CL:0002590	smooth muscle cell of the brain vasculature	RGS5: https://doi.org/10.1096/fj.02-0340fje PDGFRB: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5745011/ MYH11, MYOCD, CNN1, NG2 / CSPG4:      https://www.cell.com/cell-reports/pdf/S2211-1247(17)30644-7.pdf     https://anatomypubs.onlinelibrary.wiley.com/doi/full/10.1002/dvdy.1200	https://doi.org/10.1096/fj.02-0340fje, https://doi.org/10.1038/nn.4288, https://doi.org/10.1016/j.celrep.2017.05.019, https://doi.org/10.1002/dvdy.1200	PDGFRB, ACTA2, MYH11
+21	Per_21	Vascular	PER		VLMC	CL:0000669	pericyte	RGS5: https://doi.org/10.1096/fj.02-0340fje  PDGFRB, ANPEP (in a subset): https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5745011/  MYH11, MYOCD, CNN1, NG2 / CSPG4:      https://www.cell.com/cell-reports/pdf/S2211-1247(17)30644-7.pdf     https://anatomypubs.onlinelibrary.wiley.com/doi/full/10.1002/dvdy.1200	https://doi.org/10.1096/fj.02-0340fje, https://doi.org/10.1038/nn.4288, https://doi.org/10.1016/j.celrep.2017.05.019	+PDGFRB +CSPG4 -MYH11
+22	Per_22	Vascular	PER		VLMC	CL:0000669	pericyte	RGS5: https://doi.org/10.1096/fj.02-0340fje  PDGFRB, ANPEP (in a subset): https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5745011/  MYH11, MYOCD, CNN1, NG2 / CSPG4:      https://www.cell.com/cell-reports/pdf/S2211-1247(17)30644-7.pdf     https://anatomypubs.onlinelibrary.wiley.com/doi/full/10.1002/dvdy.1200	https://doi.org/10.1096/fj.02-0340fje, https://doi.org/10.1038/nn.4288, https://doi.org/10.1016/j.celrep.2017.05.019	+PDGFRB +CSPG4 -MYH11
+23	Per_23	Vascular			VLMC							
+24	Fbl_24	Fibroblast	FIB	PIA PVF	N/A						New term needed ?
+25	Fbl_25	Fibroblast	FIB	PIA	VLMC						Maybe vascular leptomeningeal cell  http://purl.obolibrary.org/obo/CL_4023051 based on annotation transfer?  We don't have one of these for pia mater maybe we should?	
+26	Fbl_26	Fibroblast	FIB	PIA	VLMC						Maybe vascular leptomeningeal cell http://purl.obolibrary.org/obo/CL_4023051 based on annotation transfer? We don't have one of these for pia mater maybe we should?	
+27	Fbl_27	Fibroblast	FIB	PIA	VLMC						Maybe vascular leptomeningeal cell http://purl.obolibrary.org/obo/CL_4023051 based on annotation transfer? We don't have one of these for pia mater maybe we should?	
+28	Fbl_28	Fibroblast	FIB	PIA	VLMC						Maybe vascular leptomeningeal cell http://purl.obolibrary.org/obo/CL_4023051 based on annotation transfer? We don't have one of these for pia mater maybe we should?	
+29	Fbl_29	Fibroblast			N/A							
+30	Fbl_30	Fibroblast	CHRP	ARACH	N/A						New CL term needed?	
+31	Fbl_31	Fibroblast	CHRP	ABC PIA	N/A	CL:4023097	arachnoid barrier cell		https://doi.org/10.1016/j.devcel.2020.06.009	AQP4, GDF10, GABRG3, WIF1, LGR6	Note also flagged as PIA 	
+32	OPC_32	Oligodendrocyte precursor	OPC		OPC							
+33	OPC_33	Oligodendrocyte precursor	OPC		OPC							
+34	OPC_34	Oligodendrocyte precursor	OPC		OPC							
+35	OPC_35	Oligodendrocyte precursor	OPC		OPC							
+36	OPC_36	Oligodendrocyte precursor	OPC		OPC							
+37	COP_37	Committed oligodendrocyte precursor	OLIGO	COP	OPC						Cluster term matches supercluster	
+38	COP_38	Committed oligodendrocyte precursor	OLIGO	COP	OPC						Cluster term matches supercluster	
+39	COP_39	Committed oligodendrocyte precursor	OLIGO	COP	N/A						Cluster term matches supercluster	
+40	Oligo_40	Oligodendrocyte	OLIGO		Oligo							
+41	COP_41	Committed oligodendrocyte precursor	OLIGO		N/A							
+42	COP_42	Committed oligodendrocyte precursor	OLIGO		N/A							
+43	COP_43	Committed oligodendrocyte precursor	OLIGO		N/A							
+44	Oligo_44	Oligodendrocyte	OLIGO		Oligo							
+45	Oligo_45	Oligodendrocyte	OLIGO		Oligo							
+46	Oligo_46	Oligodendrocyte	OLIGO		Oligo							
+47	Oligo_47	Oligodendrocyte	OLIGO		Oligo							
+48	Oligo_48	Oligodendrocyte	OLIGO		Oligo							
+49	Oligo_49	Oligodendrocyte	OLIGO		Oligo							
+50	Oligo_50	Oligodendrocyte	OLIGO		Oligo							
+51	Bgl_51	Bergmann glia	ASTRO		N/A							
+52	Astro_52	Astrocyte	ASTRO		Astro							
+53	Astro_53	Astrocyte	ASTRO		Astro							
+54	Astro_54	Astrocyte	ASTRO		Astro							
+55	Astro_55	Astrocyte	ASTRO		Astro							
+56	Astro_56	Astrocyte	ASTRO		Astro							
+57	Astro_57	Astrocyte	ASTRO		Astro							
+58	Astro_58	Astrocyte	ASTRO		Astro							
+59	Astro_59	Astrocyte	ASTRO		Astro							
+60	Astro_60	Astrocyte	ASTRO		Astro							
+61	Astro_61	Astrocyte	ASTRO		Astro							
+62	Astro_62	Astrocyte	ASTRO		Astro							
+63	Astro_63	Astrocyte	ASTRO		Astro							
+64	Astro_64	Astrocyte	ASTRO		Astro							
+65	Epen_65	Ependymal	EPEN		N/A							
+66	Epen_66	Ependymal	CHRP EPEN		N/A							
+67	Epen_67	Ependymal	CHRP EPEN		N/A							
+68	Epen_68	Ependymal	CHRP EPEN		N/A							
+69	Epen_69	Ependymal	EPEN		N/A							
+70	Epen_70	Ependymal	EPEN		N/A							
+71	Epen_71	Ependymal	EPEN		N/A							
+72	Epen_72	Ependymal	EPEN		N/A							
+73	Epen_73	Ependymal	EPEN		N/A							
+74	Epen_74	Ependymal	CHRP EPEN		N/A							
+75	COP_75	Committed oligodendrocyte precursor	CHRP EPEN NEUR		N/A							
+76	Chrp_76	Choroid plexus	CHRP EPEN OLIGO		N/A							
+77	Chrp_77	Choroid plexus	CHRP		N/A							
+78	Chrp_78	Choroid plexus	CHRP		N/A							
+79	Chrp_79	Choroid plexus	CHRP		N/A							
+80	Chrp_80	Choroid plexus	CHRP		N/A							
+81	Chrp_81	Choroid plexus	CHRP		N/A							
+82	Chrp_82	Choroid plexus	CHRP		N/A							
+83	DLNP_83	Deep-layer near-projecting	NEUR		N/A							
+84	DLCT6b_84	Deep-layer corticothalamic and 6b	NEUR		N/A							
+85	DLNP_85	Deep-layer near-projecting	NEUR		N/A							
+86	DLNP_86	Deep-layer near-projecting	NEUR		L5/6 NP						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+87	DLNP_87	Deep-layer near-projecting	NEUR		L5/6 NP						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+88	DLNP_88	Deep-layer near-projecting	NEUR		L5/6 NP						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+89	DLNP_89	Deep-layer near-projecting	NEUR		L5/6 NP						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+90	DLNP_90	Deep-layer near-projecting	NEUR		L5/6 NP						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+91	DLNP_91	Deep-layer near-projecting	NEUR		L5/6 NP						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+92	DLNP_92	Deep-layer near-projecting	NEUR		L5/6 NP						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+93	DLNP_93	Deep-layer near-projecting	NEUR		L5/6 NP						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+94	DLNP_94	Deep-layer near-projecting	NEUR		L5/6 NP						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+95	DLNP_95	Deep-layer near-projecting	NEUR		L5/6 NP						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+96	DLNP_96	Deep-layer near-projecting	NEUR		L5/6 NP						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+97	DLCT6b_97	Deep-layer corticothalamic and 6b	NEUR		N/A							
+98	DLCT6b_98	Deep-layer corticothalamic and 6b	NEUR		L6b						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+99	DLCT6b_99	Deep-layer corticothalamic and 6b	NEUR		L6b						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+100	DLCT6b_100	Deep-layer corticothalamic and 6b	NEUR		N/A							
+101	DLCT6b_101	Deep-layer corticothalamic and 6b	NEUR		L6b						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+102	DLCT6b_102	Deep-layer corticothalamic and 6b	NEUR		L6b						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+103	DLCT6b_103	Deep-layer corticothalamic and 6b	NEUR		L6b						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+104	DLCT6b_104	Deep-layer corticothalamic and 6b	NEUR		N/A							
+105	DLCT6b_105	Deep-layer corticothalamic and 6b	NEUR		L6b						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+106	DLCT6b_106	Deep-layer corticothalamic and 6b	NEUR		L6b						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+107	DLCT6b_107	Deep-layer corticothalamic and 6b	NEUR		N/A							
+108	DLCT6b_108	Deep-layer corticothalamic and 6b	NEUR		N/A							
+109	DLCT6b_109	Deep-layer corticothalamic and 6b	NEUR		L6 CT						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+110	DLCT6b_110	Deep-layer corticothalamic and 6b	NEUR		L6 CT						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+111	DLCT6b_111	Deep-layer corticothalamic and 6b	NEUR		N/A							
+112	DLCT6b_112	Deep-layer corticothalamic and 6b	NEUR		N/A							
+113	L5ET_113	Miscellaneous	NEUR	L5-ET	N/A	CL:4023041	L5 extratelencephalic projecting glutamatergic cortical neuron		https://doi.org/10.1038/s41467-020-14952-3	FEZF2, BCL11B, POU3F1, TXK		
+114	L5ET_114	Miscellaneous	NEUR	L5-ET	N/A	CL:4023041	L5 extratelencephalic projecting glutamatergic cortical neuron		https://doi.org/10.1038/s41467-020-14952-3	FEZF2, BCL11B, POU3F1, TXK		
+115	L5ET_115	Hippocampal CA1-3	NEUR	L5-ET	N/A						Not annotated with CL term for L5 ET, as this clashes with the supercluster (CA1-3).	
+116	Misc_116	Miscellaneous	NEUR		N/A							
+117	L5ET_117	Miscellaneous	NEUR	L5-ET VonEcon	N/A	CL:4030039	von Economo neuron		https://doi.org/10.1038/s41467-020-14952-3	FEZF2, GABRQ , ITGA4, BMP3		
+118	L5ET_118	Miscellaneous	NEUR	L5-ET	N/A	CL:4023041	L5 extratelencephalic projecting glutamatergic cortical neuron		https://doi.org/10.1038/s41467-020-14952-3	FEZF2, BCL11B, POU3F1, TXK		
+119	CA13_119	Hippocampal CA1-3	NEUR		N/A							
+120	ULIT_120	Upper-layer intratelencephalic	NEUR		L2/3 IT						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+121	ULIT_121	Upper-layer intratelencephalic	NEUR		L2/3 IT						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+122	ULIT_122	Upper-layer intratelencephalic	NEUR		L2/3 IT						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+123	ULIT_123	Upper-layer intratelencephalic	NEUR		L2/3 IT						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+124	ULIT_124	Upper-layer intratelencephalic	NEUR		L2/3 IT						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+125	ULIT_125	Upper-layer intratelencephalic	NEUR		L2/3 IT						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+126	ULIT_126	Upper-layer intratelencephalic	NEUR		L2/3 IT						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+127	ULIT_127	Upper-layer intratelencephalic	NEUR		L2/3 IT						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+128	ULIT_128	Upper-layer intratelencephalic	NEUR		L2/3 IT						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+129	ULIT_129	Upper-layer intratelencephalic	NEUR		L2/3 IT						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+130	ULIT_130	Upper-layer intratelencephalic	NEUR		L2/3 IT						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+131	ULIT_131	Upper-layer intratelencephalic	NEUR		L2/3 IT						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+132	Misc_132	Miscellaneous	NEUR		N/A							
+133	ULIT_133	Upper-layer intratelencephalic	NEUR		N/A							
+134	ULIT_134	Upper-layer intratelencephalic	NEUR		L2/3 IT						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+135	ULIT_135	Upper-layer intratelencephalic	NEUR		N/A							
+136	DLIT_136	Deep-layer intratelencephalic	NEUR		N/A							
+137	DLIT_137	Deep-layer intratelencephalic	NEUR		L5 IT						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+138	ULIT_138	Upper-layer intratelencephalic	NEUR		L4 IT						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+139	DLIT_139	Deep-layer intratelencephalic	NEUR		L5 IT						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+140	DLIT_140	Deep-layer intratelencephalic	NEUR		N/A							
+141	DLIT_141	Deep-layer intratelencephalic	NEUR		L4 IT						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+142	DLIT_142	Deep-layer intratelencephalic	NEUR		L5 IT						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+143	DLIT_143	Deep-layer intratelencephalic	NEUR		L5 IT						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+144	DLIT_144	Deep-layer intratelencephalic	NEUR		L5 IT						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+145	DLIT_145	Deep-layer intratelencephalic	NEUR		N/A							
+146	DLIT_146	Deep-layer intratelencephalic	NEUR		N/A							
+147	DLIT_147	Deep-layer intratelencephalic	NEUR		N/A							
+148	DLIT_148	Deep-layer intratelencephalic	NEUR		L6 IT						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+149	DLIT_149	Deep-layer intratelencephalic	NEUR		L6 IT						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+150	DLIT_150	Deep-layer intratelencephalic	NEUR		L6 IT Car3						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+151	DLIT_151	Deep-layer intratelencephalic	NEUR		L6 IT Car3						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+152	DLIT_152	Deep-layer intratelencephalic	NEUR		L6 IT Car3						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+153	Amex_153	Amygdala excitatory	NEUR		N/A							
+154	Amex_154	Amygdala excitatory	NEUR		N/A							
+155	Amex_155	Amygdala excitatory	NEUR		N/A							
+156	Amex_156	Amygdala excitatory	NEUR		N/A							
+157	Amex_157	Amygdala excitatory	NEUR		N/A							
+158	Amex_158	Amygdala excitatory	NEUR		N/A							
+159	Amex_159	Amygdala excitatory	NEUR		N/A							
+160	Amex_160	Amygdala excitatory	NEUR		N/A							
+161	Amex_161	Amygdala excitatory	NEUR		N/A							
+162	Amex_162	Amygdala excitatory	NEUR		N/A							
+163	CA13_163	Hippocampal CA1-3	NEUR		N/A							
+164	Misc_164	Miscellaneous	NEUR		N/A							
+165	Misc_165	Miscellaneous	NEUR		N/A							
+166	Misc_166	Miscellaneous	NEUR		N/A							
+167	Misc_167	Miscellaneous	NEUR		N/A							
+168	Misc_168	Miscellaneous	NEUR		N/A							
+169	CA13_169	Hippocampal CA1-3	NEUR		N/A							
+170	Misc_170	Miscellaneous	NEUR		N/A							
+171	Amex_171	Amygdala excitatory	NEUR		N/A							
+172	Amex_172	Amygdala excitatory	NEUR		N/A							
+173	Amex_173	Amygdala excitatory	NEUR		N/A							
+174	Amex_174	Amygdala excitatory	NEUR		N/A							
+175	Amex_175	Amygdala excitatory	NEUR		L2/3 IT						We have a more specific terms we could use based on annotation transfer from MTG. Should we add?	
+176	Misc_176	Miscellaneous	NEUR		N/A							
+177	Misc_177	Miscellaneous	NEUR		N/A							
+178	Misc_178	Miscellaneous	NEUR		N/A							
+179	CA13_179	Hippocampal CA1-3	NEUR		N/A							
+180	CA13_180	Hippocampal CA1-3	NEUR		N/A							
+181	CA13_181	Hippocampal CA1-3	NEUR		N/A							
+182	CA13_182	Hippocampal CA1-3	NEUR		N/A							
+183	CA13_183	Hippocampal CA1-3	NEUR		N/A							
+184	CA13_184	Hippocampal CA1-3	NEUR		N/A							
+185	CA13_185	Hippocampal CA1-3	NEUR		N/A							
+186	CA13_186	Hippocampal CA1-3	NEUR		N/A							
+187	CA13_187	Hippocampal CA1-3	NEUR		N/A							
+188	CA13_188	Hippocampal CA1-3	NEUR		N/A							
+189	CA13_189	Hippocampal CA1-3	NEUR		N/A							
+190	CA4_190	Hippocampal CA4	NEUR		N/A							
+191	CA4_191	Hippocampal CA4	NEUR		N/A							
+192	CA4_192	Hippocampal CA4	NEUR		N/A							
+193	CA4_193	Hippocampal CA4	NEUR		N/A							
+194	CA4_194	Hippocampal CA4	NEUR		N/A							
+195	CA4_195	Hippocampal CA4	NEUR		N/A							
+196	CA4_196	Hippocampal CA4	NEUR		N/A							
+197	CA4_197	Hippocampal CA4	NEUR		N/A							
+198	CA4_198	Hippocampal CA4	NEUR		N/A							
+199	DG_199	Hippocampal dentate gyrus	NEUR	DG-GRAN	N/A	CL:2000089	dentate gyrus granule cell	mousebrain.org added ZBTB20, DPF3, CEBPD based on human data		SLC17A7, PROX1, NR3C2, TUBGCP2, ZBTB20, DPF3, CEBPD		
+200	DG_200	Hippocampal dentate gyrus	NEUR	DG-GRAN	N/A	CL:2000089	dentate gyrus granule cell	mousebrain.org added ZBTB20, DPF3, CEBPD based on human data		SLC17A7, PROX1, NR3C2, TUBGCP2, ZBTB20, DPF3, CEBPD		
+201	DG_201	Hippocampal dentate gyrus	NEUR	DG-GRAN	N/A	CL:2000089	dentate gyrus granule cell	mousebrain.org added ZBTB20, DPF3, CEBPD based on human data		SLC17A7, PROX1, NR3C2, TUBGCP2, ZBTB20, DPF3, CEBPD		
+202	DG_202	Hippocampal dentate gyrus	NEUR	DG-GRAN	N/A	CL:2000089	dentate gyrus granule cell	mousebrain.org added ZBTB20, DPF3, CEBPD based on human data		SLC17A7, PROX1, NR3C2, TUBGCP2, ZBTB20, DPF3, CEBPD		
+203	DG_203	Hippocampal dentate gyrus	NEUR	DG-GRAN	N/A	CL:2000089	dentate gyrus granule cell	mousebrain.org added ZBTB20, DPF3, CEBPD based on human data		SLC17A7, PROX1, NR3C2, TUBGCP2, ZBTB20, DPF3, CEBPD		
+204	DG_204	Hippocampal dentate gyrus	NEUR	DG-GRAN	N/A	CL:2000089	dentate gyrus granule cell	mousebrain.org added ZBTB20, DPF3, CEBPD based on human data		SLC17A7, PROX1, NR3C2, TUBGCP2, ZBTB20, DPF3, CEBPD		
+205	DG_205	Hippocampal dentate gyrus	NEUR	DG-GRAN	N/A	CL:2000089	dentate gyrus granule cell	mousebrain.org added ZBTB20, DPF3, CEBPD based on human data		SLC17A7, PROX1, NR3C2, TUBGCP2, ZBTB20, DPF3, CEBPD		
+206	MSN_206	Medium spiny neuron	NEUR		N/A							
+207	MSN_207	Medium spiny neuron	NEUR	MSN-D2	N/A	CL:4023029	indirect pathway medium spiny neuron	FOXG1 and GAD2 to restrict the annotation to inhibitory telencephalic neurons FOXP1, DRD1 are canonical markers OTOF is a good marker in the human data, previously described as an eccentric MSN marker RGS9 and GPR88 from mouse auto-annotation		FOXG1, SLC32A1, FOXP1, OTOF, DRD2, RGS9, GPR88		
+208	MSN_208	Medium spiny neuron	NEUR	MSN-D2	N/A	CL:4023029	indirect pathway medium spiny neuron	FOXG1 and GAD2 to restrict the annotation to inhibitory telencephalic neurons FOXP1, DRD1 are canonical markers OTOF is a good marker in the human data, previously described as an eccentric MSN marker RGS9 and GPR88 from mouse auto-annotation		FOXG1, SLC32A1, FOXP1, OTOF, DRD2, RGS9, GPR88		
+209	MSN_209	Medium spiny neuron	NEUR	MSN-D1	N/A	CL:4023026	direct pathway medium spiny neuron	FOXG1 and GAD2 to restrict the annotation to inhibitory telencephalic neurons FOXP1, DRD1 are known markers OTOF is a good marker in the human data, previously described as an eccentric MSN marker RGS9 and GPR88 from mouse auto-annotation		FOXG1, SLC32A1, FOXP1, FOXP2, OTOF, DRD1, RGS9, GPR88		
+210	MSN_210	Medium spiny neuron	NEUR	MSN-D1	N/A	CL:4023026	direct pathway medium spiny neuron	FOXG1 and GAD2 to restrict the annotation to inhibitory telencephalic neurons FOXP1, DRD1 are known markers OTOF is a good marker in the human data, previously described as an eccentric MSN marker RGS9 and GPR88 from mouse auto-annotation		FOXG1, SLC32A1, FOXP1, FOXP2, OTOF, DRD1, RGS9, GPR88		
+211	MSN_211	Medium spiny neuron	NEUR	MSN-D1	N/A	CL:4023026	direct pathway medium spiny neuron	FOXG1 and GAD2 to restrict the annotation to inhibitory telencephalic neurons FOXP1, DRD1 are known markers OTOF is a good marker in the human data, previously described as an eccentric MSN marker RGS9 and GPR88 from mouse auto-annotation		FOXG1, SLC32A1, FOXP1, FOXP2, OTOF, DRD1, RGS9, GPR88		
+212	MSN_212	Medium spiny neuron	NEUR	MSN-D2	N/A	CL:4023029	indirect pathway medium spiny neuron	FOXG1 and GAD2 to restrict the annotation to inhibitory telencephalic neurons FOXP1, DRD1 are canonical markers OTOF is a good marker in the human data, previously described as an eccentric MSN marker RGS9 and GPR88 from mouse auto-annotation		FOXG1, SLC32A1, FOXP1, OTOF, DRD2, RGS9, GPR88		
+213	MSN_213	Medium spiny neuron	NEUR	MSN-D2	N/A	CL:4023029	indirect pathway medium spiny neuron	FOXG1 and GAD2 to restrict the annotation to inhibitory telencephalic neurons FOXP1, DRD1 are canonical markers OTOF is a good marker in the human data, previously described as an eccentric MSN marker RGS9 and GPR88 from mouse auto-annotation		FOXG1, SLC32A1, FOXP1, OTOF, DRD2, RGS9, GPR88		
+214	MSN_214	Medium spiny neuron	NEUR	MSN-D1	N/A	CL:4023026	direct pathway medium spiny neuron	FOXG1 and GAD2 to restrict the annotation to inhibitory telencephalic neurons FOXP1, DRD1 are known markers OTOF is a good marker in the human data, previously described as an eccentric MSN marker RGS9 and GPR88 from mouse auto-annotation		FOXG1, SLC32A1, FOXP1, FOXP2, OTOF, DRD1, RGS9, GPR88		
+215	MSN_215	Medium spiny neuron	NEUR	MSN-D1	N/A	CL:4023026	direct pathway medium spiny neuron	FOXG1 and GAD2 to restrict the annotation to inhibitory telencephalic neurons FOXP1, DRD1 are known markers OTOF is a good marker in the human data, previously described as an eccentric MSN marker RGS9 and GPR88 from mouse auto-annotation		FOXG1, SLC32A1, FOXP1, FOXP2, OTOF, DRD1, RGS9, GPR88		
+216	MSN_216	Medium spiny neuron	NEUR	MSN-D2	N/A	CL:4023029	indirect pathway medium spiny neuron	FOXG1 and GAD2 to restrict the annotation to inhibitory telencephalic neurons FOXP1, DRD1 are canonical markers OTOF is a good marker in the human data, previously described as an eccentric MSN marker RGS9 and GPR88 from mouse auto-annotation		FOXG1, SLC32A1, FOXP1, OTOF, DRD2, RGS9, GPR88		
+217	MSN_217	Medium spiny neuron	NEUR	MSN-D2	N/A	CL:4023029	indirect pathway medium spiny neuron	FOXG1 and GAD2 to restrict the annotation to inhibitory telencephalic neurons FOXP1, DRD1 are canonical markers OTOF is a good marker in the human data, previously described as an eccentric MSN marker RGS9 and GPR88 from mouse auto-annotation		FOXG1, SLC32A1, FOXP1, OTOF, DRD2, RGS9, GPR88		
+218	MSN_218	Medium spiny neuron	NEUR		N/A							
+219	MSN_219	Medium spiny neuron	NEUR	MSN-D1	N/A	CL:4023026	direct pathway medium spiny neuron	FOXG1 and GAD2 to restrict the annotation to inhibitory telencephalic neurons FOXP1, DRD1 are known markers OTOF is a good marker in the human data, previously described as an eccentric MSN marker RGS9 and GPR88 from mouse auto-annotation		FOXG1, SLC32A1, FOXP1, FOXP2, OTOF, DRD1, RGS9, GPR88		
+220	MSN_220	Medium spiny neuron	NEUR	MSN-D1	N/A	CL:4023026	direct pathway medium spiny neuron	FOXG1 and GAD2 to restrict the annotation to inhibitory telencephalic neurons FOXP1, DRD1 are known markers OTOF is a good marker in the human data, previously described as an eccentric MSN marker RGS9 and GPR88 from mouse auto-annotation		FOXG1, SLC32A1, FOXP1, FOXP2, OTOF, DRD1, RGS9, GPR88		
+221	MSN_221	Medium spiny neuron	NEUR	MSN-D2	N/A	CL:4023029	indirect pathway medium spiny neuron	FOXG1 and GAD2 to restrict the annotation to inhibitory telencephalic neurons FOXP1, DRD1 are canonical markers OTOF is a good marker in the human data, previously described as an eccentric MSN marker RGS9 and GPR88 from mouse auto-annotation		FOXG1, SLC32A1, FOXP1, OTOF, DRD2, RGS9, GPR88		
+222	EMSN_222	Eccentric medium spiny neuron	NEUR	MSN-D1 MSN-D2 MSN-ECC	N/A							Not comfortable with annotating to D1/D2 under eccentric supercluster
+223	EMSN_223	Eccentric medium spiny neuron	NEUR	MSN-D1 MSN-ECC	N/A							Not comfortable with annotating to D1/D2 under eccentric supercluster
+224	EMSN_224	Eccentric medium spiny neuron	NEUR	MSN-D1 MSN-D2 MSN-ECC	N/A							Not comfortable with annotating to D1/D2 under eccentric supercluster
+225	EMSN_225	Eccentric medium spiny neuron	NEUR	MSN-D1 MSN-ECC	N/A							Not comfortable with annotating to D1/D2 under eccentric supercluster
+226	EMSN_226	Eccentric medium spiny neuron	NEUR	MSN-D1 MSN-ECC	N/A							Not comfortable with annotating to D1/D2 under eccentric supercluster
+227	EMSN_227	Eccentric medium spiny neuron	NEUR	MSN-D1	N/A							Not comfortable with annotating to D1/D2 under eccentric supercluster
+228	EMSN_228	Eccentric medium spiny neuron	NEUR	MSN-D1	N/A							Not comfortable with annotating to D1/D2 under eccentric supercluster
+229	EMSN_229	Eccentric medium spiny neuron	NEUR	MSN-D1	N/A							Not comfortable with annotating to D1/D2 under eccentric supercluster
+230	EMSN_230	Eccentric medium spiny neuron	NEUR	MSN-D1	N/A							Not comfortable with annotating to D1/D2 under eccentric supercluster
+231	EMSN_231	Eccentric medium spiny neuron	NEUR	MSN-D1	N/A							Not comfortable with annotating to D1/D2 under eccentric supercluster
+232	EMSN_232	Eccentric medium spiny neuron	NEUR	MSN-D1	N/A							Not comfortable with annotating to D1/D2 under eccentric supercluster
+233	EMSN_233	Eccentric medium spiny neuron	NEUR	MSN-D1 MSN-ECC	N/A							Not comfortable with annotating to D1/D2 under eccentric supercluster
+234	EMSN_234	Eccentric medium spiny neuron	NEUR	MSN-D1	N/A							Not comfortable with annotating to D1/D2 under eccentric supercluster
+235	Splat_235	Splatter	NEUR	INT-SST-CHODL	N/A	CL:4023025	long-range projecting sst GABAergic cortical interneuron (Mmus)	CORT is more specifically enriched in the neuronal cluster with the high NOS1 and NPY expression. Without CORT, also labels some AVP+ neurons with low NOS1 and NPY expression.		DLX1, SST, CHODL, TACR1, NPY, NOS1, CORT		
+236	MGE_236	MGE interneuron	NEUR	INT-SST	Pvalb	CL:4023017	sst GABAergic cortical interneuron	Exclude ADARB2 because SST is expressed in some LAMP5-LHX6 interneurons	https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, LHX6, GAD2, SST 	ADARB2	
+237	Splat_237	Splatter	NEUR	INT-SST	N/A	CL:4023017	sst GABAergic cortical interneuron	Exclude ADARB2 because SST is expressed in some LAMP5-LHX6 interneurons	https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, LHX6, GAD2, SST 	ADARB2	
+238	Splat_238	Splatter	NEUR		N/A							
+239	MGE_239	MGE interneuron	NEUR	INT-SST	N/A	CL:4023017	sst GABAergic cortical interneuron	Exclude ADARB2 because SST is expressed in some LAMP5-LHX6 interneurons	https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, LHX6, GAD2, SST 	ADARB2	
+240	MGE_240	MGE interneuron	NEUR	INT-SST	Pvalb	CL:4023017	sst GABAergic cortical interneuron	Exclude ADARB2 because SST is expressed in some LAMP5-LHX6 interneurons	https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, LHX6, GAD2, SST 	ADARB2	
+241	MGE_241	MGE interneuron	NEUR	INT-SST	Sst	CL:4023017	sst GABAergic cortical interneuron	Exclude ADARB2 because SST is expressed in some LAMP5-LHX6 interneurons	https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, LHX6, GAD2, SST 	ADARB2	
+242	MGE_242	MGE interneuron	NEUR		Sst							
+243	MGE_243	MGE interneuron	NEUR	INT-SST	Sst	CL:4023017	sst GABAergic cortical interneuron	Exclude ADARB2 because SST is expressed in some LAMP5-LHX6 interneurons	https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, LHX6, GAD2, SST 	ADARB2	
+244	MGE_244	MGE interneuron	NEUR	INT-SST INT-SST-CHODL	N/A							Also in Splatter - presumably can't be both.  Not sure which one is correct.  Also expect INT-SST distinct from INT-SST-CHODL
+245	MGE_245	MGE interneuron	NEUR	INT-SST INT-SST-CHODL	N/A							Also in Splatter - presumably can't be both.  Not sure which one is correct.  Also expect INT-SST distinct from INT-SST-CHODL
+246	MGE_246	MGE interneuron	NEUR	INT-SST	N/A	CL:4023017	sst GABAergic cortical interneuron	Exclude ADARB2 because SST is expressed in some LAMP5-LHX6 interneurons	https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, LHX6, GAD2, SST 	ADARB2	
+247	MGE_247	MGE interneuron	NEUR		Sst							
+248	MGE_248	MGE interneuron	NEUR	INT-SST	Sst	CL:4023017	sst GABAergic cortical interneuron	Exclude ADARB2 because SST is expressed in some LAMP5-LHX6 interneurons	https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, LHX6, GAD2, SST 	ADARB2	
+249	MGE_249	MGE interneuron	NEUR	INT-SST	Sst	CL:4023017	sst GABAergic cortical interneuron	Exclude ADARB2 because SST is expressed in some LAMP5-LHX6 interneurons	https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, LHX6, GAD2, SST 	ADARB2	
+250	MGE_250	MGE interneuron	NEUR		Sst							
+251	MGE_251	MGE interneuron	NEUR		Sst							
+252	MGE_252	MGE interneuron	NEUR	INT-SST	Sst	CL:4023017	sst GABAergic cortical interneuron	Exclude ADARB2 because SST is expressed in some LAMP5-LHX6 interneurons	https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, LHX6, GAD2, SST 	ADARB2	
+253	MGE_253	MGE interneuron	NEUR	INT-SST	Sst	CL:4023017	sst GABAergic cortical interneuron	Exclude ADARB2 because SST is expressed in some LAMP5-LHX6 interneurons	https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, LHX6, GAD2, SST 	ADARB2	
+254	MGE_254	MGE interneuron	NEUR	INT-SST	Sst	CL:4023017	sst GABAergic cortical interneuron	Exclude ADARB2 because SST is expressed in some LAMP5-LHX6 interneurons	https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, LHX6, GAD2, SST 	ADARB2	
+255	MGE_255	MGE interneuron	NEUR		Pvalb							
+256	MGE_256	MGE interneuron	NEUR	INT-PVALB	Pvalb	CL:4023018	pvalb GABAergic cortical interneuron		https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, LHX6, GAD2, PVALB		
+257	MGE_257	MGE interneuron	NEUR	INT-PVALB	Pvalb	CL:4023018	pvalb GABAergic cortical interneuron		https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, LHX6, GAD2, PVALB		
+258	MGE_258	MGE interneuron	NEUR	INT-SST	Pvalb	CL:4023017	sst GABAergic cortical interneuron	Exclude ADARB2 because SST is expressed in some LAMP5-LHX6 interneurons	https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, LHX6, GAD2, SST 	ADARB2	
+259	MGE_259	MGE interneuron	NEUR	INT-PVALB	Pvalb	CL:4023018	pvalb GABAergic cortical interneuron		https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, LHX6, GAD2, PVALB		
+260	MGE_260	MGE interneuron	NEUR	INT-PVALB	Pvalb	CL:4023018	pvalb GABAergic cortical interneuron		https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, LHX6, GAD2, PVALB		
+261	MGE_261	MGE interneuron	NEUR	INT-PVALB	Pvalb	CL:4023018	pvalb GABAergic cortical interneuron		https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, LHX6, GAD2, PVALB		
+262	MGE_262	MGE interneuron	NEUR	INT-PVALB	Pvalb	CL:4023018	pvalb GABAergic cortical interneuron		https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, LHX6, GAD2, PVALB		
+263	MGE_263	MGE interneuron	NEUR		Pvalb							
+264	LLC_264	LAMP5-LHX6 and Chandelier		CHAND	Chandelier	CL:4023083	chandelier cell	- UNC5B, RORA, TRPS1, and NFIB from Bakken et. al 2021 motor cortex paper Note that these genes are also expressed in LAMP5-LHX6 cells.  - Added FOXG1 to limit this annotation to the telencephalon, and GAD1 to limit to GABAergic cells. ChC cells in our data did not express GAD2.  - Add CA8 based on the human data  - Removed PVALB, some chandelier cells in our human data are PVALB negative		FOXG1, GAD1, UNC5B, RORA, TRPS1, NFIB, CA8, PLEKHH2		
+265	LLC_265	LAMP5-LHX6 and Chandelier	NEUR	CHAND	Chandelier	CL:4023083	chandelier cell	- UNC5B, RORA, TRPS1, and NFIB from Bakken et. al 2021 motor cortex paper Note that these genes are also expressed in LAMP5-LHX6 cells.  - Added FOXG1 to limit this annotation to the telencephalon, and GAD1 to limit to GABAergic cells. ChC cells in our data did not express GAD2.  - Add CA8 based on the human data  - Removed PVALB, some chandelier cells in our human data are PVALB negative		FOXG1, GAD1, UNC5B, RORA, TRPS1, NFIB, CA8, PLEKHH2		
+266	LLC_266	LAMP5-LHX6 and Chandelier	NEUR	CHAND	N/A	CL:4023083	chandelier cell	- UNC5B, RORA, TRPS1, and NFIB from Bakken et. al 2021 motor cortex paper Note that these genes are also expressed in LAMP5-LHX6 cells.  - Added FOXG1 to limit this annotation to the telencephalon, and GAD1 to limit to GABAergic cells. ChC cells in our data did not express GAD2.  - Add CA8 based on the human data  - Removed PVALB, some chandelier cells in our human data are PVALB negative		FOXG1, GAD1, UNC5B, RORA, TRPS1, NFIB, CA8, PLEKHH2		
+267	LLC_267	LAMP5-LHX6 and Chandelier	NEUR	INT-LAMP5-LHX6	N/A							
+268	LLC_268	LAMP5-LHX6 and Chandelier	NEUR	INT-LAMP5-LHX6	Lamp5 Lhx6							LAMP5 LHX class needed in CL.
+269	LLC_269	LAMP5-LHX6 and Chandelier	NEUR	INT-LAMP5-LHX6	N/A							LAMP5 LHX class needed in CL.
+270	LLC_270	LAMP5-LHX6 and Chandelier	NEUR	INT-LAMP5-LHX6	Lamp5 Lhx6							LAMP5 LHX class needed in CL.
+271	LLC_271	LAMP5-LHX6 and Chandelier	NEUR	INT-LAMP5-LHX6	Lamp5 Lhx6							LAMP5 LHX class needed in CL.
+272	LLC_272	LAMP5-LHX6 and Chandelier	NEUR	INT-LAMP5-LHX6	Lamp5 Lhx6							LAMP5 LHX class needed in CL.
+273	LLC_273	LAMP5-LHX6 and Chandelier	NEUR	INT-LAMP5-LHX6	Lamp5 Lhx6							LAMP5 LHX class needed in CL.
+274	LLC_274	LAMP5-LHX6 and Chandelier	NEUR	INT-LAMP5-LHX6	Lamp5 Lhx6							LAMP5 LHX class needed in CL.
+275	LLC_275	LAMP5-LHX6 and Chandelier	NEUR	INT-LAMP5-LHX6	Lamp5 Lhx6							LAMP5 LHX class needed in CL.
+276	CGE_276	CGE interneuron	NEUR	INT-VIP	N/A	CL:4023016	vip GABAergic cortical interneuron		https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, ADARB2, CXCL14, GAD2, VIP		
+277	CGE_277	CGE interneuron	NEUR		N/A							
+278	CGE_278	CGE interneuron	NEUR		Pax6							
+279	CGE_279	CGE interneuron	NEUR	INT-VIP	N/A	CL:4023016	vip GABAergic cortical interneuron		https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, ADARB2, CXCL14, GAD2, VIP		
+280	CGE_280	CGE interneuron	NEUR	INT-VIP	N/A	CL:4023016	vip GABAergic cortical interneuron		https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, ADARB2, CXCL14, GAD2, VIP		
+281	CGE_281	CGE interneuron	NEUR	INT-VIP	N/A	CL:4023016	vip GABAergic cortical interneuron		https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, ADARB2, CXCL14, GAD2, VIP		
+282	CGE_282	CGE interneuron	NEUR		Sncg							
+283	CGE_283	CGE interneuron	NEUR		Sncg							
+284	CGE_284	CGE interneuron	NEUR	INT-VIP	Vip	CL:4023016	vip GABAergic cortical interneuron		https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, ADARB2, CXCL14, GAD2, VIP		
+285	CGE_285	CGE interneuron	NEUR	INT-VIP	Vip	CL:4023016	vip GABAergic cortical interneuron		https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, ADARB2, CXCL14, GAD2, VIP		
+286	CGE_286	CGE interneuron	NEUR	INT-LAMP5	Lamp5	CL:4023011	lamp5 GABAergic cortical interneuron	More numerous in primates and molecularly similar to hippocampal interneurons	https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, LAMP5, LHX6, GAD2		
+287	CGE_287	CGE interneuron	NEUR	INT-LAMP5	Lamp5	CL:4023011	lamp5 GABAergic cortical interneuron	More numerous in primates and molecularly similar to hippocampal interneurons	https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, LAMP5, LHX6, GAD2		
+288	CGE_288	CGE interneuron	NEUR	INT-LAMP5	Lamp5	CL:4023011	lamp5 GABAergic cortical interneuron	More numerous in primates and molecularly similar to hippocampal interneurons	https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, LAMP5, LHX6, GAD2		
+289	CGE_289	CGE interneuron	NEUR	INT-VIP	Vip	CL:4023016	vip GABAergic cortical interneuron		https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, ADARB2, CXCL14, GAD2, VIP		
+290	CGE_290	CGE interneuron	NEUR	INT-VIP	Vip	CL:4023016	vip GABAergic cortical interneuron		https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, ADARB2, CXCL14, GAD2, VIP		
+291	CGE_291	CGE interneuron	NEUR	INT-VIP	Vip	CL:4023016	vip GABAergic cortical interneuron		https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, ADARB2, CXCL14, GAD2, VIP		
+292	CGE_292	CGE interneuron	NEUR	INT-VIP	Vip	CL:4023016	vip GABAergic cortical interneuron		https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, ADARB2, CXCL14, GAD2, VIP		
+293	CGE_293	CGE interneuron	NEUR	INT-VIP	Vip	CL:4023016	vip GABAergic cortical interneuron		https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, ADARB2, CXCL14, GAD2, VIP		
+294	CGE_294	CGE interneuron	NEUR	INT-VIP	Vip	CL:4023016	vip GABAergic cortical interneuron		https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, ADARB2, CXCL14, GAD2, VIP		
+295	CGE_295	CGE interneuron	NEUR	INT-VIP	Vip	CL:4023016	vip GABAergic cortical interneuron		https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, ADARB2, CXCL14, GAD2, VIP		
+296	CGE_296	CGE interneuron	NEUR	INT-VIP	Vip	CL:4023016	vip GABAergic cortical interneuron		https://doi.org/10.1038/s41586-020-2781-z	FOXG1, NR2F1, DLX1, ADARB2, CXCL14, GAD2, VIP		
+297	URL_297	Upper rhombic lip			N/A							
+298	CBI_298	Cerebellar inhibitory	NEUR	CB-PurkLayerInt	N/A						New CL term needed	
+299	CBI_299	Cerebellar inhibitory	NEUR	CB-PurkLayerInt	N/A						New CL term needed	
+300	CBI_300	Cerebellar inhibitory	NEUR	CB-PurkLayerInt	N/A						New CL term needed	
+301	CBI_301	Cerebellar inhibitory	NEUR	CB-MolLayerInt1	N/A						New CL term needed	
+302	CBI_302	Cerebellar inhibitory	NEUR	CB-GranLayerInt	N/A						New CL term needed	
+303	CBI_303	Cerebellar inhibitory		CB-MolLayerInt1	N/A						New CL term needed	
+304	CBI_304	Cerebellar inhibitory		CB-MolLayerInt1	N/A						New CL term needed	
+305	CBI_305	Cerebellar inhibitory	NEUR	CB-MolLayerInt1 CB-MolLayerInt2	N/A							
+306	CBI_306	Cerebellar inhibitory		CB-MolLayerInt1	N/A						New CL term needed	
+307	CBI_307	Cerebellar inhibitory	NEUR	CB-MolLayerInt2	N/A						New CL term needed	
+308	URL_308	Upper rhombic lip		UBC	N/A	CL:4023161	unipolar brush cell			LMX1A, EOMES		
+309	URL_309	Upper rhombic lip	NEUR		N/A							
+310	URL_310	Upper rhombic lip	NEUR	CB-GRAN	N/A	CL:0001031	cerebellar granule cell		mousebrain.org	CBLN1, CBLN3, GABRA6		
+311	URL_311	Upper rhombic lip	NEUR	CB-GRAN	N/A	CL:0001031	cerebellar granule cell		mousebrain.org	CBLN1, CBLN3, GABRA6		
+312	URL_312	Upper rhombic lip	NEUR	CB-GRAN	N/A	CL:0001031	cerebellar granule cell		mousebrain.org	CBLN1, CBLN3, GABRA6	New CL term needed	
+313	Splat_313	Splatter	NEUR		N/A							
+314	Misc_314	Miscellaneous	NEUR	CB-PURK	N/A	CL:0000121	Purkinje cell	Kozareva, V., Martin, C., Osorno, T. et al. A transcriptomic atlas of mouse cerebellar cortex comprehensively defines cell types. Nature 598, 214–219 (2021). 	https://doi.org/10.1038/s41586-021-03220-z	PCP2, SKOR2, PVALB, GAD2		
+315	LRL_315	Lower rhombic lip	NEUR		N/A							
+316	LRL_316	Lower rhombic lip	NEUR		N/A							
+317	LRL_317	Lower rhombic lip	NEUR		N/A							
+318	LRL_318	Lower rhombic lip	NEUR		N/A							
+319	LRL_319	Lower rhombic lip	NEUR		N/A							
+320	LRL_320	Lower rhombic lip	NEUR		N/A							
+321	LRL_321	Lower rhombic lip	NEUR		N/A							
+322	LRL_322	Lower rhombic lip	NEUR		N/A							
+323	Mmb_323	Mammillary body	NEUR		N/A							
+324	Mmb_324	Mammillary body	NEUR		N/A							
+325	Mmb_325	Mammillary body	NEUR		N/A							
+326	Mmb_326	Mammillary body	NEUR		N/A							
+327	Mmb_327	Mammillary body	NEUR		N/A							
+328	Mmb_328	Mammillary body	NEUR		N/A							
+329	Mmb_329	Mammillary body	NEUR		N/A							
+330	Mmb_330	Mammillary body	NEUR		N/A							
+331	Mmb_331	Mammillary body	NEUR		N/A							
+332	Mmb_332	Mammillary body	NEUR		N/A							
+333	Mmb_333	Mammillary body	NEUR		N/A							
+334	Splat_334	Splatter	NEUR		N/A							
+335	Splat_335	Splatter	NEUR		N/A							
+336	Splat_336	Splatter	NEUR		N/A							
+337	Splat_337	Splatter	NEUR		N/A							
+338	Splat_338	Splatter	NEUR		N/A							
+339	Splat_339	Splatter	NEUR		N/A							
+340	Splat_340	Splatter	NEUR		N/A							
+341	Splat_341	Splatter	NEUR		N/A							
+342	Splat_342	Splatter	NEUR		N/A							
+343	Splat_343	Splatter	NEUR		N/A							
+344	Splat_344	Splatter	CHRP NEUR		N/A							
+345	Splat_345	Splatter	NEUR		N/A							
+346	Splat_346	Splatter	NEUR		N/A							
+347	Splat_347	Splatter	NEUR		N/A							
+348	Splat_348	Splatter	NEUR		N/A							
+349	Splat_349	Splatter	NEUR		N/A							
+350	Splat_350	Splatter	NEUR		N/A							
+351	Splat_351	Splatter	NEUR		N/A							
+352	Splat_352	Splatter			N/A							
+353	Splat_353	Splatter	NEUR		N/A							
+354	Splat_354	Splatter	NEUR		N/A							
+355	Splat_355	Splatter	NEUR		N/A							
+356	Splat_356	Splatter	NEUR		N/A							
+357	Splat_357	Splatter	NEUR		N/A							
+358	Splat_358	Splatter	NEUR		N/A							
+359	Splat_359	Splatter	NEUR		N/A							
+360	Splat_360	Splatter	NEUR		N/A							
+361	Splat_361	Splatter	NEUR		N/A							
+362	Splat_362	Splatter	NEUR		N/A							
+363	Splat_363	Splatter	NEUR		N/A							
+364	Splat_364	Splatter	NEUR		N/A							
+365	Splat_365	Splatter	NEUR		N/A							
+366	Splat_366	Splatter	NEUR		N/A							
+367	Splat_367	Splatter	NEUR		N/A							
+368	Splat_368	Splatter	NEUR		N/A							
+369	Splat_369	Splatter	NEUR		N/A							
+370	Splat_370	Splatter	NEUR		N/A							
+371	Splat_371	Splatter	NEUR		N/A							
+372	Thex_372	Thalamic excitatory	NEUR		N/A							
+373	Splat_373	Splatter	NEUR		N/A							
+374	Splat_374	Splatter	NEUR		N/A							
+375	Splat_375	Splatter	NEUR		N/A							
+376	Splat_376	Splatter	NEUR		N/A							
+377	Splat_377	Splatter	NEUR		N/A							
+378	Splat_378	Splatter	NEUR		N/A							
+379	Splat_379	Splatter	NEUR		N/A							
+380	Splat_380	Splatter	NEUR		N/A							
+381	Splat_381	Splatter	NEUR		N/A							
+382	Splat_382	Splatter	NEUR		N/A							
+383	Splat_383	Splatter	NEUR		N/A							
+384	Splat_384	Splatter	NEUR		N/A							
+385	Splat_385	Splatter	NEUR		N/A							
+386	Splat_386	Splatter	NEUR		N/A							
+387	Splat_387	Splatter	NEUR		N/A							
+388	Splat_388	Splatter	NEUR		N/A							
+389	Splat_389	Splatter	NEUR		N/A							
+390	Splat_390	Splatter	NEUR		N/A							
+391	Splat_391	Splatter	NEUR		N/A							
+392	Splat_392	Splatter	NEUR		N/A							
+393	Splat_393	Splatter	NEUR		N/A							
+394	Splat_394	Splatter	NEUR		N/A							
+395	Splat_395	Splatter	NEUR		N/A							
+396	Splat_396	Splatter	NEUR		N/A							
+397	Splat_397	Splatter	NEUR		N/A							
+398	Splat_398	Splatter	NEUR		N/A							
+399	Splat_399	Splatter	NEUR		N/A							
+400	Splat_400	Splatter	NEUR		N/A							
+401	Misc_401	Miscellaneous	NEUR		N/A							
+402	Splat_402	Splatter	NEUR		N/A							
+403	Splat_403	Splatter	NEUR		N/A							
+404	Misc_404	Miscellaneous	NEUR		N/A							
+405	Amex_405	Amygdala excitatory	NEUR		N/A							
+406	Amex_406	Amygdala excitatory	NEUR		N/A							
+407	Amex_407	Amygdala excitatory	NEUR		N/A							
+408	Amex_408	Amygdala excitatory	NEUR		N/A							
+409	Splat_409	Splatter	NEUR		N/A							
+410	Splat_410	Splatter	NEUR		N/A							
+411	Splat_411	Splatter	NEUR		N/A							
+412	Splat_412	Splatter	NEUR		N/A							
+413	Splat_413	Splatter	NEUR		N/A							
+414	Splat_414	Splatter	NEUR		N/A							
+415	Splat_415	Splatter	NEUR		N/A							
+416	Splat_416	Splatter	NEUR		N/A							
+417	Splat_417	Splatter	NEUR		N/A							
+418	Splat_418	Splatter	NEUR		N/A							
+419	Amex_419	Amygdala excitatory	NEUR		N/A							
+420	Splat_420	Splatter	NEUR		N/A							
+421	Splat_421	Splatter	NEUR		N/A							
+422	Splat_422	Splatter	NEUR		N/A							
+423	Splat_423	Splatter	NEUR	INT-LAMP5	N/A							
+424	Splat_424	Splatter	NEUR		N/A							
+425	Splat_425	Splatter	NEUR		N/A							
+426	EMSN_426	Eccentric medium spiny neuron	NEUR	MSN-D1	N/A							Not comfortable with annotating to D1/D2 under eccentric supercluster
+427	MSN_427	Medium spiny neuron	NEUR	MSN-D1	N/A	CL:4023026	direct pathway medium spiny neuron	FOXG1 and GAD2 to restrict the annotation to inhibitory telencephalic neurons FOXP1, DRD1 are known markers OTOF is a good marker in the human data, previously described as an eccentric MSN marker RGS9 and GPR88 from mouse auto-annotation		FOXG1, SLC32A1, FOXP1, FOXP2, OTOF, DRD1, RGS9, GPR88		
+428	Splat_428	Splatter	NEUR		N/A							
+429	Splat_429	Splatter	NEUR		N/A							
+430	MSN_430	Medium spiny neuron	NEUR		N/A							
+431	Splat_431	Splatter	NEUR		N/A							
+432	Splat_432	Splatter	NEUR		N/A							
+433	Midi_433	Midbrain-derived inhibitory	NEUR		N/A							
+434	Midi_434	Midbrain-derived inhibitory	NEUR		N/A							
+435	Midi_435	Midbrain-derived inhibitory	NEUR		N/A							
+436	Midi_436	Midbrain-derived inhibitory	NEUR		N/A							
+437	Midi_437	Midbrain-derived inhibitory	NEUR		N/A							
+438	Midi_438	Midbrain-derived inhibitory	NEUR		N/A							
+439	Midi_439	Midbrain-derived inhibitory	NEUR		N/A							
+440	Midi_440	Midbrain-derived inhibitory	NEUR		N/A							
+441	Midi_441	Midbrain-derived inhibitory	NEUR		N/A							
+442	Midi_442	Midbrain-derived inhibitory	NEUR		N/A							
+443	Midi_443	Midbrain-derived inhibitory	NEUR		N/A							
+444	Midi_444	Midbrain-derived inhibitory	NEUR		N/A							
+445	Thex_445	Thalamic excitatory			N/A							
+446	Thex_446	Thalamic excitatory			N/A							
+447	Thex_447	Thalamic excitatory			N/A							
+448	Thex_448	Thalamic excitatory	NEUR		N/A							
+449	Thex_449	Thalamic excitatory			N/A							
+450	Thex_450	Thalamic excitatory			N/A							
+451	Thex_451	Thalamic excitatory			N/A							
+452	Thex_452	Thalamic excitatory			N/A							
+453	Thex_453	Thalamic excitatory			N/A							
+454	Thex_454	Thalamic excitatory			N/A							
+455	Thex_455	Thalamic excitatory	NEUR		N/A							
+456	Thex_456	Thalamic excitatory	NEUR		N/A							
+457	Thex_457	Thalamic excitatory	NEUR		N/A							
+458	Thex_458	Thalamic excitatory	NEUR		N/A							
+459	Thex_459	Thalamic excitatory	NEUR		N/A							
+460	Thex_460	Thalamic excitatory	NEUR		N/A

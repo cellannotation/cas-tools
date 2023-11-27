@@ -43,10 +43,7 @@ python script.py --json path/to/CAS_schema.json --anndata path/to/input_anndata.
 """
 
 import argparse
-import json
-from typing import Optional
-
-import anndata
+from cas.file_utils import read_json_file, read_anndata_file
 
 from anndata_conversion_utils import (
     check_labelsets,
@@ -56,51 +53,6 @@ from anndata_conversion_utils import (
     validate_cell_ids,
     write_anndata,
 )
-
-
-def read_json_file(file_path):
-    """
-    Reads and parses a JSON file into a Python dictionary.
-
-    Args:
-        file_path (str): The path to the JSON file.
-
-    Returns:
-        dict: The JSON data as a Python dictionary.
-
-    Returns None if the file does not exist or if there is an issue
-    parsing the JSON content.
-
-    Example:
-        json_data = read_json_file('path/to/your/file.json')
-        if json_data is not None:
-            # Use the parsed JSON data as a dictionary
-            print(json_data)
-    """
-    try:
-        with open(file_path, "r") as file:
-            data = json.load(file)
-            return data
-    except (FileNotFoundError, json.JSONDecodeError) as e:
-        print(f"Error reading JSON file: {e}")
-        return None
-
-
-def read_anndata_file(file_path: str) -> Optional[anndata.AnnData]:
-    """Load anndata object from a file.
-
-    Args:
-        file_path: The path to the file containing the anndata object.
-
-    Returns:
-        The loaded anndata object if successful, else None.
-    """
-    try:
-        anndata_obj = anndata.read_h5ad(file_path, backed="r")
-        return anndata_obj
-    except Exception as e:
-        print(f"An error occurred while loading the file: {e}")
-        return None
 
 
 def main():
