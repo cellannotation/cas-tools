@@ -3,6 +3,7 @@ import json
 import anndata
 
 from typing import Optional
+from cas.model import CellTypeAnnotation
 
 
 def read_json_file(file_path):
@@ -31,6 +32,19 @@ def read_json_file(file_path):
     except (FileNotFoundError, json.JSONDecodeError) as e:
         print(f"Error reading JSON file: {e}")
         return None
+
+
+def read_cas_json_file(file_path) -> CellTypeAnnotation:
+    """
+    Reads and parses a JSON file into a CAS object.
+
+    Args:
+        file_path (str): The path to the JSON file.
+
+    Returns:
+        dict: The JSON data as a CAS object.
+    """
+    return CellTypeAnnotation.from_dict(read_json_file(file_path))
 
 
 def write_json_file(cas, out_file, print_undefined=False):
