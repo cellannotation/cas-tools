@@ -10,16 +10,9 @@ Key Features:
 2. Reads and processes the input JSON file and AnnData file.
 3. Updates the AnnData object with information from the JSON annotations and root keys.
 4. Writes the modified AnnData object to a specified output file.
-
-Usage:
-python script.py --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --output path/to/output_file.h5ad
 """
 
-import argparse
-import json
-from typing import Optional
-
-import anndata
+from cas.file_utils import read_json_file, read_anndata_file
 
 LABELSET_NAME = "name"
 
@@ -28,51 +21,6 @@ LABELSET = "labelset"
 ANNOTATIONS = "annotations"
 
 CELL_IDS = "cell_ids"
-
-
-def read_json_file(file_path):
-    """
-    Reads and parses a JSON file into a Python dictionary.
-
-    Args:
-        file_path (str): The path to the JSON file.
-
-    Returns:
-        dict: The JSON data as a Python dictionary.
-
-    Returns None if the file does not exist or if there is an issue
-    parsing the JSON content.
-
-    Example:
-        json_data = read_json_file('path/to/your/file.json')
-        if json_data is not None:
-            # Use the parsed JSON data as a dictionary
-            print(json_data)
-    """
-    try:
-        with open(file_path, "r") as file:
-            data = json.load(file)
-            return data
-    except (FileNotFoundError, json.JSONDecodeError) as e:
-        print(f"Error reading JSON file: {e}")
-        return None
-
-
-def read_anndata_file(file_path: str) -> Optional[anndata.AnnData]:
-    """Load anndata object from a file.
-
-    Args:
-        file_path: The path to the file containing the anndata object.
-
-    Returns:
-        The loaded anndata object if successful, else None.
-    """
-    try:
-        anndata_obj = anndata.read_h5ad(file_path, backed="r")
-        return anndata_obj
-    except Exception as e:
-        print(f"An error occurred while loading the file: {e}")
-        return None
 
 
 def is_list_of_strings(var):
@@ -90,30 +38,11 @@ def is_list_of_strings(var):
     return isinstance(var, list) and all(isinstance(item, str) for item in var)
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--json", required=True, help="Input JSON file path")
-    parser.add_argument("--anndata", required=True, help="Input AnnData file path")
-    parser.add_argument(
-        "--output",
-        help="Output AnnData file name (default: output.h5ad)",
-        default="output.h5ad",
-    )
-
-    args = parser.parse_args()
-    json_file_path = args.json
-    anndata_file_path = args.anndata
-    output_file_path = args.output
-
-    if anndata_file_path == output_file_path:
-        raise ValueError("--anndata and --output cannot be the same")
-
+def flatten(json_file_path, anndata_file_path, output_file_path):
     input_json = read_json_file(json_file_path)
     input_anndata = read_anndata_file(anndata_file_path)
-
     # obs
     annotations = input_json[ANNOTATIONS]
-
     for ann in annotations:
         cell_ids = ann.get(CELL_IDS, [])
 
@@ -121,13 +50,16 @@ if __name__ == "__main__":
             if k == CELL_IDS:
                 continue
             key = f"{ann[LABELSET]}--{k}"
-            value = v if not isinstance(v, list) else ", ".join(sorted(v))
+
+            non_dict_v = [value for value in v if not isinstance(value, dict)]
+            if len(v) > len(non_dict_v):
+                print("WARN: dict values are excluded on field '{}'".format(key))
+            value = non_dict_v if not isinstance(non_dict_v, list) else ", ".join(sorted(non_dict_v))
 
             input_anndata.obs[key] = ""
 
             for index_to_insert in ann[CELL_IDS]:
                 input_anndata.obs.at[index_to_insert, key] = value
-
     # uns
     uns_json = {}
     root_keys = list(input_json.keys())
@@ -145,7 +77,6 @@ if __name__ == "__main__":
                         continue
                     new_key = f"{labelset.get(LABELSET_NAME, '')}--{k}"
                     uns_json.update({new_key: v})
-
     input_anndata.uns.update(uns_json)
     # Close the AnnData file to prevent blocking
     input_anndata.file.close()

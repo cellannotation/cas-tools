@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """
 Script Description:
 -------------------
@@ -29,72 +27,154 @@ Validation Checks:
 Additional Notes:
 -----------------
 - JSON data is stored in AnnData.uns (excluding barcodes).
-
-Command-line Arguments:
------------------------
---json      : Path to the CAS JSON schema file.
---anndata   : Path to the AnnData file. Ideally, the location will be specified by a resolvable path in the CAS file.
---validate  : Perform validation checks before writing to the output AnnData file.
---output    : Output AnnData file name (default: output.h5ad).
-
-Usage Example:
---------------
-python script.py --json path/to/CAS_schema.json --anndata path/to/input_anndata.h5ad --validate --output path/to/output.h5ad
 """
 
-import argparse
+import json
+import sys
+
 from cas.file_utils import read_json_file, read_anndata_file
 
-from anndata_conversion_utils import (
-    check_labelsets,
-    get_cas_annotations,
-    get_matching_obs_keys,
-    save_cas_to_uns,
-    validate_cell_ids,
-    write_anndata,
-)
+LABELSET_NAME = "name"
+
+LABELSET = "labelset"
+
+LABELSETS = "labelsets"
+
+ANNOTATIONS = "annotations"
+
+CELL_IDS = "cell_ids"
+
+CELL_LABEL = "cell_label"
 
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--json", required=True, help="Path to the CAS JSON schema file."
-    )
-    parser.add_argument("--anndata", required=True, help="Path to the AnnData file.")
-    # TODO find a better argument name and Help message.
-    parser.add_argument(
-        "-v",
-        "--validate",
-        action="store_true",
-        help="Perform validation checks before writing to the output AnnData file.",
-    )
-    parser.add_argument(
-        "--output",
-        default="output.h5ad",
-        help="Output AnnData file name (default: output.h5ad).",
-    )
+def merge(cas_path: str, anndata_path: str, validate: bool, output_file_name: str):
+    """
+    Tests if CAS json and AnnData are compatible and merges CAS into AnnData if possible.
 
-    args = parser.parse_args()
-    json_file_path = args.json
-    anndata_file_path = args.anndata
-    output_file_path = args.output
-    validate = args.validate
+    Args:
+        cas_path: The path to the CAS json file.
+        anndata_path: The path to the AnnData file.
+        validate: Boolean to determine if validation checks will be performed before writing to the output AnnData file.
+        output_file_name: Output AnnData file name.
 
-    if anndata_file_path == output_file_path:
-        raise ValueError("--anndata and --output cannot be the same")
+    """
+    input_json = read_json_file(cas_path)
+    input_anndata = read_anndata_file(anndata_path)
 
-    input_json = read_json_file(json_file_path)
-    input_anndata = read_anndata_file(anndata_file_path)
+    test_merge(input_anndata, input_json, validate)
 
+    save_cas_to_uns(input_anndata, input_json)
+    write_anndata(input_anndata, output_file_name)
+
+
+def test_merge(input_anndata, input_json, validate):
+    """
+    Tests if CAS and AnnData can be merged.
+
+     Args:
+        input_anndata: The AnnData object.
+        input_json: The CAS data json object.
+        validate: Boolean to determine if validation checks will be performed before writing to the output AnnData file.
+    """
     annotations = get_cas_annotations(input_json)
     validate_cell_ids(input_anndata, annotations, validate)
 
     matching_obs_keys = get_matching_obs_keys(input_anndata, input_json)
     check_labelsets(annotations, input_anndata, matching_obs_keys, validate)
 
-    save_cas_to_uns(input_anndata, input_json)
-    write_anndata(input_anndata, output_file_path)
+
+def check_labelsets(annotations, input_anndata, matching_obs_keys, validate):
+    for ann in annotations:
+        if ann[LABELSET] in matching_obs_keys:
+            anndata_labelset_cell_ids = (
+                input_anndata.obs.groupby(ann[LABELSET], observed=False)
+                .apply(lambda group: set(group.index))
+                .to_dict()
+            )
+            for cell_label, cell_list in anndata_labelset_cell_ids.items():
+                if cell_list == set(ann[CELL_IDS]):
+                    handle_matching_labelset(ann, cell_label, input_anndata, validate)
+                elif cell_label == ann[CELL_LABEL]:
+                    handle_non_matching_labelset(
+                        ann, cell_label, cell_list, input_anndata, validate
+                    )
 
 
-if __name__ == "__main__":
-    main()
+def get_cas_annotations(input_json):
+    return input_json[ANNOTATIONS]
+
+
+def get_matching_obs_keys(input_anndata, input_json):
+    cas_labelset_names = [item[LABELSET_NAME] for item in input_json[LABELSETS]]
+    obs_keys = input_anndata.obs_keys()
+    matching_obs_keys = list(set(obs_keys).intersection(cas_labelset_names))
+    return matching_obs_keys
+
+
+def handle_matching_labelset(ann, cell_label, input_anndata, validate):
+    if cell_label != ann[CELL_LABEL]:
+        print(
+            f"{ann[CELL_LABEL]} cell ids from CAS match with the cell ids in {cell_label} from anndata. "
+            "But they have different cell label."
+        )
+        if validate:
+            sys.exit()
+        # add new category to labelset column
+        input_anndata.obs[ann[LABELSET]] = input_anndata.obs[
+            ann[LABELSET]
+        ].cat.add_categories(ann[CELL_LABEL])
+        # Overwrite the labelset value with CAS labelset
+        input_anndata.obs.loc[ann[CELL_IDS], ann[LABELSET]] = input_anndata.obs.loc[
+            ann[CELL_IDS], ann[LABELSET]
+        ].map({cell_label: ann[CELL_LABEL]})
+
+
+def handle_non_matching_labelset(ann, cell_label, cell_list, input_anndata, validate):
+    print(
+        f"{ann[CELL_LABEL]} cell ids from CAS do not match with the cell ids from anndata. "
+        "Please update your CAS json."
+    )
+    if validate:
+        sys.exit()
+    # Flush the labelset from anndata
+    input_anndata.obs.loc[cell_list, cell_label] = None
+    # Add labelset from CAS to anndata
+    input_anndata.obs.loc[ann[CELL_IDS], ann[LABELSET]] = ann[CELL_LABEL]
+
+
+def save_cas_to_uns(input_anndata, input_json):
+    # drop cell_ids
+    json_without_cell_ids = {
+        "author_name": input_json["author_name"],
+        "labelset": input_json[LABELSETS],
+        "annotations": [
+            {key: value for key, value in annotation.items() if key != "cell_ids"}
+            for annotation in input_json["annotations"]
+        ],
+    }
+    input_anndata.uns.update({"cas": json.dumps(json_without_cell_ids)})
+
+
+def validate_cell_ids(input_anndata, annotations, validate):
+    # check cell ids
+    cas_cell_ids = set()
+    for ann in annotations:
+        cas_cell_ids.update(ann.get(CELL_IDS, []))
+    anndata_cell_ids = set(input_anndata.obs.index)
+    # cas -> anndata
+    if not cas_cell_ids.issubset(anndata_cell_ids):
+        print("Not all members of cell ids from cas exist in anndata.")
+        if validate:
+            sys.exit()
+    # anndata -> cas
+    if not anndata_cell_ids.issubset(cas_cell_ids):
+        print("Not all members of cell ids from anndata exist in cas.")
+        if validate:
+            sys.exit()
+    return annotations
+
+
+def write_anndata(input_anndata, output_file_path):
+    # Close the AnnData file to prevent blocking
+    input_anndata.file.close()
+    input_anndata.write(output_file_path)
