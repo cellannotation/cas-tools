@@ -18,6 +18,8 @@ LABELSET_NAME = "name"
 
 LABELSET = "labelset"
 
+LABELSETS = "labelsets"
+
 ANNOTATIONS = "annotations"
 
 CELL_IDS = "cell_ids"
@@ -43,6 +45,7 @@ def flatten(json_file_path, anndata_file_path, output_file_path):
     input_anndata = read_anndata_file(anndata_file_path)
     # obs
     annotations = input_json[ANNOTATIONS]
+
     for ann in annotations:
         cell_ids = ann.get(CELL_IDS, [])
 
@@ -51,17 +54,14 @@ def flatten(json_file_path, anndata_file_path, output_file_path):
                 continue
             key = f"{ann[LABELSET]}--{k}"
 
-            value_str = v
+            value = v
             if isinstance(v, list):
                 non_dict_v = [value for value in v if not isinstance(value, dict)]
-                value_str = ", ".join(sorted(non_dict_v))
+                value = ", ".join(sorted(non_dict_v))
                 if len(v) > len(non_dict_v):
                     print("WARN: dict values are excluded on field '{}'".format(key))
-            value = value_str
 
-            input_anndata.obs[key] = ""
-
-            for index_to_insert in ann[CELL_IDS]:
+            for index_to_insert in cell_ids:
                 input_anndata.obs.at[index_to_insert, key] = value
     # uns
     uns_json = {}
@@ -84,3 +84,4 @@ def flatten(json_file_path, anndata_file_path, output_file_path):
     # Close the AnnData file to prevent blocking
     input_anndata.file.close()
     input_anndata.write(output_file_path)
+

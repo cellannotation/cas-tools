@@ -7,7 +7,7 @@ HERE = pathlib.Path(__file__).parent
 README = (HERE / "README.md").read_text()
 
 setup(
-    name="cas",
+    name="cas-tools",
     version="0.0.1.dev1",
     description="Cell Annotation Schema tools.",
     long_description=README,
