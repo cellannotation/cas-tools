@@ -51,10 +51,13 @@ def flatten(json_file_path, anndata_file_path, output_file_path):
                 continue
             key = f"{ann[LABELSET]}--{k}"
 
-            non_dict_v = [value for value in v if not isinstance(value, dict)]
-            if len(v) > len(non_dict_v):
-                print("WARN: dict values are excluded on field '{}'".format(key))
-            value = non_dict_v if not isinstance(non_dict_v, list) else ", ".join(sorted(non_dict_v))
+            value_str = v
+            if isinstance(v, list):
+                non_dict_v = [value for value in v if not isinstance(value, dict)]
+                value_str = ", ".join(sorted(non_dict_v))
+                if len(v) > len(non_dict_v):
+                    print("WARN: dict values are excluded on field '{}'".format(key))
+            value = value_str
 
             input_anndata.obs[key] = ""
 
