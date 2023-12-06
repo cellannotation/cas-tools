@@ -13,13 +13,16 @@ Key Features:
 4. Writes the modified AnnData object to a specified output file.
 
 ```
-cas flatten --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --output path/to/output_file.h5ad
+cas flatten --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --validate --output path/to/output_file.h5ad
 ```
 
 **Command-line Arguments:**
 - `--json`      : Path to the CAS JSON schema file.
 - `--anndata`   : Path to the AnnData file. Ideally, the location will be specified by a resolvable path in the CAS file.
+- `--validate`  : (Optional) Perform validation checks before flattening to the output AnnData file.
 - `--output`    : Output AnnData file name (default: output.h5ad).
+
+Please check the [related notebook](../notebooks/test_flatten.ipynb) to evaluate the output data format.
 
 ## Merge CAS to AnnData file
 
@@ -32,5 +35,7 @@ cas merge --json path/to/CAS_schema.json --anndata path/to/input_anndata.h5ad --
 **Command-line Arguments:**
 - `--json`      : Path to the CAS JSON schema file.
 - `--anndata`   : Path to the AnnData file. Ideally, the location will be specified by a resolvable path in the CAS file.
-- `--validate`  : Perform validation checks before writing to the output AnnData file.
+- `--validate`  : (Optional) Perform validation checks before writing to the output AnnData file.
 - `--output`    : Output AnnData file name (default: output.h5ad).
+
+Please check the [related notebook](../notebooks/test_merge.ipynb) to evaluate the output data format.

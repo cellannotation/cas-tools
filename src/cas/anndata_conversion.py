@@ -61,13 +61,13 @@ def merge(cas_path: str, anndata_path: str, validate: bool, output_file_name: st
     input_json = read_json_file(cas_path)
     input_anndata = read_anndata_file(anndata_path)
 
-    test_merge(input_anndata, input_json, validate)
+    test_compatibility(input_anndata, input_json, validate)
 
     save_cas_to_uns(input_anndata, input_json)
     write_anndata(input_anndata, output_file_name)
 
 
-def test_merge(input_anndata, input_json, validate):
+def test_compatibility(input_anndata, input_json, validate):
     """
     Tests if CAS and AnnData can be merged.
 

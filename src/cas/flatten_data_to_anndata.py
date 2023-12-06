@@ -13,6 +13,7 @@ Key Features:
 """
 
 from cas.file_utils import read_json_file, read_anndata_file
+from cas.anndata_conversion import test_compatibility
 
 LABELSET_NAME = "name"
 
@@ -23,6 +24,8 @@ LABELSETS = "labelsets"
 ANNOTATIONS = "annotations"
 
 CELL_IDS = "cell_ids"
+
+CELL_LABEL = "cell_label"
 
 
 def is_list_of_strings(var):
@@ -40,9 +43,12 @@ def is_list_of_strings(var):
     return isinstance(var, list) and all(isinstance(item, str) for item in var)
 
 
-def flatten(json_file_path, anndata_file_path, output_file_path):
+def flatten(json_file_path, anndata_file_path, validate, output_file_path):
     input_json = read_json_file(json_file_path)
     input_anndata = read_anndata_file(anndata_file_path)
+
+    if validate:
+        test_compatibility(input_anndata, input_json, validate)
     # obs
     annotations = input_json[ANNOTATIONS]
 
@@ -50,9 +56,12 @@ def flatten(json_file_path, anndata_file_path, output_file_path):
         cell_ids = ann.get(CELL_IDS, [])
 
         for k, v in ann.items():
-            if k == CELL_IDS:
+            if k == CELL_IDS or k == LABELSET:
                 continue
-            key = f"{ann[LABELSET]}--{k}"
+            if k == CELL_LABEL:
+                key = ann[LABELSET]
+            else:
+                key = f"{ann[LABELSET]}--{k}"
 
             value = v
             if isinstance(v, list):

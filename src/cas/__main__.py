@@ -30,11 +30,12 @@ def main():
         json_file_path = args.json
         anndata_file_path = args.anndata
         output_file_path = args.output
+        validate = args.validate
 
         if anndata_file_path == output_file_path:
             raise ValueError("--anndata and --output cannot be the same")
 
-        flatten(json_file_path, anndata_file_path, output_file_path)
+        flatten(json_file_path, anndata_file_path, validate, output_file_path)
 
 
 def create_merge_operation_parser(subparsers):
@@ -70,10 +71,18 @@ def create_merge_operation_parser(subparsers):
         default="output.h5ad",
         help="Output AnnData file name (default: output.h5ad).",
     )
+    parser_merge.set_defaults(validate=False)
 
 
 def create_flatten_operation_parser(subparsers):
     """
+        Command-line Arguments:
+    -----------------------
+    --json      : Path to the CAS JSON schema file.
+    --anndata   : Path to the AnnData file. Ideally, the location will be specified by a resolvable path in the CAS file.
+    --validate  : Perform validation checks before flattening to AnnData file.
+    --output    : Output AnnData file name (default: output.h5ad).
+
     Usage Example:
     --------------
     cd src
@@ -86,10 +95,17 @@ def create_flatten_operation_parser(subparsers):
     parser_flatten.add_argument("--json", required=True, help="Input JSON file path")
     parser_flatten.add_argument("--anndata", required=True, help="Input AnnData file path")
     parser_flatten.add_argument(
+        "-v",
+        "--validate",
+        action="store_true",
+        help="Perform validation checks before writing to the output AnnData file.",
+    )
+    parser_flatten.add_argument(
         "--output",
         help="Output AnnData file name (default: output.h5ad)",
         default="output.h5ad",
     )
+    parser_flatten.set_defaults(validate=False)
 
 
 if __name__ == "__main__":
