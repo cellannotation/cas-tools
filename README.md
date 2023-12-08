@@ -16,7 +16,7 @@ CAS-Tools simplifies the utilization of CAS by offering a set of programmaticall
 
 ## Installation
 
-You can install CAS-Tools using `pip`:
+You can install CAS-Tools [pypi package](https://pypi.org/project/cas-tools/) using `pip`:
 
 ```commandline
 pip install cas-tools
