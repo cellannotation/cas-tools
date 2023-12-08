@@ -1,0 +1,96 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: Cell Type Annotation
+type: object
+additionalProperties: False
+required: [ 'author_name', 'fields' ]
+
+
+definitions:
+
+  column_definition:
+    oneOf:
+      - { $ref: "#/definitions/hierarchical_column_definition" }
+      - { $ref: "#/definitions/annotation_column_definition" }
+
+  hierarchical_column_definition:
+    required: [ 'column_name', 'column_type', 'rank' ]
+    additionalProperties: False
+    properties:
+      column_name:
+        type: string
+        description: >
+          Name of a column in the original spreadsheet/tsv.  
+          Only name columns here that you can specify a type for in the column_type config, 
+           all other columns will be preserved.
+      column_type:
+        description: "Type of the column"
+        enum:
+          - "cluster_id"
+          - "cluster_name"
+          - "cell_set"
+      rank:
+        description: "Use this to number hierarchical cell sets, starting at 0 for cluster (leaf nodes)"
+        type: number
+
+  annotation_column_definition:
+    required: [ 'column_name', 'column_type' ]
+    additionalProperties: False
+    properties:
+      column_name:
+        type: string
+        description: >
+          Name of a column in the original spreadsheet/tsv.  
+          Only name columns here that you can specify a type for in the column_type config, 
+           all other columns will be preserved.
+      column_type:
+        description: "Type of the column"
+        enum:
+          - "cell_fullname"
+          - "cell_ontology_term_id"
+          - "cell_ontology_term"
+          - "cell_ids"
+          - "rationale"
+          - "rationale_dois"
+          - "marker_gene_evidence"
+          - "synonyms"
+          - "cell_set_accession"
+          - "parent_cell_set_accession"
+          # - "marker_confidence_score"
+          # - "brain_region_ontology_term_id"
+          # - "brain_region_name"
+
+properties:
+
+  author_name:
+    type: string
+    description: "This MUST be a string in the format `[FIRST NAME] [LAST NAME]`"
+
+  taxonomy_id:
+    type: string
+    description: "Taxonomy identifier"
+
+  species_ids:
+    type: array
+    items: { type: string }
+    description: "Identifier of the species of this taxonomy"
+
+  species_names:
+    type: array
+    items: { type: string }
+    description: "Names of the species of this taxonomy"
+
+  brain_region_ids:
+    type: array
+    items: { type: string }
+    description: "Identifiers of the brain regions of this taxonomy"
+
+  brain_region_names:
+    type: array
+    items: { type: string }
+    description: "Names of the brain regions of this taxonomy"
+
+  fields:
+    type: array
+    description: "Data column definitions"
+    items: { $ref : '#/definitions/column_definition' }
+
