@@ -26,5 +26,5 @@ pip install cas-tools
 
 Please see related guides:
 
-- [Commandline interface](docs/cli)
+- [Command line interface](docs/cli.md)
 
