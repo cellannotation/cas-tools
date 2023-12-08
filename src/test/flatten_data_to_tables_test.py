@@ -1,5 +1,6 @@
 import unittest
 import os
+import shutil
 
 from cas.ingest.ingest_user_table import ingest_user_data
 from cas.flatten_data_to_tables import serialize_to_tables
@@ -13,10 +14,17 @@ OUT_FOLDER = os.path.join(os.path.dirname(os.path.realpath(__file__)), "./test_d
 
 class TabularSerialisationTests(unittest.TestCase):
     def setUp(self):
+        if not os.path.exists(OUT_FOLDER):
+            os.makedirs(OUT_FOLDER)
+
         test_folder = os.listdir(OUT_FOLDER)
         for item in test_folder:
             if item.endswith(".tsv"):
                 os.remove(os.path.join(OUT_FOLDER, item))
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(OUT_FOLDER)
 
     def test_annotation_table(self):
         cta = ingest_user_data(RAW_DATA, TEST_CONFIG)

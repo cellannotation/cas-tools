@@ -8,7 +8,7 @@ README = (HERE / "README.md").read_text()
 
 setup(
     name="cas-tools",
-    version="0.0.1.dev1",
+    version="0.0.1.dev3",
     description="Cell Annotation Schema tools.",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -23,7 +23,8 @@ setup(
     package_dir={'': 'src'},
     packages=["cas"],
     include_package_data=True,
-    install_requires=["anndata==0.10.3", "cellxgene-census==1.7.0", "scanpy", "dataclasses_json"],
+    install_requires=["anndata==0.10.3", "cellxgene-census==1.7.0", "scanpy", "dataclasses_json", "pandas",
+                      "ruamel.yaml", "jsonschema"],
     entry_points={
         "console_scripts": [
             "cas=cas.__main__:main",

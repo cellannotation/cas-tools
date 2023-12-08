@@ -13,6 +13,11 @@ class CellTypeAnnotationTests(unittest.TestCase):
         if os.path.isfile(OUT_FILE):
             os.remove(OUT_FILE)
 
+    @classmethod
+    def tearDownClass(cls):
+        if os.path.isfile(OUT_FILE):
+            os.remove(OUT_FILE)
+
     def test_data_formatting(self):
         result = ingest_data(RAW_DATA, TEST_CONFIG, OUT_FILE, "json", True)
         # print(result)
