@@ -20,7 +20,7 @@ setup(
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Operating System :: OS Independent",
     ],
-    package_dir={'': 'src'},
+    # package_dir={'': 'src'},
     packages=find_packages(),
     include_package_data=True,
     install_requires=["anndata==0.10.3", "dataclasses_json", "pandas",
