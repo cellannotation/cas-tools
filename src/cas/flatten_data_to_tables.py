@@ -13,10 +13,12 @@ def serialize_to_tables(cta, file_name_prefix, out_folder, accession_prefix):
         - Labelset table
         - Metadata
         - Annotation transfer
-    :param cta: cell type annotation object to serialize.
-    :param file_name_prefix: Name prefix for table names
-    :param out_folder: output folder path.
-    :param accession_prefix: accession id prefix
+
+    Parameters:
+        cta: cell type annotation object to serialize.
+        file_name_prefix: Name prefix for table names
+        out_folder: output folder path.
+        accession_prefix: accession id prefix
     """
     annotation_table_path = generate_annotation_table(accession_prefix, cta, file_name_prefix, out_folder)
     labelset_table_path = generate_labelset_table(cta, file_name_prefix, out_folder)
@@ -28,9 +30,11 @@ def serialize_to_tables(cta, file_name_prefix, out_folder, accession_prefix):
 def generate_annotation_transfer_table(cta, file_name_prefix, out_folder):
     """
     Generates annotation transfer table.
-    :param cta: cell type annotation object to serialize.
-    :param file_name_prefix: Name prefix for table names
-    :param out_folder: output folder path.
+
+    Parameters:
+        cta: cell type annotation object to serialize.
+        file_name_prefix: Name prefix for table names
+        out_folder: output folder path.
     """
     table_path = os.path.join(out_folder, file_name_prefix + "_annotation_transfer.tsv")
 
@@ -68,9 +72,11 @@ def generate_annotation_transfer_table(cta, file_name_prefix, out_folder):
 def generate_metadata_table(cta, file_name_prefix, out_folder):
     """
     Generates the metadata table.
-    :param cta: cell type annotation object to serialize.
-    :param file_name_prefix: Name prefix for table names
-    :param out_folder: output folder path.
+
+    Parameters:
+        cta: cell type annotation object to serialize.
+        file_name_prefix: Name prefix for table names
+        out_folder: output folder path.
     """
     table_path = os.path.join(out_folder, file_name_prefix + "_metadata.tsv")
 
@@ -95,9 +101,11 @@ def generate_metadata_table(cta, file_name_prefix, out_folder):
 def generate_labelset_table(cta, file_name_prefix, out_folder):
     """
     Generates labelset table.
-    :param cta: cell type annotation object to serialize.
-    :param file_name_prefix: Name prefix for table names
-    :param out_folder: output folder path.
+
+    Parameters:
+        cta: cell type annotation object to serialize.
+        file_name_prefix: Name prefix for table names
+        out_folder: output folder path.
     """
     table_path = os.path.join(out_folder, file_name_prefix + "_labelset.tsv")
 
@@ -133,10 +141,12 @@ def generate_labelset_table(cta, file_name_prefix, out_folder):
 def generate_annotation_table(accession_prefix, cta, file_name_prefix, out_folder):
     """
     Generates annotation table.
-    :param cta: cell type annotation object to serialize.
-    :param file_name_prefix: Name prefix for table names
-    :param out_folder: output folder path.
-    :param accession_prefix: accession id prefix
+
+    Parameters:
+        cta: cell type annotation object to serialize.
+        file_name_prefix: Name prefix for table names
+        out_folder: output folder path.
+        accession_prefix: accession id prefix
     """
     std_data_path = os.path.join(out_folder, file_name_prefix + "_annotation.tsv")
     accession_manager = IncrementalAccessionManager(accession_prefix)
@@ -196,9 +206,10 @@ def generate_annotation_table(accession_prefix, cta, file_name_prefix, out_folde
 def list_to_string(my_list: list):
     """
     Converts a list to its string representation. Nanobot has problem with single quotations so removes them as well.
-    Params:
+    Parameters:
         my_list: list to serialize
-    Returns: string representation of the list
+    Returns:
+        string representation of the list
     """
     if not my_list:
         str_value = "[]"
@@ -210,7 +221,7 @@ def list_to_string(my_list: list):
 def assign_parent_accession_ids(accession_manager, std_parent_records, std_parent_records_dict, labelsets):
     """
     Assigns accession ids to parent clusters and updates their references from the child clusters.
-    Params:
+    Parameters:
         accession_manager: accession ID generator
         std_parent_records: list of all parents to assign accession ids
         std_parent_records_dict: parent cluster - child clusters dictionary
