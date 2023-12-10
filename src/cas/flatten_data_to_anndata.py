@@ -62,8 +62,14 @@ def flatten(json_file_path, anndata_file_path, validate, output_file_path):
     # obs
     annotations = input_json[ANNOTATIONS]
 
+    parent_cell_ids = collect_parent_cell_ids(input_json)
+
     for ann in annotations:
-        cell_ids = ann.get(CELL_IDS, [])
+        cell_ids = []
+        if CELL_IDS in ann and ann[CELL_IDS]:
+            cell_ids = ann[CELL_IDS]
+        elif "cell_set_accession" in ann and ann["cell_set_accession"] in parent_cell_ids:
+            cell_ids = list(parent_cell_ids[ann["cell_set_accession"]])
 
         for k, v in ann.items():
             if k == CELL_IDS or k == LABELSET:
@@ -104,3 +110,25 @@ def flatten(json_file_path, anndata_file_path, validate, output_file_path):
     input_anndata.file.close()
     input_anndata.write(output_file_path)
 
+
+def collect_parent_cell_ids(cas):
+    parent_cell_ids = dict()
+
+    labelsets = sorted(cas[LABELSETS], key=lambda x: int(x["rank"]))
+    for labelset in labelsets:
+        ls_annotations = [ann for ann in cas[ANNOTATIONS] if ann["labelset"] == labelset["name"]]
+
+        for ann in ls_annotations:
+            if "parent_cell_set_accession" in ann:
+                cell_ids = set()
+                if CELL_IDS in ann and ann[CELL_IDS]:
+                    cell_ids = set(ann[CELL_IDS])
+                elif "cell_set_accession" in ann and ann["cell_set_accession"] in parent_cell_ids:
+                    cell_ids = parent_cell_ids[ann["cell_set_accession"]]
+
+                if ann["parent_cell_set_accession"] in parent_cell_ids:
+                    parent_cell_ids[ann["parent_cell_set_accession"]].update(cell_ids)
+                else:
+                    parent_cell_ids[ann["parent_cell_set_accession"]] = set(cell_ids)
+
+    return parent_cell_ids
