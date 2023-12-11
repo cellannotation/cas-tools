@@ -24,7 +24,7 @@ class CxGDatasetResolver(BaseMatrixFileResolver):
         self.cached_datasets = list_cached_datasets(cache_folder_path)
 
     def resolve_matrix_file(self, dataset_id) -> Optional[anndata.AnnData]:
-        return read_anndata_file(self.resolve_matrix_file_path())
+        return read_anndata_file(self.resolve_matrix_file_path(dataset_id))
 
     def resolve_matrix_file_path(self, dataset_id) -> str:
         dataset_file_name = dataset_id + H5AD_FILE_EXTENSION
