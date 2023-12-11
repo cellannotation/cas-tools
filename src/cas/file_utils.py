@@ -50,7 +50,7 @@ def read_cas_json_file(file_path) -> CellTypeAnnotation:
     return CellTypeAnnotation.from_dict(read_json_file(file_path))
 
 
-def write_json_file(cas, out_file, print_undefined=False):
+def write_json_file(cas: CellTypeAnnotation, out_file: str, print_undefined: bool = False):
     """
     Writes cell type annotation object to a json file.
     :param cas: cell type annotation object to serialize.

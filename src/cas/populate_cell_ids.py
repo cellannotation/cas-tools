@@ -1,5 +1,7 @@
 import json
+import anndata
 
+from typing import Optional
 from cas.file_utils import read_json_file, read_anndata_file
 
 
@@ -13,7 +15,25 @@ def populate_cell_ids(cas_json_path: str, anndata_path: str, labelsets: list = N
         labelsets: List of labelsets to update with IDs from AnnData. If value is null, rank '0' labelset is used.
     """
     ad = read_anndata_file(anndata_path)
-    cas = read_json_file(cas_json_path)
+    if ad is not None:
+        cas = read_json_file(cas_json_path)
+        cas = add_cell_ids(cas, ad, labelsets)
+        if cas:
+            with open(cas_json_path, "w") as json_file:
+                json.dump(cas, json_file, indent=2)
+    else:
+        raise Exception('Anndata read operation failed: {}'.format(anndata_path))
+
+
+def add_cell_ids(cas: dict, ad: Optional[anndata.AnnData], labelsets: list = None):
+    """
+    Add/update CellIDs to CAS from matching AnnData file.
+
+    Parameters:
+        cas: CAS JSON object
+        ad: anndata object
+        labelsets: List of labelsets to update with IDs from AnnData. If value is null, rank '0' labelset is used.
+    """
 
     rank_zero_labelset = [lbl_set["name"] for lbl_set in cas["labelsets"] if lbl_set["rank"] == "0"][0]
     if not labelsets:
@@ -45,10 +65,11 @@ def populate_cell_ids(cas_json_path: str, anndata_path: str, labelsets: list = N
                 cell_ids = list(cid_lookup.get(anno["cell_label"], []))
                 anno["cell_ids"] = cell_ids
 
-        with open(cas_json_path, "w") as json_file:
-            json.dump(cas, json_file, indent=2)
+        return cas
     else:
         print("WARN: Cluster identifier column couldn't be identified in OBS. Populate cell ids operation is aborted.")
+
+    return None
 
 
 def get_obs_cluster_identifier_column(ad):
