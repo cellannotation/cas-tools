@@ -140,7 +140,7 @@ def handle_non_matching_labelset(ann, cell_label, cell_list, input_anndata, vali
     if validate:
         sys.exit()
     # Flush the labelset from anndata
-    input_anndata.obs.loc[list(cell_list), cell_label] = ""
+    # input_anndata.obs.loc[list(cell_list), cell_label] = ""
     # Add labelset from CAS to anndata
     cell_ids = derived_cell_ids.get(str(ann["cell_set_accession"]), set())
     input_anndata.obs.loc[list(cell_ids), ann[LABELSET]] = str(ann[CELL_LABEL])
