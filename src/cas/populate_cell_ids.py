@@ -15,29 +15,62 @@ def populate_cell_ids(cas_json_path: str, anndata_path: str, labelsets: list = N
     ad = read_anndata_file(anndata_path)
     cas = read_json_file(cas_json_path)
 
+    rank_zero_labelset = [lbl_set["name"] for lbl_set in cas["labelsets"] if lbl_set["rank"] == "0"][0]
     if not labelsets:
-        labelsets = [lbl_set["name"] for lbl_set in cas["labelsets"] if lbl_set["rank"] == "0"]
+        labelsets = rank_zero_labelset
 
-    cid_lookup = {}
-    for anno in cas["annotations"]:
-        if "user_annotations" in anno and "parent_cell_set_name" in anno and anno["labelset"] in labelsets:
-            cluster_id = anno["user_annotations"][0]["cell_label"]
-            cell_ids = list(ad.obs.loc[ad.obs["cluster_id"] == int(cluster_id), "cluster_id"].index)
-            anno["cell_ids"] = cell_ids
-            lookup_key = anno["parent_cell_set_name"]
-            if lookup_key in cid_lookup:
-                cid_lookup[lookup_key].update(cell_ids)
-            else:
-                cid_lookup[lookup_key] = set(cell_ids)
+    cluster_identifier_column = get_obs_cluster_identifier_column(ad)
 
-    for anno in cas["annotations"]:
-        if anno["labelset"] in labelsets and anno["cell_label"] in cid_lookup:
-            cell_ids = list(cid_lookup.get(anno["cell_label"], []))
-            anno["cell_ids"] = cell_ids
+    if cluster_identifier_column:
+        cid_lookup = {}
+        for anno in cas["annotations"]:
+            if anno["labelset"] == rank_zero_labelset and anno["labelset"] in labelsets:
+                cell_ids = []
+                if cluster_identifier_column.lower() == "cluster_id":
+                    cluster_id = anno["user_annotations"][0]["cell_label"]
+                    cell_ids = list(ad.obs.loc[ad.obs["cluster_id"] == int(cluster_id), cluster_identifier_column].index)
+                elif cluster_identifier_column.lower() == "cluster":
+                    cluster_label = anno["cell_label"]
+                    cell_ids = list(ad.obs.loc[ad.obs[cluster_identifier_column] == cluster_label].index)
+                anno["cell_ids"] = cell_ids
+                if "parent_cell_set_name" in anno:
+                    lookup_key = anno["parent_cell_set_name"]
+                    if lookup_key in cid_lookup:
+                        cid_lookup[lookup_key].update(cell_ids)
+                    else:
+                        cid_lookup[lookup_key] = set(cell_ids)
 
-    with open(cas_json_path, "w") as json_file:
-        json.dump(cas, json_file, indent=2)
+        for anno in cas["annotations"]:
+            if anno["labelset"] in labelsets and anno["cell_label"] in cid_lookup:
+                cell_ids = list(cid_lookup.get(anno["cell_label"], []))
+                anno["cell_ids"] = cell_ids
 
+        with open(cas_json_path, "w") as json_file:
+            json.dump(cas, json_file, indent=2)
+    else:
+        print("WARN: Cluster identifier column couldn't be identified in OBS. Populate cell ids operation is aborted.")
+
+
+def get_obs_cluster_identifier_column(ad):
+    """
+    Anndata files may use different column names to uniquely identify Clusters. Get the cluster identifier column name for the current file.
+    Args:
+        ad: anndata object
+
+    Returns:
+        cluster identifier column name
+    """
+    obs_keys = ad.obs_keys()
+    cluster_identifier_column = ""
+    if "Cluster_id" in obs_keys:
+        cluster_identifier_column = "Cluster_id"
+    elif "cluster_id" in obs_keys:
+        cluster_identifier_column = "cluster_id"
+    elif "Cluster" in obs_keys:
+        cluster_identifier_column = "Cluster"
+    elif "cluster" in obs_keys:
+        cluster_identifier_column = "cluster"
+    return cluster_identifier_column
 
 # def populate_cell_ids(cas_json_path: str, anndata_path: str, labelsets: list = None):
 #     """

@@ -80,10 +80,13 @@ def test_compatibility(input_anndata, input_json, validate):
     validate_cell_ids(input_anndata, annotations, validate)
 
     matching_obs_keys = get_matching_obs_keys(input_anndata, input_json)
-    check_labelsets(annotations, input_anndata, matching_obs_keys, validate)
+    check_labelsets(input_json, input_anndata, matching_obs_keys, validate)
 
 
-def check_labelsets(annotations, input_anndata, matching_obs_keys, validate):
+def check_labelsets(cas_json, input_anndata, matching_obs_keys, validate):
+    annotations = get_cas_annotations(cas_json)
+    derived_cell_ids = get_derived_cell_ids(cas_json)
+
     for ann in annotations:
         if ann[LABELSET] in matching_obs_keys:
             anndata_labelset_cell_ids = (
@@ -92,11 +95,11 @@ def check_labelsets(annotations, input_anndata, matching_obs_keys, validate):
                 .to_dict()
             )
             for cell_label, cell_list in anndata_labelset_cell_ids.items():
-                if cell_list == set(ann[CELL_IDS]):
+                if cell_list == derived_cell_ids.get(str(ann["cell_set_accession"]), set()):
                     handle_matching_labelset(ann, cell_label, input_anndata, validate)
                 elif cell_label == ann[CELL_LABEL]:
                     handle_non_matching_labelset(
-                        ann, cell_label, cell_list, input_anndata, validate
+                        ann, cell_label, cell_list, input_anndata, validate, derived_cell_ids
                     )
 
 
@@ -129,7 +132,7 @@ def handle_matching_labelset(ann, cell_label, input_anndata, validate):
         ].map({cell_label: ann[CELL_LABEL]})
 
 
-def handle_non_matching_labelset(ann, cell_label, cell_list, input_anndata, validate):
+def handle_non_matching_labelset(ann, cell_label, cell_list, input_anndata, validate, derived_cell_ids):
     print(
         f"{ann[CELL_LABEL]} cell ids from CAS do not match with the cell ids from anndata. "
         "Please update your CAS json."
@@ -137,9 +140,10 @@ def handle_non_matching_labelset(ann, cell_label, cell_list, input_anndata, vali
     if validate:
         sys.exit()
     # Flush the labelset from anndata
-    input_anndata.obs.loc[cell_list, cell_label] = None
+    input_anndata.obs.loc[list(cell_list), cell_label] = ""
     # Add labelset from CAS to anndata
-    input_anndata.obs.loc[ann[CELL_IDS], ann[LABELSET]] = ann[CELL_LABEL]
+    cell_ids = derived_cell_ids.get(str(ann["cell_set_accession"]), set())
+    input_anndata.obs.loc[list(cell_ids), ann[LABELSET]] = str(ann[CELL_LABEL])
 
 
 def save_cas_to_uns(input_anndata, input_json):
@@ -178,3 +182,35 @@ def write_anndata(input_anndata, output_file_path):
     # Close the AnnData file to prevent blocking
     input_anndata.file.close()
     input_anndata.write(output_file_path)
+
+
+def get_derived_cell_ids(cas):
+    """
+    Using the cluster hierarchy derives cell ids for all nodes.
+    Args:
+        cas: cas json object
+
+    Returns:
+        dictionary of cell_set_accession - set of derived cell ids
+    """
+    derived_cell_ids = dict()
+
+    labelsets = sorted(cas[LABELSETS], key=lambda x: int(x["rank"]))
+    for labelset in labelsets:
+        ls_annotations = [ann for ann in cas[ANNOTATIONS] if ann["labelset"] == labelset["name"]]
+
+        for ann in ls_annotations:
+            if "parent_cell_set_accession" in ann:
+                cell_ids = set()
+                if CELL_IDS in ann and ann[CELL_IDS]:
+                    cell_ids = set(ann[CELL_IDS])
+                    derived_cell_ids[ann["cell_set_accession"]] = cell_ids
+                elif "cell_set_accession" in ann and ann["cell_set_accession"] in derived_cell_ids:
+                    cell_ids = derived_cell_ids[str(ann["cell_set_accession"])]
+
+                if ann["parent_cell_set_accession"] in derived_cell_ids:
+                    derived_cell_ids[ann["parent_cell_set_accession"]].update(cell_ids)
+                else:
+                    derived_cell_ids[ann["parent_cell_set_accession"]] = set(cell_ids)
+
+    return derived_cell_ids
