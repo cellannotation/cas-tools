@@ -4,10 +4,12 @@ import shutil
 
 from cas.ingest.ingest_user_table import ingest_user_data
 from cas.flatten_data_to_tables import serialize_to_tables
-from cas.file_utils import read_csv_to_dict
+from cas.file_utils import read_csv_to_dict, read_cas_json_file
 
 RAW_DATA = os.path.join(os.path.dirname(os.path.realpath(__file__)), "./test_data/nhp_basal_ganglia/AIT115_annotation_sheet.tsv")
 TEST_CONFIG = os.path.join(os.path.dirname(os.path.realpath(__file__)), "./test_data/nhp_basal_ganglia/test_config.yaml")
+
+TEST_JSON = os.path.join(os.path.dirname(os.path.realpath(__file__)), "./test_data/siletti/Siletti_all_non_neuronal_cells_with_cids.json")
 
 OUT_FOLDER = os.path.join(os.path.dirname(os.path.realpath(__file__)), "./test_data/table_out/")
 
@@ -114,4 +116,15 @@ class TabularSerialisationTests(unittest.TestCase):
         self.assertEqual("", records[1]["transferred_cell_label"])
         self.assertEqual("", records[1]["source_taxonomy"])
         self.assertEqual("", records[1]["source_node_accession"])
+
+    def test_loading_from_json(self):
+        cta = read_cas_json_file(TEST_JSON)
+        tables = serialize_to_tables(cta, "Test_table", OUT_FOLDER, "CS202210140_")
+
+        annotation_table_path = os.path.join(OUT_FOLDER, "Test_table_annotation.tsv")
+        self.assertEqual(annotation_table_path, tables[0])
+        self.assertTrue(os.path.isfile(annotation_table_path))
+
+        headers, records = read_csv_to_dict(annotation_table_path, id_column_name="cell_set_accession", delimiter="\t")
+        self.assertEqual(89, len(records))
 
