@@ -8,7 +8,7 @@ README = (HERE / "README.md").read_text()
 
 setup(
     name="cas-tools",
-    version="0.0.1.dev13",
+    version="0.0.1.dev14",
     description="Cell Annotation Schema tools.",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -31,5 +31,3 @@ setup(
         ]
     },
 )
-
-# print(find_packages(where='src', exclude=("test*",)))

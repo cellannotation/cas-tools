@@ -1,7 +1,11 @@
 import dataclasses_json
+import pandas as pd
+
 from typing import List, Optional, Any
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from dataclasses_json import DataClassJsonMixin
+
+from cas.reports import get_all_annotations
 
 
 exclude_none_values = True
@@ -213,3 +217,15 @@ class CellTypeAnnotation(EncoderMixin):
     def set_exclude_none_values(self, value):
         global exclude_none_values
         exclude_none_values = value
+
+    def get_all_annotations(self, show_cell_ids: bool = False, labels: list = None) -> pd.DataFrame:
+        """
+        Lists all annotations.
+
+        Args:
+            show_cell_ids: identifies if result have 'cell_ids' column. Default value is false
+            labels: list of key(labelset), value(cell_label) pairs to filter annotations
+        Returns:
+            Annotations data frame
+        """
+        return get_all_annotations(asdict(self), show_cell_ids=show_cell_ids, labels=labels)
