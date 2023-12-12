@@ -24,9 +24,9 @@ class TabularSerialisationTests(unittest.TestCase):
             if item.endswith(".tsv"):
                 os.remove(os.path.join(OUT_FOLDER, item))
 
-    @classmethod
-    def tearDownClass(cls):
-        shutil.rmtree(OUT_FOLDER)
+    # @classmethod
+    # def tearDownClass(cls):
+    #     shutil.rmtree(OUT_FOLDER)
 
     def test_annotation_table(self):
         cta = ingest_user_data(RAW_DATA, TEST_CONFIG)
@@ -127,4 +127,12 @@ class TabularSerialisationTests(unittest.TestCase):
 
         headers, records = read_csv_to_dict(annotation_table_path, id_column_name="cell_set_accession", delimiter="\t")
         self.assertEqual(89, len(records))
+
+        # cluster_1 = records['TST_1']
+        # self.assertEqual("1_MSN", cluster_1["cell_label"])
+        # self.assertEqual("TST_300", cluster_1["parent_cell_set_accession"])
+        # self.assertEqual("D1-Matrix", cluster_1["parent_cell_set_name"])
+        # self.assertEqual("cluster", cluster_1["labelset"])
+        # self.assertEqual("[\"EPYC\", \"RELN\", \"GULP1\"]", cluster_1["marker_gene_evidence"])
+        # self.assertEqual("PuR(0.52) | CaH(0.39)", cluster_1["region.info _Frequency_"])
 

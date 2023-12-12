@@ -151,7 +151,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Mgl_4",
       "cell_set_accession": "CS202210140_5",
       "cell_ontology_term_id": "",
@@ -173,7 +173,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Mgl_5",
       "cell_set_accession": "CS202210140_6",
       "cell_ontology_term_id": "",
@@ -195,7 +195,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Mgl_6",
       "cell_set_accession": "CS202210140_7",
       "cell_ontology_term_id": "",
@@ -217,7 +217,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Mgl_7",
       "cell_set_accession": "CS202210140_8",
       "cell_ontology_term_id": "",
@@ -239,7 +239,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Mgl_8",
       "cell_set_accession": "CS202210140_9",
       "cell_ontology_term_id": "",
@@ -261,7 +261,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Mgl_9",
       "cell_set_accession": "CS202210140_10",
       "cell_ontology_term_id": "",
@@ -283,7 +283,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Mgl_10",
       "cell_set_accession": "CS202210140_11",
       "cell_ontology_term_id": "",
@@ -305,7 +305,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Mgl_11",
       "cell_set_accession": "CS202210140_12",
       "cell_ontology_term_id": "",
@@ -327,7 +327,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Mgl_12",
       "cell_set_accession": "CS202210140_13",
       "cell_ontology_term_id": "",
@@ -349,7 +349,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "VendPLVAP_13",
       "cell_set_accession": "CS202210140_14",
       "cell_ontology_term_id": "",
@@ -371,7 +371,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "VendAC_14",
       "cell_set_accession": "CS202210140_15",
       "cell_ontology_term_id": "",
@@ -393,7 +393,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "VendC_15",
       "cell_set_accession": "CS202210140_16",
       "cell_ontology_term_id": "CL:0002144",
@@ -418,7 +418,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "VendVC_16",
       "cell_set_accession": "CS202210140_17",
       "cell_ontology_term_id": "CL:0002144",
@@ -440,7 +440,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "VendV_17",
       "cell_set_accession": "CS202210140_18",
       "cell_ontology_term_id": "CL:0002543",
@@ -462,7 +462,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "VendA_18",
       "cell_set_accession": "CS202210140_19",
       "cell_ontology_term_id": "CL:1000413",
@@ -489,7 +489,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Vsmc_19",
       "cell_set_accession": "CS202210140_20",
       "cell_ontology_term_id": "",
@@ -511,7 +511,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Vsmc_20",
       "cell_set_accession": "CS202210140_21",
       "cell_ontology_term_id": "CL:0002590",
@@ -538,7 +538,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Per_21",
       "cell_set_accession": "CS202210140_22",
       "cell_ontology_term_id": "CL:0000669",
@@ -563,7 +563,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Per_22",
       "cell_set_accession": "CS202210140_23",
       "cell_ontology_term_id": "CL:0000669",
@@ -588,7 +588,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Per_23",
       "cell_set_accession": "CS202210140_24",
       "cell_ontology_term_id": "",
@@ -610,7 +610,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Fbl_24",
       "cell_set_accession": "CS202210140_25",
       "cell_ontology_term_id": "",
@@ -632,7 +632,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Fbl_25",
       "cell_set_accession": "CS202210140_26",
       "cell_ontology_term_id": "",
@@ -654,7 +654,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Fbl_26",
       "cell_set_accession": "CS202210140_27",
       "cell_ontology_term_id": "",
@@ -676,7 +676,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Fbl_27",
       "cell_set_accession": "CS202210140_28",
       "cell_ontology_term_id": "",
@@ -698,7 +698,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Fbl_28",
       "cell_set_accession": "CS202210140_29",
       "cell_ontology_term_id": "",
@@ -720,7 +720,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Fbl_29",
       "cell_set_accession": "CS202210140_30",
       "cell_ontology_term_id": "",
@@ -742,7 +742,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Fbl_30",
       "cell_set_accession": "CS202210140_31",
       "cell_ontology_term_id": "",
@@ -764,7 +764,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Fbl_31",
       "cell_set_accession": "CS202210140_32",
       "cell_ontology_term_id": "CL:4023097",
@@ -790,7 +790,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "OPC_32",
       "cell_set_accession": "CS202210140_33",
       "cell_ontology_term_id": "",
@@ -812,7 +812,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "OPC_33",
       "cell_set_accession": "CS202210140_34",
       "cell_ontology_term_id": "",
@@ -834,7 +834,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "OPC_34",
       "cell_set_accession": "CS202210140_35",
       "cell_ontology_term_id": "",
@@ -856,7 +856,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "OPC_35",
       "cell_set_accession": "CS202210140_36",
       "cell_ontology_term_id": "",
@@ -878,7 +878,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "OPC_36",
       "cell_set_accession": "CS202210140_37",
       "cell_ontology_term_id": "",
@@ -900,7 +900,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "COP_37",
       "cell_set_accession": "CS202210140_38",
       "cell_ontology_term_id": "",
@@ -922,7 +922,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "COP_38",
       "cell_set_accession": "CS202210140_39",
       "cell_ontology_term_id": "",
@@ -944,7 +944,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "COP_39",
       "cell_set_accession": "CS202210140_40",
       "cell_ontology_term_id": "",
@@ -966,7 +966,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Oligo_40",
       "cell_set_accession": "CS202210140_41",
       "cell_ontology_term_id": "",
@@ -988,7 +988,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "COP_41",
       "cell_set_accession": "CS202210140_42",
       "cell_ontology_term_id": "",
@@ -1010,7 +1010,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "COP_42",
       "cell_set_accession": "CS202210140_43",
       "cell_ontology_term_id": "",
@@ -1032,7 +1032,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "COP_43",
       "cell_set_accession": "CS202210140_44",
       "cell_ontology_term_id": "",
@@ -1054,7 +1054,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Oligo_44",
       "cell_set_accession": "CS202210140_45",
       "cell_ontology_term_id": "",
@@ -1076,7 +1076,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Oligo_45",
       "cell_set_accession": "CS202210140_46",
       "cell_ontology_term_id": "",
@@ -1098,7 +1098,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Oligo_46",
       "cell_set_accession": "CS202210140_47",
       "cell_ontology_term_id": "",
@@ -1120,7 +1120,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Oligo_47",
       "cell_set_accession": "CS202210140_48",
       "cell_ontology_term_id": "",
@@ -1142,7 +1142,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Oligo_48",
       "cell_set_accession": "CS202210140_49",
       "cell_ontology_term_id": "",
@@ -1164,7 +1164,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Oligo_49",
       "cell_set_accession": "CS202210140_50",
       "cell_ontology_term_id": "",
@@ -1186,7 +1186,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Oligo_50",
       "cell_set_accession": "CS202210140_51",
       "cell_ontology_term_id": "",
@@ -1208,7 +1208,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Bgl_51",
       "cell_set_accession": "CS202210140_52",
       "cell_ontology_term_id": "",
@@ -1230,7 +1230,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Astro_52",
       "cell_set_accession": "CS202210140_53",
       "cell_ontology_term_id": "",
@@ -1252,7 +1252,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Astro_53",
       "cell_set_accession": "CS202210140_54",
       "cell_ontology_term_id": "",
@@ -1274,7 +1274,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Astro_54",
       "cell_set_accession": "CS202210140_55",
       "cell_ontology_term_id": "",
@@ -1296,7 +1296,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Astro_55",
       "cell_set_accession": "CS202210140_56",
       "cell_ontology_term_id": "",
@@ -1318,7 +1318,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Astro_56",
       "cell_set_accession": "CS202210140_57",
       "cell_ontology_term_id": "",
@@ -1340,7 +1340,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Astro_57",
       "cell_set_accession": "CS202210140_58",
       "cell_ontology_term_id": "",
@@ -1362,7 +1362,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Astro_58",
       "cell_set_accession": "CS202210140_59",
       "cell_ontology_term_id": "",
@@ -1384,7 +1384,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Astro_59",
       "cell_set_accession": "CS202210140_60",
       "cell_ontology_term_id": "",
@@ -1406,7 +1406,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Astro_60",
       "cell_set_accession": "CS202210140_61",
       "cell_ontology_term_id": "",
@@ -1428,7 +1428,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Astro_61",
       "cell_set_accession": "CS202210140_62",
       "cell_ontology_term_id": "",
@@ -1450,7 +1450,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Astro_62",
       "cell_set_accession": "CS202210140_63",
       "cell_ontology_term_id": "",
@@ -1472,7 +1472,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Astro_63",
       "cell_set_accession": "CS202210140_64",
       "cell_ontology_term_id": "",
@@ -1494,7 +1494,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Astro_64",
       "cell_set_accession": "CS202210140_65",
       "cell_ontology_term_id": "",
@@ -1516,7 +1516,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Epen_65",
       "cell_set_accession": "CS202210140_66",
       "cell_ontology_term_id": "",
@@ -1538,7 +1538,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Epen_66",
       "cell_set_accession": "CS202210140_67",
       "cell_ontology_term_id": "",
@@ -1560,7 +1560,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Epen_67",
       "cell_set_accession": "CS202210140_68",
       "cell_ontology_term_id": "",
@@ -1582,7 +1582,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Epen_68",
       "cell_set_accession": "CS202210140_69",
       "cell_ontology_term_id": "",
@@ -1604,7 +1604,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Epen_69",
       "cell_set_accession": "CS202210140_70",
       "cell_ontology_term_id": "",
@@ -1626,7 +1626,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Epen_70",
       "cell_set_accession": "CS202210140_71",
       "cell_ontology_term_id": "",
@@ -1648,7 +1648,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Epen_71",
       "cell_set_accession": "CS202210140_72",
       "cell_ontology_term_id": "",
@@ -1670,7 +1670,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Epen_72",
       "cell_set_accession": "CS202210140_73",
       "cell_ontology_term_id": "",
@@ -1692,7 +1692,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Epen_73",
       "cell_set_accession": "CS202210140_74",
       "cell_ontology_term_id": "",
@@ -1714,7 +1714,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Epen_74",
       "cell_set_accession": "CS202210140_75",
       "cell_ontology_term_id": "",
@@ -1736,7 +1736,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "COP_75",
       "cell_set_accession": "CS202210140_76",
       "cell_ontology_term_id": "",
@@ -1758,7 +1758,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Chrp_76",
       "cell_set_accession": "CS202210140_77",
       "cell_ontology_term_id": "",
@@ -1780,7 +1780,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Chrp_77",
       "cell_set_accession": "CS202210140_78",
       "cell_ontology_term_id": "",
@@ -1802,7 +1802,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Chrp_78",
       "cell_set_accession": "CS202210140_79",
       "cell_ontology_term_id": "",
@@ -1824,7 +1824,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Chrp_79",
       "cell_set_accession": "CS202210140_80",
       "cell_ontology_term_id": "",
@@ -1846,7 +1846,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Chrp_80",
       "cell_set_accession": "CS202210140_81",
       "cell_ontology_term_id": "",
@@ -1868,7 +1868,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Chrp_81",
       "cell_set_accession": "CS202210140_82",
       "cell_ontology_term_id": "",
@@ -1890,7 +1890,7 @@
       ]
     },
     {
-      "labelset": "Cluster_name",
+      "labelset": "Cluster",
       "cell_label": "Chrp_82",
       "cell_set_accession": "CS202210140_83",
       "cell_ontology_term_id": "",
@@ -1914,7 +1914,7 @@
   ],
   "labelsets": [
     {
-      "name": "Cluster_name",
+      "name": "Cluster",
       "rank": "0"
     },
     {

@@ -155,6 +155,9 @@ def generate_annotation_table(accession_prefix, cta, file_name_prefix, out_folde
     std_records = list()
     std_parent_records = list()
     std_parent_records_dict = dict()
+
+    # sort annotations by accession ids incrementing (if there is)
+    cta["annotations"].sort(key=lambda x: int(str(x["cell_set_accession"]).split("_")[1]) if "cell_set_accession" in x and x["cell_set_accession"] and "_" in x["cell_set_accession"] else 0)
     for annotation_object in cta["annotations"]:
         record = dict()
         if "cell_set_accession" in annotation_object and annotation_object["cell_set_accession"]:
@@ -196,6 +199,8 @@ def generate_annotation_table(accession_prefix, cta, file_name_prefix, out_folde
                 children = list()
                 children.append(record)
                 std_parent_records_dict[annotation_object["parent_cell_set_name"]] = children
+        if "parent_cell_set_accession" in annotation_object:
+            record["parent_cell_set_accession"] = annotation_object["parent_cell_set_accession"]
     assign_parent_accession_ids(accession_manager, std_parent_records, std_parent_records_dict, cta["labelsets"])
     std_records.extend(std_parent_records)
     std_records_df = pd.DataFrame.from_records(std_records)

@@ -22,7 +22,7 @@ def main():
     cas_non_neuronal = CellTypeAnnotation("", list())
 
     labelsets = list()
-    cluster_ls = Labelset("Cluster_name")
+    cluster_ls = Labelset("Cluster")
     cluster_ls.rank = "0"
     supercluster_ls = Labelset("supercluster_term")
     supercluster_ls.rank = "1"
@@ -61,7 +61,7 @@ def main():
     for record_key in records:
         record = records[record_key]
         annotation = Annotation("", "")
-        annotation.labelset = "Cluster_name"
+        annotation.labelset = "Cluster"
 
         extract_annotation_data(record, record_key, annotation, nm_records, accession_manager)
 
