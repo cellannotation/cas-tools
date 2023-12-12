@@ -1,21 +1,22 @@
 SUPERCLUSTER 	CELL_ONTOLOGY_TERM_ID	CELL_ONTOLOGY_TERM	RATIONALE	RATIONALE_DOI	POSITIVE_GENE_EVIDENCE		Notes
-Amygdala excitatory	CL:4023039	amygdala excitatory neuron					
-CGE interneuron	CL:4023070	caudal ganglionic eminence derived GABAergic cortical interneuron					
-Cerebellar inhibitory	CL:4023057	cerebellar inhibitory GABAergic interneuron					
-Deep-layer corticothalamic and 6b	CL:4023013	corticothalamic-projecting glutamatergic cortical neuron					CL currently lacks suitably granular class
-Deep-layer intratelencephalic	CL:4023013	corticothalamic-projecting glutamatergic cortical neuron					CL currently lacks suitably granular class
-Deep-layer near-projecting	CL:4023013	corticothalamic-projecting glutamatergic cortical neuron					CL currently lacks suitably granular class
-Eccentric medium spiny neuron	CL:4030057	eccentric medium spiny neuron					
-Hippocampal CA1-3	CL:4023060	hippocampal CA1-3 neuron					
-Hippocampal CA4	CL:4023061	hippocampal CA4 neuron					
-Hippocampal dentate gyrus	CL:4023062	dentate gyrus neuron					
-LAMP5-LHX6 and Chandelier	CL:0010011	cerebral cortex GABAergic interneuron					CL currently lacks suitably granular class
-Lower rhombic lip	CL:0000540	neuron					CL currently lacks suitably granular class
-MGE interneuron	CL:4023069	medial ganglionic eminence derived GABAergic coritcal interneuron'					
-Mammillary body	CL:4023074	mammillary body neuron					
-Medium spiny neuron	CL:1001474	medium spiny neuron					
-Thalamic excitatory	CL:4023068	thalamic excitatory neuron					
-Upper rhombic lip	CL:0000540	neuron					CL currently lacks suitably granular class
-Upper-layer intratelencephalic	CL:4023008	intratelencephalic-projecting glutamatergic cortical neuron					
-Splatter	CL:0000540	neuron
-Midbrain-derived inhibitory	CL:4023079	midbrain-derived inhibitory neuron
+Amygdala excitatory	CL:4023039	amygdala excitatory neuron	Based on dissection region 				
+CGE interneuron	CL:4023070	caudal ganglionic eminence derived GABAergic cortical interneuron	Based on annotation transfer from Middle Temporal Gyrus (Jorstad et al., 2023)	DOI:10.1126/science.adf6812			
+Cerebellar inhibitory	CL:4023057	cerebellar inhibitory GABAergic interneuron	Based on annotation transfer from Middle Temporal Gyrus (Jorstad et al., 2023)	DOI:10.1126/science.adf6812			
+Deep-layer corticothalamic and 6b	CL:4023013	corticothalamic-projecting glutamatergic cortical neuron	Based on annotation transfer from Middle Temporal Gyrus (Jorstad et al., 2023)	DOI:10.1126/science.adf6812			CL currently lacks suitably granular class
+Deep-layer intratelencephalic	CL:4023013	corticothalamic-projecting glutamatergic cortical neuron	Based on annotation transfer from Middle Temporal Gyrus (Jorstad et al., 2023)	DOI:10.1126/science.adf6812			CL currently lacks suitably granular class
+Deep-layer near-projecting	CL:4023013	corticothalamic-projecting glutamatergic cortical neuron	Based on annotation transfer from Middle Temporal Gyrus (Jorstad et al., 2023)	DOI:10.1126/science.adf6812			CL currently lacks suitably granular class
+Eccentric medium spiny neuron	CL:4030057	eccentric medium spiny neuron	Based on integration and co-analysis with dataset from Saunders et al., 2018. Markers pulled by comparing our data to Saunders et. al 1018.  Data on http://dropviz.org/?_state_id_=8d0e82549d6039d9	https://doi.org/10.1016/j.cell.2018.07.028			
+Hippocampal CA1-3	CL:4023060	hippocampal CA1-3 neuron	Based on dissection region 				
+Hippocampal CA4	CL:4023061	hippocampal CA4 neuron	Based on dissection region 				
+Hippocampal dentate gyrus	CL:4023062	dentate gyrus neuron	Based on dissection region 				
+LAMP5-LHX6 and Chandelier	CL:0010011	cerebral cortex GABAergic interneuron	Based on annotation transfer from Middle Temporal Gyrus (Jorstad et al., 2023)	DOI:10.1126/science.adf6812			CL currently lacks suitably granular class
+Lower rhombic lip	CL:0000540	neuron	Based in part on dissection region and knowledge of development.				CL currently lacks suitably granular class
+MGE interneuron	CL:4023069	medial ganglionic eminence derived GABAergic coritcal interneuron'	Based on annotation transfer from Middle Temporal Gyrus (Jorstad et al., 2023)	DOI:10.1126/science.adf6812			
+Mammillary body	CL:4023074	mammillary body neuron	Based on dissection region 				
+Medium spiny neuron	CL:1001474	medium spiny neuron	Based on dissection region and marker expression.				
+Thalamic excitatory	CL:4023068	thalamic excitatory neuron	Based on dissection region 				
+Upper rhombic lip	CL:0000540	neuron	Based in part on dissection region and knowledge of development.				CL currently lacks suitably granular class
+Upper-layer intratelencephalic	CL:4023008	intratelencephalic-projecting glutamatergic cortical neuron	Based on annotation transfer from Middle Temporal Gyrus (Jorstad et al., 2023)	DOI:10.1126/science.adf6812			
+Splatter	CL:0000540	neuron	Label based on embedding				
+Midbrain-derived inhibitory	CL:4023079	midbrain-derived inhibitory neuron	Based in part on dissection region and knowledge of development.
+Miscellaneous	CL:0000000	cell

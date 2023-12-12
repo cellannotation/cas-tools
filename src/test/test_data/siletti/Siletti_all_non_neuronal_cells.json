@@ -7,9 +7,9 @@
       "cell_set_accession": "CS202210140_464",
       "cell_ontology_term_id": "CL:0000129",
       "cell_ontology_term": "microglia",
-      "rationale": "",
+      "rationale": "Supported by marker expression and annotation transfer from Middle Temporal Gyrus dataset (Jorstad et al., 2023)",
       "rationale_dois": [
-        ""
+        "DOI:10.1126/science.adf6812"
       ],
       "marker_gene_evidence": [
         "PTPRC"
@@ -21,9 +21,9 @@
       "cell_set_accession": "CS202210140_465",
       "cell_ontology_term_id": "CL:0002139",
       "cell_ontology_term": "endothelial cell of vascular tree",
-      "rationale": "",
+      "rationale": "Supported by marker expression and annotation transfer from Middle Temporal Gyrus dataset (Jorstad et al., 2023)",
       "rationale_dois": [
-        ""
+        "DOI:10.1126/science.adf6812"
       ],
       "marker_gene_evidence": [
         "CLDN5",
@@ -50,9 +50,9 @@
       "cell_set_accession": "CS202210140_467",
       "cell_ontology_term_id": "CL:0002453",
       "cell_ontology_term": "oligodendrocyte precursor cell",
-      "rationale": "",
+      "rationale": "Supported by marker expression and annotation transfer from Middle Temporal Gyrus dataset (Jorstad et al., 2023)",
       "rationale_dois": [
-        ""
+        "DOI:10.1126/science.adf6812"
       ],
       "marker_gene_evidence": [
         "PDGFRA",
@@ -80,9 +80,9 @@
       "cell_set_accession": "CS202210140_469",
       "cell_ontology_term_id": "CL:0000128",
       "cell_ontology_term": "oligodendrocyte",
-      "rationale": "",
+      "rationale": "Supported by marker expression and annotation transfer from Middle Temporal Gyrus dataset (Jorstad et al., 2023)",
       "rationale_dois": [
-        ""
+        "DOI:10.1126/science.adf6812"
       ],
       "marker_gene_evidence": [
         "SOX10",
@@ -113,9 +113,9 @@
       "cell_set_accession": "CS202210140_470",
       "cell_ontology_term_id": "CL:0000127",
       "cell_ontology_term": "astrocyte",
-      "rationale": "",
+      "rationale": "Supported by marker expression and annotation transfer from Middle Temporal Gyrus dataset (Jorstad et al., 2023)",
       "rationale_dois": [
-        ""
+        "DOI:10.1126/science.adf6812"
       ],
       "marker_gene_evidence": [
         "AQP4"
@@ -148,119 +148,6 @@
       "marker_gene_evidence": [
         "FOXJ1",
         "TTR"
-      ]
-    },
-    {
-      "labelset": "Supercluster",
-      "cell_label": "Miscellaneous",
-      "cell_set_accession": "CS202210140_463",
-      "cell_ontology_term_id": "CL:0000000",
-      "cell_ontology_term": "cell",
-      "rationale": "",
-      "rationale_dois": [
-        ""
-      ],
-      "marker_gene_evidence": [
-        ""
-      ]
-    },
-    {
-      "labelset": "Cluster",
-      "cell_label": "Bcell_0",
-      "cell_set_accession": "CS202210140_1",
-      "cell_ontology_term_id": "CL:0000236",
-      "cell_ontology_term": "B cell",
-      "rationale": " PAX5:    https://doi.org/10.1016/j.immuni.2007.05.019 FCRL1:  https://doi.org/10.1182/blood-2004-06-2344               https://doi.org/10.4049/jimmunol.1501027  Also express: MS4A1 CD79A CD79B",
-      "rationale_dois": [
-        "https://doi.org/10.1016/j.immuni.2007.05.019",
-        "https://doi.org/10.1182/blood-2004-06-2344",
-        "https://doi.org/10.4049/jimmunol.1501027"
-      ],
-      "marker_gene_evidence": [
-        "DOCK8",
-        "PAX5",
-        "FCRL1"
-      ],
-      "parent_cell_set_name": "Miscellaneous",
-      "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "0"
-        }
-      ]
-    },
-    {
-      "labelset": "Cluster",
-      "cell_label": "Tcell_1",
-      "cell_set_accession": "CS202210140_2",
-      "cell_ontology_term_id": "CL:0000084",
-      "cell_ontology_term": "T cell",
-      "rationale": "DOCK8: https://doi.org/10.1084%2Fjem.20110345 CD8: https://doi.org/10.1038 CD3: https://doi.org/10.1038/s41593-018-0290-2  Also express: TRAC CD3E",
-      "rationale_dois": [
-        "https://doi.org/10.1084%2Fjem.20110345",
-        "https://doi.org/10.1038",
-        "https://doi.org/10.1038/s41593-018-0290-2"
-      ],
-      "marker_gene_evidence": [
-        "DOCK8",
-        "CD8A",
-        "CD3G"
-      ],
-      "parent_cell_set_name": "Miscellaneous",
-      "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "1"
-        }
-      ]
-    },
-    {
-      "labelset": "Cluster",
-      "cell_label": "Nkcell_2",
-      "cell_set_accession": "CS202210140_3",
-      "cell_ontology_term_id": "CL:0000623",
-      "cell_ontology_term": "natural killer cell",
-      "rationale": "NCAM1: Bottcher et al. 2019 Adult human data + wikipedia pages for GZMB, natural killer cells  Also express: KLRF1",
-      "rationale_dois": [
-        "https://doi.org/10.1038/s41593-018-0290-2"
-      ],
-      "marker_gene_evidence": [
-        "NCAM1",
-        "GZMB"
-      ],
-      "parent_cell_set_name": "Miscellaneous",
-      "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "2"
-        }
-      ]
-    },
-    {
-      "labelset": "Cluster",
-      "cell_label": "Mono_3",
-      "cell_set_accession": "CS202210140_4",
-      "cell_ontology_term_id": "CL:0000576",
-      "cell_ontology_term": "monocyte",
-      "rationale": "https://doi.org/10.1038/s41467-018-04985-0: We then analyzed differentially expressed genes between clusters (Fig. 1c and Supplementary Fig. 1). Cluster 1 displayed high expression of monocyte genes such as CTSS, FCN1, S100A9, LYZ, VCAN. Clusters 2 and 3 shared high expression of macrophage genes such as LGMN, CTSB, CD14, APOE, C1QB, MARCO, CD163, FCGR3A. Cluster 4 expressed high levels of monocyte and macrophage-related genes such as FCN1, S100A9, VCAN, S100A8, MAFB. Clusters 5 and 6 expressed monocyte-related genes such as FCN1, S100A9, VCAN, FCGR1A, FCGR1B, as well as DC genes including CD1C, FCER1A, IFITM2, CLEC10A, FCGR2B.   https://singlecell.broadinstitute.org/single_cell/study/SCP424/single-cell-comparison-pbmc-data#study-visualize VCAN is not expressed much in CD16+ monocytes  Took TYROBP from the 10X single-cell PBMC data FCN1 may also mark dendritic cells  CD14 expression seems too low to use as a marker",
-      "rationale_dois": [
-        "https://doi.org/10.1038/s41467-018-04985-0"
-      ],
-      "marker_gene_evidence": [
-        "TYROBP",
-        "FCN1",
-        "LYZ"
-      ],
-      "parent_cell_set_name": "Miscellaneous",
-      "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "3"
-        }
       ]
     },
     {
@@ -629,7 +516,7 @@
       "cell_set_accession": "CS202210140_21",
       "cell_ontology_term_id": "CL:0002590",
       "cell_ontology_term": "smooth muscle cell of the brain vasculature",
-      "rationale": "RGS5: https://doi.org/10.1096/fj.02-0340fje PDGFRB: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5745011/ MYH11, MYOCD, CNN1, NG2 / CSPG4:      https://www.cell.com/cell-reports/pdf/S2211-1247(17)30644-7.pdf     https://anatomypubs.onlinelibrary.wiley.com/doi/full/10.1002/dvdy.1200",
+      "rationale": "Inferred from expression of: RGS5 (Cho et al., 2003); PDGFRB (Sweeney et al., 2016); MYH11, MYOCD, CNN1, NG2 / CSPG4 (Kumar et al., 2017).   For example, the absence of \u03b1\u2010smooth muscle actin (SMA) on NG2\u2010positive cells in CNS capillaries has led some workers to the erroneous conclusion that NG2 is expressed by endothelial cells, rather than mural cells, in this microvasculature (Schrappe et al., 1991; Grako and Stallcup, 1995). Our current results demonstrate that, although SMA is an excellent marker for smooth muscle cells, it is not always an appropriate marker for pericytes in vivo. (Ozerdem et al., 2001)",
       "rationale_dois": [
         "https://doi.org/10.1096/fj.02-0340fje",
         "https://doi.org/10.1038/nn.4288",
@@ -656,14 +543,15 @@
       "cell_set_accession": "CS202210140_22",
       "cell_ontology_term_id": "CL:0000669",
       "cell_ontology_term": "pericyte",
-      "rationale": "RGS5: https://doi.org/10.1096/fj.02-0340fje  PDGFRB, ANPEP (in a subset): https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5745011/  MYH11, MYOCD, CNN1, NG2 / CSPG4:      https://www.cell.com/cell-reports/pdf/S2211-1247(17)30644-7.pdf     https://anatomypubs.onlinelibrary.wiley.com/doi/full/10.1002/dvdy.1200",
+      "rationale": "Inferred from expression of: RGS5 (Cho et al., 2003);  PDGFRB, ANPEP (in a subset) (Sweeney et al., 2016); MYH11, MYOCD, CNN1, NG2 / CSPG4 (Kumar et al., 2017).   For example, the absence of \u03b1\u2010smooth muscle actin (SMA) on NG2\u2010positive cells in CNS capillaries has led some workers to the erroneous conclusion that NG2 is expressed by endothelial cells, rather than mural cells, in this microvasculature (Schrappe et al., 1991; Grako and Stallcup, 1995). Our current results demonstrate that, although SMA is an excellent marker for smooth muscle cells, it is not always an appropriate marker for pericytes in vivo. (Ozerdem et al., 2001)",
       "rationale_dois": [
         "https://doi.org/10.1096/fj.02-0340fje",
         "https://doi.org/10.1038/nn.4288",
         "https://doi.org/10.1016/j.celrep.2017.05.019"
       ],
       "marker_gene_evidence": [
-        "+PDGFRB +CSPG4 -MYH11"
+        "PDGFRB",
+        "CSPG4"
       ],
       "parent_cell_set_name": "Vascular",
       "parent_cell_set_accession": "CS202210140_465",
@@ -680,14 +568,15 @@
       "cell_set_accession": "CS202210140_23",
       "cell_ontology_term_id": "CL:0000669",
       "cell_ontology_term": "pericyte",
-      "rationale": "RGS5: https://doi.org/10.1096/fj.02-0340fje  PDGFRB, ANPEP (in a subset): https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5745011/  MYH11, MYOCD, CNN1, NG2 / CSPG4:      https://www.cell.com/cell-reports/pdf/S2211-1247(17)30644-7.pdf     https://anatomypubs.onlinelibrary.wiley.com/doi/full/10.1002/dvdy.1200",
+      "rationale": "Inferred from expression of: RGS5 (Cho et al., 2003);  PDGFRB, ANPEP (in a subset) (Sweeney et al., 2016); MYH11, MYOCD, CNN1, NG2 / CSPG4 (Kumar et al., 2017).   For example, the absence of \u03b1\u2010smooth muscle actin (SMA) on NG2\u2010positive cells in CNS capillaries has led some workers to the erroneous conclusion that NG2 is expressed by endothelial cells, rather than mural cells, in this microvasculature (Schrappe et al., 1991; Grako and Stallcup, 1995). Our current results demonstrate that, although SMA is an excellent marker for smooth muscle cells, it is not always an appropriate marker for pericytes in vivo. (Ozerdem et al., 2001)",
       "rationale_dois": [
         "https://doi.org/10.1096/fj.02-0340fje",
         "https://doi.org/10.1038/nn.4288",
         "https://doi.org/10.1016/j.celrep.2017.05.019"
       ],
       "marker_gene_evidence": [
-        "+PDGFRB +CSPG4 -MYH11"
+        "PDGFRB",
+        "CSPG4"
       ],
       "parent_cell_set_name": "Vascular",
       "parent_cell_set_accession": "CS202210140_465",
@@ -2019,417 +1908,6 @@
         {
           "labelset": "Cluster ID",
           "cell_label": "82"
-        }
-      ]
-    },
-    {
-      "labelset": "Cluster",
-      "cell_label": "L5ET_113",
-      "cell_set_accession": "CS202210140_114",
-      "cell_ontology_term_id": "CL:4023041",
-      "cell_ontology_term": "L5 extratelencephalic projecting glutamatergic cortical neuron",
-      "rationale": "",
-      "rationale_dois": [
-        "https://doi.org/10.1038/s41467-020-14952-3"
-      ],
-      "marker_gene_evidence": [
-        "FEZF2",
-        "BCL11B",
-        "POU3F1",
-        "TXK"
-      ],
-      "parent_cell_set_name": "Miscellaneous",
-      "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "113"
-        }
-      ]
-    },
-    {
-      "labelset": "Cluster",
-      "cell_label": "L5ET_114",
-      "cell_set_accession": "CS202210140_115",
-      "cell_ontology_term_id": "CL:4023041",
-      "cell_ontology_term": "L5 extratelencephalic projecting glutamatergic cortical neuron",
-      "rationale": "",
-      "rationale_dois": [
-        "https://doi.org/10.1038/s41467-020-14952-3"
-      ],
-      "marker_gene_evidence": [
-        "FEZF2",
-        "BCL11B",
-        "POU3F1",
-        "TXK"
-      ],
-      "parent_cell_set_name": "Miscellaneous",
-      "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "114"
-        }
-      ]
-    },
-    {
-      "labelset": "Cluster",
-      "cell_label": "Misc_116",
-      "cell_set_accession": "CS202210140_117",
-      "cell_ontology_term_id": "",
-      "cell_ontology_term": "",
-      "rationale": "",
-      "rationale_dois": [
-        ""
-      ],
-      "marker_gene_evidence": [
-        ""
-      ],
-      "parent_cell_set_name": "Miscellaneous",
-      "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "116"
-        }
-      ]
-    },
-    {
-      "labelset": "Cluster",
-      "cell_label": "L5ET_117",
-      "cell_set_accession": "CS202210140_118",
-      "cell_ontology_term_id": "CL:4030039",
-      "cell_ontology_term": "von Economo neuron",
-      "rationale": "",
-      "rationale_dois": [
-        "https://doi.org/10.1038/s41467-020-14952-3"
-      ],
-      "marker_gene_evidence": [
-        "FEZF2",
-        "GABRQ",
-        "ITGA4",
-        "BMP3"
-      ],
-      "parent_cell_set_name": "Miscellaneous",
-      "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "117"
-        }
-      ]
-    },
-    {
-      "labelset": "Cluster",
-      "cell_label": "L5ET_118",
-      "cell_set_accession": "CS202210140_119",
-      "cell_ontology_term_id": "CL:4023041",
-      "cell_ontology_term": "L5 extratelencephalic projecting glutamatergic cortical neuron",
-      "rationale": "",
-      "rationale_dois": [
-        "https://doi.org/10.1038/s41467-020-14952-3"
-      ],
-      "marker_gene_evidence": [
-        "FEZF2",
-        "BCL11B",
-        "POU3F1",
-        "TXK"
-      ],
-      "parent_cell_set_name": "Miscellaneous",
-      "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "118"
-        }
-      ]
-    },
-    {
-      "labelset": "Cluster",
-      "cell_label": "Misc_132",
-      "cell_set_accession": "CS202210140_133",
-      "cell_ontology_term_id": "",
-      "cell_ontology_term": "",
-      "rationale": "",
-      "rationale_dois": [
-        ""
-      ],
-      "marker_gene_evidence": [
-        ""
-      ],
-      "parent_cell_set_name": "Miscellaneous",
-      "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "132"
-        }
-      ]
-    },
-    {
-      "labelset": "Cluster",
-      "cell_label": "Misc_164",
-      "cell_set_accession": "CS202210140_165",
-      "cell_ontology_term_id": "",
-      "cell_ontology_term": "",
-      "rationale": "",
-      "rationale_dois": [
-        ""
-      ],
-      "marker_gene_evidence": [
-        ""
-      ],
-      "parent_cell_set_name": "Miscellaneous",
-      "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "164"
-        }
-      ]
-    },
-    {
-      "labelset": "Cluster",
-      "cell_label": "Misc_165",
-      "cell_set_accession": "CS202210140_166",
-      "cell_ontology_term_id": "",
-      "cell_ontology_term": "",
-      "rationale": "",
-      "rationale_dois": [
-        ""
-      ],
-      "marker_gene_evidence": [
-        ""
-      ],
-      "parent_cell_set_name": "Miscellaneous",
-      "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "165"
-        }
-      ]
-    },
-    {
-      "labelset": "Cluster",
-      "cell_label": "Misc_166",
-      "cell_set_accession": "CS202210140_167",
-      "cell_ontology_term_id": "",
-      "cell_ontology_term": "",
-      "rationale": "",
-      "rationale_dois": [
-        ""
-      ],
-      "marker_gene_evidence": [
-        ""
-      ],
-      "parent_cell_set_name": "Miscellaneous",
-      "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "166"
-        }
-      ]
-    },
-    {
-      "labelset": "Cluster",
-      "cell_label": "Misc_167",
-      "cell_set_accession": "CS202210140_168",
-      "cell_ontology_term_id": "",
-      "cell_ontology_term": "",
-      "rationale": "",
-      "rationale_dois": [
-        ""
-      ],
-      "marker_gene_evidence": [
-        ""
-      ],
-      "parent_cell_set_name": "Miscellaneous",
-      "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "167"
-        }
-      ]
-    },
-    {
-      "labelset": "Cluster",
-      "cell_label": "Misc_168",
-      "cell_set_accession": "CS202210140_169",
-      "cell_ontology_term_id": "",
-      "cell_ontology_term": "",
-      "rationale": "",
-      "rationale_dois": [
-        ""
-      ],
-      "marker_gene_evidence": [
-        ""
-      ],
-      "parent_cell_set_name": "Miscellaneous",
-      "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "168"
-        }
-      ]
-    },
-    {
-      "labelset": "Cluster",
-      "cell_label": "Misc_170",
-      "cell_set_accession": "CS202210140_171",
-      "cell_ontology_term_id": "",
-      "cell_ontology_term": "",
-      "rationale": "",
-      "rationale_dois": [
-        ""
-      ],
-      "marker_gene_evidence": [
-        ""
-      ],
-      "parent_cell_set_name": "Miscellaneous",
-      "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "170"
-        }
-      ]
-    },
-    {
-      "labelset": "Cluster",
-      "cell_label": "Misc_176",
-      "cell_set_accession": "CS202210140_177",
-      "cell_ontology_term_id": "",
-      "cell_ontology_term": "",
-      "rationale": "",
-      "rationale_dois": [
-        ""
-      ],
-      "marker_gene_evidence": [
-        ""
-      ],
-      "parent_cell_set_name": "Miscellaneous",
-      "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "176"
-        }
-      ]
-    },
-    {
-      "labelset": "Cluster",
-      "cell_label": "Misc_177",
-      "cell_set_accession": "CS202210140_178",
-      "cell_ontology_term_id": "",
-      "cell_ontology_term": "",
-      "rationale": "",
-      "rationale_dois": [
-        ""
-      ],
-      "marker_gene_evidence": [
-        ""
-      ],
-      "parent_cell_set_name": "Miscellaneous",
-      "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "177"
-        }
-      ]
-    },
-    {
-      "labelset": "Cluster",
-      "cell_label": "Misc_178",
-      "cell_set_accession": "CS202210140_179",
-      "cell_ontology_term_id": "",
-      "cell_ontology_term": "",
-      "rationale": "",
-      "rationale_dois": [
-        ""
-      ],
-      "marker_gene_evidence": [
-        ""
-      ],
-      "parent_cell_set_name": "Miscellaneous",
-      "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "178"
-        }
-      ]
-    },
-    {
-      "labelset": "Cluster",
-      "cell_label": "Misc_314",
-      "cell_set_accession": "CS202210140_315",
-      "cell_ontology_term_id": "CL:0000121",
-      "cell_ontology_term": "Purkinje cell",
-      "rationale": "Kozareva, V., Martin, C., Osorno, T. et al. A transcriptomic atlas of mouse cerebellar cortex comprehensively defines cell types. Nature 598, 214\u2013219 (2021). ",
-      "rationale_dois": [
-        "https://doi.org/10.1038/s41586-021-03220-z"
-      ],
-      "marker_gene_evidence": [
-        "PCP2",
-        "SKOR2",
-        "PVALB",
-        "GAD2"
-      ],
-      "parent_cell_set_name": "Miscellaneous",
-      "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "314"
-        }
-      ]
-    },
-    {
-      "labelset": "Cluster",
-      "cell_label": "Misc_401",
-      "cell_set_accession": "CS202210140_402",
-      "cell_ontology_term_id": "",
-      "cell_ontology_term": "",
-      "rationale": "",
-      "rationale_dois": [
-        ""
-      ],
-      "marker_gene_evidence": [
-        ""
-      ],
-      "parent_cell_set_name": "Miscellaneous",
-      "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "401"
-        }
-      ]
-    },
-    {
-      "labelset": "Cluster",
-      "cell_label": "Misc_404",
-      "cell_set_accession": "CS202210140_405",
-      "cell_ontology_term_id": "",
-      "cell_ontology_term": "",
-      "rationale": "",
-      "rationale_dois": [
-        ""
-      ],
-      "marker_gene_evidence": [
-        ""
-      ],
-      "parent_cell_set_name": "Miscellaneous",
-      "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "404"
         }
       ]
     }
