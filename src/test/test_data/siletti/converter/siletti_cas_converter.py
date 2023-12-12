@@ -22,9 +22,9 @@ def main():
     cas_non_neuronal = CellTypeAnnotation("", list())
 
     labelsets = list()
-    cluster_ls = Labelset("Cluster")
+    cluster_ls = Labelset("Cluster_name")
     cluster_ls.rank = "0"
-    supercluster_ls = Labelset("Supercluster")
+    supercluster_ls = Labelset("supercluster_term")
     supercluster_ls.rank = "1"
     labelsets.append(cluster_ls)
     labelsets.append(supercluster_ls)
@@ -45,7 +45,7 @@ def main():
     for record_key in nsc_records:
         record = nsc_records[record_key]
         annotation = Annotation("", "")
-        annotation.labelset = "Supercluster"
+        annotation.labelset = "supercluster_term"
         extract_annotation_data(record, record_key, annotation, nm_records, accession_manager)
         annotations_neuronal.append(annotation)
 
@@ -53,7 +53,7 @@ def main():
     for record_key in nnsc_records:
         record = nnsc_records[record_key]
         annotation = Annotation("", "")
-        annotation.labelset = "Supercluster"
+        annotation.labelset = "supercluster_term"
         extract_annotation_data(record, record_key, annotation, nm_records, accession_manager)
         annotations_non_neuronal.append(annotation)
 
@@ -61,7 +61,7 @@ def main():
     for record_key in records:
         record = records[record_key]
         annotation = Annotation("", "")
-        annotation.labelset = "Cluster"
+        annotation.labelset = "Cluster_name"
 
         extract_annotation_data(record, record_key, annotation, nm_records, accession_manager)
 
