@@ -3,7 +3,8 @@ import os
 from cas.file_utils import read_cas_json_file, write_json_file
 from cas.accession.hash_accession_manager import HashAccessionManager
 
-CAS_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), "./test_data/siletti/Siletti_all_non_neuronal_cells_with_cids.json")
+CAS_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                        "../siletti/Siletti_all_non_neuronal_cells_with_cids.json")
 
 
 def main():
@@ -14,7 +15,7 @@ def main():
     for annotation in cas.annotations:
         annotation.cell_set_accession = accession_manager.generate_accession_id(cell_ids=annotation.cell_ids)
 
-    write_json_file(cas, "./hash_demo.json")
+    write_json_file(cas, "hash_demo.json")
 
 
 if __name__ == "__main__":
