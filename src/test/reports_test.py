@@ -44,5 +44,17 @@ class ReportsTests(unittest.TestCase):
         self.assertEqual(3, df.shape[0])
         self.assertEqual(14, df.shape[1])
 
+    def test_cell_ids_not_existing(self):
+        cas = read_cas_json_file(TEST_JSON)
+        cas = asdict(cas)
+
+        for ann in cas["annotations"]:
+            del ann["cell_ids"]
+
+        df = get_all_annotations(cas)
+        # print(df)
+        self.assertEqual(89, df.shape[0])
+        self.assertEqual(14, df.shape[1])
+
 
 
