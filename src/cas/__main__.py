@@ -1,10 +1,14 @@
 import sys
 import argparse
 import pathlib
+import warnings
 
 from cas.anndata_conversion import merge
 from cas.flatten_data_to_anndata import flatten
 from cas.populate_cell_ids import populate_cell_ids
+from cas.validate import validate as schema_validate
+
+warnings.filterwarnings("always")
 
 
 def main():
@@ -14,6 +18,7 @@ def main():
     create_merge_operation_parser(subparsers)
     create_flatten_operation_parser(subparsers)
     create_populate_cells_operation_parser(subparsers)
+    create_schema_validation_operation_parser(subparsers)
 
     args = parser.parse_args()
 
@@ -46,6 +51,11 @@ def main():
         if "labelsets" in args and args.labelsets:
             labelsets = [item.strip() for item in str(args.labelsets).split(",")]
         populate_cell_ids(json_file_path, anndata_file_path, labelsets)
+    elif args.action == "validate":
+        args = parser.parse_args()
+        schema = args.schema
+        data_file_path = args.data
+        schema_validate(schema, data_file_path)
 
 
 def create_merge_operation_parser(subparsers):
@@ -143,6 +153,26 @@ def create_populate_cells_operation_parser(subparsers):
         default="",
     )
     parser_populate.set_defaults(validate=False)
+
+
+def create_schema_validation_operation_parser(subparsers):
+    """
+    Command-line Arguments:
+    -----------------------
+    --schema    : One of 'base', 'bican' or 'cap'. Identifies the CAS schema to validate data against.
+    --data   : Path to the data file (or folder) to validate
+
+    Usage Example:
+    --------------
+    cd src
+    python -m cas validate --schema bican --data path/to/file
+    """
+    parser_validate = subparsers.add_parser("validate",
+                                         description="The CAS file structure validator",
+                                         help="Test if given CAS has a valid structure.")
+
+    parser_validate.add_argument("--schema", required=True, help="One of 'base', 'bican' or 'cap'")
+    parser_validate.add_argument("--data", required=True, help="Path to the data file (or folder) to validate", type=pathlib.Path)
 
 
 if __name__ == "__main__":
