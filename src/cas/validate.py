@@ -10,8 +10,8 @@ from cas_schema import schema_validator, schemas
 warnings.filterwarnings("always")
 
 SCHEMA_FILE_MAPPING = {"base": "general_schema.json",
-                       "bican": "CAP_schema.json",
-                       "cap": "BICAN_schema.json"}
+                       "cap": "CAP_schema.json",
+                       "bican": "BICAN_schema.json"}
 
 
 def validate(schema_name: str, data_path: str):
@@ -37,4 +37,4 @@ def validate(schema_name: str, data_path: str):
     if not result:
         raise Exception("Validation Failed")
 
-
+    return True

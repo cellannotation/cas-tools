@@ -16,15 +16,19 @@ class ValidatorTests(unittest.TestCase):
 
     def test_file_validation(self):
         try:
-            validate("bican", TEST_JSON)
+            validate("cap", TEST_JSON)
             self.fail("A validation error should occur here")
         except Exception as e:
             self.assertEqual("Validation Failed", e.args[0])
 
+        self.assertTrue(validate("bican", TEST_JSON))
+
     def test_folder_validation(self):
         try:
-            validate("bican", TEST_FOLDER)
+            validate("cap", TEST_FOLDER)
             self.fail("A validation error should occur here")
         except Exception as e:
             self.assertEqual("Validation Failed", e.args[0])
+
+        self.assertTrue(validate("bican", TEST_FOLDER))
 
