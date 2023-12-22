@@ -4,7 +4,7 @@ Following operations are supported by the CAS commandline interface.
 
 ## Flatten onto AnnData
 
-Processes and integrates information from a JSON file and an AnnData (Annotated Data) file,  creating a new AnnData object that incorporates the metadata. The resulting AnnData object is then saved to a new file.
+Flattens all content of CAS annotations to `obs` key:value pairs. Flattens all other content to key_value pairs in `uns`. The resulting AnnData object is then saved to a new file.
 
 Key Features:
 1. Parses command-line arguments for input JSON file, input AnnData file, and output file.
@@ -44,7 +44,7 @@ Please check the [related notebook](../notebooks/test_merge.ipynb) to evaluate t
 
 ## Populate Cell IDs
 
-Add/update CellIDs to CAS from matching AnnData file.
+Add/update CellIDs to CAS from matching AnnData file. Checks for alignment between `obs` key:value pairs in AnnData file and labelset:cell_label pairs in CAS for some specified list of `labelsets`. If they are aligned, updates `cell_ids` in CAS.
 
 ```commandline
 cas populate_cells --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --labelsets Cluster,Supercluster

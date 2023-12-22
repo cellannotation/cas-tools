@@ -99,8 +99,9 @@ def create_flatten_operation_parser(subparsers):
     python -m cas flatten --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --output path/to/output_file.h5ad
     """
     parser_flatten = subparsers.add_parser("flatten",
-                                         description="The CAS and AnnData merge parser",
-                                         help="Test if CAS can be merged to the AnnData and merges if possible.")
+                                         description="Flattens all content of CAS annotations to an AnnData file.",
+                                         help="Flattens all content of CAS annotations to obs key:value pairs. "
+                                              "Flattens all other content to key_value pairs in uns.")
 
     parser_flatten.add_argument("--json", required=True, help="Input JSON file path")
     parser_flatten.add_argument("--anndata", required=True, help="Input AnnData file path")
@@ -132,8 +133,8 @@ def create_populate_cells_operation_parser(subparsers):
     python -m cas populate_cells --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --labelsets Cluster,Supercluster
     """
     parser_populate = subparsers.add_parser("populate_cells",
-                                         description="The CAS and AnnData merge parser",
-                                         help="Test if CAS can be merged to the AnnData and merges if possible.")
+                                         description="The CAS cell IDs population operation.",
+                                         help="Checks for alignment between obs key:value pairs in AnnData file and labelset:cell_label pairs in CAS for some specified list of labelsets. If they are aligned, updates cell_ids in CAS.")
 
     parser_populate.add_argument("--json", required=True, help="Input JSON file path")
     parser_populate.add_argument("--anndata", required=True, help="Input AnnData file path")
