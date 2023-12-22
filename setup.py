@@ -1,5 +1,5 @@
 import pathlib
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 # The directory containing this file
@@ -8,7 +8,7 @@ README = (HERE / "README.md").read_text()
 
 setup(
     name="cas-tools",
-    version="0.0.1.dev2",
+    version="0.0.1.dev15",
     description="Cell Annotation Schema tools.",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -21,9 +21,10 @@ setup(
         "Operating System :: OS Independent",
     ],
     package_dir={'': 'src'},
-    packages=["cas"],
+    packages=find_packages(where='src', exclude=("test*",)),
     include_package_data=True,
-    install_requires=["anndata==0.10.3", "cellxgene-census==1.7.0", "scanpy", "dataclasses_json"],
+    install_requires=["anndata==0.10.3", "dataclasses_json", "pandas",
+                      "ruamel.yaml", "jsonschema"],
     entry_points={
         "console_scripts": [
             "cas=cas.__main__:main",

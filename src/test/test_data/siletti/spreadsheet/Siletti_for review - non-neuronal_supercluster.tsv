@@ -1,12 +1,11 @@
 SUPERCLUSTER 	CELL_ONTOLOGY_TERM_ID	CELL_ONTOLOGY_TERM	RATIONALE	RATIONALE_DOI	POSITIVE_GENE_EVIDENCE	NEGATIVE_GENE_EVIDENCE	Notes
-Microglia	CL:0000129	microglia			PTPRC		Lattice curation - Central nervous system macrophage - presumably because may include macroglia
-Vascular	CL:0002139	endothelial cell of vascular tree			CLDN5, ACTA2		Lattice curation splits into pericyte, VSMC, endothelial cell 
+Microglia	CL:0000129	microglia	Supported by marker expression and annotation transfer from Middle Temporal Gyrus dataset (Jorstad et al., 2023)	DOI:10.1126/science.adf6812	PTPRC		Lattice curation - Central nervous system macrophage - presumably because may include macroglia
+Vascular	CL:0002139	endothelial cell of vascular tree	Supported by marker expression and annotation transfer from Middle Temporal Gyrus dataset (Jorstad et al., 2023)	DOI:10.1126/science.adf6812	CLDN5, ACTA2		Lattice curation splits into pericyte, VSMC, endothelial cell 
 Fibroblast	CL:0000057	fibroblast			LUM		
-Oligodendrocyte precursor	CL:0002453	oligodendrocyte precursor cell			PDGFRA, SOX10		Distinction between precursor an comited precursor in in SM table 3 but not on CxG
+Oligodendrocyte precursor	CL:0002453	oligodendrocyte precursor cell	Supported by marker expression and annotation transfer from Middle Temporal Gyrus dataset (Jorstad et al., 2023)	DOI:10.1126/science.adf6812	PDGFRA, SOX10		Distinction between precursor an comited precursor in in SM table 3 but not on CxG
 Committed oligodendrocyte precursor	CL:4023059	differentiation-committed oligodendrcyte precursor			SOX10, GPR17	PDGFRA	Distinction between precursor an comited precursor in in SM table 3 but not on CxG
-Oligodendrocyte	CL:0000128	oligodendrocyte			SOX10, PLP1		
+Oligodendrocyte	CL:0000128	oligodendrocyte	Supported by marker expression and annotation transfer from Middle Temporal Gyrus dataset (Jorstad et al., 2023)	DOI:10.1126/science.adf6812	SOX10, PLP1		
 Bergmann glia	CL:0000644	Bergmann glial cell	GDF10 marks Bergmann glia in the mouse Other markers from adult human data		AQP4, GDF10, GABRG3, WIF1, LGR6		
-Astrocyte	CL:0000127	astrocyte			AQP4		
+Astrocyte	CL:0000127	astrocyte	Supported by marker expression and annotation transfer from Middle Temporal Gyrus dataset (Jorstad et al., 2023)	DOI:10.1126/science.adf6812	AQP4		
 Ependymal	CL:0000065	ependymal cell			FOXJ1		
 Choroid plexus	CL:0000706	choroid plexus epithelial cell			FOXJ1, TTR
-Miscellaneous	CL:0000000	cell

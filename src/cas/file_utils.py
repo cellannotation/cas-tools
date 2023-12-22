@@ -1,8 +1,11 @@
 import csv
 import json
 import anndata
+import pathlib
 
 from typing import Optional
+from ruamel.yaml import YAML
+
 from cas.model import CellTypeAnnotation
 
 
@@ -47,7 +50,7 @@ def read_cas_json_file(file_path) -> CellTypeAnnotation:
     return CellTypeAnnotation.from_dict(read_json_file(file_path))
 
 
-def write_json_file(cas, out_file, print_undefined=False):
+def write_json_file(cas: CellTypeAnnotation, out_file: str, print_undefined: bool = False):
     """
     Writes cell type annotation object to a json file.
     :param cas: cell type annotation object to serialize.
@@ -136,3 +139,46 @@ def read_csv_to_dict(csv_path, id_column=0, id_column_name="", delimiter=",", id
             row_count += 1
 
     return headers, records
+
+
+def read_json_config(file_path: str) -> dict:
+    """
+    Reads the configuration object from the given path.
+    :param file_path: path to the json file
+    :return: configuration object (List of data column config items)
+    """
+    with open(file_path, "r") as fs:
+        try:
+            return json.load(fs)
+        except Exception as e:
+            raise Exception("JSON read failed:" + file_path + " " + str(e))
+
+
+def read_yaml_config(file_path: str) -> dict:
+    """
+    Reads the configuration object from the given path.
+    :param file_path: path to the yaml file
+    :return: configuration object (List of data column config items)
+    """
+    with open(file_path, "r") as fs:
+        try:
+            ryaml = YAML(typ='safe')
+            return ryaml.load(fs)
+        except Exception as e:
+            raise Exception("Yaml read failed:" + file_path + " " + str(e))
+
+
+def read_config(file_path: str) -> dict:
+    """
+    Reads the configuration object from the given path.
+    :param file_path: path to the configuration file
+    :return: configuration object (List of data column config items)
+    """
+    file_extension = pathlib.Path(file_path).suffix
+    if file_extension == ".json":
+        return read_json_config(file_path)
+    elif file_extension == ".yaml" or file_extension == ".yml":
+        return read_yaml_config(file_path)
+    else:
+        raise Exception("Given configuration file extension is not supported. "
+                        "Try a json or yaml file instead of :" + file_path)
