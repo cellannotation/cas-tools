@@ -12,6 +12,8 @@ Key Features:
 3. Updates the AnnData object with information from the JSON annotations and root keys.
 4. Writes the modified AnnData object to a specified output file.
 
+Detailed specification about the `flatten` operation can be found in the [related issue](https://github.com/cellannotation/cas-tools/issues/7).
+
 ```commandline
 cas flatten --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --validate --output path/to/output_file.h5ad
 ```
