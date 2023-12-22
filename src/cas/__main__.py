@@ -169,9 +169,9 @@ def create_schema_validation_operation_parser(subparsers):
     """
     parser_validate = subparsers.add_parser("validate",
                                          description="The CAS file structure validator",
-                                         help="Test if given CAS has a valid structure.")
+                                         help="Test if given CAS is compatible with the CAS schema.")
 
-    parser_validate.add_argument("--schema", required=True, help="One of 'base', 'bican' or 'cap'")
+    parser_validate.add_argument("--schema", required=True, help="Schema name: one of 'base', 'bican' or 'cap'")
     parser_validate.add_argument("--data", required=True, help="Path to the data file (or folder) to validate", type=pathlib.Path)
 
 
