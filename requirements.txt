@@ -7,4 +7,4 @@ ruamel.yaml
 jsonschema==4.4.0
 ordered-set==4.1.0
 deepmerge==1.1.0
-# TODO: cell-annotation-schema
+cell-annotation-schema
