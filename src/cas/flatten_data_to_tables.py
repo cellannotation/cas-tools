@@ -246,8 +246,8 @@ def assign_parent_accession_ids(accession_manager, std_parent_records, std_paren
 
 def normalize_column_name(column_name: str) -> str:
     """
-    Normalizes column name for nanobot compatibility.
-    Nanobot column name requirement: All names must match: ^[\w_ ]+$' for to_url()
+    Normalizes column name for url compatibility.
+    URL compatible column name requirement: All names must match: ^[\w_ ]+$' for to_url()
 
     Parameters:
         column_name: current column name
