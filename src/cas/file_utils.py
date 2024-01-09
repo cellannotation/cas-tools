@@ -37,7 +37,7 @@ def read_json_file(file_path):
         return None
 
 
-def read_cas_json_file(file_path) -> CellTypeAnnotation:
+def read_cas_json_file(file_path: str) -> CellTypeAnnotation:
     """
     Reads and parses a JSON file into a CAS object.
 
@@ -48,6 +48,22 @@ def read_cas_json_file(file_path) -> CellTypeAnnotation:
         dict: The JSON data as a CAS object.
     """
     return CellTypeAnnotation.from_dict(read_json_file(file_path))
+
+
+def read_cas_from_anndata(anndata_path: str) -> CellTypeAnnotation:
+    """
+    Reads the CAS json from the anndata uns and parses into a CAS object.
+    Args:
+        anndata_path: The path to the Anndata file.
+
+    Returns:
+        CellTypeAnnotation object.
+    """
+    input_anndata = read_anndata_file(anndata_path)
+    if input_anndata and "cas" in input_anndata.uns:
+        return CellTypeAnnotation.from_dict(json.loads(input_anndata.uns["cas"]))
+    else:
+        raise Exception("Given Anndata file doesn't have a 'cas' object in it's uns.")
 
 
 def write_json_file(cas: CellTypeAnnotation, out_file: str, print_undefined: bool = False):
