@@ -2,6 +2,18 @@
 
 Following operations are supported by the CAS commandline interface.
 
+## Validate CAS file
+
+Checks if the provided CAS data files comply with the specified CAS schema. In case of invalid files, the system logs the issues and throws an exception.
+
+```commandline
+cas validate --schema bican --data path/to/file
+```
+
+**Command-line Arguments:**
+- `--schema`    : One of 'base', 'bican' or 'cap'. Identifies the CAS schema to validate data against.
+- `--data`   : Path to the data file (or folder) to validate. If given path is a folder, validates all json files inside.
+
 ## Flatten onto AnnData
 
 Flattens all content of CAS annotations to `obs` key:value pairs. Flattens all other content to key_value pairs in `uns`. The resulting AnnData object is then saved to a new file.
