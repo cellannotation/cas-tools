@@ -57,7 +57,6 @@ def flatten(json_file_path, anndata_file_path, validate, output_file_path):
     input_json = read_json_file(json_file_path)
     input_anndata = read_anndata_file(anndata_file_path)
 
-    test_compatibility(input_anndata, input_json, validate)
     # obs
     annotations = input_json[ANNOTATIONS]
 
