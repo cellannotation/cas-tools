@@ -20,11 +20,20 @@ def serialize_to_tables(cta, file_name_prefix, out_folder, accession_prefix):
         out_folder: output folder path.
         accession_prefix: accession id prefix
     """
-    annotation_table_path = generate_annotation_table(accession_prefix, cta, file_name_prefix, out_folder)
+    annotation_table_path = generate_annotation_table(
+        accession_prefix, cta, file_name_prefix, out_folder
+    )
     labelset_table_path = generate_labelset_table(cta, file_name_prefix, out_folder)
     metadata_table_path = generate_metadata_table(cta, file_name_prefix, out_folder)
-    annotation_transfer_table_path = generate_annotation_transfer_table(cta, file_name_prefix, out_folder)
-    return [annotation_table_path, labelset_table_path, metadata_table_path, annotation_transfer_table_path]
+    annotation_transfer_table_path = generate_annotation_transfer_table(
+        cta, file_name_prefix, out_folder
+    )
+    return [
+        annotation_table_path,
+        labelset_table_path,
+        metadata_table_path,
+        annotation_transfer_table_path,
+    ]
 
 
 def generate_annotation_transfer_table(cta, file_name_prefix, out_folder):
@@ -42,11 +51,17 @@ def generate_annotation_transfer_table(cta, file_name_prefix, out_folder):
     records = list()
 
     for annotation_object in cta["annotations"]:
-        if ("cell_set_accession" in annotation_object and annotation_object["cell_set_accession"] and
-                "transferred_annotations" in annotation_object and annotation_object["transferred_annotations"]):
+        if (
+            "cell_set_accession" in annotation_object
+            and annotation_object["cell_set_accession"]
+            and "transferred_annotations" in annotation_object
+            and annotation_object["transferred_annotations"]
+        ):
             for ta in annotation_object["transferred_annotations"]:
                 record = dict()
-                record["target_node_accession"] = annotation_object["cell_set_accession"]
+                record["target_node_accession"] = annotation_object[
+                    "cell_set_accession"
+                ]
                 record["transferred_cell_label"] = ta.get("transferred_cell_label", "")
                 record["source_taxonomy"] = ta.get("source_taxonomy", "")
                 record["source_node_accession"] = ta.get("source_node_accession", "")
@@ -84,7 +99,9 @@ def generate_metadata_table(cta, file_name_prefix, out_folder):
     records = list()
 
     record = dict()
-    record["cellannotation_schema_version"] = cta.get("cellannotation_schema_version", "")
+    record["cellannotation_schema_version"] = cta.get(
+        "cellannotation_schema_version", ""
+    )
     record["cellannotation_timestamp"] = cta.get("cellannotation_timestamp", "")
     record["cellannotation_version"] = cta.get("cellannotation_version", "")
     record["cellannotation_url"] = cta.get("cellannotation_url", "")
@@ -122,9 +139,15 @@ def generate_labelset_table(cta, file_name_prefix, out_folder):
             aut_annot = labelset["automated_annotation"]
             name_prefix = "automated_annotation_"
             record[name_prefix + "algorithm_name"] = aut_annot.get("algorithm_name", "")
-            record[name_prefix + "algorithm_version"] = aut_annot.get("algorithm_version", "")
-            record[name_prefix + "algorithm_repo_url"] = aut_annot.get("algorithm_repo_url", "")
-            record[name_prefix + "reference_location"] = aut_annot.get("reference_location", "")
+            record[name_prefix + "algorithm_version"] = aut_annot.get(
+                "algorithm_version", ""
+            )
+            record[name_prefix + "algorithm_repo_url"] = aut_annot.get(
+                "algorithm_repo_url", ""
+            )
+            record[name_prefix + "reference_location"] = aut_annot.get(
+                "reference_location", ""
+            )
         else:
             name_prefix = "automated_annotation_"
             record[name_prefix + "algorithm_name"] = ""
@@ -157,51 +180,88 @@ def generate_annotation_table(accession_prefix, cta, file_name_prefix, out_folde
     std_parent_records_dict = dict()
 
     # sort annotations by accession ids incrementing (if there is)
-    cta["annotations"].sort(key=lambda x: int(str(x["cell_set_accession"]).split("_")[1]) if "cell_set_accession" in x and x["cell_set_accession"] and "_" in x["cell_set_accession"] else 0)
+    cta["annotations"].sort(
+        key=lambda x: int(str(x["cell_set_accession"]).split("_")[1])
+        if "cell_set_accession" in x
+        and x["cell_set_accession"]
+        and "_" in x["cell_set_accession"]
+        else 0
+    )
     for annotation_object in cta["annotations"]:
         record = dict()
-        if "cell_set_accession" in annotation_object and annotation_object["cell_set_accession"]:
-            record["cell_set_accession"] = (accession_manager.generate_accession_id(
-                annotation_object.get("cell_set_accession", "")))
+        if (
+            "cell_set_accession" in annotation_object
+            and annotation_object["cell_set_accession"]
+        ):
+            record["cell_set_accession"] = accession_manager.generate_accession_id(
+                annotation_object.get("cell_set_accession", "")
+            )
             annotation_object["cell_set_accession"] = record["cell_set_accession"]
             record["cell_label"] = annotation_object.get("cell_label", "")
             record["cell_fullname"] = annotation_object.get("cell_fullname", "")
             record["parent_cell_set_accession"] = ""
             record["parent_cell_set_name"] = ""
-            record["labelset"] = str(annotation_object.get("labelset", "")).replace("_name", "")
-            record["cell_ontology_term_id"] = annotation_object.get("cell_ontology_term_id", "")
-            record["cell_ontology_term"] = annotation_object.get("cell_ontology_term", "")
+            record["labelset"] = str(annotation_object.get("labelset", "")).replace(
+                "_name", ""
+            )
+            record["cell_ontology_term_id"] = annotation_object.get(
+                "cell_ontology_term_id", ""
+            )
+            record["cell_ontology_term"] = annotation_object.get(
+                "cell_ontology_term", ""
+            )
             record["rationale"] = annotation_object.get("rationale", "")
-            record["rationale_dois"] = list_to_string(annotation_object.get("rationale_dois", []))
-            record["marker_gene_evidence"] = list_to_string(annotation_object.get("marker_gene_evidence", []))
+            record["rationale_dois"] = list_to_string(
+                annotation_object.get("rationale_dois", [])
+            )
+            record["marker_gene_evidence"] = list_to_string(
+                annotation_object.get("marker_gene_evidence", [])
+            )
             record["synonyms"] = list_to_string(annotation_object.get("synonyms", []))
-            if "user_annotations" in annotation_object and annotation_object["user_annotations"]:
+            if (
+                "user_annotations" in annotation_object
+                and annotation_object["user_annotations"]
+            ):
                 for user_annot in annotation_object["user_annotations"]:
-                    record[normalize_column_name(user_annot["labelset"])] = user_annot["cell_label"]
+                    record[normalize_column_name(user_annot["labelset"])] = user_annot[
+                        "cell_label"
+                    ]
             # record["cell_ids"] = annotation_object.get("cell_ids", "")
             std_records.append(record)
         else:
             # parent nodes
             parent_label = annotation_object["cell_label"]
-            if parent_label not in [parent["cell_label"] for parent in std_parent_records]:
+            if parent_label not in [
+                parent["cell_label"] for parent in std_parent_records
+            ]:
                 record["cell_set_accession"] = ""
                 record["cell_label"] = parent_label
                 record["cell_fullname"] = ""
                 record["parent_cell_set_accession"] = ""
                 record["parent_cell_set_name"] = ""
-                record["labelset"] = str(annotation_object.get("labelset", "")).replace("_name", "")
+                record["labelset"] = str(annotation_object.get("labelset", "")).replace(
+                    "_name", ""
+                )
                 std_parent_records.append(record)
         if "parent_cell_set_name" in annotation_object:
             record["parent_cell_set_name"] = annotation_object["parent_cell_set_name"]
             if annotation_object["parent_cell_set_name"] in std_parent_records_dict:
-                std_parent_records_dict.get(annotation_object["parent_cell_set_name"]).append(record)
+                std_parent_records_dict.get(
+                    annotation_object["parent_cell_set_name"]
+                ).append(record)
             else:
                 children = list()
                 children.append(record)
-                std_parent_records_dict[annotation_object["parent_cell_set_name"]] = children
+                std_parent_records_dict[
+                    annotation_object["parent_cell_set_name"]
+                ] = children
         if "parent_cell_set_accession" in annotation_object:
-            record["parent_cell_set_accession"] = annotation_object["parent_cell_set_accession"]
-    assign_parent_accession_ids(accession_manager, std_parent_records, std_parent_records_dict, cta["labelsets"])
+            record["parent_cell_set_accession"] = annotation_object[
+                "parent_cell_set_accession"
+            ]
+    assign_parent_accession_ids(
+        accession_manager, std_parent_records, std_parent_records_dict, cta["labelsets"]
+    )
     std_records.extend(std_parent_records)
     std_records_df = pd.DataFrame.from_records(std_records)
     std_records_df.to_csv(std_data_path, sep="\t", index=False)
@@ -219,11 +279,13 @@ def list_to_string(my_list: list):
     if not my_list:
         str_value = "[]"
     else:
-        str_value = str(my_list).replace("'", "\"")
+        str_value = str(my_list).replace("'", '"')
     return str_value
 
 
-def assign_parent_accession_ids(accession_manager, std_parent_records, std_parent_records_dict, labelsets):
+def assign_parent_accession_ids(
+    accession_manager, std_parent_records, std_parent_records_dict, labelsets
+):
     """
     Assigns accession ids to parent clusters and updates their references from the child clusters.
     Parameters:
@@ -232,7 +294,12 @@ def assign_parent_accession_ids(accession_manager, std_parent_records, std_paren
         std_parent_records_dict: parent cluster - child clusters dictionary
         labelsets: labelsets list
     """
-    label_set_ranks = dict([(label_set["name"].replace("_name", ""), label_set["rank"]) for label_set in labelsets])
+    label_set_ranks = dict(
+        [
+            (label_set["name"].replace("_name", ""), label_set["rank"])
+            for label_set in labelsets
+        ]
+    )
 
     std_parent_records.sort(key=lambda x: int(label_set_ranks[x["labelset"]]))
     for std_parent_record in std_parent_records:

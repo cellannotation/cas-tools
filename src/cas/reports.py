@@ -1,7 +1,9 @@
 import pandas as pd
 
 
-def get_all_annotations(cas: dict, show_cell_ids: bool = False, labels: list = None) -> pd.DataFrame:
+def get_all_annotations(
+    cas: dict, show_cell_ids: bool = False, labels: list = None
+) -> pd.DataFrame:
     """
     Lists all annotations.
 
@@ -14,7 +16,7 @@ def get_all_annotations(cas: dict, show_cell_ids: bool = False, labels: list = N
     """
     df = pd.json_normalize(cas["annotations"])
     if not show_cell_ids:
-        df = df.drop('cell_ids', axis=1, errors='ignore')
+        df = df.drop("cell_ids", axis=1, errors="ignore")
 
     if labels:
         mask = df.apply(lambda row: filter_by_label(row, labels), axis=1)
@@ -29,6 +31,6 @@ def filter_by_label(row, labels):
     """
     filter_row = False
     for lbl in labels:
-        if row['labelset'] == lbl[0] and row['cell_label'] == lbl[1]:
+        if row["labelset"] == lbl[0] and row["cell_label"] == lbl[1]:
             filter_row = True
     return filter_row

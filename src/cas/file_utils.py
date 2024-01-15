@@ -66,7 +66,9 @@ def read_cas_from_anndata(anndata_path: str) -> CellTypeAnnotation:
         raise Exception("Given Anndata file doesn't have a 'cas' object in it's uns.")
 
 
-def write_json_file(cas: CellTypeAnnotation, out_file: str, print_undefined: bool = False):
+def write_json_file(
+    cas: CellTypeAnnotation, out_file: str, print_undefined: bool = False
+):
     """
     Writes cell type annotation object to a json file.
     :param cas: cell type annotation object to serialize.
@@ -109,10 +111,19 @@ def read_tsv_to_dict(tsv_path, id_column=0, generated_ids=False):
         Function provides two return values: first; headers of the table and second; the TSV content dict. Key of the
         content is the first column value and the values are dict of row values.
     """
-    return read_csv_to_dict(tsv_path, id_column=id_column, delimiter="\t", generated_ids=generated_ids)
+    return read_csv_to_dict(
+        tsv_path, id_column=id_column, delimiter="\t", generated_ids=generated_ids
+    )
 
 
-def read_csv_to_dict(csv_path, id_column=0, id_column_name="", delimiter=",", id_to_lower=False, generated_ids=False):
+def read_csv_to_dict(
+    csv_path,
+    id_column=0,
+    id_column_name="",
+    delimiter=",",
+    id_to_lower=False,
+    generated_ids=False,
+):
     """
     Reads tsv file content into a dict. Key is the first column value and the value is dict representation of the
     row values (each header is a key and column value is the value).
@@ -178,7 +189,7 @@ def read_yaml_config(file_path: str) -> dict:
     """
     with open(file_path, "r") as fs:
         try:
-            ryaml = YAML(typ='safe')
+            ryaml = YAML(typ="safe")
             return ryaml.load(fs)
         except Exception as e:
             raise Exception("Yaml read failed:" + file_path + " " + str(e))
@@ -196,5 +207,7 @@ def read_config(file_path: str) -> dict:
     elif file_extension == ".yaml" or file_extension == ".yml":
         return read_yaml_config(file_path)
     else:
-        raise Exception("Given configuration file extension is not supported. "
-                        "Try a json or yaml file instead of :" + file_path)
+        raise Exception(
+            "Given configuration file extension is not supported. "
+            "Try a json or yaml file instead of :" + file_path
+        )

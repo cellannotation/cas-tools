@@ -12,8 +12,10 @@ warnings.filterwarnings("always")
 
 
 def main():
-    parser = argparse.ArgumentParser(prog="cas", description='Cell Type Annotation Tools cli interface.')
-    subparsers = parser.add_subparsers(help='Available ctat actions', dest='action')
+    parser = argparse.ArgumentParser(
+        prog="cas", description="Cell Type Annotation Tools cli interface."
+    )
+    subparsers = parser.add_subparsers(help="Available ctat actions", dest="action")
 
     create_merge_operation_parser(subparsers)
     create_flatten_operation_parser(subparsers)
@@ -72,13 +74,17 @@ def create_merge_operation_parser(subparsers):
     cd src
     python -m cas merge --json path/to/CAS_schema.json --anndata path/to/input_anndata.h5ad --validate --output path/to/output.h5ad
     """
-    parser_merge = subparsers.add_parser("merge",
-                                         description="The CAS and AnnData merge parser",
-                                         help="Test if CAS can be merged to the AnnData and merges if possible.")
+    parser_merge = subparsers.add_parser(
+        "merge",
+        description="The CAS and AnnData merge parser",
+        help="Test if CAS can be merged to the AnnData and merges if possible.",
+    )
     parser_merge.add_argument(
         "--json", required=True, help="Path to the CAS JSON schema file."
     )
-    parser_merge.add_argument("--anndata", required=True, help="Path to the AnnData file.")
+    parser_merge.add_argument(
+        "--anndata", required=True, help="Path to the AnnData file."
+    )
     # TODO find a better argument name and Help message.
     parser_merge.add_argument(
         "-v",
@@ -108,13 +114,17 @@ def create_flatten_operation_parser(subparsers):
     cd src
     python -m cas flatten --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --output path/to/output_file.h5ad
     """
-    parser_flatten = subparsers.add_parser("flatten",
-                                         description="Flattens all content of CAS annotations to an AnnData file.",
-                                         help="Flattens all content of CAS annotations to obs key:value pairs. "
-                                              "Flattens all other content to key_value pairs in uns.")
+    parser_flatten = subparsers.add_parser(
+        "flatten",
+        description="Flattens all content of CAS annotations to an AnnData file.",
+        help="Flattens all content of CAS annotations to obs key:value pairs. "
+        "Flattens all other content to key_value pairs in uns.",
+    )
 
     parser_flatten.add_argument("--json", required=True, help="Input JSON file path")
-    parser_flatten.add_argument("--anndata", required=True, help="Input AnnData file path")
+    parser_flatten.add_argument(
+        "--anndata", required=True, help="Input AnnData file path"
+    )
     parser_flatten.add_argument(
         "-v",
         "--validate",
@@ -142,12 +152,16 @@ def create_populate_cells_operation_parser(subparsers):
     cd src
     python -m cas populate_cells --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --labelsets Cluster,Supercluster
     """
-    parser_populate = subparsers.add_parser("populate_cells",
-                                         description="The CAS cell IDs population operation.",
-                                         help="Checks for alignment between obs key:value pairs in AnnData file and labelset:cell_label pairs in CAS for some specified list of labelsets. If they are aligned, updates cell_ids in CAS.")
+    parser_populate = subparsers.add_parser(
+        "populate_cells",
+        description="The CAS cell IDs population operation.",
+        help="Checks for alignment between obs key:value pairs in AnnData file and labelset:cell_label pairs in CAS for some specified list of labelsets. If they are aligned, updates cell_ids in CAS.",
+    )
 
     parser_populate.add_argument("--json", required=True, help="Input JSON file path")
-    parser_populate.add_argument("--anndata", required=True, help="Input AnnData file path")
+    parser_populate.add_argument(
+        "--anndata", required=True, help="Input AnnData file path"
+    )
     parser_populate.add_argument(
         "--labelsets",
         help="List of labelsets to update with IDs from AnnData",
@@ -168,12 +182,21 @@ def create_schema_validation_operation_parser(subparsers):
     cd src
     python -m cas validate --schema bican --data path/to/file
     """
-    parser_validate = subparsers.add_parser("validate",
-                                         description="The CAS file structure validator",
-                                         help="Test if given CAS is compatible with the CAS schema.")
+    parser_validate = subparsers.add_parser(
+        "validate",
+        description="The CAS file structure validator",
+        help="Test if given CAS is compatible with the CAS schema.",
+    )
 
-    parser_validate.add_argument("--schema", required=True, help="Schema name: one of 'base', 'bican' or 'cap'")
-    parser_validate.add_argument("--data", required=True, help="Path to the data file (or folder) to validate", type=pathlib.Path)
+    parser_validate.add_argument(
+        "--schema", required=True, help="Schema name: one of 'base', 'bican' or 'cap'"
+    )
+    parser_validate.add_argument(
+        "--data",
+        required=True,
+        help="Path to the data file (or folder) to validate",
+        type=pathlib.Path,
+    )
 
 
 if __name__ == "__main__":

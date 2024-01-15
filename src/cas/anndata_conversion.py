@@ -95,12 +95,12 @@ def check_labelsets(cas_json, input_anndata, matching_obs_keys, validate):
                 .to_dict()
             )
             for cell_label, cell_list in anndata_labelset_cell_ids.items():
-                if cell_list == derived_cell_ids.get(str(ann["cell_set_accession"]), set()):
+                if cell_list == derived_cell_ids.get(
+                    str(ann["cell_set_accession"]), set()
+                ):
                     handle_matching_labelset(ann, cell_label, input_anndata, validate)
                 elif cell_label == ann[CELL_LABEL]:
-                    handle_non_matching_labelset(
-                        ann, cell_label, cell_list, input_anndata, validate, derived_cell_ids
-                    )
+                    handle_non_matching_labelset(ann, validate, derived_cell_ids)
 
 
 def get_cas_annotations(input_json):
@@ -132,7 +132,7 @@ def handle_matching_labelset(ann, cell_label, input_anndata, validate):
         ].map({cell_label: ann[CELL_LABEL]})
 
 
-def handle_non_matching_labelset(ann, cell_label, cell_list, input_anndata, validate, derived_cell_ids):
+def handle_non_matching_labelset(ann, input_anndata, validate, derived_cell_ids):
     print(
         f"{ann[CELL_LABEL]} cell ids from CAS do not match with the cell ids from anndata. "
         "Please update your CAS json."
@@ -197,7 +197,9 @@ def get_derived_cell_ids(cas):
 
     labelsets = sorted(cas[LABELSETS], key=lambda x: int(x["rank"]))
     for labelset in labelsets:
-        ls_annotations = [ann for ann in cas[ANNOTATIONS] if ann["labelset"] == labelset["name"]]
+        ls_annotations = [
+            ann for ann in cas[ANNOTATIONS] if ann["labelset"] == labelset["name"]
+        ]
 
         for ann in ls_annotations:
             if "parent_cell_set_accession" in ann:
@@ -205,7 +207,10 @@ def get_derived_cell_ids(cas):
                 if CELL_IDS in ann and ann[CELL_IDS]:
                     cell_ids = set(ann[CELL_IDS])
                     derived_cell_ids[ann["cell_set_accession"]] = cell_ids
-                elif "cell_set_accession" in ann and ann["cell_set_accession"] in derived_cell_ids:
+                elif (
+                    "cell_set_accession" in ann
+                    and ann["cell_set_accession"] in derived_cell_ids
+                ):
                     cell_ids = derived_cell_ids[str(ann["cell_set_accession"])]
 
                 if ann["parent_cell_set_accession"] in derived_cell_ids:

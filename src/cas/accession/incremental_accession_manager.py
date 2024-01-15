@@ -27,8 +27,11 @@ class IncrementalAccessionManager(BaseAccessionManager):
         if id_recommendation:
             id_recommendation = id_recommendation.replace(self.accession_prefix, "")
 
-        if (id_recommendation and id_recommendation not in self.accession_ids and
-                int(id_recommendation) > self.last_accession_id):
+        if (
+            id_recommendation
+            and id_recommendation not in self.accession_ids
+            and int(id_recommendation) > self.last_accession_id
+        ):
             accession_id = id_recommendation
             self.last_accession_id = int(id_recommendation)
         else:

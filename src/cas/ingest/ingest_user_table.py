@@ -3,13 +3,26 @@ import os
 from typing import get_type_hints
 from pathlib import Path
 
-from cas.model import CellTypeAnnotation, Labelset, Annotation, AnnotationTransfer, UserAnnotation, AutomatedAnnotation
+from cas.model import (
+    CellTypeAnnotation,
+    Labelset,
+    Annotation,
+    AnnotationTransfer,
+    UserAnnotation,
+    AutomatedAnnotation,
+)
 from cas.file_utils import write_json_file, read_config, read_tsv_to_dict
 from cas.flatten_data_to_tables import serialize_to_tables
 from cas.ingest.config_validator import validate
 
 
-def ingest_data(data_file: str, config_file: str, out_file: str, format:str = "json", print_undefined: bool = False) -> dict:
+def ingest_data(
+    data_file: str,
+    config_file: str,
+    out_file: str,
+    format: str = "json",
+    print_undefined: bool = False,
+) -> dict:
     """
     Ingests given data into standard cell annotation schema data structure using the given configuration.
 
@@ -68,14 +81,16 @@ def ingest_user_data(data_file: str, config_file: str):
                 ao.rank = int(str(field["rank"]).strip())
                 utilized_columns.add(field["column_name"])
             elif field["column_type"] == "cell_set":
-                parent_ao = Annotation(field["column_name"], record[field["column_name"]])
+                parent_ao = Annotation(
+                    field["column_name"], record[field["column_name"]]
+                )
                 parent_ao.rank = int(str(field["rank"]).strip())
                 parents.insert(int(str(field["rank"]).strip()), parent_ao)
                 utilized_columns.add(field["column_name"])
             else:
                 # handle annotation columns
                 if "typing.List[str]" in str(get_type_hints(ao)[field["column_type"]]):
-                    list_value = str(record[field["column_name"]]).split(',')
+                    list_value = str(record[field["column_name"]]).split(",")
                     stripped = list(map(str.strip, list_value))
                     setattr(ao, field["column_type"], stripped)
                 else:
@@ -98,7 +113,9 @@ def add_user_annotations(ao, headers, record, utilized_columns):
     :param record: a record in the user data
     :param utilized_columns: list of processed columns
     """
-    not_utilized_columns = [column_name for column_name in headers if column_name not in utilized_columns]
+    not_utilized_columns = [
+        column_name for column_name in headers if column_name not in utilized_columns
+    ]
     for not_utilized_column in not_utilized_columns:
         if record[not_utilized_column]:
             ao.add_user_annotation(not_utilized_column, record[not_utilized_column])
@@ -133,9 +150,9 @@ def populate_labelsets(cas, config_fields):
     """
     labelsets = list()
     for field in config_fields:
-        if field['column_type'] == 'cell_set' or field['column_type'] == 'cluster_name':
-            label_set = Labelset(field['column_name'])
-            if 'rank' in field:
+        if field["column_type"] == "cell_set" or field["column_type"] == "cluster_name":
+            label_set = Labelset(field["column_name"])
+            if "rank" in field:
                 label_set.rank = str(field["rank"])
             labelsets.append(label_set)
     if labelsets:

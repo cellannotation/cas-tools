@@ -22,7 +22,7 @@ def populate_cell_ids(cas_json_path: str, anndata_path: str, labelsets: list = N
             with open(cas_json_path, "w") as json_file:
                 json.dump(cas, json_file, indent=2)
     else:
-        raise Exception('Anndata read operation failed: {}'.format(anndata_path))
+        raise Exception("Anndata read operation failed: {}".format(anndata_path))
 
 
 def add_cell_ids(cas: dict, ad: Optional[anndata.AnnData], labelsets: list = None):
@@ -35,7 +35,9 @@ def add_cell_ids(cas: dict, ad: Optional[anndata.AnnData], labelsets: list = Non
         labelsets: List of labelsets to update with IDs from AnnData. If value is null, rank '0' labelset is used.
     """
 
-    rank_zero_labelset = [lbl_set["name"] for lbl_set in cas["labelsets"] if lbl_set["rank"] == "0"][0]
+    rank_zero_labelset = [
+        lbl_set["name"] for lbl_set in cas["labelsets"] if lbl_set["rank"] == "0"
+    ][0]
     if not labelsets:
         labelsets = rank_zero_labelset
 
@@ -48,10 +50,19 @@ def add_cell_ids(cas: dict, ad: Optional[anndata.AnnData], labelsets: list = Non
                 cell_ids = []
                 if cluster_identifier_column.lower() == "cluster_id":
                     cluster_id = anno["user_annotations"][0]["cell_label"]
-                    cell_ids = list(ad.obs.loc[ad.obs["cluster_id"] == int(cluster_id), cluster_identifier_column].index)
+                    cell_ids = list(
+                        ad.obs.loc[
+                            ad.obs["cluster_id"] == int(cluster_id),
+                            cluster_identifier_column,
+                        ].index
+                    )
                 elif cluster_identifier_column.lower() == "cluster":
                     cluster_label = anno["cell_label"]
-                    cell_ids = list(ad.obs.loc[ad.obs[cluster_identifier_column] == cluster_label].index)
+                    cell_ids = list(
+                        ad.obs.loc[
+                            ad.obs[cluster_identifier_column] == cluster_label
+                        ].index
+                    )
                 anno["cell_ids"] = cell_ids
                 if "parent_cell_set_name" in anno:
                     lookup_key = anno["parent_cell_set_name"]
@@ -67,7 +78,9 @@ def add_cell_ids(cas: dict, ad: Optional[anndata.AnnData], labelsets: list = Non
 
         return cas
     else:
-        print("WARN: Cluster identifier column couldn't be identified in OBS. Populate cell ids operation is aborted.")
+        print(
+            "WARN: Cluster identifier column couldn't be identified in OBS. Populate cell ids operation is aborted."
+        )
 
     return None
 
@@ -92,6 +105,7 @@ def get_obs_cluster_identifier_column(ad):
     elif "cluster" in obs_keys:
         cluster_identifier_column = "cluster"
     return cluster_identifier_column
+
 
 # def populate_cell_ids(cas_json_path: str, anndata_path: str, labelsets: list = None):
 #     """

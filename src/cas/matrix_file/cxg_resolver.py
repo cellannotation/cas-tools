@@ -32,12 +32,23 @@ class CxGDatasetResolver(BaseMatrixFileResolver):
             return os.path.join(self.cache_folder_path, dataset_file_name)
 
         # TODO implement dataset download operation
-        raise Exception("Dataset could not be found at location: '{}'".format(
-            os.path.join(self.cache_folder_path, dataset_file_name)))
+        raise Exception(
+            "Dataset could not be found at location: '{}'".format(
+                os.path.join(self.cache_folder_path, dataset_file_name)
+            )
+        )
 
 
 def list_cached_datasets(cache_folder_path):
     if os.path.isdir(cache_folder_path):
-        return [f for f in os.listdir(cache_folder_path) if os.path.isfile(os.path.join(cache_folder_path, f))]
+        return [
+            f
+            for f in os.listdir(cache_folder_path)
+            if os.path.isfile(os.path.join(cache_folder_path, f))
+        ]
     else:
-        raise Exception("CellxGene dataset cache folder is not accessible: '{}'".format(cache_folder_path))
+        raise Exception(
+            "CellxGene dataset cache folder is not accessible: '{}'".format(
+                cache_folder_path
+            )
+        )
