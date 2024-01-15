@@ -6,7 +6,9 @@ from cas.matrix_file.cxg_resolver import CxGDatasetResolver
 CXG_PREFIX = "CellXGene_dataset"
 
 
-def resolve_matrix_file(matrix_file_id: str, cache_folder_path: str = None) -> Optional[anndata.AnnData] :
+def resolve_matrix_file(
+    matrix_file_id: str, cache_folder_path: str = None
+) -> Optional[anndata.AnnData]:
     """
     Resolves matrix file identified by the given matrix_file_id.
 
@@ -27,7 +29,7 @@ def resolve_matrix_file(matrix_file_id: str, cache_folder_path: str = None) -> O
     return resolver.resolve_matrix_file(dataset_id)
 
 
-def resolve_matrix_file_path(matrix_file_id: str, cache_folder_path: str = None) -> str :
+def resolve_matrix_file_path(matrix_file_id: str, cache_folder_path: str = None) -> str:
     """
     Resolves matrix file identified by the given matrix_file_id.
 
@@ -46,6 +48,3 @@ def resolve_matrix_file_path(matrix_file_id: str, cache_folder_path: str = None)
         raise Exception("Unrecognised matrix file protocol: '{}'".format(protocol))
 
     return resolver.resolve_matrix_file_path(dataset_id)
-
-
-

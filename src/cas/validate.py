@@ -9,9 +9,11 @@ from cas_schema import schema_validator, schemas
 
 warnings.filterwarnings("always")
 
-SCHEMA_FILE_MAPPING = {"base": "general_schema.json",
-                       "cap": "CAP_schema.json",
-                       "bican": "BICAN_schema.json"}
+SCHEMA_FILE_MAPPING = {
+    "base": "general_schema.json",
+    "cap": "CAP_schema.json",
+    "bican": "BICAN_schema.json",
+}
 
 
 def validate(schema_name: str, data_path: str):
@@ -29,11 +31,13 @@ def validate(schema_name: str, data_path: str):
     if not os.path.exists(data_path):
         raise Exception("Please provide a valid 'data_path': {}".format(data_path))
 
-    schema_file = (resources.files(schemas) / SCHEMA_FILE_MAPPING[schema_name])
+    schema_file = resources.files(schemas) / SCHEMA_FILE_MAPPING[schema_name]
     with schema_file.open("rt") as f:
         schema = json.loads(f.read())
 
-    result = schema_validator.validate(schema, SCHEMA_FILE_MAPPING[schema_name], data_path)
+    result = schema_validator.validate(
+        schema, SCHEMA_FILE_MAPPING[schema_name], data_path
+    )
     if not result:
         raise Exception("Validation Failed")
 

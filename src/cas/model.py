@@ -12,17 +12,15 @@ exclude_none_values = True
 
 
 class EncoderMixin(DataClassJsonMixin):
-
     dataclass_json_config = dataclasses_json.config(
         # letter_case=dataclasses_json.LetterCase.CAMEL,
         undefined=dataclasses_json.Undefined.EXCLUDE,
-        exclude=lambda f: exclude_none_values and f is None
+        exclude=lambda f: exclude_none_values and f is None,
     )["dataclasses_json"]
 
 
 @dataclass
 class AutomatedAnnotation(EncoderMixin):
-
     algorithm_name: str
     """The name of the algorithm used. It MUST be a string of the algorithm's name."""
 
@@ -43,7 +41,6 @@ class AutomatedAnnotation(EncoderMixin):
 
 @dataclass
 class Labelset(EncoderMixin):
-
     name: str
     """name of annotation key"""
 
@@ -65,7 +62,6 @@ class Labelset(EncoderMixin):
 
 @dataclass
 class AnnotationTransfer(EncoderMixin):
-
     transferred_cell_label: Optional[str]
     """Transferred cell label"""
 
@@ -169,12 +165,13 @@ class Annotation(EncoderMixin):
         """
         if not self.user_annotations:
             self.user_annotations = list()
-        self.user_annotations.append(UserAnnotation(user_annotation_set, user_annotation_label))
+        self.user_annotations.append(
+            UserAnnotation(user_annotation_set, user_annotation_label)
+        )
 
 
 @dataclass
 class CellTypeAnnotation(EncoderMixin):
-
     # data_url: str
     # annotation_objects: List[Annotation]
     # taxonomy: TaxonomyMetadata = None
@@ -218,7 +215,9 @@ class CellTypeAnnotation(EncoderMixin):
         global exclude_none_values
         exclude_none_values = value
 
-    def get_all_annotations(self, show_cell_ids: bool = False, labels: list = None) -> pd.DataFrame:
+    def get_all_annotations(
+        self, show_cell_ids: bool = False, labels: list = None
+    ) -> pd.DataFrame:
         """
         Lists all annotations.
 
@@ -228,4 +227,6 @@ class CellTypeAnnotation(EncoderMixin):
         Returns:
             Annotations data frame
         """
-        return get_all_annotations(asdict(self), show_cell_ids=show_cell_ids, labels=labels)
+        return get_all_annotations(
+            asdict(self), show_cell_ids=show_cell_ids, labels=labels
+        )

@@ -7,10 +7,12 @@ from jsonschema import Draft7Validator
 
 from cas.file_utils import read_config
 
-SCHEMA_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), "./config_schema.yaml")
+SCHEMA_PATH = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)), "./config_schema.yaml"
+)
 
 
-ryaml = YAML(typ='safe')
+ryaml = YAML(typ="safe")
 with open(SCHEMA_PATH) as stream:
     ctat_schema = ryaml.load(stream)
     validator = Draft7Validator(ctat_schema)
@@ -53,4 +55,3 @@ def validate_json_str(json_str: str) -> bool:
     :return: True if object is valid, False otherwise.
     """
     return validate(json.loads(json_str))
-

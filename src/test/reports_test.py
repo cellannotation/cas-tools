@@ -6,13 +6,15 @@ from dataclasses import asdict
 from cas.reports import get_all_annotations
 from cas.file_utils import read_cas_json_file
 
-TEST_JSON = os.path.join(os.path.dirname(os.path.realpath(__file__)), "./test_data/siletti/Siletti_all_non_neuronal_cells_with_cids.json")
+TEST_JSON = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)),
+    "./test_data/siletti/Siletti_all_non_neuronal_cells_with_cids.json",
+)
 
 
 class ReportsTests(unittest.TestCase):
-
     def setUp(self):
-        pd.set_option('display.max_columns', None)
+        pd.set_option("display.max_columns", None)
 
     def test_annotations_listing(self):
         cas = read_cas_json_file(TEST_JSON)
@@ -36,10 +38,14 @@ class ReportsTests(unittest.TestCase):
         cas = read_cas_json_file(TEST_JSON)
         self.assertEqual(89, len(cas.annotations))
 
-        df = cas.get_all_annotations(labels=[("Supercluster", "Microglia"),
-                                             ("Cluster", "Mgl_4"),
-                                             ("Cluster", "Astro_55"),
-                                             ("Dummy", "Dummy")])
+        df = cas.get_all_annotations(
+            labels=[
+                ("Supercluster", "Microglia"),
+                ("Cluster", "Mgl_4"),
+                ("Cluster", "Astro_55"),
+                ("Dummy", "Dummy"),
+            ]
+        )
         print(df)
         self.assertEqual(3, df.shape[0])
         self.assertEqual(14, df.shape[1])
@@ -55,6 +61,3 @@ class ReportsTests(unittest.TestCase):
         # print(df)
         self.assertEqual(89, df.shape[0])
         self.assertEqual(14, df.shape[1])
-
-
-
