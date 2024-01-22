@@ -1,19 +1,18 @@
 import os
-
-from typing import get_type_hints
 from pathlib import Path
+from typing import get_type_hints
 
-from cas.model import (
-    CellTypeAnnotation,
-    Labelset,
-    Annotation,
-    AnnotationTransfer,
-    UserAnnotation,
-    AutomatedAnnotation,
-)
-from cas.file_utils import write_json_file, read_config, read_tsv_to_dict
+from cas.file_utils import read_config, read_tsv_to_dict, write_json_file
 from cas.flatten_data_to_tables import serialize_to_tables
 from cas.ingest.config_validator import validate
+from cas.model import (
+    Annotation,
+    AnnotationTransfer,
+    AutomatedAnnotation,
+    CellTypeAnnotation,
+    Labelset,
+    UserAnnotation,
+)
 
 
 def ingest_data(

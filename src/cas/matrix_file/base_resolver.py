@@ -1,7 +1,7 @@
 import abc
-import anndata
-
 from typing import Optional
+
+import anndata
 
 
 class BaseMatrixFileResolver(metaclass=abc.ABCMeta):

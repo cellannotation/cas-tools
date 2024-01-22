@@ -1,9 +1,9 @@
 import csv
 import json
-import anndata
 import pathlib
-
 from typing import Optional
+
+import anndata
 from ruamel.yaml import YAML
 
 from cas.model import CellTypeAnnotation

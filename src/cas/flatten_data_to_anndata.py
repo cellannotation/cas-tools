@@ -12,8 +12,8 @@ Key Features:
 4. Writes the modified AnnData object to a specified output file.
 """
 
-from cas.file_utils import read_json_file, read_anndata_file
 from cas.anndata_conversion import test_compatibility
+from cas.file_utils import read_anndata_file, read_json_file
 
 LABELSET_NAME = "name"
 

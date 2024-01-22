@@ -32,7 +32,7 @@ Additional Notes:
 import json
 import sys
 
-from cas.file_utils import read_json_file, read_anndata_file
+from cas.file_utils import read_anndata_file, read_json_file
 
 LABELSET_NAME = "name"
 

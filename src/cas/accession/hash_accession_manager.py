@@ -1,6 +1,6 @@
 import hashlib
-
 from typing import List
+
 from cas.accession.base_accession_manager import BaseAccessionManager
 
 

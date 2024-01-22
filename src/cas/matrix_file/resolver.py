@@ -1,6 +1,7 @@
+from typing import Optional
+
 import anndata
 
-from typing import Optional
 from cas.matrix_file.cxg_resolver import CxGDatasetResolver
 
 CXG_PREFIX = "CellXGene_dataset"

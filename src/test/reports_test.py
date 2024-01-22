@@ -1,10 +1,11 @@
-import unittest
 import os
+import unittest
+from dataclasses import asdict
+
 import pandas as pd
 
-from dataclasses import asdict
-from cas.reports import get_all_annotations
 from cas.file_utils import read_cas_json_file
+from cas.reports import get_all_annotations
 
 TEST_JSON = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
