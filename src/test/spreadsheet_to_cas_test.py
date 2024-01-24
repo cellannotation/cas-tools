@@ -239,9 +239,9 @@ class TestYourModule(unittest.TestCase):
         "cas.spreadsheet_to_cas.read_anndata_file", return_value=generate_mock_dataset()
     )
     def test_spreadsheet2cas(self, mock_read_anndata_file, mock_download_source_h5ad):
-        spreadsheet2cas("test_data/sample_spreadsheet_data.xlsx", None)
+        spreadsheet2cas("test_data/sample_spreadsheet_data.xlsx", None, None)
 
-        json_file_path = "2a498ace-872a-4935-984b-1afa70fd9886.json"
+        json_file_path = "output6.json"
 
         try:
             with open(json_file_path, "r") as json_file:
