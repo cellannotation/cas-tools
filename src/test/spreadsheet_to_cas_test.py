@@ -190,7 +190,7 @@ class TestYourModule(unittest.TestCase):
     def test_read_spreadsheet_default_sheet(self):
         # Test reading spreadsheet with default sheet
         meta_data, column_names, raw_data = read_spreadsheet(
-            "test_data/sample_spreadsheet_data.xlsx"
+            "test_data/sample_spreadsheet_data.xlsx", None
         )
         self.assertEqual(len(meta_data), 8)
         self.assertEqual(len(column_names), 9)
@@ -239,15 +239,15 @@ class TestYourModule(unittest.TestCase):
         "cas.spreadsheet_to_cas.read_anndata_file", return_value=generate_mock_dataset()
     )
     def test_spreadsheet2cas(self, mock_read_anndata_file, mock_download_source_h5ad):
-        spreadsheet2cas("test_data/sample_spreadsheet_data.xlsx", None, None)
+        spreadsheet2cas("test_data/sample_spreadsheet_data.xlsx", None, "output.json")
 
-        json_file_path = "output6.json"
+        json_file_path = "output.json"
 
         try:
             with open(json_file_path, "r") as json_file:
                 json_data = json.load(json_file)
 
-            self.assertEqual(len(json_data), 9)
+            self.assertEqual(len(json_data), 10)
             self.assertEqual(len(json_data["annotations"]), 103)
             self.assertEqual(len(json_data["annotations"][0]), 14)
         finally:

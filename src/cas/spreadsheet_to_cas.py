@@ -1,7 +1,7 @@
 import json
 import os
 import logging
-from typing import List
+from typing import List, Optional
 
 import anndata as ad
 import cellxgene_census
@@ -13,7 +13,7 @@ from cas.file_utils import read_anndata_file
 logging.basicConfig(level=logging.INFO)
 
 
-def read_spreadsheet(file_path: str, sheet_name: str):
+def read_spreadsheet(file_path: str, sheet_name: Optional[str]):
     """
     Read the specific sheet from the Excel file into a pandas DataFrame.
 
@@ -78,13 +78,13 @@ def download_and_read_dataset_with_id(dataset_id: str) -> ad.AnnData:
     return anndata
 
 
-def spreadsheet2cas(spreadsheet_file_path: str, sheet_name: str, output_file_path: str):
+def spreadsheet2cas(spreadsheet_file_path: str, sheet_name: Optional[str], output_file_path: str):
     """
     Convert a spreadsheet to Cell Annotation Schema (CAS) JSON.
 
     Args:
         spreadsheet_file_path (str): Path to the spreadsheet file.
-        sheet_name (str): Target sheet name in the spreadsheet.
+        sheet_name (Optional[str]): Target sheet name in the spreadsheet. Can be a string or None.
         output_file_path (str): Output CAS file name.
     """
     meta_data_result, column_names_result, raw_data_result = read_spreadsheet(
