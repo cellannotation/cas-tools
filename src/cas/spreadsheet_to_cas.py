@@ -1,5 +1,6 @@
 import json
 import os
+import logging
 from typing import List
 
 import anndata as ad
@@ -9,7 +10,10 @@ import pandas as pd
 from cas.file_utils import read_anndata_file
 
 
-def read_spreadsheet(file_path: str, sheet_name: str = None):
+logging.basicConfig(level=logging.INFO)
+
+
+def read_spreadsheet(file_path: str, sheet_name: str):
     """
     Read the specific sheet from the Excel file into a pandas DataFrame.
 
@@ -67,18 +71,21 @@ def download_and_read_dataset_with_id(dataset_id: str) -> ad.AnnData:
     if os.path.exists(anndata_file_path):
         print(f"File '{anndata_file_path}' already exists. Skipping download.")
     else:
+        logging.info(f"Downloading dataset with ID '{dataset_id}'...")
         cellxgene_census.download_source_h5ad(dataset_id, to_path=anndata_file_path)
+        logging.info(f"Download complete. File saved at '{anndata_file_path}'.")
     anndata = read_anndata_file(anndata_file_path)
     return anndata
 
 
-def spreadsheet2cas(spreadsheet_file_path: str, sheet_name: str):
+def spreadsheet2cas(spreadsheet_file_path: str, sheet_name: str, output_file_path: str):
     """
     Convert a spreadsheet to Cell Annotation Schema (CAS) JSON.
 
     Args:
         spreadsheet_file_path (str): Path to the spreadsheet file.
         sheet_name (str): Target sheet name in the spreadsheet.
+        output_file_path (str): Output CAS file name.
     """
     meta_data_result, column_names_result, raw_data_result = read_spreadsheet(
         spreadsheet_file_path, sheet_name
@@ -88,6 +95,7 @@ def spreadsheet2cas(spreadsheet_file_path: str, sheet_name: str):
         meta_data_result["CxG LINK"].rstrip("/").split("/")[-1].split(".")[0]
     )
     dataset_anndata = download_and_read_dataset_with_id(matrix_file_id)
+    labelsets = set()
 
     # metadata
     cas = {
@@ -95,18 +103,20 @@ def spreadsheet2cas(spreadsheet_file_path: str, sheet_name: str):
         "cellannotation_schema_version": "TBA",
         "cellannotation_timestamp": "TBA",
         "cellannotation_version": "TBA",
-        "cellannotation_url": meta_data_result["CAP LINK"],
+        "cellannotation_url": meta_data_result["CxG LINK"],
         "author_name": "TBA",
         "author_contact": "TBA",
         "orcid": "TBA",
         "annotations": [],
+        "labelsets": []
     }
 
-    # #annotations
+    # annotations
     stripped_data_result = raw_data_result.map(
         lambda x: x.strip() if isinstance(x, str) else x
     )
     for index, row in stripped_data_result.iterrows():
+        labelsets.add(row[0])
         anno = {
             "labelset": row[0],
             "cell_label": row[1],
@@ -125,6 +135,15 @@ def spreadsheet2cas(spreadsheet_file_path: str, sheet_name: str):
         }
         cas.get("annotations").append(anno)
 
+    # labelsets
+    for labelset in labelsets:
+        labelsets_dict = {
+            "name": labelset,
+            "description": "TBA",
+            "rank": "TBA"
+        }
+        cas.get("labelsets").append(labelsets_dict)
+
     # Write the JSON data to the file
-    with open(f"{matrix_file_id}.json", "w") as json_file:
+    with open(output_file_path, "w") as json_file:
         json.dump(cas, json_file, indent=2)
