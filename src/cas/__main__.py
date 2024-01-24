@@ -51,8 +51,9 @@ def main():
         args = parser.parse_args()
         spreadsheet_file_path = args.spreadsheet
         sheet_name = args.sheet
+        output_file_path = args.output
 
-        spreadsheet2cas(spreadsheet_file_path, sheet_name)
+        spreadsheet2cas(spreadsheet_file_path, sheet_name, output_file_path)
     elif args.action == "populate_cells":
         args = parser.parse_args()
         json_file_path = args.json
@@ -151,13 +152,15 @@ def create_spreadsheet2cas_operation_parser(subparsers):
     """
     Command-line Arguments:
     -----------------------
-    --spreadsheet : Path to the spreadsheet file.
-    --sheet       : Target sheet name in the spreadsheet.
+    --spreadsheet      : Path to the spreadsheet file.
+    --sheet            : Target sheet name in the spreadsheet.
+    --output           : Output CAS file name (default: output.json).
 
     Usage Example:
     --------------
     cd src
-    python -m cas spreadsheet2cas --spreadsheet path/to/Cell_annotation_metadata_PBMC.xlsx --sheet PBMC3_Yoshida_2022_PBMC
+    python -m cas spreadsheet2cas --spreadsheet path/to/Cell_annotation_metadata_PBMC.xlsx --sheet
+    PBMC3_Yoshida_2022_PBMC --output path/to/output_file.json
     """
     parser_spreadsheet2cas = subparsers.add_parser(
         "spreadsheet2cas",
@@ -170,6 +173,11 @@ def create_spreadsheet2cas_operation_parser(subparsers):
     )
     parser_spreadsheet2cas.add_argument(
         "--sheet", required=False, help="Target sheet name in the spreadsheet."
+    )
+    parser_spreadsheet2cas.add_argument(
+        "--output",
+        default="output.json",
+        help="Output CAS file name (default: output.json).",
     )
     parser_spreadsheet2cas.set_defaults(validate=False)
 
