@@ -51,9 +51,12 @@ def main():
         args = parser.parse_args()
         spreadsheet_file_path = args.spreadsheet
         sheet_name = args.sheet
+        anndata_file_path = args.anndata
         output_file_path = args.output
 
-        spreadsheet2cas(spreadsheet_file_path, sheet_name, output_file_path)
+        spreadsheet2cas(
+            spreadsheet_file_path, sheet_name, anndata_file_path, output_file_path
+        )
     elif args.action == "populate_cells":
         args = parser.parse_args()
         json_file_path = args.json
@@ -152,9 +155,11 @@ def create_spreadsheet2cas_operation_parser(subparsers):
     """
     Command-line Arguments:
     -----------------------
-    --spreadsheet      : Path to the spreadsheet file.
-    --sheet            : Target sheet name in the spreadsheet.
-    --output           : Output CAS file name (default: output.json).
+    --spreadsheet   : Path to the spreadsheet file.
+    --sheet         : Target sheet name in the spreadsheet.
+    --anndata       : Path to the AnnData file. If not provided anndata will be downloaded using CxG LINK in
+                    spreadsheet.
+    --output        : Output CAS file name (default: output.json).
 
     Usage Example:
     --------------
@@ -173,6 +178,11 @@ def create_spreadsheet2cas_operation_parser(subparsers):
     )
     parser_spreadsheet2cas.add_argument(
         "--sheet", required=False, help="Target sheet name in the spreadsheet."
+    )
+    parser_spreadsheet2cas.add_argument(
+        "--anndata",
+        default=None,
+        help="Path to the AnnData file. If not provided, AnnData will be downloaded using CxG LINK in spreadsheet.",
     )
     parser_spreadsheet2cas.add_argument(
         "--output",
