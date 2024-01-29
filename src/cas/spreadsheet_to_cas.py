@@ -12,6 +12,14 @@ from cas.file_utils import read_anndata_file
 
 logging.basicConfig(level=logging.INFO)
 
+LABELSET_COLUMN = "CELL LABELSET NAME"
+CELL_LABEL_COLUMN = "CELL TYPE TERM"
+CL_TERM_COLUMN = "CL TERM"
+EVIDENCE_COLUMN = "EVIDENCE"
+MARKER_GENES_COLUMN = "MARKER GENES"
+SYNONYM_COLUMN = "SYNONYMS"
+CATEGORIES_COLUMN = "CATEGORIES"
+
 
 def read_spreadsheet(file_path: str, sheet_name: Optional[str]):
     """
@@ -35,6 +43,7 @@ def read_spreadsheet(file_path: str, sheet_name: Optional[str]):
     column_names = spreadsheet_df.iloc[8, :].tolist()
     # Extract raw data (from 10th row onwards)
     raw_data = spreadsheet_df.iloc[9:, :]
+    raw_data.columns = column_names
 
     return meta_data, column_names, raw_data
 
@@ -78,13 +87,19 @@ def download_and_read_dataset_with_id(dataset_id: str) -> ad.AnnData:
     return anndata
 
 
-def spreadsheet2cas(spreadsheet_file_path: str, sheet_name: Optional[str], output_file_path: str):
+def spreadsheet2cas(
+    spreadsheet_file_path: str,
+    sheet_name: Optional[str],
+    anndata_file_path: str,
+    output_file_path: str,
+):
     """
     Convert a spreadsheet to Cell Annotation Schema (CAS) JSON.
 
     Args:
         spreadsheet_file_path (str): Path to the spreadsheet file.
         sheet_name (Optional[str]): Target sheet name in the spreadsheet. Can be a string or None.
+        anndata_file_path: The path to the AnnData file.
         output_file_path (str): Output CAS file name.
     """
     meta_data_result, column_names_result, raw_data_result = read_spreadsheet(
@@ -94,7 +109,11 @@ def spreadsheet2cas(spreadsheet_file_path: str, sheet_name: Optional[str], outpu
     matrix_file_id = (
         meta_data_result["CxG LINK"].rstrip("/").split("/")[-1].split(".")[0]
     )
-    dataset_anndata = download_and_read_dataset_with_id(matrix_file_id)
+    if anndata_file_path:
+        dataset_anndata = read_anndata_file(anndata_file_path)
+    else:
+        dataset_anndata = download_and_read_dataset_with_id(matrix_file_id)
+
     labelsets = set()
 
     # metadata
@@ -108,7 +127,7 @@ def spreadsheet2cas(spreadsheet_file_path: str, sheet_name: Optional[str], outpu
         "author_contact": "TBA",
         "orcid": "TBA",
         "annotations": [],
-        "labelsets": []
+        "labelsets": [],
     }
 
     # annotations
@@ -116,19 +135,28 @@ def spreadsheet2cas(spreadsheet_file_path: str, sheet_name: Optional[str], outpu
         lambda x: x.strip() if isinstance(x, str) else x
     )
     for index, row in stripped_data_result.iterrows():
-        labelsets.add(row[0])
+        labelset = row[LABELSET_COLUMN]
+        cell_label = row[CELL_LABEL_COLUMN]
+        cell_ontology_term_id = row[CL_TERM_COLUMN]
+        rationale = row[EVIDENCE_COLUMN]
+        marker_gene_evidence = row[MARKER_GENES_COLUMN]
+        synonyms = row[SYNONYM_COLUMN]
+        category_fullname = row[CATEGORIES_COLUMN]
+
+        labelsets.add(labelset)
+
         anno = {
-            "labelset": row[0],
-            "cell_label": row[1],
-            "cell_fullname": row[1],
-            "cell_ontology_term_id": row[2],
-            "cell_ontology_term": row[1],
-            "cell_ids": get_cell_ids(dataset_anndata, row[0], row[1]),
-            "rationale": row[8],
+            "labelset": labelset,
+            "cell_label": cell_label,
+            "cell_fullname": cell_label,
+            "cell_ontology_term_id": cell_ontology_term_id,
+            "cell_ontology_term": cell_label,
+            "cell_ids": get_cell_ids(dataset_anndata, labelset, cell_label),
+            "rationale": rationale,
             "rationale_dois": meta_data_result["PAPER DOI"],
-            "marker_gene_evidence": row[3],
-            "synonyms": row[6],
-            "category_fullname": row[7],
+            "marker_gene_evidence": marker_gene_evidence,
+            "synonyms": synonyms,
+            "category_fullname": category_fullname,
             "category_cell_ontology_exists": "TBA",
             "category_cell_ontology_term_id": "TBA",
             "category_cell_ontology_term": "TBA",
@@ -137,11 +165,7 @@ def spreadsheet2cas(spreadsheet_file_path: str, sheet_name: Optional[str], outpu
 
     # labelsets
     for labelset in labelsets:
-        labelsets_dict = {
-            "name": labelset,
-            "description": "TBA",
-            "rank": "TBA"
-        }
+        labelsets_dict = {"name": labelset, "description": "TBA", "rank": "TBA"}
         cas.get("labelsets").append(labelsets_dict)
 
     # Write the JSON data to the file
