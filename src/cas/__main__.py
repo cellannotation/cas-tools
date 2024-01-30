@@ -52,10 +52,11 @@ def main():
         spreadsheet_file_path = args.spreadsheet
         sheet_name = args.sheet
         anndata_file_path = args.anndata
+        labelsets = args.labelsets
         output_file_path = args.output
 
         spreadsheet2cas(
-            spreadsheet_file_path, sheet_name, anndata_file_path, output_file_path
+            spreadsheet_file_path, sheet_name, anndata_file_path, labelsets, output_file_path
         )
     elif args.action == "populate_cells":
         args = parser.parse_args()
@@ -159,13 +160,15 @@ def create_spreadsheet2cas_operation_parser(subparsers):
     --sheet         : Target sheet name in the spreadsheet.
     --anndata       : Path to the AnnData file. If not provided anndata will be downloaded using CxG LINK in
                     spreadsheet.
+    --labelsets     : List to determine the rank of labelsets in spreadsheet. If not provided ranks will be
+                    determined using order of CELL LABELSET NAME.
     --output        : Output CAS file name (default: output.json).
 
     Usage Example:
     --------------
     cd src
-    python -m cas spreadsheet2cas --spreadsheet path/to/Cell_annotation_metadata_PBMC.xlsx --sheet
-    PBMC3_Yoshida_2022_PBMC --output path/to/output_file.json
+    python -m cas spreadsheet2cas --spreadsheet path/to/spreadsheet.xlsx --sheet
+    sheet_name --labelsets item1 item2 item3 --output path/to/output_file.json
     """
     parser_spreadsheet2cas = subparsers.add_parser(
         "spreadsheet2cas",
@@ -183,6 +186,13 @@ def create_spreadsheet2cas_operation_parser(subparsers):
         "--anndata",
         default=None,
         help="Path to the AnnData file. If not provided, AnnData will be downloaded using CxG LINK in spreadsheet.",
+    )
+    parser_spreadsheet2cas.add_argument(
+        "--labelsets",
+        default=None,
+        nargs='+',
+        help="List to determine the rank of labelsets in spreadsheet. If not provided ranks will be determined using "
+             "order of CELL LABELSET NAME.",
     )
     parser_spreadsheet2cas.add_argument(
         "--output",

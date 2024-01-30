@@ -8,6 +8,7 @@ import anndata as ad
 import pandas as pd
 
 from cas.spreadsheet_to_cas import (
+    calculate_labelset_rank,
     cellxgene_census,
     download_and_read_dataset_with_id,
     get_cell_ids,
@@ -234,12 +235,23 @@ class TestYourModule(unittest.TestCase):
 
         self.assertEqual(result.shape, (5, 0))
 
+    def test_calculate_labelset_rank(self):
+        # Test with an empty list
+        result_empty = calculate_labelset_rank([])
+        self.assertEqual(result_empty, {})
+
+        # Test with a non-empty list
+        input_list = ['item1', 'item2', 'item3']
+        result_non_empty = calculate_labelset_rank(input_list)
+        expected_result_non_empty = {'item1': 0, 'item2': 1, 'item3': 2}
+        self.assertEqual(result_non_empty, expected_result_non_empty)
+
     @patch("cellxgene_census.download_source_h5ad", return_value=None)
     @patch(
         "cas.spreadsheet_to_cas.read_anndata_file", return_value=generate_mock_dataset()
     )
     def test_spreadsheet2cas(self, mock_read_anndata_file, mock_download_source_h5ad):
-        spreadsheet2cas("test_data/sample_spreadsheet_data.xlsx", None, None, "output.json")
+        spreadsheet2cas("test_data/sample_spreadsheet_data.xlsx", None, None, None, "output.json")
 
         json_file_path = "output.json"
 
