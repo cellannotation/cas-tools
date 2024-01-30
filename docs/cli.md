@@ -38,6 +38,21 @@ cas flatten --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --
 
 Please check the [related notebook](../notebooks/test_flatten.ipynb) to evaluate the output data format.
 
+## Convert spreadsheet to CAS
+
+Convert a spreadsheet to Cell Annotation Schema (CAS) JSON.
+
+Detailed specification about the `spreadsheet2cas` operation can be found in the [related issue](https://github.com/cellannotation/cell-annotation-schema/issues/25).
+
+```commandline
+spreadsheet2cas --spreadsheet  path/to/spreadsheet_file --sheet optional_sheet_name
+```
+
+**Command-line Arguments:**
+- `--spreadsheet` : Path to the spreadsheet file.
+- `--sheet` : Target sheet name in the spreadsheet.
+- `--output` : Output CAS file name (default: output.json).
+ 
 ## Merge CAS to AnnData file
 
 Integrates cell annotations from a CAS (Cell Annotation Schema) JSON file into an AnnData object.  It performs validation checks to ensure data consistency between the CAS file and the AnnData file.  The AnnData file location should ideally be specified as a resolvable path in the CAS file.

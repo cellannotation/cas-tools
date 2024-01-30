@@ -1,11 +1,12 @@
-import sys
 import argparse
 import pathlib
+import sys
 import warnings
 
 from cas.anndata_conversion import merge
 from cas.flatten_data_to_anndata import flatten
 from cas.populate_cell_ids import populate_cell_ids
+from cas.spreadsheet_to_cas import spreadsheet2cas
 from cas.validate import validate as schema_validate
 
 warnings.filterwarnings("always")
@@ -19,6 +20,7 @@ def main():
 
     create_merge_operation_parser(subparsers)
     create_flatten_operation_parser(subparsers)
+    create_spreadsheet2cas_operation_parser(subparsers)
     create_populate_cells_operation_parser(subparsers)
     create_schema_validation_operation_parser(subparsers)
 
@@ -45,6 +47,16 @@ def main():
             raise ValueError("--anndata and --output cannot be the same")
 
         flatten(json_file_path, anndata_file_path, validate, output_file_path)
+    elif args.action == "spreadsheet2cas":
+        args = parser.parse_args()
+        spreadsheet_file_path = args.spreadsheet
+        sheet_name = args.sheet
+        anndata_file_path = args.anndata
+        output_file_path = args.output
+
+        spreadsheet2cas(
+            spreadsheet_file_path, sheet_name, anndata_file_path, output_file_path
+        )
     elif args.action == "populate_cells":
         args = parser.parse_args()
         json_file_path = args.json
@@ -137,6 +149,47 @@ def create_flatten_operation_parser(subparsers):
         default="output.h5ad",
     )
     parser_flatten.set_defaults(validate=False)
+
+
+def create_spreadsheet2cas_operation_parser(subparsers):
+    """
+    Command-line Arguments:
+    -----------------------
+    --spreadsheet   : Path to the spreadsheet file.
+    --sheet         : Target sheet name in the spreadsheet.
+    --anndata       : Path to the AnnData file. If not provided anndata will be downloaded using CxG LINK in
+                    spreadsheet.
+    --output        : Output CAS file name (default: output.json).
+
+    Usage Example:
+    --------------
+    cd src
+    python -m cas spreadsheet2cas --spreadsheet path/to/Cell_annotation_metadata_PBMC.xlsx --sheet
+    PBMC3_Yoshida_2022_PBMC --output path/to/output_file.json
+    """
+    parser_spreadsheet2cas = subparsers.add_parser(
+        "spreadsheet2cas",
+        description="Converts a spreadsheet to CAS JSON.",
+        help="Converts a spreadsheet to Cell Annotation Schema (CAS) JSON.",
+    )
+
+    parser_spreadsheet2cas.add_argument(
+        "--spreadsheet", required=True, help="Path to the spreadsheet file."
+    )
+    parser_spreadsheet2cas.add_argument(
+        "--sheet", required=False, help="Target sheet name in the spreadsheet."
+    )
+    parser_spreadsheet2cas.add_argument(
+        "--anndata",
+        default=None,
+        help="Path to the AnnData file. If not provided, AnnData will be downloaded using CxG LINK in spreadsheet.",
+    )
+    parser_spreadsheet2cas.add_argument(
+        "--output",
+        default="output.json",
+        help="Output CAS file name (default: output.json).",
+    )
+    parser_spreadsheet2cas.set_defaults(validate=False)
 
 
 def create_populate_cells_operation_parser(subparsers):

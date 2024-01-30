@@ -1,5 +1,5 @@
-import unittest
 import os
+import unittest
 import warnings
 
 from cas.validate import validate

@@ -1,12 +1,11 @@
+from dataclasses import asdict, dataclass
+from typing import Any, List, Optional
+
 import dataclasses_json
 import pandas as pd
-
-from typing import List, Optional, Any
-from dataclasses import dataclass, asdict
 from dataclasses_json import DataClassJsonMixin
 
 from cas.reports import get_all_annotations
-
 
 exclude_none_values = True
 

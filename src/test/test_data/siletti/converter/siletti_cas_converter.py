@@ -2,16 +2,16 @@
 
 import os
 
-from cas.model import (
-    CellTypeAnnotation,
-    Annotation,
-    Labelset,
-    AnnotationTransfer,
-    UserAnnotation,
-    AutomatedAnnotation,
-)
-from cas.file_utils import read_csv_to_dict, write_json_file
 from cas.accession.incremental_accession_manager import IncrementalAccessionManager
+from cas.file_utils import read_csv_to_dict, write_json_file
+from cas.model import (
+    Annotation,
+    AnnotationTransfer,
+    AutomatedAnnotation,
+    CellTypeAnnotation,
+    Labelset,
+    UserAnnotation,
+)
 
 CLUSTERS_TSV = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
