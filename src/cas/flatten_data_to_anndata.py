@@ -57,6 +57,20 @@ def flatten(json_file_path, anndata_file_path, validate, output_file_path):
     input_json = read_json_file(json_file_path)
     input_anndata = read_anndata_file(anndata_file_path)
 
+    flatten_cas_object(input_json, input_anndata, validate, output_file_path)
+
+
+def flatten_cas_object(input_json, input_anndata, validate, output_file_path):
+    """
+     Processes and integrates information from a JSON file and an AnnData (Annotated Data) file, creating a new AnnData
+     object that incorporates the metadata. The resulting AnnData object is then saved to a new file.
+
+    Args:
+        input_json: CAS json file.
+        input_anndata: The AnnData object.
+        validate: Boolean to determine if validation checks will be performed before writing to the output AnnData file.
+        output_file_path: Output AnnData file name.
+    """
     # obs
     annotations = input_json[ANNOTATIONS]
 
