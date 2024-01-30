@@ -1,11 +1,9 @@
-import os
 import json
+import os
 import warnings
-
 from importlib import resources
 
 from cas_schema import schema_validator, schemas
-
 
 warnings.filterwarnings("always")
 

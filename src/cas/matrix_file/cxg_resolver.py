@@ -1,10 +1,11 @@
 import os
-import anndata
-
 from os.path import isfile, join
 from typing import Optional
-from cas.matrix_file.base_resolver import BaseMatrixFileResolver
+
+import anndata
+
 from cas.file_utils import read_anndata_file
+from cas.matrix_file.base_resolver import BaseMatrixFileResolver
 
 H5AD_FILE_EXTENSION = ".h5ad"
 

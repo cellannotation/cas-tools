@@ -1,8 +1,9 @@
 import os
+from dataclasses import asdict
+
 import pandas as pd
 
 from cas.accession.incremental_accession_manager import IncrementalAccessionManager
-from dataclasses import asdict
 
 
 def serialize_to_tables(cta, file_name_prefix, out_folder, accession_prefix):

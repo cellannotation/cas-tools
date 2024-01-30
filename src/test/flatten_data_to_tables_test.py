@@ -1,10 +1,10 @@
-import unittest
 import os
 import shutil
+import unittest
 
-from cas.ingest.ingest_user_table import ingest_user_data
+from cas.file_utils import read_cas_json_file, read_csv_to_dict
 from cas.flatten_data_to_tables import serialize_to_tables
-from cas.file_utils import read_csv_to_dict, read_cas_json_file
+from cas.ingest.ingest_user_table import ingest_user_data
 
 RAW_DATA = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),

@@ -1,5 +1,5 @@
-import unittest
 import os
+import unittest
 
 from cas.ingest.ingest_user_table import ingest_data
 

@@ -1,8 +1,9 @@
 import json
+from typing import Optional
+
 import anndata
 
-from typing import Optional
-from cas.file_utils import read_json_file, read_anndata_file
+from cas.file_utils import read_anndata_file, read_json_file
 
 
 def populate_cell_ids(cas_json_path: str, anndata_path: str, labelsets: list = None):

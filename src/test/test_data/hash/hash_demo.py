@@ -1,7 +1,7 @@
 import os
 
-from cas.file_utils import read_cas_json_file, write_json_file
 from cas.accession.hash_accession_manager import HashAccessionManager
+from cas.file_utils import read_cas_json_file, write_json_file
 
 CAS_PATH = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),

@@ -1,6 +1,7 @@
-import unittest
 import os
-from cas.ingest.config_validator import validate, validate_json_str, validate_file
+import unittest
+
+from cas.ingest.config_validator import validate, validate_file, validate_json_str
 
 VALID_TEST_DATA_1 = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
