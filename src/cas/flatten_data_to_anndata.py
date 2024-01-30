@@ -88,8 +88,8 @@ def flatten_cas_object(input_json, input_anndata, validate, output_file_path):
         for k, v in ann.items():
             if k == CELL_IDS or k == LABELSET:
                 continue
-            if k == CELL_LABEL:
-                key = ann[LABELSET]
+            # if k == CELL_LABEL:
+            #     key = ann[LABELSET]
             else:
                 key = f"{ann[LABELSET]}--{k}"
 
@@ -99,6 +99,7 @@ def flatten_cas_object(input_json, input_anndata, validate, output_file_path):
                 value = ", ".join(sorted(non_dict_v))
                 if len(v) > len(non_dict_v):
                     print("WARN: dict values are excluded on field '{}'".format(key))
+                input_anndata.obs[key] = ""
 
             for index_to_insert in cell_ids:
                 input_anndata.obs.at[index_to_insert, key] = value
