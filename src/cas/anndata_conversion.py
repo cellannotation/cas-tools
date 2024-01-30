@@ -31,6 +31,9 @@ Additional Notes:
 
 import json
 import sys
+from typing import Optional
+
+import anndata
 
 from cas.file_utils import read_anndata_file, read_json_file
 
@@ -61,6 +64,20 @@ def merge(cas_path: str, anndata_path: str, validate: bool, output_file_name: st
     input_json = read_json_file(cas_path)
     input_anndata = read_anndata_file(anndata_path)
 
+    merge_cas_object(input_json, input_anndata, validate, output_file_name)
+
+
+def merge_cas_object(input_json: dict, input_anndata: Optional[anndata.AnnData], validate: bool, output_file_name: str):
+    """
+    Tests if CAS json and AnnData are compatible and merges CAS into AnnData if possible.
+
+    Args:
+        input_json: The CAS json object.
+        input_anndata: The AnnData object.
+        validate: Boolean to determine if validation checks will be performed before writing to the output AnnData file.
+        output_file_name: Output AnnData file name.
+
+    """
     test_compatibility(input_anndata, input_json, validate)
 
     save_cas_to_uns(input_anndata, input_json)
