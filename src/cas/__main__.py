@@ -7,6 +7,7 @@ from cas.anndata_conversion import merge
 from cas.flatten_data_to_anndata import flatten
 from cas.populate_cell_ids import populate_cell_ids
 from cas.spreadsheet_to_cas import spreadsheet2cas
+from cas.anndata_to_cas import anndata2cas
 from cas.validate import validate as schema_validate
 
 warnings.filterwarnings("always")
@@ -21,6 +22,7 @@ def main():
     create_merge_operation_parser(subparsers)
     create_flatten_operation_parser(subparsers)
     create_spreadsheet2cas_operation_parser(subparsers)
+    create_anndata2cas_operation_parser(subparsers)
     create_populate_cells_operation_parser(subparsers)
     create_schema_validation_operation_parser(subparsers)
 
@@ -57,6 +59,16 @@ def main():
 
         spreadsheet2cas(
             spreadsheet_file_path, sheet_name, anndata_file_path, labelsets, output_file_path
+        )
+    elif args.action == "anndata2cas":
+        args = parser.parse_args()
+        anndata_file_path = args.anndata
+        labelsets = args.labelsets
+        output_file_path = args.output
+        include_hierarchy = args.hierarchy
+
+        anndata2cas(
+            anndata_file_path, labelsets, output_file_path, include_hierarchy
         )
     elif args.action == "populate_cells":
         args = parser.parse_args()
@@ -158,18 +170,17 @@ def create_spreadsheet2cas_operation_parser(subparsers):
     -----------------------
     --spreadsheet   : Path to the spreadsheet file.
     --sheet         : Target sheet name in the spreadsheet.
-    --anndata       : Path to the AnnData file. If not provided anndata will be downloaded using CxG LINK in
+    --anndata       : Path to the AnnData file. If not provided, AnnData will be downloaded using CxG LINK in
                     spreadsheet.
-    --labelsets     : List to determine the rank of labelsets in spreadsheet. If not provided ranks will be
-                    determined using order of CELL LABELSET NAME.
+    --labelsets     : List to determine the rank of labelsets in spreadsheet. If not provided, ranks will be determined using the order of CELL LABELSET NAME.
     --output        : Output CAS file name (default: output.json).
 
     Usage Example:
     --------------
     cd src
-    python -m cas spreadsheet2cas --spreadsheet path/to/spreadsheet.xlsx --sheet
-    sheet_name --labelsets item1 item2 item3 --output path/to/output_file.json
+    python -m cas spreadsheet2cas --spreadsheet path/to/spreadsheet.xlsx --sheet sheet_name --labelsets item1 item2 item3 --output path/to/output_file.json
     """
+
     parser_spreadsheet2cas = subparsers.add_parser(
         "spreadsheet2cas",
         description="Converts a spreadsheet to CAS JSON.",
@@ -199,7 +210,51 @@ def create_spreadsheet2cas_operation_parser(subparsers):
         default="output.json",
         help="Output CAS file name (default: output.json).",
     )
-    parser_spreadsheet2cas.set_defaults(validate=False)
+
+
+def create_anndata2cas_operation_parser(subparsers):
+    """
+    Command-line Arguments:
+    -----------------------
+    --anndata       : Path to the AnnData file.
+    --labelsets     : List of labelsets.
+    --output        : Output CAS file name (default: output.json).
+    --hierarchy     : Flag indicating whether to include hierarchy in the output.
+
+
+    Usage Example:
+    --------------
+    cd src
+    python -m cas anndata2cas --anndata path/to/anndata.h5ad --labelsets item1 item2 item3 --output
+    path/to/output_file.json
+    """
+    parser_anndata2cas = subparsers.add_parser(
+        "anndata2cas",
+        description="Converts an anndata to CAS JSON.",
+        help="Converts an anndata to Cell Annotation Schema (CAS) JSON.",
+    )
+
+    parser_anndata2cas.add_argument(
+        "--anndata",
+        required=True,
+        help="Path to the AnnData file.",
+    )
+    parser_anndata2cas.add_argument(
+        "--labelsets",
+        required=True,
+        nargs='+',
+        help="List of labelsets.",
+    )
+    parser_anndata2cas.add_argument(
+        "--output",
+        default="output.json",
+        help="Output CAS file name (default: output.json).",
+    )
+    parser_anndata2cas.add_argument(
+        "--hierarchy",
+        action="store_true",
+        help="Include hierarchy in the output.",
+    )
 
 
 def create_populate_cells_operation_parser(subparsers):
@@ -230,7 +285,6 @@ def create_populate_cells_operation_parser(subparsers):
         help="List of labelsets to update with IDs from AnnData",
         default="",
     )
-    parser_populate.set_defaults(validate=False)
 
 
 def create_schema_validation_operation_parser(subparsers):
