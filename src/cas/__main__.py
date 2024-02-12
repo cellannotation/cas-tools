@@ -41,12 +41,11 @@ def main():
         json_file_path = args.json
         anndata_file_path = args.anndata
         output_file_path = args.output
-        validate = args.validate
 
-        if anndata_file_path == output_file_path:
+        if output_file_path and anndata_file_path == output_file_path:
             raise ValueError("--anndata and --output cannot be the same")
 
-        flatten(json_file_path, anndata_file_path, validate, output_file_path)
+        flatten(json_file_path, anndata_file_path, output_file_path)
     elif args.action == "spreadsheet2cas":
         args = parser.parse_args()
         spreadsheet_file_path = args.spreadsheet
@@ -119,8 +118,8 @@ def create_flatten_operation_parser(subparsers):
     -----------------------
     --json      : Path to the CAS JSON schema file.
     --anndata   : Path to the AnnData file. Ideally, the location will be specified by a resolvable path in the CAS file.
-    --validate  : Perform validation checks before flattening to AnnData file.
-    --output    : Output AnnData file name (default: output.h5ad).
+    --output    : Optional output AnnData file name. If provided a new flatten anndata file will be created,
+    otherwise the inputted anndata file will be updated with the flatten data.
 
     Usage Example:
     --------------
@@ -139,15 +138,9 @@ def create_flatten_operation_parser(subparsers):
         "--anndata", required=True, help="Input AnnData file path"
     )
     parser_flatten.add_argument(
-        "-v",
-        "--validate",
-        action="store_true",
-        help="Perform validation checks before writing to the output AnnData file.",
-    )
-    parser_flatten.add_argument(
         "--output",
+        required=False,
         help="Output AnnData file name (default: output.h5ad)",
-        default="output.h5ad",
     )
     parser_flatten.set_defaults(validate=False)
 
