@@ -61,9 +61,10 @@ def get_cell_ids(dataset: ad.AnnData, labelset: str, cell_label: str) -> List[st
     Returns:
         List[str]: List of cell IDs.
     """
+    cell_label_lower = str(cell_label).lower()
     return dataset.obs.index[
-        dataset.obs[labelset].str.lower() == cell_label.lower()
-    ].tolist()
+        dataset.obs[labelset].astype(str).str.lower() == cell_label_lower
+        ].tolist()
 
 
 def download_and_read_dataset_with_id(dataset_id: str) -> ad.AnnData:
@@ -133,7 +134,6 @@ def spreadsheet2cas(
         dataset_anndata = download_and_read_dataset_with_id(matrix_file_id)
 
     labelsets = OrderedDict()
-
 
     # metadata
     cas = {
