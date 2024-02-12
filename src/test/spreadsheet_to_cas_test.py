@@ -241,9 +241,9 @@ class TestYourModule(unittest.TestCase):
         self.assertEqual(result_empty, {})
 
         # Test with a non-empty list
-        input_list = ['item1', 'item2', 'item3']
+        input_list = ["item1", "item2", "item3"]
         result_non_empty = calculate_labelset_rank(input_list)
-        expected_result_non_empty = {'item1': 0, 'item2': 1, 'item3': 2}
+        expected_result_non_empty = {"item1": 0, "item2": 1, "item3": 2}
         self.assertEqual(result_non_empty, expected_result_non_empty)
 
     @patch("cellxgene_census.download_source_h5ad", return_value=None)
@@ -251,7 +251,9 @@ class TestYourModule(unittest.TestCase):
         "cas.spreadsheet_to_cas.read_anndata_file", return_value=generate_mock_dataset()
     )
     def test_spreadsheet2cas(self, mock_read_anndata_file, mock_download_source_h5ad):
-        spreadsheet2cas("test_data/sample_spreadsheet_data.xlsx", None, None, None, "output.json")
+        spreadsheet2cas(
+            "test_data/sample_spreadsheet_data.xlsx", None, None, None, "output.json"
+        )
 
         json_file_path = "output.json"
 
