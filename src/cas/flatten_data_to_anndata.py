@@ -17,7 +17,7 @@ import h5py
 import numpy as np
 import pandas as pd
 
-from cas.file_utils import read_json_file
+from cas.file_utils import read_json_file, update_obs_dataset, write_json_to_hdf5
 
 LABELSET_NAME = "name"
 
@@ -133,20 +133,6 @@ def process_annotations(annotations, obs_index, parent_cell_ids):
     return flatten_data
 
 
-def update_obs_dataset(obs_dataset, flatten_data):
-    """
-    Updates obs dataset with flattened data.
-
-    Args:
-        obs_dataset (h5py.Dataset): Dataset representing the obs field in the AnnData file.
-        flatten_data (dict): Dictionary containing flattened data.
-    """
-    for key, value in flatten_data.items():
-        obs_dataset.create_dataset(key, data=value.values.astype("O"))
-        columns = np.append(obs_dataset.attrs["column-order"], key)
-        obs_dataset.attrs["column-order"] = columns
-
-
 def generate_uns_json(input_json):
     """
     Generates a dictionary representing the uns (unstructured) field in an AnnData object from a given JSON input.
@@ -181,46 +167,20 @@ def generate_uns_json(input_json):
     return uns_json
 
 
-def write_json_to_hdf5(group, data):
-    """
-    Recursively writes JSON-like data to an HDF5 group.
-
-    Args:
-        group (h5py.Group): The HDF5 group to write data to.
-        data (dict): A dictionary containing the data to be written.
-
-    Returns:
-        None
-    """
-    for key, value in data.items():
-        if isinstance(value, dict):
-            subgroup = group.create_group(key)
-            write_json_to_hdf5(subgroup, value)
-        elif isinstance(value, list):
-            if all(isinstance(item, str) for item in value):
-                group.create_dataset(key, data=", ".join(sorted(value)))
-            else:
-                subgroup = group.create_group(key)
-                for i, item in enumerate(value):
-                    subgroup.create_dataset(str(i), data=item)
-        else:
-            group.create_dataset(key, data=value)
-
-
 def collect_parent_cell_ids(cas):
     """
-        Collects parent cell IDs from the given CAS (Cluster Annotation Service) data.
+    Collects parent cell IDs from the given CAS (Cluster Annotation Service) data.
 
-        This function iterates through labelsets in the CAS data and collects parent cell IDs
-        associated with each labelset annotation. It populates and returns a dictionary
-        mapping parent cell set accessions to sets of corresponding cell IDs.
+    This function iterates through labelsets in the CAS data and collects parent cell IDs
+    associated with each labelset annotation. It populates and returns a dictionary
+    mapping parent cell set accessions to sets of corresponding cell IDs.
 
-        Args:
-            cas (dict): The Cluster Annotation Service data containing labelsets and annotations.
+    Args:
+        cas (dict): The Cluster Annotation Service data containing labelsets and annotations.
 
-        Returns:
-            dict: A dictionary mapping parent cell set accessions to sets of corresponding cell IDs.
-        """
+    Returns:
+        dict: A dictionary mapping parent cell set accessions to sets of corresponding cell IDs.
+    """
     parent_cell_ids = dict()
 
     labelsets = sorted(cas[LABELSETS], key=lambda x: int(x["rank"]))

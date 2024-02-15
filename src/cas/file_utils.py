@@ -211,3 +211,43 @@ def read_config(file_path: str) -> dict:
             "Given configuration file extension is not supported. "
             "Try a json or yaml file instead of :" + file_path
         )
+
+
+def update_obs_dataset(obs_dataset, flatten_data):
+    """
+    Updates obs dataset with flattened data.
+
+    Args:
+        obs_dataset (h5py.Dataset): Dataset representing the obs field in the AnnData file.
+        flatten_data (dict): Dictionary containing flattened data.
+    """
+    for key, value in flatten_data.items():
+        obs_dataset.create_dataset(key, data=value.values.astype("O"))
+        columns = np.append(obs_dataset.attrs["column-order"], key)
+        obs_dataset.attrs["column-order"] = columns
+
+
+def write_json_to_hdf5(group, data):
+    """
+    Recursively writes JSON-like data to an HDF5 group.
+
+    Args:
+        group (h5py.Group): The HDF5 group to write data to.
+        data (dict): A dictionary containing the data to be written.
+
+    Returns:
+        None
+    """
+    for key, value in data.items():
+        if isinstance(value, dict):
+            subgroup = group.create_group(key)
+            write_json_to_hdf5(subgroup, value)
+        elif isinstance(value, list):
+            if all(isinstance(item, str) for item in value):
+                group.create_dataset(key, data=", ".join(sorted(value)))
+            else:
+                subgroup = group.create_group(key)
+                for i, item in enumerate(value):
+                    subgroup.create_dataset(str(i), data=item)
+        else:
+            group.create_dataset(key, data=value)
