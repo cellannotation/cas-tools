@@ -4,6 +4,7 @@ import pathlib
 from typing import Optional
 
 import anndata
+import numpy as np
 from ruamel.yaml import YAML
 
 from cas.model import CellTypeAnnotation
