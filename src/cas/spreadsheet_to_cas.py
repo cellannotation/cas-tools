@@ -68,28 +68,6 @@ def get_cell_ids(dataset: ad.AnnData, labelset: str, cell_label: str) -> List[st
         ].tolist()
 
 
-def download_and_read_dataset_with_id(dataset_id: str) -> ad.AnnData:
-    """
-    Download and read an AnnData dataset with a specified ID.
-
-    Args:
-        dataset_id (str): ID of the dataset.
-
-    Returns:
-        ad.AnnData: AnnData object.
-    """
-    anndata_file_path = f"{dataset_id}.h5ad"
-    # Check if the file already exists
-    if os.path.exists(anndata_file_path):
-        print(f"File '{anndata_file_path}' already exists. Skipping download.")
-    else:
-        logging.info(f"Downloading dataset with ID '{dataset_id}'...")
-        cellxgene_census.download_source_h5ad(dataset_id, to_path=anndata_file_path)
-        logging.info(f"Download complete. File saved at '{anndata_file_path}'.")
-    anndata = read_anndata_file(anndata_file_path)
-    return anndata
-
-
 def calculate_labelset_rank(input_list: List[str]) -> Dict[str, int]:
     """
     Assign ranks to items in a list.
