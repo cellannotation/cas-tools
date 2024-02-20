@@ -8,6 +8,7 @@ import anndata as ad
 import cellxgene_census
 import pandas as pd
 
+from cas.cxg_utils import download_dataset_with_id
 from cas.file_utils import read_anndata_file
 
 
@@ -128,10 +129,9 @@ def spreadsheet2cas(
     matrix_file_id = (
         meta_data_result["CxG LINK"].rstrip("/").split("/")[-1].split(".")[0]
     )
-    if anndata_file_path:
-        dataset_anndata = read_anndata_file(anndata_file_path)
-    else:
-        dataset_anndata = download_and_read_dataset_with_id(matrix_file_id)
+    if not anndata_file_path:
+        download_dataset_with_id(matrix_file_id)
+    dataset_anndata = read_anndata_file(anndata_file_path)
 
     labelsets = OrderedDict()
 
