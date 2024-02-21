@@ -8,7 +8,7 @@ README = (HERE / "README.md").read_text()
 
 setup(
     name="cas-tools",
-    version="0.0.1.dev21",
+    version="0.0.1.dev22",
     description="Cell Annotation Schema tools.",
     long_description=README,
     long_description_content_type="text/markdown",
