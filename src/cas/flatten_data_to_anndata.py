@@ -114,22 +114,22 @@ def process_annotations(annotations, obs_index, parent_cell_ids):
         # Convert cell_ids to a list if it's not already for np.isin
         if not isinstance(cell_ids, list):
             cell_ids = list(cell_ids)
+        mask = np.isin(obs_index, cell_ids)
 
         for k, v in ann.items():
             if k in [CELL_IDS, LABELSET]:
                 continue
+
             key = f"{ann[LABELSET]}--{k}"
             value = ", ".join(
                 sorted([str(value) for value in v] if isinstance(v, list) else [str(v)])
             )
-            mask = np.isin(obs_index, cell_ids)
-            new_array = pd.Series("", index=obs_index)
+
+            if key not in flatten_data:
+                flatten_data[key] = pd.Series("", index=obs_index)
+            new_array = flatten_data[key]
             new_array[mask] = value
-            if key in flatten_data:
-                mask1 = new_array != ""
-                mask2 = flatten_data[key] != ""
-                new_array[~mask1 & mask2] = flatten_data[key][~mask1 & mask2]
-            flatten_data[key] = new_array
+
     return flatten_data
 
 
