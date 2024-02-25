@@ -278,9 +278,9 @@ def list_to_string(my_list: list):
         string representation of the list
     """
     if not my_list:
-        str_value = "[]"
+        str_value = ""
     else:
-        str_value = str(my_list).replace("'", '"')
+        str_value = "|".join(my_list)
     return str_value
 
 
@@ -322,4 +322,4 @@ def normalize_column_name(column_name: str) -> str:
     Returns:
         normalized column_name
     """
-    return column_name.strip().replace("(", "_").replace(")", "_")
+    return column_name.strip().replace("(", "_").replace(")", "_").replace("-", "_")
