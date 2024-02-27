@@ -102,14 +102,15 @@ def generate_metadata_table(cta, file_name_prefix, project_config, out_folder):
     records = list()
 
     record = dict()
-    record["cellannotation_schema_version"] = cta.get(
-        "cellannotation_schema_version", ""
-    )
+    record["index"] = "1"
     record["author_name"] = cta.get("author_name", "")
     record["author_contact"] = cta.get("author_contact", "")
     record["orcid"] = project_config.get("author", "")
     record["author_list"] = cta.get("author_list", "")
     record["matrix_file_id"] = project_config.get("matrix_file_id", "")
+    record["cellannotation_schema_version"] = cta.get(
+        "cellannotation_schema_version", ""
+    )
     record["cellannotation_timestamp"] = cta.get("cellannotation_timestamp", "")
     record["cellannotation_version"] = cta.get("cellannotation_version", "")
     record["cellannotation_url"] = cta.get("cellannotation_url", "")
