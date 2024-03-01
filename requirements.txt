@@ -1,10 +1,10 @@
-anndata==0.10.5
+anndata==0.10.3
 cellxgene-census
 openpyxl
 dataclasses_json
-pandas>=2.1.1
+pandas
 ruamel.yaml
-jsonschema>=4.21.1
+jsonschema==4.4.0
 ordered-set==4.1.0
 deepmerge==1.1.0
 cell-annotation-schema
