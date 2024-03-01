@@ -53,6 +53,23 @@ spreadsheet2cas --spreadsheet  path/to/spreadsheet_file --sheet optional_sheet_n
 - `--sheet` : Target sheet name in the spreadsheet.
 - `--output` : Output CAS file name (default: output.json).
  
+## Convert AnnData to CAS
+
+Convert an AnnData file to Cell Annotation Schema (CAS) JSON.
+
+Detailed specification about the `anndata2cas` operation can be found in the 
+[related issue](https://github.com/cellannotation/cas-tools/issues/10).
+
+```commandline
+cas anndata2cas --anndata path/to/anndata.h5ad --labelsets item1 item2 item3 --output path/to/output_file.json
+```
+
+**Command-line Arguments:**
+- `--anndata` : Path to the AnnData file.
+- `--labelsets` : List of labelsets.
+- `--output` : Output CAS file name (default: output.json).
+- `--hierarchy`: Flag indicating whether to include hierarchy in the output.
+
 ## Merge CAS to AnnData file
 
 Integrates cell annotations from a CAS (Cell Annotation Schema) JSON file into an AnnData object.  It performs validation checks to ensure data consistency between the CAS file and the AnnData file.  The AnnData file location should ideally be specified as a resolvable path in the CAS file.

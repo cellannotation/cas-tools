@@ -8,6 +8,7 @@ import anndata as ad
 import cellxgene_census
 import pandas as pd
 
+from cas.cxg_utils import download_dataset_with_id
 from cas.file_utils import read_anndata_file
 
 
@@ -61,31 +62,10 @@ def get_cell_ids(dataset: ad.AnnData, labelset: str, cell_label: str) -> List[st
     Returns:
         List[str]: List of cell IDs.
     """
+    cell_label_lower = str(cell_label).lower()
     return dataset.obs.index[
-        dataset.obs[labelset].str.lower() == cell_label.lower()
-    ].tolist()
-
-
-def download_and_read_dataset_with_id(dataset_id: str) -> ad.AnnData:
-    """
-    Download and read an AnnData dataset with a specified ID.
-
-    Args:
-        dataset_id (str): ID of the dataset.
-
-    Returns:
-        ad.AnnData: AnnData object.
-    """
-    anndata_file_path = f"{dataset_id}.h5ad"
-    # Check if the file already exists
-    if os.path.exists(anndata_file_path):
-        print(f"File '{anndata_file_path}' already exists. Skipping download.")
-    else:
-        logging.info(f"Downloading dataset with ID '{dataset_id}'...")
-        cellxgene_census.download_source_h5ad(dataset_id, to_path=anndata_file_path)
-        logging.info(f"Download complete. File saved at '{anndata_file_path}'.")
-    anndata = read_anndata_file(anndata_file_path)
-    return anndata
+        dataset.obs[labelset].astype(str).str.lower() == cell_label_lower
+        ].tolist()
 
 
 def calculate_labelset_rank(input_list: List[str]) -> Dict[str, int]:
@@ -127,13 +107,11 @@ def spreadsheet2cas(
     matrix_file_id = (
         meta_data_result["CxG LINK"].rstrip("/").split("/")[-1].split(".")[0]
     )
-    if anndata_file_path:
-        dataset_anndata = read_anndata_file(anndata_file_path)
-    else:
-        dataset_anndata = download_and_read_dataset_with_id(matrix_file_id)
+    if not anndata_file_path:
+        download_dataset_with_id(matrix_file_id)
+    dataset_anndata = read_anndata_file(anndata_file_path)
 
     labelsets = OrderedDict()
-
 
     # metadata
     cas = {

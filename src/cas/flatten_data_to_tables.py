@@ -6,7 +6,7 @@ import pandas as pd
 from cas.accession.incremental_accession_manager import IncrementalAccessionManager
 
 
-def serialize_to_tables(cta, file_name_prefix, out_folder, accession_prefix):
+def serialize_to_tables(cta, file_name_prefix, out_folder, project_config):
     """
     Writes cell type annotation object to a series of tsv files.
     Tables to generate:
@@ -19,13 +19,14 @@ def serialize_to_tables(cta, file_name_prefix, out_folder, accession_prefix):
         cta: cell type annotation object to serialize.
         file_name_prefix: Name prefix for table names
         out_folder: output folder path.
-        accession_prefix: accession id prefix
+        project_config: project configuration with extra metadata
     """
+    accession_prefix = project_config["accession_id_prefix"]
     annotation_table_path = generate_annotation_table(
         accession_prefix, cta, file_name_prefix, out_folder
     )
     labelset_table_path = generate_labelset_table(cta, file_name_prefix, out_folder)
-    metadata_table_path = generate_metadata_table(cta, file_name_prefix, out_folder)
+    metadata_table_path = generate_metadata_table(cta, file_name_prefix, project_config, out_folder)
     annotation_transfer_table_path = generate_annotation_transfer_table(
         cta, file_name_prefix, out_folder
     )
@@ -85,13 +86,14 @@ def generate_annotation_transfer_table(cta, file_name_prefix, out_folder):
     return table_path
 
 
-def generate_metadata_table(cta, file_name_prefix, out_folder):
+def generate_metadata_table(cta, file_name_prefix, project_config, out_folder):
     """
     Generates the metadata table.
 
     Parameters:
         cta: cell type annotation object to serialize.
         file_name_prefix: Name prefix for table names
+        project_config: metadata coming from project config
         out_folder: output folder path.
     """
     table_path = os.path.join(out_folder, file_name_prefix + "_metadata.tsv")
@@ -100,15 +102,18 @@ def generate_metadata_table(cta, file_name_prefix, out_folder):
     records = list()
 
     record = dict()
+    record["index"] = "1"
+    record["author_name"] = cta.get("author_name", "")
+    record["author_contact"] = cta.get("author_contact", "")
+    record["orcid"] = project_config.get("author", "")
+    record["author_list"] = cta.get("author_list", "")
+    record["matrix_file_id"] = project_config.get("matrix_file_id", "")
     record["cellannotation_schema_version"] = cta.get(
         "cellannotation_schema_version", ""
     )
     record["cellannotation_timestamp"] = cta.get("cellannotation_timestamp", "")
     record["cellannotation_version"] = cta.get("cellannotation_version", "")
     record["cellannotation_url"] = cta.get("cellannotation_url", "")
-    record["author_name"] = cta.get("author_name", "")
-    record["author_contact"] = cta.get("author_contact", "")
-    record["orcid"] = cta.get("orcid", "")
     records.append(record)
 
     records_df = pd.DataFrame.from_records(records)
@@ -278,9 +283,9 @@ def list_to_string(my_list: list):
         string representation of the list
     """
     if not my_list:
-        str_value = "[]"
+        str_value = ""
     else:
-        str_value = str(my_list).replace("'", '"')
+        str_value = "|".join(my_list)
     return str_value
 
 
@@ -322,4 +327,4 @@ def normalize_column_name(column_name: str) -> str:
     Returns:
         normalized column_name
     """
-    return column_name.strip().replace("(", "_").replace(")", "_")
+    return column_name.strip().replace("(", "_").replace(")", "_").replace("-", "_")

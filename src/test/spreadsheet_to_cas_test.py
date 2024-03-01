@@ -10,13 +10,14 @@ import pandas as pd
 from cas.spreadsheet_to_cas import (
     calculate_labelset_rank,
     cellxgene_census,
-    download_and_read_dataset_with_id,
     get_cell_ids,
     read_spreadsheet,
     spreadsheet2cas,
 )
 
 warnings.filterwarnings("ignore", category=UserWarning, module="anndata._core.anndata")
+
+TEST_SPREADSHEET = os.path.join(os.path.dirname(os.path.realpath(__file__)), "./test_data/sample_spreadsheet_data.xlsx")
 
 
 def generate_mock_dataset():
@@ -187,11 +188,11 @@ def generate_mock_dataset():
     )
 
 
-class TestYourModule(unittest.TestCase):
+class SpreadsheetToCasTests(unittest.TestCase):
     def test_read_spreadsheet_default_sheet(self):
         # Test reading spreadsheet with default sheet
         meta_data, column_names, raw_data = read_spreadsheet(
-            "test_data/sample_spreadsheet_data.xlsx", None
+            TEST_SPREADSHEET, None
         )
         self.assertEqual(len(meta_data), 8)
         self.assertEqual(len(column_names), 9)
@@ -200,7 +201,7 @@ class TestYourModule(unittest.TestCase):
     def test_read_spreadsheet_custom_sheet(self):
         # Test reading spreadsheet with custom sheet
         meta_data, column_names, raw_data = read_spreadsheet(
-            "test_data/sample_spreadsheets_data.xlsx",
+            TEST_SPREADSHEET,
             sheet_name="PBMC3_Yoshida_2022_PBMC",
         )
         self.assertEqual(len(meta_data), 8)
@@ -222,18 +223,6 @@ class TestYourModule(unittest.TestCase):
             cell_ids = get_cell_ids(mock_dataset, "annotation_broad", "T CD4+")
             self.assertEqual(cell_ids, ["1", "2", "4"])
 
-    @patch("cellxgene_census.download_source_h5ad", return_value=None)
-    @patch(
-        "cas.spreadsheet_to_cas.read_anndata_file", return_value=generate_mock_dataset()
-    )
-    def test_download_and_read_dataset_with_id(
-        self, mock_read_anndata_file, mock_download_source_h5ad
-    ):
-        dataset_id = "dataset_id"
-
-        result = download_and_read_dataset_with_id(dataset_id)
-
-        self.assertEqual(result.shape, (5, 0))
 
     def test_calculate_labelset_rank(self):
         # Test with an empty list
@@ -251,9 +240,7 @@ class TestYourModule(unittest.TestCase):
         "cas.spreadsheet_to_cas.read_anndata_file", return_value=generate_mock_dataset()
     )
     def test_spreadsheet2cas(self, mock_read_anndata_file, mock_download_source_h5ad):
-        spreadsheet2cas(
-            "test_data/sample_spreadsheet_data.xlsx", None, None, None, "output.json"
-        )
+        spreadsheet2cas(TEST_SPREADSHEET, None, None, None, "output.json")
 
         json_file_path = "output.json"
 

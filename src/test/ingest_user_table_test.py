@@ -34,6 +34,9 @@ class CellTypeAnnotationTests(unittest.TestCase):
         self.assertTrue("author_name" in result)
         self.assertEqual("Test User", result["author_name"])
 
+        self.assertTrue("cellannotation_schema_version" in result)
+        self.assertTrue("." in result["cellannotation_schema_version"])
+
         self.assertTrue("labelsets" in result)
         self.assertEqual(4, len(result["labelsets"]))
         # print(result["labelsets"])
