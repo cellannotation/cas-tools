@@ -8,6 +8,7 @@ from cas.flatten_data_to_anndata import flatten
 from cas.populate_cell_ids import populate_cell_ids
 from cas.spreadsheet_to_cas import spreadsheet2cas
 from cas.anndata_to_cas import anndata2cas
+from cas.abc_cas_converter import abc2cas, cas2abc
 from cas.validate import validate as schema_validate
 
 warnings.filterwarnings("always")
@@ -23,6 +24,8 @@ def main():
     create_flatten_operation_parser(subparsers)
     create_spreadsheet2cas_operation_parser(subparsers)
     create_anndata2cas_operation_parser(subparsers)
+    create_abc2cas_operation_parser(subparsers)
+    create_cas2abc_operation_parser(subparsers)
     create_populate_cells_operation_parser(subparsers)
     create_schema_validation_operation_parser(subparsers)
 
@@ -58,7 +61,11 @@ def main():
         output_file_path = args.output
 
         spreadsheet2cas(
-            spreadsheet_file_path, sheet_name, anndata_file_path, labelsets, output_file_path
+            spreadsheet_file_path,
+            sheet_name,
+            anndata_file_path,
+            labelsets,
+            output_file_path,
         )
     elif args.action == "anndata2cas":
         args = parser.parse_args()
@@ -67,9 +74,21 @@ def main():
         output_file_path = args.output
         include_hierarchy = args.hierarchy
 
-        anndata2cas(
-            anndata_file_path, labelsets, output_file_path, include_hierarchy
-        )
+        anndata2cas(anndata_file_path, labelsets, output_file_path, include_hierarchy)
+    elif args.action == "abc2cas":
+        args = parser.parse_args()
+        cat_set_file_path = args.catset
+        cat_file_path = args.cat
+        output_file_path = args.output
+
+        abc2cas(cat_set_file_path, cat_file_path, output_file_path)
+    elif args.action == "cas2abc":
+        args = parser.parse_args()
+        json_file_path = args.json
+        cat_set_file_path = args.catset
+        cat_file_path = args.cat
+
+        cas2abc(json_file_path, cat_set_file_path, cat_file_path)
     elif args.action == "populate_cells":
         args = parser.parse_args()
         json_file_path = args.json
@@ -201,9 +220,9 @@ def create_spreadsheet2cas_operation_parser(subparsers):
     parser_spreadsheet2cas.add_argument(
         "--labelsets",
         default=None,
-        nargs='+',
+        nargs="+",
         help="List to determine the rank of labelsets in spreadsheet. If not provided ranks will be determined using "
-             "order of CELL LABELSET NAME.",
+        "order of CELL LABELSET NAME.",
     )
     parser_spreadsheet2cas.add_argument(
         "--output",
@@ -242,7 +261,7 @@ def create_anndata2cas_operation_parser(subparsers):
     parser_anndata2cas.add_argument(
         "--labelsets",
         required=True,
-        nargs='+',
+        nargs="+",
         help="List of labelsets.",
     )
     parser_anndata2cas.add_argument(
@@ -254,6 +273,81 @@ def create_anndata2cas_operation_parser(subparsers):
         "--hierarchy",
         action="store_true",
         help="Include hierarchy in the output.",
+    )
+
+
+def create_abc2cas_operation_parser(subparsers):
+    """
+    Command-line Arguments:
+    -----------------------
+    --catset       : Path to the Cluster Annotation Term Set file.
+    --cat           : Path to the Cluster Annotation Term file.
+    --output        : Output CAS file name (default: output.json).
+
+
+    Usage Example:
+    --------------
+    cd src
+
+    python -m cas abc2cas --catset path/to/cluster_annotation_term_set.csv --cat path/to/cluster_annotation_term.csv
+    --output path/to/output_file.json
+    """
+    parser_abc2cas = subparsers.add_parser(
+        "abc2cas",
+        description="Converts given ABC cluster_annotation files to CAS JSON.",
+        help="Converts given ABC cluster_annotation files to Cell Annotation Schema (CAS) JSON.",
+    )
+
+    parser_abc2cas.add_argument(
+        "--catset",
+        required=True,
+        help="Path to the Cluster Annotation Term Set file.",
+    )
+    parser_abc2cas.add_argument(
+        "--cat",
+        required=True,
+        help="Path to the Cluster Annotation Term file.",
+    )
+    parser_abc2cas.add_argument(
+        "--output",
+        default="output.json",
+        help="Output CAS file name (default: output.json).",
+    )
+
+
+def create_cas2abc_operation_parser(subparsers):
+    """
+    Command-line Arguments:
+    -----------------------
+    --json         : Path to the CAS JSON schema file.
+    --catset       : Path to the Cluster Annotation Term Set file.
+    --cat          : Path to the Cluster Annotation Term file.
+
+
+    Usage Example:
+    --------------
+    cd src
+
+    python -m cas cas2abc --json path/to/json_file.json --cat-set path/to/cluster_annotation_term_set.csv --cat
+    path/to/cluster_annotation_term.csv
+    """
+    parser_cas2abc = subparsers.add_parser(
+        "cas2abc",
+        description="Converts given CAS JSON to ABC files",
+        help="Converts given Cell Annotation Schema (CAS) to ABC files: cluster_annotation_term and "
+             "cluster_annotation_term_set, and writes them to files with cat_file_path and cat_set_file_path",
+    )
+
+    parser_cas2abc.add_argument("--json", required=True, help="Input CAS JSON file path")
+    parser_cas2abc.add_argument(
+        "--catset",
+        required=True,
+        help="Path to the Cluster Annotation Term Set file.",
+    )
+    parser_cas2abc.add_argument(
+        "--cat",
+        required=True,
+        help="Path to the Cluster Annotation Term file.",
     )
 
 
