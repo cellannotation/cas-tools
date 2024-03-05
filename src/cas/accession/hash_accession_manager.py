@@ -56,4 +56,4 @@ def is_hash_accession(accession_id: str):
     Returns: True if value is a valid hash accession id, false otherwise.
 
     """
-    return len(accession_id) == 10 and all(c in string.hexdigits for c in accession_id)
+    return accession_id and len(accession_id) == 10 and all(c in string.hexdigits for c in accession_id)
