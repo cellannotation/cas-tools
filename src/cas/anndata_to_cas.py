@@ -192,7 +192,7 @@ def generate_cas_metadata(uns):
     cellannotation_timestamp = None
     cellannotation_version = None
     cellannotation_url = None
-    author_name = None
+    author_name = "John Doe"  # Adding default author_name as it is required in the schema
     author_contact = None
     orcid = None
     cas_init = {
