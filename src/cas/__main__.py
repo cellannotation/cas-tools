@@ -1,13 +1,13 @@
 import argparse
+import os
 import pathlib
-import sys
 import warnings
 
 from cas.anndata_conversion import merge
+from cas.anndata_to_cas import anndata2cas
 from cas.flatten_data_to_anndata import flatten
 from cas.populate_cell_ids import populate_cell_ids
 from cas.spreadsheet_to_cas import spreadsheet2cas
-from cas.anndata_to_cas import anndata2cas
 from cas.validate import validate as schema_validate
 
 warnings.filterwarnings("always")
@@ -44,7 +44,7 @@ def main():
         anndata_file_path = args.anndata
         output_file_path = args.output
 
-        if output_file_path and anndata_file_path == output_file_path:
+        if output_file_path and os.path.abspath(anndata_file_path) == os.path.abspath(output_file_path):
             raise ValueError("--anndata and --output cannot be the same")
 
         flatten(json_file_path, anndata_file_path, output_file_path)
