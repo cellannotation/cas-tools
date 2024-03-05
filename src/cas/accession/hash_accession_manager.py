@@ -1,4 +1,5 @@
 import hashlib
+import string
 from typing import List
 
 from cas.accession.base_accession_manager import BaseAccessionManager
@@ -22,10 +23,14 @@ class HashAccessionManager(BaseAccessionManager):
         """
         Generates a Blake2b hashing algorithm based hash for the given cell IDs.
         Params:
-            id_recommendation: this value is ignored in this manager
+            id_recommendation: pre-calculated hash accession recommendation. Returns this value if recommendation is a
+            valid accession id.
             cell_ids: Cell IDs list. Algorithm sorts cell ids internally.
         Return: accession_id
         """
+        if is_hash_accession(id_recommendation):
+            return id_recommendation
+
         if not cell_ids:
             raise Exception("Cell IDs list is empty.")
 
@@ -40,3 +45,15 @@ class HashAccessionManager(BaseAccessionManager):
         else:
             self.accession_ids.append(accession_id)
         return accession_id
+
+
+def is_hash_accession(accession_id: str):
+    """
+    Checks if the given accession is a valid hash accession. Hash accessions are 10 char long and only has hexdigits
+    Args:
+        accession_id: accession to check
+
+    Returns: True if value is a valid hash accession id, false otherwise.
+
+    """
+    return len(accession_id) == 10 and all(c in string.hexdigits for c in accession_id)

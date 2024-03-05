@@ -1,9 +1,11 @@
 import os
+import string
 from dataclasses import asdict
 
 import pandas as pd
 
 from cas.accession.incremental_accession_manager import IncrementalAccessionManager
+from cas.accession.hash_accession_manager import HashAccessionManager, is_hash_accession
 
 
 def serialize_to_tables(cta, file_name_prefix, out_folder, project_config):
@@ -178,7 +180,6 @@ def generate_annotation_table(accession_prefix, cta, file_name_prefix, out_folde
         accession_prefix: accession id prefix
     """
     std_data_path = os.path.join(out_folder, file_name_prefix + "_annotation.tsv")
-    accession_manager = IncrementalAccessionManager(accession_prefix)
 
     cta = asdict(cta)
     std_records = list()
@@ -193,6 +194,13 @@ def generate_annotation_table(accession_prefix, cta, file_name_prefix, out_folde
         and "_" in x["cell_set_accession"]
         else 0
     )
+
+    first_accession = cta["annotations"][0].get("cell_set_accession", "")
+    if is_hash_accession(first_accession):
+        accession_manager = HashAccessionManager()
+    else:
+        accession_manager = IncrementalAccessionManager(accession_prefix)
+
     for annotation_object in cta["annotations"]:
         record = dict()
         if (
