@@ -27,14 +27,14 @@ Key Features:
 Detailed specification about the `flatten` operation can be found in the [related issue](https://github.com/cellannotation/cas-tools/issues/7).
 
 ```commandline
-cas flatten --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --validate --output path/to/output_file.h5ad
+cas flatten --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --output path/to/output_file.h5ad
 ```
 
 **Command-line Arguments:**
 - `--json`      : Path to the CAS JSON schema file.
 - `--anndata`   : Path to the AnnData file. Ideally, the location will be specified by a resolvable path in the CAS file.
-- `--validate`  : (Optional) Perform validation checks before flattening to the output AnnData file.
-- `--output`    : Output AnnData file name (default: output.h5ad).
+- `--output`    : Optional output AnnData file name. If provided a new flatten anndata file will be created,
+    otherwise the inputted anndata file will be updated with the flatten data.
 
 Please check the [related notebook](../notebooks/test_flatten.ipynb) to evaluate the output data format.
 

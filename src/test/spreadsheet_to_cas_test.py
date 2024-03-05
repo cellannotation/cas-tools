@@ -230,9 +230,9 @@ class SpreadsheetToCasTests(unittest.TestCase):
         self.assertEqual(result_empty, {})
 
         # Test with a non-empty list
-        input_list = ['item1', 'item2', 'item3']
+        input_list = ["item1", "item2", "item3"]
         result_non_empty = calculate_labelset_rank(input_list)
-        expected_result_non_empty = {'item1': 0, 'item2': 1, 'item3': 2}
+        expected_result_non_empty = {"item1": 0, "item2": 1, "item3": 2}
         self.assertEqual(result_non_empty, expected_result_non_empty)
 
     @patch("cellxgene_census.download_source_h5ad", return_value=None)
