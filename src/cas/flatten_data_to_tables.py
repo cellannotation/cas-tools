@@ -22,14 +22,10 @@ def serialize_to_tables(cta, file_name_prefix, out_folder, project_config):
         project_config: project configuration with extra metadata
     """
     accession_prefix = project_config["accession_id_prefix"]
-    annotation_table_path = generate_annotation_table(
-        accession_prefix, cta, file_name_prefix, out_folder
-    )
-    labelset_table_path = generate_labelset_table(cta, file_name_prefix, out_folder)
-    metadata_table_path = generate_metadata_table(cta, file_name_prefix, project_config, out_folder)
-    annotation_transfer_table_path = generate_annotation_transfer_table(
-        cta, file_name_prefix, out_folder
-    )
+    annotation_table_path = generate_annotation_table(accession_prefix, cta, out_folder)
+    labelset_table_path = generate_labelset_table(cta, out_folder)
+    metadata_table_path = generate_metadata_table(cta, project_config, out_folder)
+    annotation_transfer_table_path = generate_annotation_transfer_table(cta, out_folder)
     return [
         annotation_table_path,
         labelset_table_path,
@@ -38,16 +34,15 @@ def serialize_to_tables(cta, file_name_prefix, out_folder, project_config):
     ]
 
 
-def generate_annotation_transfer_table(cta, file_name_prefix, out_folder):
+def generate_annotation_transfer_table(cta, out_folder):
     """
     Generates annotation transfer table.
 
     Parameters:
         cta: cell type annotation object to serialize.
-        file_name_prefix: Name prefix for table names
         out_folder: output folder path.
     """
-    table_path = os.path.join(out_folder, file_name_prefix + "_annotation_transfer.tsv")
+    table_path = os.path.join(out_folder, "annotation_transfer.tsv")
 
     cta = asdict(cta)
     records = list()
@@ -86,17 +81,16 @@ def generate_annotation_transfer_table(cta, file_name_prefix, out_folder):
     return table_path
 
 
-def generate_metadata_table(cta, file_name_prefix, project_config, out_folder):
+def generate_metadata_table(cta, project_config, out_folder):
     """
     Generates the metadata table.
 
     Parameters:
         cta: cell type annotation object to serialize.
-        file_name_prefix: Name prefix for table names
         project_config: metadata coming from project config
         out_folder: output folder path.
     """
-    table_path = os.path.join(out_folder, file_name_prefix + "_metadata.tsv")
+    table_path = os.path.join(out_folder, "metadata.tsv")
 
     cta = asdict(cta)
     records = list()
@@ -121,16 +115,15 @@ def generate_metadata_table(cta, file_name_prefix, project_config, out_folder):
     return table_path
 
 
-def generate_labelset_table(cta, file_name_prefix, out_folder):
+def generate_labelset_table(cta, out_folder):
     """
     Generates labelset table.
 
     Parameters:
         cta: cell type annotation object to serialize.
-        file_name_prefix: Name prefix for table names
         out_folder: output folder path.
     """
-    table_path = os.path.join(out_folder, file_name_prefix + "_labelset.tsv")
+    table_path = os.path.join(out_folder + "labelset.tsv")
 
     cta = asdict(cta)
     records = list()
@@ -167,17 +160,16 @@ def generate_labelset_table(cta, file_name_prefix, out_folder):
     return table_path
 
 
-def generate_annotation_table(accession_prefix, cta, file_name_prefix, out_folder):
+def generate_annotation_table(accession_prefix, cta, out_folder):
     """
     Generates annotation table.
 
     Parameters:
         cta: cell type annotation object to serialize.
-        file_name_prefix: Name prefix for table names
         out_folder: output folder path.
         accession_prefix: accession id prefix
     """
-    std_data_path = os.path.join(out_folder, file_name_prefix + "_annotation.tsv")
+    std_data_path = os.path.join(out_folder, "annotation.tsv")
     accession_manager = IncrementalAccessionManager(accession_prefix)
 
     cta = asdict(cta)
