@@ -175,7 +175,7 @@ def add_annotations(cas: Dict[str, Any], cat: pd.DataFrame):
             "cell_set_accession": cell_set_accession,
             "parent_cell_set_accession": parent_cell_set_accession,
         }
-        cas.get("annotations").append({k: v for k, v in anno.items() if v is not None})
+        cas.get("annotations").append({k: v for k, v in anno.items() if v is not None and not pd.isna(v)})
 
 
 def add_labelsets(cas: Dict[str, Any], cat_set: pd.DataFrame):
