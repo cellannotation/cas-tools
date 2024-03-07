@@ -11,9 +11,13 @@ Key Features:
 3. Updates the AnnData object with information from the JSON annotations and root keys.
 4. Writes the modified AnnData object to a specified output file.
 """
+import shutil
 
-from cas.anndata_conversion import test_compatibility
-from cas.file_utils import read_anndata_file, read_json_file
+import h5py
+import numpy as np
+import pandas as pd
+
+from cas.file_utils import read_json_file, update_obs_dataset, write_json_to_hdf5
 
 LABELSET_NAME = "name"
 
@@ -43,7 +47,7 @@ def is_list_of_strings(var):
     return isinstance(var, list) and all(isinstance(item, str) for item in var)
 
 
-def flatten(json_file_path, anndata_file_path, validate, output_file_path):
+def flatten(json_file_path, anndata_file_path, output_file_path):
     """
      Processes and integrates information from a JSON file and an AnnData (Annotated Data) file, creating a new AnnData
      object that incorporates the metadata. The resulting AnnData object is then saved to a new file.
@@ -51,59 +55,99 @@ def flatten(json_file_path, anndata_file_path, validate, output_file_path):
     Args:
         json_file_path: The path to the CAS json file.
         anndata_file_path: The path to the AnnData file.
-        validate: Boolean to determine if validation checks will be performed before writing to the output AnnData file.
         output_file_path: Output AnnData file name.
     """
     input_json = read_json_file(json_file_path)
-    input_anndata = read_anndata_file(anndata_file_path)
 
-    flatten_cas_object(input_json, input_anndata, validate, output_file_path)
+    flatten_cas_object(input_json, anndata_file_path, output_file_path)
 
 
-def flatten_cas_object(input_json, input_anndata, validate, output_file_path):
+# @profile
+def flatten_cas_object(input_json, anndata_file_path, output_file_path):
     """
      Processes and integrates information from a JSON file and an AnnData (Annotated Data) file, creating a new AnnData
      object that incorporates the metadata. The resulting AnnData object is then saved to a new file.
 
     Args:
         input_json: CAS json file.
-        input_anndata: The AnnData object.
-        validate: Boolean to determine if validation checks will be performed before writing to the output AnnData file.
+        anndata_file_path: The path to the AnnData file.
         output_file_path: Output AnnData file name.
     """
-    # obs
-    annotations = input_json[ANNOTATIONS]
+    if output_file_path:
+        shutil.copy(anndata_file_path, output_file_path)
+        anndata_file_path = output_file_path
 
+    annotations = input_json[ANNOTATIONS]
     parent_cell_ids = collect_parent_cell_ids(input_json)
 
+    with h5py.File(anndata_file_path, "r+") as f:
+        obs_dataset = f["obs"]
+        obs_index = np.array(obs_dataset["CellID"], dtype=str)
+
+        # obs
+        flatten_data = process_annotations(annotations, obs_index, parent_cell_ids)
+        update_obs_dataset(obs_dataset, flatten_data)
+
+        # uns
+        uns_json = generate_uns_json(input_json)
+        uns_dataset = f["uns"]
+        write_json_to_hdf5(uns_dataset, uns_json)
+
+
+def process_annotations(annotations, obs_index, parent_cell_ids):
+    """
+    Processes annotations and generates flattened data for obs dataset.
+
+    Args:
+        annotations (list): List of annotations.
+        obs_index (np.ndarray): Array representing the index of the obs dataset.
+        parent_cell_ids (dict): Dictionary containing parent cell ids.
+
+    Returns:
+        dict: Dictionary containing flattened data.
+    """
+    flatten_data = {}
     for ann in annotations:
-        cell_ids = []
-        if CELL_IDS in ann and ann[CELL_IDS]:
-            cell_ids = ann[CELL_IDS]
-        elif (
-            "cell_set_accession" in ann and ann["cell_set_accession"] in parent_cell_ids
-        ):
-            cell_ids = list(parent_cell_ids[ann["cell_set_accession"]])
+        cell_ids = ann.get(
+            CELL_IDS, parent_cell_ids.get(ann.get("cell_set_accession", []))
+        )
+        # Convert cell_ids to a list if it's not already for np.isin
+        if not isinstance(cell_ids, list):
+            cell_ids = list(cell_ids)
+        mask = np.isin(obs_index, cell_ids)
 
         for k, v in ann.items():
-            if k == CELL_IDS or k == LABELSET:
+            if k in [CELL_IDS, LABELSET]:
                 continue
-            # if k == CELL_LABEL:
-            #     key = ann[LABELSET]
-            else:
-                key = f"{ann[LABELSET]}--{k}"
 
-            value = v
-            if isinstance(v, list):
-                non_dict_v = [value for value in v if not isinstance(value, dict)]
-                value = ", ".join(sorted(non_dict_v))
-                if len(v) > len(non_dict_v):
-                    print("WARN: dict values are excluded on field '{}'".format(key))
-                input_anndata.obs[key] = ""
+            key = f"{ann[LABELSET]}--{k}"
+            value = ", ".join(
+                sorted([str(value) for value in v] if isinstance(v, list) else [str(v)])
+            )
 
-            for index_to_insert in cell_ids:
-                input_anndata.obs.at[index_to_insert, key] = value
-    # uns
+            if key not in flatten_data:
+                flatten_data[key] = pd.Series("", index=obs_index)
+            new_array = flatten_data[key]
+            new_array[mask] = value
+
+    return flatten_data
+
+
+def generate_uns_json(input_json):
+    """
+    Generates a dictionary representing the uns (unstructured) field in an AnnData object from a given JSON input.
+
+    This function processes information from a JSON input and generates a dictionary that represents the uns (unstructured)
+    field in an AnnData object. The resulting dictionary can be used to populate the uns field in the AnnData object.
+
+    Args:
+        input_json (dict): A dictionary representing the input JSON data containing annotations.
+
+    Returns:
+        dict: A dictionary representing the uns (unstructured) field in an AnnData object, ready to be used as input
+              for writing to an AnnData file.
+
+    """
     uns_json = {}
     root_keys = list(input_json.keys())
     root_keys.remove(ANNOTATIONS)
@@ -120,13 +164,23 @@ def flatten_cas_object(input_json, input_anndata, validate, output_file_path):
                         continue
                     new_key = f"{labelset.get(LABELSET_NAME, '')}--{k}"
                     uns_json.update({new_key: v})
-    input_anndata.uns.update(uns_json)
-    # Close the AnnData file to prevent blocking
-    input_anndata.file.close()
-    input_anndata.write(output_file_path)
+    return uns_json
 
 
 def collect_parent_cell_ids(cas):
+    """
+    Collects parent cell IDs from the given CAS (Cluster Annotation Service) data.
+
+    This function iterates through labelsets in the CAS data and collects parent cell IDs
+    associated with each labelset annotation. It populates and returns a dictionary
+    mapping parent cell set accessions to sets of corresponding cell IDs.
+
+    Args:
+        cas (dict): The Cluster Annotation Service data containing labelsets and annotations.
+
+    Returns:
+        dict: A dictionary mapping parent cell set accessions to sets of corresponding cell IDs.
+    """
     parent_cell_ids = dict()
 
     labelsets = sorted(cas[LABELSETS], key=lambda x: int(x["rank"]))
