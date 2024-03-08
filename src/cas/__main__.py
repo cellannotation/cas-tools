@@ -322,7 +322,7 @@ def create_cas2abc_operation_parser(subparsers):
     --------------
     cd src
 
-    python -m cas cas2abc --json path/to/json_file.json --cat-set path/to/cluster_annotation_term_set.csv --cat
+    python -m cas cas2abc --json path/to/json_file.json --catset path/to/cluster_annotation_term_set.csv --cat
     path/to/cluster_annotation_term.csv
     """
     parser_cas2abc = subparsers.add_parser(
