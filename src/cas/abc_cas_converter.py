@@ -214,7 +214,7 @@ def init_metadata() -> Dict[str, Any]:
     cellannotation_timestamp = None
     cellannotation_version = None
     cellannotation_url = None
-    author_name = None
+    author_name = "Jane Doe"  # TODO Needs proper author_name assignment
     author_contact = None
     orcid = None
     cas = {
