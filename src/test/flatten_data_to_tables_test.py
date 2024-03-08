@@ -5,6 +5,7 @@ import unittest
 from cas.file_utils import read_cas_json_file, read_csv_to_dict
 from cas.flatten_data_to_tables import serialize_to_tables
 from cas.ingest.ingest_user_table import ingest_user_data
+from cas.accession.hash_accession_manager import is_hash_accession
 
 RAW_DATA = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
@@ -156,3 +157,9 @@ class TabularSerialisationTests(unittest.TestCase):
         # self.assertEqual("cluster", cluster_1["labelset"])
         # self.assertEqual("[\"EPYC\", \"RELN\", \"GULP1\"]", cluster_1["marker_gene_evidence"])
         # self.assertEqual("PuR(0.52) | CaH(0.39)", cluster_1["region.info _Frequency_"])
+
+    def test_is_hash_accession(self):
+        self.assertTrue(is_hash_accession("01d93e7878"))
+        self.assertFalse(is_hash_accession(""))
+        self.assertFalse(is_hash_accession("AIT_34"))
+        self.assertFalse(is_hash_accession("01d9_E7878"))
