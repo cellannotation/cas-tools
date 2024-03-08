@@ -70,6 +70,43 @@ cas anndata2cas --anndata path/to/anndata.h5ad --labelsets item1 item2 item3 --o
 - `--output` : Output CAS file name (default: output.json).
 - `--hierarchy`: Flag indicating whether to include hierarchy in the output.
 
+## Convert ABC to CAS
+
+Converts given ABC cluster_annotation files to Cell Annotation Schema (CAS) JSON.
+
+Detailed specification about the `abc2cas` operation can be found in the 
+[related issue](https://github.com/cellannotation/cas-tools/issues/22).
+
+```commandline
+python -m cas abc2cas --catset path/to/cluster_annotation_term_set.csv --cat path/to/cluster_annotation_term.csv 
+--output path/to/output_file.json
+```
+
+**Command-line Arguments:**
+- `--catset` : Path to the Cluster Annotation Term Set file.
+- `--cat` : Path to the Cluster Annotation Term file.
+- `--output` : Output CAS file name (default: output.json).
+
+## Convert CAS to ABC
+
+**Status: Incomplete**
+
+Converts given Cell Annotation Schema (CAS) to ABC files: cluster_annotation_term and cluster_annotation_term_set, 
+and writes them to files with cat_file_path and cat_set_file_path.
+
+Detailed specification about the `cas2abc` operation can be found in the 
+[related issue](https://github.com/cellannotation/cas-tools/issues/22).
+
+```commandline
+python -m cas cas2abc --json path/to/json_file.json --catset path/to/cluster_annotation_term_set.csv --cat 
+path/to/cluster_annotation_term.csv
+```
+
+**Command-line Arguments:**
+- `--json` : Path to the CAS JSON schema file.
+- `--catset` : Path to the Cluster Annotation Term Set file.
+- `--cat` : Path to the Cluster Annotation Term file.
+
 ## Merge CAS to AnnData file
 
 Integrates cell annotations from a CAS (Cell Annotation Schema) JSON file into an AnnData object.  It performs validation checks to ensure data consistency between the CAS file and the AnnData file.  The AnnData file location should ideally be specified as a resolvable path in the CAS file.
