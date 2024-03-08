@@ -146,6 +146,7 @@ def add_annotations(cas: Dict[str, Any], cat: pd.DataFrame):
         labelset = row.cluster_annotation_term_set_label
         cell_label = row.name
         cell_ontology_term_id = None
+        cell_ontology_term = None
         cell_ids = None
         rationale = None
         rationale_dois = None
@@ -163,7 +164,7 @@ def add_annotations(cas: Dict[str, Any], cat: pd.DataFrame):
             "cell_label": cell_label,
             "cell_fullname": cell_label,
             "cell_ontology_term_id": cell_ontology_term_id,
-            "cell_ontology_term": cell_label,
+            "cell_ontology_term": cell_ontology_term,
             "cell_ids": cell_ids,
             "rationale": rationale,
             "rationale_dois": rationale_dois,
