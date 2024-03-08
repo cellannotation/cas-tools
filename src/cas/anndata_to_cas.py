@@ -1,5 +1,9 @@
 import json
-from typing import List
+import itertools
+from typing import Any, List, Dict
+
+import anndata as ad
+import pandas as pd
 
 from cas.file_utils import read_anndata_file
 from cas.spreadsheet_to_cas import calculate_labelset_rank, get_cell_ids
@@ -28,80 +32,95 @@ def anndata2cas(
 
     cas = generate_cas_metadata(dict(anndata.uns))
 
+    generate_cas_labelsets(cas, labelset_dict)
+
     parent_cell_look_up = generate_cas_annotations(
         anndata, cas, include_hierarchy, labelset_dict
     )
 
-    generate_cas_labelsets(cas, labelsets)
-
-    add_parent_cell_hierarchy(cas, include_hierarchy, parent_cell_look_up)
+    if include_hierarchy:
+        add_parent_cell_hierarchy(cas, parent_cell_look_up)
 
     # Write the JSON data to the file
     with open(output_file_path, "w") as json_file:
         json.dump(cas, json_file, indent=2)
 
 
-def add_parent_cell_hierarchy(cas, include_hierarchy, parent_cell_look_up):
+def update_parent_info(value: Dict[str, Any], parent_key: str, parent_value: Dict[str, Any]):
+    """Updates parent information in a child item's dictionary.
+
+    Args:
+        value (Dict[str, Any]): The child item's dictionary to be updated.
+        parent_key (str): The key of the parent item.
+        parent_value (Dict[str, Any]): The parent item's dictionary.
+
+    This function modifies `value` to include `parent` (using `parent_key`),
+    `p_accession`, and `parent_rank` based on `parent_value`.
+    """
+    value.update({
+        "parent": parent_key,
+        "p_accession": parent_value.get("accession"),
+        "parent_rank": parent_value.get("rank"),
+    })
+
+
+def add_parent_cell_hierarchy(cas: Dict[str, Any], parent_cell_look_up: Dict[str, Any]):
     """
     Adds parent cell hierarchy information to the CAS dictionary.
 
     Args:
-        cas (dict): The CAS dictionary.
-        include_hierarchy (bool): Flag indicating whether to include hierarchy in the output.
-        parent_cell_look_up (dict): Dictionary containing parent cell information.
+        cas (Dict[str, Any]): The CAS dictionary.
+        parent_cell_look_up (Dict[str, Any]): Dictionary containing parent cell information.
 
     Returns:
         None
     """
-    if include_hierarchy:
-        for key, value in parent_cell_look_up.items():
-            for inner_key, inner_value in parent_cell_look_up.items():
-                if value != inner_value and value.get("cell_ids").issubset(
-                    inner_value.get("cell_ids")
-                ):
-                    value.update(
-                        {
-                            "parent": inner_key,
-                            "p_accession": inner_value.get("accession"),
-                        }
-                    )
+    for (key, value), (inner_key, inner_value) in itertools.combinations(parent_cell_look_up.items(), 2):
+        if value.get("parent") is not None and value.get("parent_rank", 0) <= inner_value.get("rank"):
+            continue
 
-        annotation_list = cas.get("annotations")
-        for annotation in annotation_list:
-            annotation.update(
-                {
-                    "parent_cell_set_name": parent_cell_look_up.get(
-                        annotation.get("cell_label")
-                    ).get("parent")
-                }
-            )
-            annotation.update(
-                {
-                    "parent_cell_set_accession": parent_cell_look_up.get(
-                        annotation.get("cell_label")
-                    ).get("p_accession")
-                }
-            )
+        if value["cell_ids"] != inner_value["cell_ids"] and value["cell_ids"].issubset(inner_value["cell_ids"]):
+            update_parent_info(value, inner_key, inner_value)
+        elif value["cell_ids"] == inner_value["cell_ids"]:
+            if int(inner_value["rank"]) < int(value["rank"]):
+                update_parent_info(value, key, value)
+            elif int(value["rank"]) < int(inner_value["rank"]):
+                update_parent_info(value, inner_key, inner_value)
+
+    annotation_list = cas.get("annotations")
+    for annotation in annotation_list:
+        parent = parent_cell_look_up.get(annotation.get("cell_label")).get("parent")
+        p_accession = parent_cell_look_up.get(annotation.get("cell_label")).get(
+            "p_accession"
+        )
+        if parent and p_accession:
+            annotation.update({"parent_cell_set_name": parent})
+            annotation.update({"parent_cell_set_accession": p_accession})
 
 
-def generate_cas_annotations(anndata, cas, include_hierarchy, labelset_dict):
+def generate_cas_annotations(
+    anndata: ad.AnnData,
+    cas: Dict[str, Any],
+    include_hierarchy: bool,
+    labelset_dict: Dict[str, Any],
+) -> Dict[str, Any]:
     """
     Generates CAS annotations and returns parent_cell_look_up dictionary that is calculated during annotation
     generation.
 
     Args:
-        anndata (AnnData): The AnnData object.
-        cas (dict): The CAS dictionary.
+        anndata (ad.AnnData): The AnnData object.
+        cas (Dict[str, Any]): The CAS dictionary.
         include_hierarchy (bool): Flag indicating whether to include hierarchy in the output.
-        labelset_dict (dict): Dictionary containing labelsets.
+        labelset_dict (Dict[str, Any]): Dictionary containing labelsets.
 
     Returns:
-        parent_cell_look_up (dict): A dictionary containing information about parent cell lookups.
+        parent_cell_look_up (Dict[str, Any]): A dictionary containing information about parent cell lookups.
     """
     accession_manager = HashAccessionManager()
     parent_cell_look_up = {}
     for k, v in labelset_dict.items():
-        for label in v:
+        for label in v["members"]:
             labelset = k
             cell_label = label
             cell_ontology_term_id = anndata.obs[anndata.obs[k] == cell_label][
@@ -131,6 +150,7 @@ def generate_cas_annotations(anndata, cas, include_hierarchy, labelset_dict):
                     parent_cell_look_up[cell_label] = {
                         "cell_ids": set(cell_ids),
                         "accession": cell_set_accession,
+                        "rank": v.get("rank"),
                     }
 
             anno_init = {
@@ -157,34 +177,35 @@ def generate_cas_annotations(anndata, cas, include_hierarchy, labelset_dict):
     return parent_cell_look_up
 
 
-def generate_cas_labelsets(cas, labelsets):
+def generate_cas_labelsets(
+    cas: Dict[str, Any], labelset_dict: Dict[str, Dict[str, Any]]
+):
     """
     Generates CAS labelsets and updates the provided CAS dictionary.
 
     Args:
-        cas (dict): The CAS dictionary.
-        labelsets (list): List of labelsets.
+        cas (Dict[str, Any]): The CAS dictionary.
+        labelset_dict (Dict[str, Dict[str, Any]]): Dictionary containing labelset information (name, members, and rank).
 
     Returns:
         None
     """
     # labelsets
-    labelset_rank_dict = calculate_labelset_rank(labelsets)
-    for labelset, rank in labelset_rank_dict.items():
+    for labelset, value in labelset_dict.items():
         cas.get("labelsets").append(
-            {"name": labelset, "description": "", "rank": str(rank)}
+            {"name": labelset, "description": "", "rank": str(value.get("rank"))}
         )
 
 
-def generate_cas_metadata(uns):
+def generate_cas_metadata(uns: Dict[str, Any]) -> Dict[str, Any]:
     """
     Generates CAS metadata based on the provided 'uns' dictionary.
 
     Args:
-        uns (dict): The 'uns' dictionary containing metadata.
+        uns (Dict[str, Any]): The 'uns' dictionary containing metadata.
 
     Returns:
-        dict: The generated CAS metadata dictionary.
+        Dict[str, Any]: The generated CAS metadata dictionary.
     """
     # TODO None values will be calculated later on
     matrix_file_id = None
@@ -192,7 +213,9 @@ def generate_cas_metadata(uns):
     cellannotation_timestamp = None
     cellannotation_version = None
     cellannotation_url = None
-    author_name = "John Doe"  # Adding default author_name as it is required in the schema
+    author_name = (
+        "John Doe"  # Adding default author_name as it is required in the schema
+    )
     author_contact = None
     orcid = None
     cas_init = {
@@ -212,18 +235,30 @@ def generate_cas_metadata(uns):
     return cas
 
 
-def calculate_labelset(obs, labelsets):
+def calculate_labelset(
+    obs: pd.DataFrame, labelsets: List[str]
+) -> Dict[str, Dict[str, Any]]:
     """
     Calculates labelset dictionary based on the provided observations.
 
     Args:
-        obs (DataFrame): DataFrame containing observations.
+        obs (pd.DataFrame): DataFrame containing observations.
         labelsets (List[str]): List of labelsets.
 
     Returns:
-        dict: The calculated labelset dictionary.
+        Dict[str, Dict[str, Any]]: A dictionary where keys are labelsets and values are dictionaries containing:
+            - "members": set of members for the labelset.
+            - "rank": rank of the labelset.
     """
     labelset_dict = {}
+    labelset_rank_dict = calculate_labelset_rank(labelsets)
     for item in labelsets:
-        labelset_dict.update({item: set(obs[item])})
+        labelset_dict.update(
+            {
+                item: {
+                    "members": set(obs[item]),
+                    "rank": str(labelset_rank_dict.get(item)),
+                }
+            }
+        )
     return labelset_dict
