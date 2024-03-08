@@ -96,6 +96,11 @@ def add_parent_cell_hierarchy(cas: Dict[str, Any], parent_cell_look_up: Dict[str
                 update_parent_info(inner_value, key, value)
             elif int(value["rank"]) < int(inner_value["rank"]):
                 update_parent_info(value, inner_key, inner_value)
+            else:
+                raise ValueError(
+                    f"{key} and {inner_key} cell labels have the same cell_ids. cell_ids can't be identical at "
+                    f"the same rank."
+                )
 
     annotation_list = cas.get("annotations")
     for annotation in annotation_list:
