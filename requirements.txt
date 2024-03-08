@@ -8,3 +8,6 @@ jsonschema==4.4.0
 ordered-set==4.1.0
 deepmerge==1.1.0
 cell-annotation-schema
+h5py>=3.10.0
+numpy>=1.23.5
+setuptools>=65.5.1

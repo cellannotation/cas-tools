@@ -27,14 +27,14 @@ Key Features:
 Detailed specification about the `flatten` operation can be found in the [related issue](https://github.com/cellannotation/cas-tools/issues/7).
 
 ```commandline
-cas flatten --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --validate --output path/to/output_file.h5ad
+cas flatten --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --output path/to/output_file.h5ad
 ```
 
 **Command-line Arguments:**
 - `--json`      : Path to the CAS JSON schema file.
 - `--anndata`   : Path to the AnnData file. Ideally, the location will be specified by a resolvable path in the CAS file.
-- `--validate`  : (Optional) Perform validation checks before flattening to the output AnnData file.
-- `--output`    : Output AnnData file name (default: output.h5ad).
+- `--output`    : Optional output AnnData file name. If provided a new flatten anndata file will be created,
+    otherwise the inputted anndata file will be updated with the flatten data.
 
 Please check the [related notebook](../notebooks/test_flatten.ipynb) to evaluate the output data format.
 
@@ -53,6 +53,23 @@ spreadsheet2cas --spreadsheet  path/to/spreadsheet_file --sheet optional_sheet_n
 - `--sheet` : Target sheet name in the spreadsheet.
 - `--output` : Output CAS file name (default: output.json).
  
+## Convert AnnData to CAS
+
+Convert an AnnData file to Cell Annotation Schema (CAS) JSON.
+
+Detailed specification about the `anndata2cas` operation can be found in the 
+[related issue](https://github.com/cellannotation/cas-tools/issues/10).
+
+```commandline
+cas anndata2cas --anndata path/to/anndata.h5ad --labelsets item1 item2 item3 --output path/to/output_file.json
+```
+
+**Command-line Arguments:**
+- `--anndata` : Path to the AnnData file.
+- `--labelsets` : List of labelsets.
+- `--output` : Output CAS file name (default: output.json).
+- `--hierarchy`: Flag indicating whether to include hierarchy in the output.
+
 ## Merge CAS to AnnData file
 
 Integrates cell annotations from a CAS (Cell Annotation Schema) JSON file into an AnnData object.  It performs validation checks to ensure data consistency between the CAS file and the AnnData file.  The AnnData file location should ideally be specified as a resolvable path in the CAS file.

@@ -1,12 +1,14 @@
+from collections import OrderedDict
 import json
 import os
 import logging
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 import anndata as ad
 import cellxgene_census
 import pandas as pd
 
+from cas.cxg_utils import download_dataset_with_id
 from cas.file_utils import read_anndata_file
 
 
@@ -60,37 +62,32 @@ def get_cell_ids(dataset: ad.AnnData, labelset: str, cell_label: str) -> List[st
     Returns:
         List[str]: List of cell IDs.
     """
+    cell_label_lower = str(cell_label).lower()
     return dataset.obs.index[
-        dataset.obs[labelset].str.lower() == cell_label.lower()
-    ].tolist()
+        dataset.obs[labelset].astype(str).str.lower() == cell_label_lower
+        ].tolist()
 
 
-def download_and_read_dataset_with_id(dataset_id: str) -> ad.AnnData:
+def calculate_labelset_rank(input_list: List[str]) -> Dict[str, int]:
     """
-    Download and read an AnnData dataset with a specified ID.
+    Assign ranks to items in a list.
 
     Args:
-        dataset_id (str): ID of the dataset.
+        input_list (List[str]): The list of items.
 
     Returns:
-        ad.AnnData: AnnData object.
+        Dict[str, int]: A dictionary where keys are items from the input list and
+        values are their corresponding ranks (0-based).
+
     """
-    anndata_file_path = f"{dataset_id}.h5ad"
-    # Check if the file already exists
-    if os.path.exists(anndata_file_path):
-        print(f"File '{anndata_file_path}' already exists. Skipping download.")
-    else:
-        logging.info(f"Downloading dataset with ID '{dataset_id}'...")
-        cellxgene_census.download_source_h5ad(dataset_id, to_path=anndata_file_path)
-        logging.info(f"Download complete. File saved at '{anndata_file_path}'.")
-    anndata = read_anndata_file(anndata_file_path)
-    return anndata
+    return {item: rank for rank, item in enumerate(input_list)}
 
 
 def spreadsheet2cas(
     spreadsheet_file_path: str,
     sheet_name: Optional[str],
     anndata_file_path: str,
+    labelset_list: Optional[List[str]],
     output_file_path: str,
 ):
     """
@@ -100,6 +97,7 @@ def spreadsheet2cas(
         spreadsheet_file_path (str): Path to the spreadsheet file.
         sheet_name (Optional[str]): Target sheet name in the spreadsheet. Can be a string or None.
         anndata_file_path: The path to the AnnData file.
+        labelset_list (Optional[List[str]]): List to determine the rank of labelsets in spreadsheet.
         output_file_path (str): Output CAS file name.
     """
     meta_data_result, column_names_result, raw_data_result = read_spreadsheet(
@@ -109,12 +107,11 @@ def spreadsheet2cas(
     matrix_file_id = (
         meta_data_result["CxG LINK"].rstrip("/").split("/")[-1].split(".")[0]
     )
-    if anndata_file_path:
-        dataset_anndata = read_anndata_file(anndata_file_path)
-    else:
-        dataset_anndata = download_and_read_dataset_with_id(matrix_file_id)
+    if not anndata_file_path:
+        download_dataset_with_id(matrix_file_id)
+    dataset_anndata = read_anndata_file(anndata_file_path)
 
-    labelsets = set()
+    labelsets = OrderedDict()
 
     # metadata
     cas = {
@@ -143,7 +140,8 @@ def spreadsheet2cas(
         synonyms = row[SYNONYM_COLUMN]
         category_fullname = row[CATEGORIES_COLUMN]
 
-        labelsets.add(labelset)
+        # labelsets.add(labelset)
+        labelsets[labelset] = None
 
         anno = {
             "labelset": labelset,
@@ -164,9 +162,9 @@ def spreadsheet2cas(
         cas.get("annotations").append(anno)
 
     # labelsets
-    for labelset in labelsets:
-        labelsets_dict = {"name": labelset, "description": "TBA", "rank": "TBA"}
-        cas.get("labelsets").append(labelsets_dict)
+    labelset_rank_dict = calculate_labelset_rank(labelset_list if labelset_list else list(labelsets.keys()))
+    for labelset, rank in labelset_rank_dict.items():
+        cas.get("labelsets").append({"name": labelset, "description": "TBA", "rank": str(rank)})
 
     # Write the JSON data to the file
     with open(output_file_path, "w") as json_file:

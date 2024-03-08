@@ -183,6 +183,11 @@ class CellTypeAnnotation(EncoderMixin):
     and provenance. As this is intended as a general schema, compulsory fields are kept to a minimum. However, tools 
     using this schema are encouarged to specify a larger set of compulsory fields for publication."""
 
+    matrix_file_id: Optional[str] = None
+    """A resolvable ID for a cell by gene matrix file in the form namespace:accession, e.g. 
+    CellXGene_dataset:8e10f1c4-8e98-41e5-b65f-8cd89a887122. Please see https://github.com/cellannotation/cell-annotation
+    -schema/registry/registry.json for supported namespaces."""
+
     labelsets: Optional[List[Labelset]] = None
 
     author_contact: Optional[str] = None
@@ -196,12 +201,20 @@ class CellTypeAnnotation(EncoderMixin):
     This versioning MUST follow the format `'[MAJOR].[MINOR].[PATCH]'` as defined by Semantic Versioning 2.0.0, 
     https://semver.org/"""
 
+    cellannotation_timestamp: Optional[str] = None
+    """The timestamp of all cell annotations published (per dataset). This MUST be a string in the format 
+    '%yyyy-%mm-%dd %hh:%mm:%ss'."""
+
     cellannotation_version: Optional[str] = None
     """The version for all cell annotations published (per dataset). This MUST be a string. The recommended versioning 
     format is `'[MAJOR].[MINOR].[PATCH]'` as defined by Semantic Versioning 2.0.0, https://semver.org/"""
 
     cellannotation_url: Optional[str] = None
     """A persistent URL of all cell annotations published (per dataset)."""
+
+    author_list: Optional[List[str]] = None
+    """This field stores a list of users who are included in the project as collaborators, regardless of their specific 
+    role. An example list; John Smith|Cody Miller|Sarah Jones."""
 
     def add_annotation_object(self, obj):
         """

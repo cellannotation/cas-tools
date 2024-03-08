@@ -41,7 +41,7 @@ class ReportsTests(unittest.TestCase):
 
         df = cas.get_all_annotations(
             labels=[
-                ("Supercluster", "Microglia"),
+                ("supercluster_term", "Microglia"),
                 ("Cluster", "Mgl_4"),
                 ("Cluster", "Astro_55"),
                 ("Dummy", "Dummy"),
