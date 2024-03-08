@@ -1,5 +1,6 @@
 import json
 import os
+from importlib.metadata import version
 from typing import Any, Dict
 
 import pandas as pd
@@ -209,7 +210,7 @@ def init_metadata() -> Dict[str, Any]:
     """
     # TODO These needs proper assignments
     matrix_file_id = None
-    cellannotation_schema_version = None
+    cellannotation_schema_version = version("cell-annotation-schema")
     cellannotation_timestamp = None
     cellannotation_version = None
     cellannotation_url = None
