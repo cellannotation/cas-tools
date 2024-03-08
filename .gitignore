@@ -1,0 +1,4 @@
+venv/
+notebooks/*.h5ad
+.idea
+
