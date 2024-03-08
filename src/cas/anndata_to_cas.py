@@ -93,7 +93,7 @@ def add_parent_cell_hierarchy(cas: Dict[str, Any], parent_cell_look_up: Dict[str
             update_parent_info(value, inner_key, inner_value)
         elif value["cell_ids"] == inner_value["cell_ids"]:
             if int(inner_value["rank"]) < int(value["rank"]):
-                update_parent_info(value, key, value)
+                update_parent_info(inner_value, key, value)
             elif int(value["rank"]) < int(inner_value["rank"]):
                 update_parent_info(value, inner_key, inner_value)
 
