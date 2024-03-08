@@ -1,16 +1,16 @@
-from typing import Any, Dict
 import unittest
+from typing import Any, Dict
 
-import pandas as pd
 import anndata as ad
+import pandas as pd
 
 from cas.anndata_to_cas import (
+    add_parent_cell_hierarchy,
+    calculate_labelset,
+    calculate_labelset_rank,
     generate_cas_annotations,
     generate_cas_labelsets,
     generate_cas_metadata,
-    calculate_labelset,
-    calculate_labelset_rank,
-    add_parent_cell_hierarchy,
     update_parent_info,
 )
 
@@ -33,7 +33,10 @@ class TestAnndataToCas(unittest.TestCase):
         labelset_dict = {
             "labelset1": {"members": {"member1", "member2", "member3"}, "rank": 0},
             "labelset2": {"members": {"member4", "member5"}, "rank": 1},
-            "labelset3": {"members": {"member6", "member7", "member8", "member9"}, "rank": 2},
+            "labelset3": {
+                "members": {"member6", "member7", "member8", "member9"},
+                "rank": 2,
+            },
         }
         generate_cas_labelsets(cas, labelset_dict)
 
@@ -60,30 +63,29 @@ class TestAnndataToCas(unittest.TestCase):
         # Ensure labelset dictionary is calculated correctly
         self.assertIn("labelset1", labelset_dict)
         self.assertIn("labelset2", labelset_dict)
-        self.assertEqual(labelset_dict["labelset1"], {"members": {"A", "B", "C"}, "rank": "0"})
-        self.assertEqual(labelset_dict["labelset2"], {"members": {"X", "Y"}, "rank": "1"})
+        self.assertEqual(
+            labelset_dict["labelset1"], {"members": {"A", "B", "C"}, "rank": "0"}
+        )
+        self.assertEqual(
+            labelset_dict["labelset2"], {"members": {"X", "Y"}, "rank": "1"}
+        )
 
     def test_generate_cas_annotations(self):
-        example_data = pd.DataFrame({
-            'feature1': [1, 2],
-            'feature2': [3, 4]
-        })
-        obs_data = pd.DataFrame({
-            'cell_type': ['type1', 'type2'],
-            'cell_type_ontology_term_id': ['CTO:0001', 'CTO:0002'],
-            'labelset1': ['label1', 'label2']
-        }, index=['sample1', 'sample2'])
+        example_data = pd.DataFrame({"feature1": [1, 2], "feature2": [3, 4]})
+        obs_data = pd.DataFrame(
+            {
+                "cell_type": ["type1", "type2"],
+                "cell_type_ontology_term_id": ["CTO:0001", "CTO:0002"],
+                "labelset1": ["label1", "label2"],
+            },
+            index=["sample1", "sample2"],
+        )
 
         adata = ad.AnnData(X=example_data.values, obs=obs_data)
 
-        cas = {'annotations': []}
+        cas = {"annotations": []}
         include_hierarchy = True
-        labelset_dict = {
-            'labelset1': {
-                'members': {'label1', 'label2'},
-                'rank': 1
-            }
-        }
+        labelset_dict = {"labelset1": {"members": {"label1", "label2"}, "rank": 1}}
 
         result = generate_cas_annotations(adata, cas, include_hierarchy, labelset_dict)
 
@@ -97,7 +99,14 @@ class TestAnndataToCas(unittest.TestCase):
                 {"cell_label": "A"},
             ]
         }
-        parent_cell_look_up = {"A": {"cell_ids": {1, 2}, "accession": "A_123", "parent": "P", "p_accession": "P_123"}}
+        parent_cell_look_up = {
+            "A": {
+                "cell_ids": {1, 2},
+                "accession": "A_123",
+                "parent": "P",
+                "p_accession": "P_123",
+            }
+        }
 
         add_parent_cell_hierarchy(cas, parent_cell_look_up=parent_cell_look_up)
 
@@ -110,11 +119,21 @@ class TestAnndataToCas(unittest.TestCase):
     def test_update_parent_info(self):
         """Test updating child item with correct parent information."""
         # Setup initial child and parent dictionaries
-        child = {"name": "child1", "parent": None, "p_accession": None, "parent_rank": None}
+        child = {
+            "name": "child1",
+            "parent": None,
+            "p_accession": None,
+            "parent_rank": None,
+        }
         parent = {"name": "parent1", "accession": "A001", "rank": 1}
 
         # Expected result after updating child with parent info
-        expected = {"name": "child1", "parent": "parent1", "p_accession": "A001", "parent_rank": 1}
+        expected = {
+            "name": "child1",
+            "parent": "parent1",
+            "p_accession": "A001",
+            "parent_rank": 1,
+        }
 
         # Update child with parent info
         update_parent_info(child, "parent1", parent)

@@ -1,13 +1,13 @@
-import json
 import itertools
-from typing import Any, List, Dict
+import json
+from typing import Any, Dict, List
 
 import anndata as ad
 import pandas as pd
 
+from cas.accession.hash_accession_manager import HashAccessionManager
 from cas.file_utils import read_anndata_file
 from cas.spreadsheet_to_cas import calculate_labelset_rank, get_cell_ids
-from cas.accession.hash_accession_manager import HashAccessionManager
 
 
 def anndata2cas(
@@ -46,7 +46,9 @@ def anndata2cas(
         json.dump(cas, json_file, indent=2)
 
 
-def update_parent_info(value: Dict[str, Any], parent_key: str, parent_value: Dict[str, Any]):
+def update_parent_info(
+    value: Dict[str, Any], parent_key: str, parent_value: Dict[str, Any]
+):
     """Updates parent information in a child item's dictionary.
 
     Args:
@@ -57,11 +59,13 @@ def update_parent_info(value: Dict[str, Any], parent_key: str, parent_value: Dic
     This function modifies `value` to include `parent` (using `parent_key`),
     `p_accession`, and `parent_rank` based on `parent_value`.
     """
-    value.update({
-        "parent": parent_key,
-        "p_accession": parent_value.get("accession"),
-        "parent_rank": parent_value.get("rank"),
-    })
+    value.update(
+        {
+            "parent": parent_key,
+            "p_accession": parent_value.get("accession"),
+            "parent_rank": parent_value.get("rank"),
+        }
+    )
 
 
 def add_parent_cell_hierarchy(cas: Dict[str, Any], parent_cell_look_up: Dict[str, Any]):
@@ -75,11 +79,17 @@ def add_parent_cell_hierarchy(cas: Dict[str, Any], parent_cell_look_up: Dict[str
     Returns:
         None
     """
-    for (key, value), (inner_key, inner_value) in itertools.combinations(parent_cell_look_up.items(), 2):
-        if value.get("parent") is not None and value.get("parent_rank", 0) <= inner_value.get("rank"):
+    for (key, value), (inner_key, inner_value) in itertools.combinations(
+        parent_cell_look_up.items(), 2
+    ):
+        if value.get("parent") is not None and value.get(
+            "parent_rank", 0
+        ) <= inner_value.get("rank"):
             continue
 
-        if value["cell_ids"] != inner_value["cell_ids"] and value["cell_ids"].issubset(inner_value["cell_ids"]):
+        if value["cell_ids"] != inner_value["cell_ids"] and value["cell_ids"].issubset(
+            inner_value["cell_ids"]
+        ):
             update_parent_info(value, inner_key, inner_value)
         elif value["cell_ids"] == inner_value["cell_ids"]:
             if int(inner_value["rank"]) < int(value["rank"]):
