@@ -1,3 +1,4 @@
+import os
 import unittest
 from unittest.mock import patch
 
@@ -11,8 +12,9 @@ class CxGUtilsTests(unittest.TestCase):
             self, mock_download_source_h5ad
     ):
         dataset_id = "dataset_id"
+        expected_path = os.path.join(os.getcwd(), f"{dataset_id}.h5ad")
 
         download_dataset_with_id(dataset_id)
 
-        mock_download_source_h5ad.assert_called_once_with(dataset_id, to_path=f"{dataset_id}.h5ad")
+        mock_download_source_h5ad.assert_called_once_with(dataset_id, to_path=expected_path)
 
