@@ -79,12 +79,14 @@ def add_parent_cell_hierarchy(cas: Dict[str, Any], parent_cell_look_up: Dict[str
     Returns:
         None
     """
-    for (key, value), (inner_key, inner_value) in itertools.combinations(
-        parent_cell_look_up.items(), 2
+    for (key, value), (inner_key, inner_value) in itertools.product(
+        parent_cell_look_up.items(), repeat=2
     ):
-        if value.get("parent") is not None and value.get(
-            "parent_rank", 0
-        ) <= inner_value.get("rank"):
+        if key == inner_key:
+            continue
+        if value.get("parent") and value.get("parent_rank", 0) <= inner_value.get(
+            "rank"
+        ):
             continue
 
         if value["cell_ids"] != inner_value["cell_ids"] and value["cell_ids"].issubset(
@@ -104,13 +106,21 @@ def add_parent_cell_hierarchy(cas: Dict[str, Any], parent_cell_look_up: Dict[str
 
     annotation_list = cas.get("annotations")
     for annotation in annotation_list:
-        parent = parent_cell_look_up.get(annotation.get("cell_label")).get("parent")
-        p_accession = parent_cell_look_up.get(annotation.get("cell_label")).get(
-            "p_accession"
-        )
+        parent_info = parent_cell_look_up.get(annotation.get("cell_label"))
+        parent = parent_info.get("parent")
+        p_accession = parent_info.get("p_accession")
         if parent and p_accession:
+            # Add parent data
             annotation.update({"parent_cell_set_name": parent})
             annotation.update({"parent_cell_set_accession": p_accession})
+            # Remove CL annotation if parent and child has the same annotation
+            parent_cell_ontology_term_id = parent_info.get("cell_ontology_term_id")
+            parent_cell_ontology_term = parent_info.get("cell_ontology_term")
+            if parent_cell_ontology_term_id == annotation.get(
+                "cell_ontology_term_id"
+            ) and parent_cell_ontology_term == annotation.get("cell_ontology_term"):
+                annotation.pop("cell_ontology_term_id", None)
+                annotation.pop("cell_ontology_term", None)
 
 
 def generate_cas_annotations(
@@ -166,6 +176,8 @@ def generate_cas_annotations(
                         "cell_ids": set(cell_ids),
                         "accession": cell_set_accession,
                         "rank": v.get("rank"),
+                        "cell_ontology_term_id": cell_ontology_term_id,
+                        "cell_ontology_term": cell_ontology_term,
                     }
 
             anno_init = {

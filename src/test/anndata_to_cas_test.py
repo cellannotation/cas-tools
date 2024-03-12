@@ -75,7 +75,7 @@ class TestAnndataToCas(unittest.TestCase):
         obs_data = pd.DataFrame(
             {
                 "cell_type": ["type1", "type2"],
-                "cell_type_ontology_term_id": ["CTO:0001", "CTO:0002"],
+                "cell_type_ontology_term_id": ["CL:0001", "CL:0002"],
                 "labelset1": ["label1", "label2"],
             },
             index=["sample1", "sample2"],
@@ -96,7 +96,16 @@ class TestAnndataToCas(unittest.TestCase):
     def test_add_parent_cell_hierarchy(self):
         cas = {
             "annotations": [
-                {"cell_label": "A"},
+                {
+                    "cell_label": "A",
+                    "cell_ontology_term_id": "CL:1234567",
+                    "cell_ontology_term": "Test cell",
+                },
+                {
+                    "cell_label": "P",
+                    "cell_ontology_term_id": "CL:1234567",
+                    "cell_ontology_term": "Test cell",
+                },
             ]
         }
         parent_cell_look_up = {
@@ -105,6 +114,16 @@ class TestAnndataToCas(unittest.TestCase):
                 "accession": "A_123",
                 "parent": "P",
                 "p_accession": "P_123",
+                "rank": 0,
+                "cell_ontology_term_id": "CL:1234567",
+                "cell_ontology_term": "Test cell",
+            },
+            "P": {
+                "cell_ids": {1, 2},
+                "accession": "P_123",
+                "rank": 1,
+                "cell_ontology_term_id": "CL:1234567",
+                "cell_ontology_term": "Test cell",
             }
         }
 
@@ -112,9 +131,13 @@ class TestAnndataToCas(unittest.TestCase):
 
         # Ensure parent cell hierarchy information is added correctly
         self.assertIn("annotations", cas)
-        for annotation in cas["annotations"]:
-            self.assertIn("parent_cell_set_name", annotation)
-            self.assertIn("parent_cell_set_accession", annotation)
+        # for annotation in cas["annotations"]:
+        self.assertIn("parent_cell_set_name", cas["annotations"][0])
+        self.assertIn("parent_cell_set_accession", cas["annotations"][0])
+        self.assertNotIn("cell_ontology_term_id", cas["annotations"][0])
+        self.assertNotIn("cell_ontology_term", cas["annotations"][0])
+        self.assertIn("cell_ontology_term_id", cas["annotations"][1])
+        self.assertIn("cell_ontology_term", cas["annotations"][1])
 
     def test_update_parent_info(self):
         """Test updating child item with correct parent information."""
