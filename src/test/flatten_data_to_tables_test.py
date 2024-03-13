@@ -44,7 +44,7 @@ class TabularSerialisationTests(unittest.TestCase):
         cta = ingest_user_data(RAW_DATA, TEST_CONFIG)
         tables = serialize_to_tables(cta, "Test_table", OUT_FOLDER, {"accession_id_prefix": "TST_"})
 
-        annotation_table_path = os.path.join(OUT_FOLDER, "Test_table_annotation.tsv")
+        annotation_table_path = os.path.join(OUT_FOLDER, "annotation.tsv")
         self.assertEqual(annotation_table_path, tables[0])
         self.assertTrue(os.path.isfile(annotation_table_path))
 
@@ -84,7 +84,7 @@ class TabularSerialisationTests(unittest.TestCase):
         cta = ingest_user_data(RAW_DATA, TEST_CONFIG)
         tables = serialize_to_tables(cta, "Test_table", OUT_FOLDER, {"accession_id_prefix": "TST_"})
 
-        table_path = os.path.join(OUT_FOLDER, "Test_table_labelset.tsv")
+        table_path = os.path.join(OUT_FOLDER, "labelset.tsv")
         self.assertEqual(table_path, tables[1])
         self.assertTrue(os.path.isfile(table_path))
 
@@ -106,7 +106,7 @@ class TabularSerialisationTests(unittest.TestCase):
         cta = ingest_user_data(RAW_DATA, TEST_CONFIG)
         tables = serialize_to_tables(cta, "Test_table", OUT_FOLDER, {"accession_id_prefix": "TST_"})
 
-        table_path = os.path.join(OUT_FOLDER, "Test_table_metadata.tsv")
+        table_path = os.path.join(OUT_FOLDER, "metadata.tsv")
         self.assertEqual(table_path, tables[2])
         self.assertTrue(os.path.isfile(table_path))
 
@@ -123,7 +123,7 @@ class TabularSerialisationTests(unittest.TestCase):
         cta = ingest_user_data(RAW_DATA, TEST_CONFIG)
         tables = serialize_to_tables(cta, "Test_table", OUT_FOLDER, {"accession_id_prefix": "TST_"})
 
-        table_path = os.path.join(OUT_FOLDER, "Test_table_annotation_transfer.tsv")
+        table_path = os.path.join(OUT_FOLDER, "annotation_transfer.tsv")
         self.assertEqual(table_path, tables[3])
         self.assertTrue(os.path.isfile(table_path))
 
@@ -141,7 +141,7 @@ class TabularSerialisationTests(unittest.TestCase):
         cta = read_cas_json_file(TEST_JSON)
         tables = serialize_to_tables(cta, "Test_table", OUT_FOLDER, {"accession_id_prefix": "CS202210140_"})
 
-        annotation_table_path = os.path.join(OUT_FOLDER, "Test_table_annotation.tsv")
+        annotation_table_path = os.path.join(OUT_FOLDER, "annotation.tsv")
         self.assertEqual(annotation_table_path, tables[0])
         self.assertTrue(os.path.isfile(annotation_table_path))
 
