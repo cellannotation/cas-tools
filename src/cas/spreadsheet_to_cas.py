@@ -97,7 +97,8 @@ def spreadsheet2cas(
         spreadsheet_file_path (str): Path to the spreadsheet file.
         sheet_name (Optional[str]): Target sheet name in the spreadsheet. Can be a string or None.
         anndata_file_path: The path to the AnnData file.
-        labelset_list (Optional[List[str]]): List to determine the rank of labelsets in spreadsheet.
+        labelset_list (Optional[List[str]]): List of names of observation (obs) fields used to record author cell
+        type names, which determine the rank of labelsets in a spreadsheet.
         output_file_path (str): Output CAS file name.
     """
     meta_data_result, column_names_result, raw_data_result = read_spreadsheet(

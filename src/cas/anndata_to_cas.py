@@ -21,7 +21,9 @@ def anndata2cas(
 
     Args:
         anndata_file_path (str): Path to the AnnData file.
-        labelsets (List[str]): List of labelsets.
+        labelsets (List[str]): List of labelsets, which are names of observation (obs) fields used to record author
+        cell type names. The labelsets should be provided in order, starting from rank 0 (leaf nodes) and ascending
+        to higher ranks.
         output_file_path (str): Output CAS file name.
         include_hierarchy (bool): Flag indicating whether to include hierarchy in the output.
     """

@@ -48,7 +48,9 @@ def main():
         anndata_file_path = args.anndata
         output_file_path = args.output
 
-        if output_file_path and os.path.abspath(anndata_file_path) == os.path.abspath(output_file_path):
+        if output_file_path and os.path.abspath(anndata_file_path) == os.path.abspath(
+            output_file_path
+        ):
             raise ValueError("--anndata and --output cannot be the same")
 
         flatten(json_file_path, anndata_file_path, output_file_path)
@@ -185,7 +187,10 @@ def create_spreadsheet2cas_operation_parser(subparsers):
     --sheet         : Target sheet name in the spreadsheet.
     --anndata       : Path to the AnnData file. If not provided, AnnData will be downloaded using CxG LINK in
                     spreadsheet.
-    --labelsets     : List to determine the rank of labelsets in spreadsheet. If not provided, ranks will be determined using the order of CELL LABELSET NAME.
+    --labelsets     : List of names of observation (obs) fields used to record author cell type names,
+    which determine the rank of labelsets in a spreadsheet. If not provided, ranks will be determined based on
+    the order of the fields specified in the CELL LABELSET NAME column.
+
     --output        : Output CAS file name (default: output.json).
 
     Usage Example:
@@ -198,6 +203,7 @@ def create_spreadsheet2cas_operation_parser(subparsers):
         "spreadsheet2cas",
         description="Converts a spreadsheet to CAS JSON.",
         help="Converts a spreadsheet to Cell Annotation Schema (CAS) JSON.",
+        usage="cas spreadsheet2cas --spreadsheet path/to/spreadsheet.xlsx --sheet sheet_name --labelsets item1 item2 item3 --output path/to/output_file.json"
     )
 
     parser_spreadsheet2cas.add_argument(
@@ -215,8 +221,9 @@ def create_spreadsheet2cas_operation_parser(subparsers):
         "--labelsets",
         default=None,
         nargs="+",
-        help="List to determine the rank of labelsets in spreadsheet. If not provided ranks will be determined using "
-        "order of CELL LABELSET NAME.",
+        help="List of names of observation (obs) fields used to record author cell type names, which determine the "
+             "rank of labelsets in a spreadsheet. If not provided, ranks will be determined based on the order of the"
+             " fields specified in the CELL LABELSET NAME column.",
     )
     parser_spreadsheet2cas.add_argument(
         "--output",
@@ -230,7 +237,9 @@ def create_anndata2cas_operation_parser(subparsers):
     Command-line Arguments:
     -----------------------
     --anndata       : Path to the AnnData file.
-    --labelsets     : List of labelsets.
+    --labelsets     : List of labelsets, which are names of observation (obs) fields used to record author cell type
+    names. The labelsets should be provided in order, starting from rank 0 (leaf nodes) and ascending to higher ranks.
+
     --output        : Output CAS file name (default: output.json).
     --hierarchy     : Flag indicating whether to include hierarchy in the output.
 
@@ -245,6 +254,7 @@ def create_anndata2cas_operation_parser(subparsers):
         "anndata2cas",
         description="Converts an anndata to CAS JSON.",
         help="Converts an anndata to Cell Annotation Schema (CAS) JSON.",
+        usage="cas anndata2cas --anndata path/to/anndata.h5ad --labelsets item1 item2 item3 --output path/to/output_file.json",
     )
 
     parser_anndata2cas.add_argument(
@@ -256,7 +266,8 @@ def create_anndata2cas_operation_parser(subparsers):
         "--labelsets",
         required=True,
         nargs="+",
-        help="List of labelsets.",
+        help="List of labelsets, which are names of observation (obs) fields used to record author cell type names. "
+             "The labelsets should be provided in order, starting from rank 0 (leaf nodes) and ascending to higher ranks."
     )
     parser_anndata2cas.add_argument(
         "--output",
@@ -329,10 +340,12 @@ def create_cas2abc_operation_parser(subparsers):
         "cas2abc",
         description="Converts given CAS JSON to ABC files",
         help="Converts given Cell Annotation Schema (CAS) to ABC files: cluster_annotation_term and "
-             "cluster_annotation_term_set, and writes them to files with cat_file_path and cat_set_file_path",
+        "cluster_annotation_term_set, and writes them to files with cat_file_path and cat_set_file_path",
     )
 
-    parser_cas2abc.add_argument("--json", required=True, help="Input CAS JSON file path")
+    parser_cas2abc.add_argument(
+        "--json", required=True, help="Input CAS JSON file path"
+    )
     parser_cas2abc.add_argument(
         "--catset",
         required=True,
