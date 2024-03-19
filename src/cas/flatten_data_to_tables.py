@@ -198,17 +198,17 @@ def generate_annotation_table(accession_prefix, cta, out_folder):
             "cell_set_accession" in annotation_object
             and annotation_object["cell_set_accession"]
         ):
+            record["labelset"] = str(annotation_object.get("labelset", "")).replace(
+                "_name", ""
+            )
             record["cell_set_accession"] = accession_manager.generate_accession_id(
-                annotation_object.get("cell_set_accession", "")
+                id_recommendation=annotation_object.get("cell_set_accession", ""), labelset=record["labelset"]
             )
             annotation_object["cell_set_accession"] = record["cell_set_accession"]
             record["cell_label"] = annotation_object.get("cell_label", "")
             record["cell_fullname"] = annotation_object.get("cell_fullname", "")
             record["parent_cell_set_accession"] = ""
             record["parent_cell_set_name"] = ""
-            record["labelset"] = str(annotation_object.get("labelset", "")).replace(
-                "_name", ""
-            )
             record["cell_ontology_term_id"] = annotation_object.get(
                 "cell_ontology_term_id", ""
             )
