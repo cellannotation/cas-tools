@@ -158,7 +158,7 @@ def generate_cas_annotations(
             ].iloc[0]
             cell_ids = get_cell_ids(anndata, labelset, label)
             cell_set_accession = accession_manager.generate_accession_id(
-                cell_ids=cell_ids
+                cell_ids=cell_ids, labelset=labelset
             )
             # TODO None values will be calculated later on
             rationale = None

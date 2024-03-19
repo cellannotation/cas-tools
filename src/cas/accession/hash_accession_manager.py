@@ -41,6 +41,8 @@ class HashAccessionManager(BaseAccessionManager):
             str.encode(" ".join(sorted(cell_ids))), digest_size=self.digest_size
         )
         accession_id = blake_hasher.hexdigest()
+        if labelset:
+            accession_id = labelset + ":" + accession_id
 
         if accession_id in self.accession_ids:
             print(accession_id)
