@@ -51,6 +51,10 @@ spreadsheet2cas --spreadsheet  path/to/spreadsheet_file --sheet optional_sheet_n
 **Command-line Arguments:**
 - `--spreadsheet` : Path to the spreadsheet file.
 - `--sheet` : Target sheet name in the spreadsheet.
+- `--anndata` : Path to the AnnData file. If not provided, AnnData will be downloaded using CxG LINK in spreadsheet.
+- `labelsets` : List of names of observation (obs) fields used to record author cell type names,
+    which determine the rank of labelsets in a spreadsheet. If not provided, ranks will be determined based on
+    the order of the fields specified in the CELL LABELSET NAME column.
 - `--output` : Output CAS file name (default: output.json).
  
 ## Convert AnnData to CAS
@@ -66,7 +70,8 @@ cas anndata2cas --anndata path/to/anndata.h5ad --labelsets item1 item2 item3 --o
 
 **Command-line Arguments:**
 - `--anndata` : Path to the AnnData file.
-- `--labelsets` : List of labelsets.
+- `--labelsets` : List of labelsets, which are names of observation (obs) fields used to record author cell type
+    names. The labelsets should be provided in order, starting from rank 0 (leaf nodes) and ascending to higher ranks.
 - `--output` : Output CAS file name (default: output.json).
 - `--hierarchy`: Flag indicating whether to include hierarchy in the output.
 
