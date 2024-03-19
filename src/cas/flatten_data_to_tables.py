@@ -177,20 +177,19 @@ def generate_annotation_table(accession_prefix, cta, out_folder):
     std_parent_records = list()
     std_parent_records_dict = dict()
 
-    # sort annotations by accession ids incrementing (if there is)
-    cta["annotations"].sort(
-        key=lambda x: int(str(x["cell_set_accession"]).split("_")[1])
-        if "cell_set_accession" in x
-        and x["cell_set_accession"]
-        and "_" in x["cell_set_accession"]
-        else 0
-    )
-
     first_accession = cta["annotations"][0].get("cell_set_accession", "")
     if is_hash_accession(first_accession):
         accession_manager = HashAccessionManager()
     else:
         accession_manager = IncrementalAccessionManager(accession_prefix)
+        # sort annotations by accession ids incrementing (if there is)
+        cta["annotations"].sort(
+            key=lambda x: int(str(x["cell_set_accession"]).split(":")[-1].split("_")[-1])
+            if "cell_set_accession" in x
+               and x["cell_set_accession"]
+               and "_" in x["cell_set_accession"]
+            else 0
+        )
 
     for annotation_object in cta["annotations"]:
         record = dict()
