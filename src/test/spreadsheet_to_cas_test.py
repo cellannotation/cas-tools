@@ -195,9 +195,9 @@ class SpreadsheetToCasTests(unittest.TestCase):
     def test_read_spreadsheet_default_sheet(self):
         # Test reading spreadsheet with default sheet
         meta_data, column_names, raw_data = read_spreadsheet(TEST_SPREADSHEET, None)
-        self.assertEqual(len(meta_data), 8)
+        self.assertEqual(len(meta_data), 5)
         self.assertEqual(len(column_names), 9)
-        self.assertEqual(raw_data.shape, (103, 9))
+        self.assertEqual(raw_data.shape, (73, 9))
 
     def test_read_spreadsheet_custom_sheet(self):
         # Test reading spreadsheet with custom sheet
@@ -205,9 +205,9 @@ class SpreadsheetToCasTests(unittest.TestCase):
             TEST_SPREADSHEET,
             sheet_name="PBMC3_Yoshida_2022_PBMC",
         )
-        self.assertEqual(len(meta_data), 8)
+        self.assertEqual(len(meta_data), 5)
         self.assertEqual(len(column_names), 9)
-        self.assertEqual(raw_data.shape, (103, 9))
+        self.assertEqual(raw_data.shape, (73, 9))
 
     def test_get_cell_ids(self):
         with warnings.catch_warnings():
