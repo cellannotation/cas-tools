@@ -21,7 +21,7 @@ class TestABCConverter(unittest.TestCase):
         self.cas = init_metadata()
         self.cat = pd.DataFrame(
             {
-                "cluster_annotation_term_set_label": ["labelset1", "labelset2"],
+                "cluster_annotation_term_set_name": ["labelset1", "labelset2"],
                 "name": ["cell1", "cell2"],
                 "label": ["label1", "label2"],
                 "parent_term_label": ["parent1", "parent2"],
@@ -30,7 +30,7 @@ class TestABCConverter(unittest.TestCase):
         )
         self.cat_set = pd.DataFrame(
             {
-                "label": ["labelset1", "labelset2"],
+                "name": ["labelset1", "labelset2"],
                 "description": ["description1", "description2"],
                 "order": [0, 1],
             }
