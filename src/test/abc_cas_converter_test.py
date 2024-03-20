@@ -1,9 +1,12 @@
+import json
+import os
 import unittest
 
 import numpy as np
 import pandas as pd
 
 from cas.abc_cas_converter import (
+    abc2cas,
     add_annotations,
     add_labelsets,
     calculate_order_mapping,
@@ -120,3 +123,22 @@ class TestABCConverter(unittest.TestCase):
         self.assertTrue("annotations" in metadata)
         self.assertEqual(len(metadata["labelsets"]), 0)
         self.assertEqual(len(metadata["annotations"]), 0)
+
+    def test_abc2cas(self):
+        cat_set_file_path = "test_data/ABC_data/WMB-taxonomy/20231215/cluster_annotation_term_set.csv"
+        cat_file_path = "test_data/ABC_data/WMB-taxonomy/20231215/cluster_annotation_term.csv"
+
+        abc2cas(cat_set_file_path, cat_file_path, "test_data/abc2cas.json")
+
+        with open("test_data/abc2cas.json", "r") as abc2cas_file:
+            result = json.load(abc2cas_file)
+
+        self.assertIn("annotations", result)
+        self.assertIn("labelsets", result)
+        self.assertIn("cellannotation_schema_version", result)
+        self.assertIn("author_name", result)
+        self.assertIn("author_name", result)
+        self.assertEqual(len(result["annotations"]), 6905)
+        self.assertEqual(len(result["labelsets"]), 5)
+
+        os.remove("test_data/abc2cas.json")
