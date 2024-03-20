@@ -21,6 +21,11 @@ TEST_JSON = os.path.join(
     "./test_data/siletti/Siletti_all_non_neuronal_cells_with_cids.json",
 )
 
+TEST_JSON2 = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)),
+    "./test_data/jorstad_mtg.json",
+)
+
 OUT_FOLDER = os.path.join(
     os.path.dirname(os.path.realpath(__file__)), "./test_data/table_out/"
 )
@@ -157,6 +162,31 @@ class TabularSerialisationTests(unittest.TestCase):
         # self.assertEqual("cluster", cluster_1["labelset"])
         # self.assertEqual("[\"EPYC\", \"RELN\", \"GULP1\"]", cluster_1["marker_gene_evidence"])
         # self.assertEqual("PuR(0.52) | CaH(0.39)", cluster_1["region.info _Frequency_"])
+
+    def test_loading_from_json2(self):
+        cta = read_cas_json_file(TEST_JSON2)
+        tables = serialize_to_tables(cta, "Test_table", OUT_FOLDER, {"accession_id_prefix": "TST_"})
+
+        annotation_table_path = os.path.join(OUT_FOLDER, "annotation.tsv")
+        self.assertEqual(annotation_table_path, tables[0])
+        self.assertTrue(os.path.isfile(annotation_table_path))
+
+        headers, records = read_csv_to_dict(
+            annotation_table_path, id_column_name="cell_set_accession", delimiter="\t"
+        )
+        self.assertEqual(160, len(records))
+
+        cluster_1 = records["CrossArea_cluster:4062c5afea"]
+        self.assertEqual("Sst_14", cluster_1["cell_label"])
+        self.assertEqual("CrossArea_subclass:8fa477a378", cluster_1["parent_cell_set_accession"])
+        self.assertEqual("Sst", cluster_1["parent_cell_set_name"])
+        self.assertEqual("CrossArea_cluster", cluster_1["labelset"])
+
+        cluster_sst = records["CrossArea_subclass:8fa477a378"]
+        self.assertEqual("Sst", cluster_sst["cell_label"])
+        self.assertEqual("Class:d4ef18755c", cluster_sst["parent_cell_set_accession"])
+        self.assertEqual("inhibitory", cluster_sst["parent_cell_set_name"])
+        self.assertEqual("CrossArea_subclass", cluster_sst["labelset"])
 
     def test_is_hash_accession(self):
         self.assertTrue(is_hash_accession("01d93e7878"))

@@ -177,20 +177,19 @@ def generate_annotation_table(accession_prefix, cta, out_folder):
     std_parent_records = list()
     std_parent_records_dict = dict()
 
-    # sort annotations by accession ids incrementing (if there is)
-    cta["annotations"].sort(
-        key=lambda x: int(str(x["cell_set_accession"]).split("_")[1])
-        if "cell_set_accession" in x
-        and x["cell_set_accession"]
-        and "_" in x["cell_set_accession"]
-        else 0
-    )
-
     first_accession = cta["annotations"][0].get("cell_set_accession", "")
     if is_hash_accession(first_accession):
         accession_manager = HashAccessionManager()
     else:
         accession_manager = IncrementalAccessionManager(accession_prefix)
+        # sort annotations by accession ids incrementing (if there is)
+        cta["annotations"].sort(
+            key=lambda x: int(str(x["cell_set_accession"]).split(":")[-1].split("_")[-1])
+            if "cell_set_accession" in x
+               and x["cell_set_accession"]
+               and "_" in x["cell_set_accession"]
+            else 0
+        )
 
     for annotation_object in cta["annotations"]:
         record = dict()
@@ -198,17 +197,16 @@ def generate_annotation_table(accession_prefix, cta, out_folder):
             "cell_set_accession" in annotation_object
             and annotation_object["cell_set_accession"]
         ):
+            labelset = str(annotation_object.get("labelset", "")).replace("_name", "")
             record["cell_set_accession"] = accession_manager.generate_accession_id(
-                annotation_object.get("cell_set_accession", "")
+                id_recommendation=annotation_object.get("cell_set_accession", ""), labelset=labelset
             )
             annotation_object["cell_set_accession"] = record["cell_set_accession"]
             record["cell_label"] = annotation_object.get("cell_label", "")
             record["cell_fullname"] = annotation_object.get("cell_fullname", "")
             record["parent_cell_set_accession"] = ""
             record["parent_cell_set_name"] = ""
-            record["labelset"] = str(annotation_object.get("labelset", "")).replace(
-                "_name", ""
-            )
+            record["labelset"] = labelset
             record["cell_ontology_term_id"] = annotation_object.get(
                 "cell_ontology_term_id", ""
             )

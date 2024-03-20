@@ -18,7 +18,7 @@ class HashAccessionManager(BaseAccessionManager):
         self.accession_ids = list()
 
     def generate_accession_id(
-        self, id_recommendation: str = None, cell_ids: List = None
+        self, id_recommendation: str = None, cell_ids: List = None, labelset: str = None
     ) -> str:
         """
         Generates a Blake2b hashing algorithm based hash for the given cell IDs.
@@ -26,8 +26,11 @@ class HashAccessionManager(BaseAccessionManager):
             id_recommendation: pre-calculated hash accession recommendation. Returns this value if recommendation is a
             valid accession id.
             cell_ids: Cell IDs list. Algorithm sorts cell ids internally.
+            labelset: Labelset name. If provided, uses it as a prefix to the accession id.
         Return: accession_id
         """
+        if id_recommendation and labelset and ":" not in id_recommendation:
+            id_recommendation = labelset + ":" + id_recommendation
         if is_hash_accession(id_recommendation):
             return id_recommendation
 
@@ -38,6 +41,8 @@ class HashAccessionManager(BaseAccessionManager):
             str.encode(" ".join(sorted(cell_ids))), digest_size=self.digest_size
         )
         accession_id = blake_hasher.hexdigest()
+        if labelset:
+            accession_id = labelset + ":" + accession_id
 
         if accession_id in self.accession_ids:
             print(accession_id)
@@ -56,4 +61,7 @@ def is_hash_accession(accession_id: str):
     Returns: True if value is a valid hash accession id, false otherwise.
 
     """
-    return accession_id and len(accession_id) == 10 and all(c in string.hexdigits for c in accession_id)
+    if not accession_id:
+        return False
+    hash_part = accession_id.split(":")[-1]
+    return len(hash_part) == 10 and all(c in string.hexdigits for c in hash_part)
