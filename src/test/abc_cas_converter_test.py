@@ -125,8 +125,8 @@ class TestABCConverter(unittest.TestCase):
         self.assertEqual(len(metadata["annotations"]), 0)
 
     def test_abc2cas(self):
-        cat_set_file_path = "test_data/ABC_data/WMB-taxonomy/20231215/cluster_annotation_term_set.csv"
-        cat_file_path = "test_data/ABC_data/WMB-taxonomy/20231215/cluster_annotation_term.csv"
+        cat_set_file_path = "test/test_data/ABC_data/WMB-taxonomy/20231215/cluster_annotation_term_set.csv"
+        cat_file_path = "test/test_data/ABC_data/WMB-taxonomy/20231215/cluster_annotation_term.csv"
         print(os.getcwd())
 
         abc2cas(cat_set_file_path, cat_file_path, "test_data/abc2cas.json")
