@@ -7,12 +7,13 @@ import pandas as pd
 
 from cas.file_utils import read_json_file
 
-CAT_SET_REQUIRED_COLUMNS = ["label", "description", "order"]
+CAT_SET_REQUIRED_COLUMNS = ["label", "name","description", "order"]
 CAT_REQUIRED_COLUMNS = [
     "cluster_annotation_term_set_label",
     "name",
     "label",
     "parent_term_label",
+    "cluster_annotation_term_set_name",
 ]
 
 
@@ -143,8 +144,9 @@ def add_annotations(cas: Dict[str, Any], cat: pd.DataFrame):
 
     """
     for row in cat.itertuples():
-        labelset = row.cluster_annotation_term_set_label
+        labelset = row.cluster_annotation_term_set_name
         cell_label = row.name
+        cell_fullname = None
         cell_ontology_term_id = None
         cell_ontology_term = None
         cell_ids = None
@@ -162,7 +164,7 @@ def add_annotations(cas: Dict[str, Any], cat: pd.DataFrame):
         anno = {
             "labelset": labelset,
             "cell_label": cell_label,
-            "cell_fullname": cell_label,
+            "cell_fullname": cell_fullname,
             "cell_ontology_term_id": cell_ontology_term_id,
             "cell_ontology_term": cell_ontology_term,
             "cell_ids": cell_ids,
@@ -190,7 +192,7 @@ def add_labelsets(cas: Dict[str, Any], cat_set: pd.DataFrame):
     """
     order_mapping = calculate_order_mapping(cat_set["order"])
     for row in cat_set.itertuples():
-        name = row.label
+        name = row.name
         description = row.description
         rank = None
         if row.order != 0:
