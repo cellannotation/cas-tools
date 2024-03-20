@@ -109,7 +109,9 @@ class TestABCConverter(unittest.TestCase):
         add_annotations(self.cas, self.cat)
         self.assertEqual(len(self.cas["annotations"]), 2)
         self.assertEqual(self.cas["annotations"][0]["cell_label"], "cell1")
-        self.assertEqual(self.cas["annotations"][1]["parent_cell_set_accession"], "parent2")
+        self.assertEqual(
+            self.cas["annotations"][1]["parent_cell_set_accession"], "parent2"
+        )
 
     def test_add_labelsets(self):
         add_labelsets(self.cas, self.cat_set)
@@ -125,13 +127,26 @@ class TestABCConverter(unittest.TestCase):
         self.assertEqual(len(metadata["annotations"]), 0)
 
     def test_abc2cas(self):
-        cat_set_file_path = "test/test_data/ABC_data/WMB-taxonomy/20231215/cluster_annotation_term_set.csv"
-        cat_file_path = "test/test_data/ABC_data/WMB-taxonomy/20231215/cluster_annotation_term.csv"
-        print(os.getcwd())
+        # Base directory for test data
+        base_dir = os.path.join("test_data", "ABC_data", "WMB-taxonomy", "20231215")
 
-        abc2cas(cat_set_file_path, cat_file_path, "test_data/abc2cas.json")
+        # Constructing full paths
+        cat_set_file_path = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            os.path.join(base_dir, "cluster_annotation_term_set.csv"),
+        )
+        cat_file_path = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            os.path.join(base_dir, "cluster_annotation_term.csv"),
+        )
+        output_json = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            os.path.join("test_data", "abc2cas.json"),
+        )
 
-        with open("test_data/abc2cas.json", "r") as abc2cas_file:
+        abc2cas(cat_set_file_path, cat_file_path, output_json)
+
+        with open(output_json, "r") as abc2cas_file:
             result = json.load(abc2cas_file)
 
         self.assertIn("annotations", result)
@@ -142,4 +157,4 @@ class TestABCConverter(unittest.TestCase):
         self.assertEqual(len(result["annotations"]), 6905)
         self.assertEqual(len(result["labelsets"]), 5)
 
-        os.remove("test_data/abc2cas.json")
+        os.remove(output_json)
