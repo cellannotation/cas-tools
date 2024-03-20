@@ -257,18 +257,13 @@ def initialize_cas_structure(matrix_file_id: str, meta_data_result: dict):
         dict: The initial CAS structure with the matrix file ID, annotation URL, and placeholders
               for future data. Excludes fields that remain None.
     """
-    cas_init = {
+    cas_init = {k: v for k, v in meta_data_result.items()}
+    cas_init.update({
         "matrix_file_id": matrix_file_id,
-        "cellannotation_schema_version": None,
-        "cellannotation_timestamp": None,
-        "cellannotation_version": None,
         "cellannotation_url": meta_data_result["matrix_file_id"],
-        "author_name": None,
-        "author_contact": None,
-        "orcid": None,
         "annotations": [],
         "labelsets": [],
-    }
+    })
     cas = {k: v for k, v in cas_init.items() if v is not None}
     return cas
 

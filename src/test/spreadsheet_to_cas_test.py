@@ -248,7 +248,7 @@ class SpreadsheetToCasTests(unittest.TestCase):
             with open(json_file_path, "r") as json_file:
                 json_data = json.load(json_file)
 
-            self.assertEqual(len(json_data), 4)
+            self.assertEqual(len(json_data), 8)
             self.assertEqual(len(json_data["annotations"]), 73)
             self.assertEqual(len(json_data["annotations"][0]), 7)
         finally:
