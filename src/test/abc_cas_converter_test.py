@@ -1,9 +1,12 @@
+import json
+import os
 import unittest
 
 import numpy as np
 import pandas as pd
 
 from cas.abc_cas_converter import (
+    abc2cas,
     add_annotations,
     add_labelsets,
     calculate_order_mapping,
@@ -21,7 +24,7 @@ class TestABCConverter(unittest.TestCase):
         self.cas = init_metadata()
         self.cat = pd.DataFrame(
             {
-                "cluster_annotation_term_set_label": ["labelset1", "labelset2"],
+                "cluster_annotation_term_set_name": ["labelset1", "labelset2"],
                 "name": ["cell1", "cell2"],
                 "label": ["label1", "label2"],
                 "parent_term_label": ["parent1", "parent2"],
@@ -30,7 +33,7 @@ class TestABCConverter(unittest.TestCase):
         )
         self.cat_set = pd.DataFrame(
             {
-                "label": ["labelset1", "labelset2"],
+                "name": ["labelset1", "labelset2"],
                 "description": ["description1", "description2"],
                 "order": [0, 1],
             }
@@ -106,7 +109,9 @@ class TestABCConverter(unittest.TestCase):
         add_annotations(self.cas, self.cat)
         self.assertEqual(len(self.cas["annotations"]), 2)
         self.assertEqual(self.cas["annotations"][0]["cell_label"], "cell1")
-        self.assertEqual(self.cas["annotations"][1]["parent_cell_set_accession"], "parent2")
+        self.assertEqual(
+            self.cas["annotations"][1]["parent_cell_set_accession"], "parent2"
+        )
 
     def test_add_labelsets(self):
         add_labelsets(self.cas, self.cat_set)
@@ -120,3 +125,36 @@ class TestABCConverter(unittest.TestCase):
         self.assertTrue("annotations" in metadata)
         self.assertEqual(len(metadata["labelsets"]), 0)
         self.assertEqual(len(metadata["annotations"]), 0)
+
+    def test_abc2cas(self):
+        # Base directory for test data
+        base_dir = os.path.join("test_data", "ABC_data", "WMB-taxonomy", "20231215")
+
+        # Constructing full paths
+        cat_set_file_path = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            os.path.join(base_dir, "cluster_annotation_term_set.csv"),
+        )
+        cat_file_path = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            os.path.join(base_dir, "cluster_annotation_term.csv"),
+        )
+        output_json = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            os.path.join("test_data", "abc2cas.json"),
+        )
+
+        abc2cas(cat_set_file_path, cat_file_path, output_json)
+
+        with open(output_json, "r") as abc2cas_file:
+            result = json.load(abc2cas_file)
+
+        self.assertIn("annotations", result)
+        self.assertIn("labelsets", result)
+        self.assertIn("cellannotation_schema_version", result)
+        self.assertIn("author_name", result)
+        self.assertIn("author_name", result)
+        self.assertEqual(len(result["annotations"]), 6905)
+        self.assertEqual(len(result["labelsets"]), 5)
+
+        os.remove(output_json)
