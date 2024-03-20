@@ -84,13 +84,13 @@ def main():
         output_file_path = args.output
 
         abc2cas(cat_set_file_path, cat_file_path, output_file_path)
-    elif args.action == "cas2abc":
-        args = parser.parse_args()
-        json_file_path = args.json
-        cat_set_file_path = args.catset
-        cat_file_path = args.cat
-
-        cas2abc(json_file_path, cat_set_file_path, cat_file_path)
+    # elif args.action == "cas2abc":
+    #     args = parser.parse_args()
+    #     json_file_path = args.json
+    #     cat_set_file_path = args.catset
+    #     cat_file_path = args.cat
+    #
+    #     cas2abc(json_file_path, cat_set_file_path, cat_file_path)
     elif args.action == "populate_cells":
         args = parser.parse_args()
         json_file_path = args.json
@@ -203,7 +203,7 @@ def create_spreadsheet2cas_operation_parser(subparsers):
         "spreadsheet2cas",
         description="Converts a spreadsheet to CAS JSON.",
         help="Converts a spreadsheet to Cell Annotation Schema (CAS) JSON.",
-        usage="cas spreadsheet2cas --spreadsheet path/to/spreadsheet.xlsx --sheet sheet_name --labelsets item1 item2 item3 --output path/to/output_file.json"
+        usage="cas spreadsheet2cas --spreadsheet path/to/spreadsheet.xlsx --sheet sheet_name --labelsets item1 item2 item3 --output path/to/output_file.json",
     )
 
     parser_spreadsheet2cas.add_argument(
@@ -222,8 +222,8 @@ def create_spreadsheet2cas_operation_parser(subparsers):
         default=None,
         nargs="+",
         help="List of names of observation (obs) fields used to record author cell type names, which determine the "
-             "rank of labelsets in a spreadsheet. If not provided, ranks will be determined based on the order of the"
-             " fields specified in the CELL LABELSET NAME column.",
+        "rank of labelsets in a spreadsheet. If not provided, ranks will be determined based on the order of the"
+        " fields specified in the CELL LABELSET NAME column.",
     )
     parser_spreadsheet2cas.add_argument(
         "--output",
@@ -267,7 +267,7 @@ def create_anndata2cas_operation_parser(subparsers):
         required=True,
         nargs="+",
         help="List of labelsets, which are names of observation (obs) fields used to record author cell type names. "
-             "The labelsets should be provided in order, starting from rank 0 (leaf nodes) and ascending to higher ranks."
+        "The labelsets should be provided in order, starting from rank 0 (leaf nodes) and ascending to higher ranks.",
     )
     parser_anndata2cas.add_argument(
         "--output",
@@ -338,9 +338,9 @@ def create_cas2abc_operation_parser(subparsers):
     """
     parser_cas2abc = subparsers.add_parser(
         "cas2abc",
-        description="Converts given CAS JSON to ABC files",
+        description="Converts given CAS JSON to ABC files. NOTE: This command is under development and may change.",
         help="Converts given Cell Annotation Schema (CAS) to ABC files: cluster_annotation_term and "
-        "cluster_annotation_term_set, and writes them to files with cat_file_path and cat_set_file_path",
+        "cluster_annotation_term_set, and writes them to files with cat_file_path and cat_set_file_path. (Under Development)",
     )
 
     parser_cas2abc.add_argument(
