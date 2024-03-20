@@ -1,16 +1,17 @@
-from collections import OrderedDict
 import json
-import os
 import logging
+import re
+from collections import OrderedDict
+from importlib import resources
 from typing import Dict, List, Optional
 
 import anndata as ad
-import cellxgene_census
+import numpy as np
 import pandas as pd
+from cas_schema import schemas
 
 from cas.cxg_utils import download_dataset_with_id
 from cas.file_utils import read_anndata_file
-
 
 logging.basicConfig(level=logging.INFO)
 
@@ -34,18 +35,39 @@ def read_spreadsheet(file_path: str, sheet_name: Optional[str]):
     Returns:
         tuple: Tuple containing metadata (dict), column names (list), and raw data (pd.DataFrame).
     """
-    # Read the specific sheet or the first sheet if sheet_name is not provided
+    schema_file = resources.files(schemas) / "CAP_schema.json"
+    with schema_file.open("rt") as f:
+        cap_schema = json.loads(f.read())
     if sheet_name:
         spreadsheet_df = pd.read_excel(file_path, sheet_name=sheet_name, header=None)
     else:
         spreadsheet_df = pd.read_excel(file_path, header=None)
-    # Extract meta data (first 8 rows)
-    meta_data = dict(spreadsheet_df.iloc[:8, 0:2].to_records(index=False))
-    # Extract column names (9th row)
-    column_names = spreadsheet_df.iloc[8, :].tolist()
-    # Extract raw data (from 10th row onwards)
-    raw_data = spreadsheet_df.iloc[9:, :]
-    raw_data.columns = column_names
+
+    meta_data = {}
+    column_names = []
+    raw_data = pd.DataFrame()
+
+    header_row_index = None
+    for index, row in spreadsheet_df.iterrows():
+        first_cell = str(row[0])
+        if first_cell.startswith("#"):
+            key = first_cell[1:].strip()
+            value = row[1] if pd.notnull(row[1]) else ""
+            if key in cap_schema["properties"]:
+                meta_data[key] = value
+        else:
+            header_row_index = index
+            break
+
+    if header_row_index is not None:
+        column_names = spreadsheet_df.iloc[header_row_index, :].tolist()
+        raw_data = spreadsheet_df.iloc[header_row_index + 1 :, :]
+        raw_data.columns = column_names
+        if "CELL LABELSET NAME" in raw_data.columns:
+            raw_data = raw_data[raw_data["CELL LABELSET NAME"] != "cell_type"]
+        raw_data = raw_data.where(pd.notnull(raw_data), None)
+    else:
+        raise ValueError("Header row not found in the spreadsheet.")
 
     return meta_data, column_names, raw_data
 
@@ -65,7 +87,7 @@ def get_cell_ids(dataset: ad.AnnData, labelset: str, cell_label: str) -> List[st
     cell_label_lower = str(cell_label).lower()
     return dataset.obs.index[
         dataset.obs[labelset].astype(str).str.lower() == cell_label_lower
-        ].tolist()
+    ].tolist()
 
 
 def calculate_labelset_rank(input_list: List[str]) -> Dict[str, int]:
@@ -81,6 +103,34 @@ def calculate_labelset_rank(input_list: List[str]) -> Dict[str, int]:
 
     """
     return {item: rank for rank, item in enumerate(input_list)}
+
+
+def custom_lowercase_transform(s):
+    """
+    Transforms the given string to lowercase except for words that are acronyms or specific cell type names
+    which are three characters or less.
+
+    Args:
+        s (str): The input string.
+
+    Returns:
+        str: The transformed string.
+    """
+
+    # Define a function to decide whether a word should stay uppercase
+    def transform_word(match):
+        word = match.group()
+        # If a word is three characters or less, it stays uppercase
+        if len(word) <= 3:
+            return word
+        # Otherwise, convert the word to lowercase
+        else:
+            return word.lower()
+
+    # Use regex to find words and apply the transformation logic
+    transformed_string = re.sub(r"\b[A-Za-z]+\b", transform_word, s)
+
+    return transformed_string
 
 
 def spreadsheet2cas(
@@ -105,43 +155,73 @@ def spreadsheet2cas(
         spreadsheet_file_path, sheet_name
     )
 
-    matrix_file_id = (
-        meta_data_result["CxG LINK"].rstrip("/").split("/")[-1].split(".")[0]
+    dataset_anndata, matrix_file_id = load_or_fetch_anndata(
+        anndata_file_path, meta_data_result
     )
-    if not anndata_file_path:
-        download_dataset_with_id(matrix_file_id)
-    dataset_anndata = read_anndata_file(anndata_file_path)
 
-    labelsets = OrderedDict()
+    cas = initialize_cas_structure(matrix_file_id, meta_data_result)
 
-    # metadata
-    cas = {
-        "matrix_file_id": matrix_file_id,
-        "cellannotation_schema_version": "TBA",
-        "cellannotation_timestamp": "TBA",
-        "cellannotation_version": "TBA",
-        "cellannotation_url": meta_data_result["CxG LINK"],
-        "author_name": "TBA",
-        "author_contact": "TBA",
-        "orcid": "TBA",
-        "annotations": [],
-        "labelsets": [],
-    }
+    labelsets = process_and_add_annotations(cas, dataset_anndata, raw_data_result)
 
-    # annotations
+    process_and_add_labelsets(cas, labelset_list, labelsets)
+
+    # Write the JSON data to the file
+    with open(output_file_path, "w") as json_file:
+        json.dump(cas, json_file, indent=2)
+
+
+def process_and_add_labelsets(
+    cas: dict, labelset_list: Optional[List[str]], labelsets: OrderedDict
+):
+    """
+    Adds labelsets with ranks to the CAS structure, using either a provided list or keys from `labelsets`.
+
+    Args:
+        cas (dict): The CAS structure to update.
+        labelset_list (Optional[List[str]]): Custom list to define labelset ranks. If None, uses `labelsets` keys.
+        labelsets (OrderedDict): Processed labelsets, used if no custom list is provided.
+
+    Uses `calculate_labelset_rank` to determine ranks, appending each labelset to CAS with its rank.
+    """
+    labelset_rank_dict = calculate_labelset_rank(
+        labelset_list if labelset_list else list(labelsets.keys())
+    )
+    for labelset, rank in labelset_rank_dict.items():
+        cas.get("labelsets").append(
+            {"name": labelset, "description": None, "rank": str(rank)}
+        )
+
+
+def process_and_add_annotations(cas, dataset_anndata, raw_data_result):
+    """
+    Adds processed annotations from raw data to the CAS structure and tracks labelsets.
+    Assumes certain external definitions for column names and transformation functions.
+
+    Args:
+        cas (dict): The CAS structure to update with annotations.
+        dataset_anndata (AnnData): Dataset for annotation context.
+        raw_data_result (DataFrame): Raw annotation data.
+
+    Returns:
+        OrderedDict: Tracks labelsets encountered, initialized to None.
+
+    Note:
+        Requires `custom_lowercase_transform`, `get_cell_ids`, and column constants to be defined.
+    """
     stripped_data_result = raw_data_result.map(
         lambda x: x.strip() if isinstance(x, str) else x
     )
+    labelsets = OrderedDict()
     for index, row in stripped_data_result.iterrows():
         labelset = row[LABELSET_COLUMN]
-        cell_label = row[CELL_LABEL_COLUMN]
+        cell_label = custom_lowercase_transform(row[CELL_LABEL_COLUMN])
         cell_ontology_term_id = row[CL_TERM_COLUMN]
         rationale = row[EVIDENCE_COLUMN]
+        rationale_dois = None
         marker_gene_evidence = row[MARKER_GENES_COLUMN]
         synonyms = row[SYNONYM_COLUMN]
         category_fullname = row[CATEGORIES_COLUMN]
 
-        # labelsets.add(labelset)
         labelsets[labelset] = None
 
         anno = {
@@ -152,21 +232,65 @@ def spreadsheet2cas(
             "cell_ontology_term": cell_label,
             "cell_ids": get_cell_ids(dataset_anndata, labelset, cell_label),
             "rationale": rationale,
-            "rationale_dois": meta_data_result["PAPER DOI"],
+            "rationale_dois": rationale_dois,
             "marker_gene_evidence": marker_gene_evidence,
             "synonyms": synonyms,
             "category_fullname": category_fullname,
-            "category_cell_ontology_exists": "TBA",
-            "category_cell_ontology_term_id": "TBA",
-            "category_cell_ontology_term": "TBA",
+            "category_cell_ontology_exists": None,
+            "category_cell_ontology_term_id": None,
+            "category_cell_ontology_term": None,
         }
-        cas.get("annotations").append(anno)
+        cas.get("annotations").append({k: v for k, v in anno.items() if v})
+    return labelsets
 
-    # labelsets
-    labelset_rank_dict = calculate_labelset_rank(labelset_list if labelset_list else list(labelsets.keys()))
-    for labelset, rank in labelset_rank_dict.items():
-        cas.get("labelsets").append({"name": labelset, "description": "TBA", "rank": str(rank)})
 
-    # Write the JSON data to the file
-    with open(output_file_path, "w") as json_file:
-        json.dump(cas, json_file, indent=2)
+def initialize_cas_structure(matrix_file_id: str, meta_data_result: dict):
+    """
+    Initializes the Cell Annotation Schema (CAS) structure with basic information and placeholders
+    for annotations and labelsets. Fields initialized with None values are omitted in the final output.
+
+    Args:
+        matrix_file_id (str): The ID of the matrix file, used within the CAS for identification.
+        meta_data_result (dict): Metadata containing at least the 'matrix_file_id' for the CAS URL.
+
+    Returns:
+        dict: The initial CAS structure with the matrix file ID, annotation URL, and placeholders
+              for future data. Excludes fields that remain None.
+    """
+    cas_init = {
+        "matrix_file_id": matrix_file_id,
+        "cellannotation_schema_version": None,
+        "cellannotation_timestamp": None,
+        "cellannotation_version": None,
+        "cellannotation_url": meta_data_result["matrix_file_id"],
+        "author_name": None,
+        "author_contact": None,
+        "orcid": None,
+        "annotations": [],
+        "labelsets": [],
+    }
+    cas = {k: v for k, v in cas_init.items() if v is not None}
+    return cas
+
+
+def load_or_fetch_anndata(anndata_file_path: str, meta_data_result: dict):
+    """
+    Loads or fetches an AnnData file, based on a local path or a matrix file ID from metadata.
+
+    Args:
+        anndata_file_path (str): Path to an AnnData file, or None to fetch using metadata.
+        meta_data_result (dict): Metadata with 'matrix_file_id' for fetching the dataset.
+
+    Returns:
+        tuple: (AnnData object, matrix file ID), ready for use.
+
+    Raises:
+        ValueError: If 'matrix_file_id' is missing from metadata.
+    """
+    matrix_file_id = (
+        meta_data_result["matrix_file_id"].rstrip("/").split("/")[-1].split(".")[0]
+    )
+    if not anndata_file_path:
+        anndata_file_path = download_dataset_with_id(matrix_file_id)
+    dataset_anndata = read_anndata_file(anndata_file_path)
+    return dataset_anndata, matrix_file_id
