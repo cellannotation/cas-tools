@@ -115,9 +115,10 @@ def add_parent_cell_hierarchy(cas: Dict[str, Any], parent_cell_look_up: Dict[str
             # Add parent data
             annotation.update({"parent_cell_set_name": parent})
             annotation.update({"parent_cell_set_accession": p_accession})
-            # Remove CL annotation if parent and child has the same annotation
-            parent_cell_ontology_term_id = parent_info.get("cell_ontology_term_id")
-            parent_cell_ontology_term = parent_info.get("cell_ontology_term")
+            # Remove CL annotation if parent and child have the same annotation
+            parent_dict = parent_cell_look_up.get(parent)
+            parent_cell_ontology_term_id = parent_dict.get("cell_ontology_term_id")
+            parent_cell_ontology_term = parent_dict.get("cell_ontology_term")
             if parent_cell_ontology_term_id == annotation.get(
                 "cell_ontology_term_id"
             ) and parent_cell_ontology_term == annotation.get("cell_ontology_term"):
