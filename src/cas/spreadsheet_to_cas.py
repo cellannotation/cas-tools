@@ -74,7 +74,7 @@ def read_spreadsheet(file_path: str, sheet_name: Optional[str], schema: dict):
         for column in raw_data.columns:
             raw_data = raw_data[raw_data[column] != 'cell_type']
         # resolve_ref(schema, schema["properties"]["annotations"]["items"]["$ref"])["properties"]["labelset"]
-        raw_data = raw_data.where(pd.notnull(raw_data), None)
+        raw_data = raw_data.where(pd.notnull(raw_data), "")
     else:
         raise ValueError("Header row not found in the spreadsheet.")
 
@@ -246,6 +246,8 @@ def process_and_add_annotations(cas, dataset_anndata, raw_data_result, columns, 
         for column_name in columns:
             if column_name in annotation_properties:
                 anno[column_name] = row[column_name]
+                if annotation_properties[column_name]["type"] == "array":
+                    anno[column_name] = re.split("[,|]", row[column_name])
             elif row[column_name]:
                 user_annotations[column_name] = row[column_name]
 
