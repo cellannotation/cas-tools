@@ -55,13 +55,16 @@ def read_spreadsheet(file_path: str, sheet_name: Optional[str], schema: dict):
     raw_data = pd.DataFrame()
 
     header_row_index = None
+    metadata_properties = {k: v for k, v in schema['properties'].items() if k not in ["labelsets", "annotations"]}
     for index, row in spreadsheet_df.iterrows():
         first_cell = str(row[0])
         if first_cell.startswith("#"):
             key = first_cell[1:].strip()
             value = row[1] if pd.notnull(row[1]) else ""
-            if key in schema["properties"]:
+            if key in metadata_properties:
                 meta_data[key] = value
+                if metadata_properties[key]["type"] == "array":
+                    meta_data[key] = re.split("[,|]", value)
         else:
             header_row_index = index
             break
