@@ -60,6 +60,7 @@ def main():
         sheet_name = args.sheet
         anndata_file_path = args.anndata
         labelsets = args.labelsets
+        schema_name = args.schema
         output_file_path = args.output
 
         spreadsheet2cas(
@@ -67,6 +68,7 @@ def main():
             sheet_name,
             anndata_file_path,
             labelsets,
+            schema_name,
             output_file_path,
         )
     elif args.action == "anndata2cas":
@@ -190,7 +192,7 @@ def create_spreadsheet2cas_operation_parser(subparsers):
     --labelsets     : List of names of observation (obs) fields used to record author cell type names,
     which determine the rank of labelsets in a spreadsheet. If not provided, ranks will be determined based on
     the order of the fields specified in the CELL LABELSET NAME column.
-
+    --schema        : Name of cell annotation schema used to in spreadsheet. It can be one of 'base', 'bican' or 'cap'.
     --output        : Output CAS file name (default: output.json).
 
     Usage Example:
@@ -224,6 +226,12 @@ def create_spreadsheet2cas_operation_parser(subparsers):
         help="List of names of observation (obs) fields used to record author cell type names, which determine the "
         "rank of labelsets in a spreadsheet. If not provided, ranks will be determined based on the order of the"
         " fields specified in the CELL LABELSET NAME column.",
+    )
+    parser_spreadsheet2cas.add_argument(
+        "--schema",
+        default="cap",
+        help="Name of cell annotation schema used to in spreadsheet. It can be one of 'base', 'bican' or 'cap'.",
+        choices=["base", "bican", "cap"]
     )
     parser_spreadsheet2cas.add_argument(
         "--output",
