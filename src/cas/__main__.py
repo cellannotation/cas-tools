@@ -1,15 +1,14 @@
 import argparse
 import os
 import pathlib
-import sys
 import warnings
 
+from cas.abc_cas_converter import abc2cas, cas2abc
 from cas.anndata_conversion import merge
 from cas.anndata_to_cas import anndata2cas
 from cas.flatten_data_to_anndata import flatten
 from cas.populate_cell_ids import populate_cell_ids
 from cas.spreadsheet_to_cas import spreadsheet2cas
-from cas.abc_cas_converter import abc2cas, cas2abc
 from cas.validate import validate as schema_validate
 
 warnings.filterwarnings("always")
@@ -52,7 +51,6 @@ def main():
             output_file_path
         ):
             raise ValueError("--anndata and --output cannot be the same")
-
         flatten(json_file_path, anndata_file_path, output_file_path)
     elif args.action == "spreadsheet2cas":
         args = parser.parse_args()
@@ -231,7 +229,7 @@ def create_spreadsheet2cas_operation_parser(subparsers):
         "--schema",
         default="cap",
         help="Name of cell annotation schema used to in spreadsheet. It can be one of 'base', 'bican' or 'cap'.",
-        choices=["base", "bican", "cap"]
+        choices=["base", "bican", "cap"],
     )
     parser_spreadsheet2cas.add_argument(
         "--output",
