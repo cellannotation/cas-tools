@@ -223,6 +223,8 @@ def update_obs_dataset(obs_dataset, flatten_data):
         flatten_data (dict): Dictionary containing flattened data.
     """
     for key, value in flatten_data.items():
+        if key in obs_dataset:
+            del obs_dataset[key]
         obs_dataset.create_dataset(key, data=value.values.astype("O"))
         columns = np.append(obs_dataset.attrs["column-order"], key)
         obs_dataset.attrs["column-order"] = columns
