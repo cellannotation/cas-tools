@@ -63,7 +63,7 @@ def flatten(json_file_path, anndata_file_path, output_file_path):
 
 
 # @profile
-def flatten_cas_object(input_json, anndata_file_path, output_file_path):
+def flatten_cas_object(input_json, anndata_file_path, output_file_path, cell_ids_column="CellID"):
     """
      Processes and integrates information from a JSON file and an AnnData (Annotated Data) file, creating a new AnnData
      object that incorporates the metadata. The resulting AnnData object is then saved to a new file.
@@ -72,6 +72,7 @@ def flatten_cas_object(input_json, anndata_file_path, output_file_path):
         input_json: CAS json file.
         anndata_file_path: The path to the AnnData file.
         output_file_path: Output AnnData file name.
+        cell_ids_column: The column name for cell IDs in the AnnData file. `CellID` by default.
     """
     if output_file_path:
         shutil.copy(anndata_file_path, output_file_path)
@@ -82,7 +83,8 @@ def flatten_cas_object(input_json, anndata_file_path, output_file_path):
 
     with h5py.File(anndata_file_path, "r+") as f:
         obs_dataset = f["obs"]
-        obs_index = np.array(obs_dataset["CellID"], dtype=str)
+        obs_index = np.array(obs_dataset[cell_ids_column], dtype=str)
+        print(obs_index)
 
         # obs
         flatten_data = process_annotations(annotations, obs_index, parent_cell_ids)
@@ -111,24 +113,25 @@ def process_annotations(annotations, obs_index, parent_cell_ids):
         cell_ids = ann.get(
             CELL_IDS, parent_cell_ids.get(ann.get("cell_set_accession", []))
         )
-        # Convert cell_ids to a list if it's not already for np.isin
-        if not isinstance(cell_ids, list):
-            cell_ids = list(cell_ids)
-        mask = np.isin(obs_index, cell_ids)
+        if cell_ids:  # only happens if data has multi-inheritance (as in basal ganglia data)
+            # Convert cell_ids to a list if it's not already for np.isin
+            if not isinstance(cell_ids, list):
+                cell_ids = list(cell_ids)
+            mask = np.isin(obs_index, cell_ids)
 
-        for k, v in ann.items():
-            if k in [CELL_IDS, LABELSET]:
-                continue
+            for k, v in ann.items():
+                if k in [CELL_IDS, LABELSET]:
+                    continue
 
-            key = f"{ann[LABELSET]}--{k}"
-            value = ", ".join(
-                sorted([str(value) for value in v] if isinstance(v, list) else [str(v)])
-            )
+                key = f"{ann[LABELSET]}--{k}"
+                value = ", ".join(
+                    sorted([str(value) for value in v] if isinstance(v, list) else [str(v)])
+                )
 
-            if key not in flatten_data:
-                flatten_data[key] = pd.Series("", index=obs_index)
-            new_array = flatten_data[key]
-            new_array[mask] = value
+                if key not in flatten_data:
+                    flatten_data[key] = pd.Series("", index=obs_index)
+                new_array = flatten_data[key]
+                new_array[mask] = value
 
     return flatten_data
 
