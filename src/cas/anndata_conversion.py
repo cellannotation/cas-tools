@@ -117,7 +117,7 @@ def check_labelsets(cas_json, input_anndata, matching_obs_keys, validate):
                 ):
                     handle_matching_labelset(ann, cell_label, input_anndata, validate)
                 elif cell_label == ann[CELL_LABEL]:
-                    handle_non_matching_labelset(ann, validate, derived_cell_ids)
+                    handle_non_matching_labelset(ann, input_anndata, validate, derived_cell_ids)
 
 
 def get_cas_annotations(input_json):
