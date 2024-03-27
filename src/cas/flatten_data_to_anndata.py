@@ -119,16 +119,14 @@ def process_annotations(annotations, obs_index, parent_cell_ids):
         for k, v in ann.items():
             if k in [CELL_IDS, LABELSET]:
                 continue
-
-            key = f"{ann[LABELSET]}--{k}"
+            key = f"{ann[LABELSET]}--{k}" if k != CELL_LABEL else ann[LABELSET]
             value = ", ".join(
                 sorted([str(value) for value in v] if isinstance(v, list) else [str(v)])
             )
 
             if key not in flatten_data:
                 flatten_data[key] = pd.Series("", index=obs_index)
-            new_array = flatten_data[key]
-            new_array[mask] = value
+            flatten_data[key].loc[mask] = value
 
     return flatten_data
 
@@ -159,11 +157,12 @@ def generate_uns_json(input_json):
             uns_json[key] = value
         else:
             for labelset in value:
+                metadata_key = f"{labelset.get(LABELSET_NAME, '')}--metadata"
+                uns_json.update({metadata_key: {}})
                 for k, v in labelset.items():
                     if k == LABELSET_NAME:
                         continue
-                    new_key = f"{labelset.get(LABELSET_NAME, '')}--{k}"
-                    uns_json.update({new_key: v})
+                    uns_json.get(metadata_key, {}).update({k: v})
     return uns_json
 
 
