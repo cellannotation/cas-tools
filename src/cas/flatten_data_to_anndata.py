@@ -82,7 +82,7 @@ def flatten_cas_object(input_json, anndata_file_path, output_file_path):
 
     with h5py.File(anndata_file_path, "r+") as f:
         obs_dataset = f["obs"]
-        obs_index = np.array(obs_dataset["CellID"], dtype=str)
+        obs_index = np.array(obs_dataset[obs_dataset.attrs['_index']], dtype=str)
 
         # obs
         flatten_data = process_annotations(annotations, obs_index, parent_cell_ids)
@@ -111,6 +111,8 @@ def process_annotations(annotations, obs_index, parent_cell_ids):
         cell_ids = ann.get(
             CELL_IDS, parent_cell_ids.get(ann.get("cell_set_accession", []))
         )
+        if not cell_ids:  # only happens if data has multi-inheritance (as in basal ganglia data)
+            continue
         # Convert cell_ids to a list if it's not already for np.isin
         if not isinstance(cell_ids, list):
             cell_ids = list(cell_ids)
@@ -120,7 +122,11 @@ def process_annotations(annotations, obs_index, parent_cell_ids):
             if k in [CELL_IDS, LABELSET]:
                 continue
 
-            key = f"{ann[LABELSET]}--{k}"
+            if k == CELL_LABEL:
+                key = ann[LABELSET]
+            else:
+                key = f"{ann[LABELSET]}--{k}"
+
             value = ", ".join(
                 sorted([str(value) for value in v] if isinstance(v, list) else [str(v)])
             )
