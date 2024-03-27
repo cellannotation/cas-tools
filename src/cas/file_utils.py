@@ -68,7 +68,7 @@ def read_cas_from_anndata(anndata_path: str) -> CellTypeAnnotation:
 
 
 def write_json_file(
-    cas: CellTypeAnnotation, out_file: str, print_undefined: bool = False
+        cas: CellTypeAnnotation, out_file: str, print_undefined: bool = False
 ):
     """
     Writes cell type annotation object to a json file.
@@ -118,12 +118,12 @@ def read_tsv_to_dict(tsv_path, id_column=0, generated_ids=False):
 
 
 def read_csv_to_dict(
-    csv_path,
-    id_column=0,
-    id_column_name="",
-    delimiter=",",
-    id_to_lower=False,
-    generated_ids=False,
+        csv_path,
+        id_column=0,
+        id_column_name="",
+        delimiter=",",
+        id_to_lower=False,
+        generated_ids=False,
 ):
     """
     Reads tsv file content into a dict. Key is the first column value and the value is dict representation of the
@@ -225,9 +225,15 @@ def update_obs_dataset(obs_dataset, flatten_data):
     for key, value in flatten_data.items():
         if key in obs_dataset:
             del obs_dataset[key]
+            columns = obs_dataset.attrs["column-order"]
+            columns = columns[columns != key]
+            obs_dataset.attrs["column-order"] = columns
+
         obs_dataset.create_dataset(key, data=value.values.astype("O"))
-        columns = np.append(obs_dataset.attrs["column-order"], key)
-        obs_dataset.attrs["column-order"] = columns
+
+        if key not in obs_dataset.attrs["column-order"]:
+            columns = np.append(obs_dataset.attrs["column-order"], key)
+            obs_dataset.attrs["column-order"] = columns
 
 
 def write_json_to_hdf5(group, data):

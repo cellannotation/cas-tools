@@ -83,7 +83,6 @@ def flatten_cas_object(input_json, anndata_file_path, output_file_path):
     with h5py.File(anndata_file_path, "r+") as f:
         obs_dataset = f["obs"]
         obs_index = np.array(obs_dataset[obs_dataset.attrs['_index']], dtype=str)
-        print(obs_index)
 
         # obs
         flatten_data = process_annotations(annotations, obs_index, parent_cell_ids)
