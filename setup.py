@@ -23,8 +23,20 @@ setup(
     package_dir={'': 'src'},
     packages=find_packages(where='src', exclude=("test*",)),
     include_package_data=True,
-    install_requires=["anndata==0.10.3", "dataclasses_json", "pandas",
-                      "ruamel.yaml", "jsonschema"],
+    install_requires=[
+        "anndata==0.10.3",
+        "cellxgene-census==1.10.2",
+        "openpyxl==3.1.2",
+        "dataclasses-json==0.6.4",
+        "pandas==2.2.1",
+        "ruamel.yaml==0.18.6",
+        "jsonschema==4.4.0",
+        "ordered-set==4.1.0",
+        "deepmerge==1.1.0",
+        "cell-annotation-schema==0.2b0",
+        "h5py==3.10.0",
+        "numpy==1.26.4"
+    ],
     entry_points={
         "console_scripts": [
             "cas=cas.__main__:main",
