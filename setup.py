@@ -25,18 +25,17 @@ setup(
     include_package_data=True,
     install_requires=[
         "anndata==0.10.3",
-        "cellxgene-census",  # No version specified, latest will be used
-        "openpyxl",          # No version specified, latest will be used
-        "dataclasses_json",  # No version specified, latest will be used
-        "pandas",            # No version specified, latest will be used
-        "ruamel.yaml",       # No version specified, latest will be used
+        "cellxgene-census==1.10.2",
+        "openpyxl==3.1.2",
+        "dataclasses-json==0.6.4",
+        "pandas==2.2.1",
+        "ruamel.yaml==0.18.6",
         "jsonschema==4.4.0",
         "ordered-set==4.1.0",
         "deepmerge==1.1.0",
-        "cell-annotation-schema",  # No version specified, latest will be used
-        "h5py>=3.10.0",
-        "numpy>=1.23.5",
-        "setuptools>=65.5.1"
+        "cell-annotation-schema==0.2b0",
+        "h5py==3.10.0",
+        "numpy==1.26.4"
     ],
     entry_points={
         "console_scripts": [
