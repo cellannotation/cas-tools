@@ -108,7 +108,7 @@ def check_labelsets(cas_json, input_anndata, matching_obs_keys, validate):
         if ann[LABELSET] in matching_obs_keys:
             anndata_labelset_cell_ids = (
                 input_anndata.obs.groupby(ann[LABELSET], observed=False)
-                .apply(lambda group: set(group.index))
+                .apply(lambda group: set(group.index), include_groups=False)
                 .to_dict()
             )
             for cell_label, cell_list in anndata_labelset_cell_ids.items():
