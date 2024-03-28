@@ -3,15 +3,21 @@ import logging
 import re
 from collections import OrderedDict
 from importlib import resources
-from typing import Dict, List, Optional
+from typing import List, Optional
 
-import anndata as ad
-import numpy as np
 import pandas as pd
 from cas_schema import schemas
 
+from cas.anndata_to_cas import calculate_labelset
 from cas.cxg_utils import download_dataset_with_id
 from cas.file_utils import read_anndata_file
+from cas.utils.conversion_utils import (
+    add_labelsets_to_cas,
+    add_parent_cell_hierarchy,
+    add_parent_hierarchy_to_annotations,
+    generate_parent_cell_lookup,
+    get_cell_ids,
+)
 from cas.validate import SCHEMA_FILE_MAPPING
 
 logging.basicConfig(level=logging.INFO)
@@ -26,7 +32,7 @@ CATEGORIES_COLUMN = "CATEGORIES"
 
 
 def resolve_ref(schema, ref):
-    parts = ref[1:].split('/')
+    parts = ref[1:].split("/")
     definition = schema
     for part in parts[1:]:
         definition = definition[part]
@@ -51,11 +57,13 @@ def read_spreadsheet(file_path: str, sheet_name: Optional[str], schema: dict):
         spreadsheet_df = pd.read_excel(file_path, header=None)
 
     meta_data = {}
-    column_names = []
-    raw_data = pd.DataFrame()
 
     header_row_index = None
-    metadata_properties = {k: v for k, v in schema['properties'].items() if k not in ["labelsets", "annotations"]}
+    metadata_properties = {
+        k: v
+        for k, v in schema["properties"].items()
+        if k not in ["labelsets", "annotations"]
+    }
     for index, row in spreadsheet_df.iterrows():
         first_cell = str(row[0])
         if first_cell.startswith("#"):
@@ -71,12 +79,11 @@ def read_spreadsheet(file_path: str, sheet_name: Optional[str], schema: dict):
 
     if header_row_index is not None:
         column_names = spreadsheet_df.iloc[header_row_index, :].tolist()
-        raw_data = spreadsheet_df.iloc[header_row_index + 1:, :]
+        raw_data = spreadsheet_df.iloc[header_row_index + 1 :, :]
         raw_data.columns = column_names
         # Iterate through each column and filter out rows with 'cell_type' in any column
         for column in raw_data.columns:
-            raw_data = raw_data[raw_data[column] != 'cell_type']
-        # resolve_ref(schema, schema["properties"]["annotations"]["items"]["$ref"])["properties"]["labelset"]
+            raw_data = raw_data[raw_data[column] != "cell_type"]
         raw_data = raw_data.where(pd.notnull(raw_data), "")
     else:
         raise ValueError("Header row not found in the spreadsheet.")
@@ -94,43 +101,10 @@ def retrieve_schema(schema_name):
     return schema
 
 
-def get_cell_ids(dataset: ad.AnnData, labelset: str, cell_label: str) -> List[str]:
-    """
-    Get cell IDs from an AnnData dataset based on a specified labelset and cell label.
-
-    Args:
-        dataset (ad.AnnData): AnnData dataset.
-        labelset (str): Labelset to filter.
-        cell_label (str): Cell label to match.
-
-    Returns:
-        List[str]: List of cell IDs.
-    """
-    cell_label_lower = str(cell_label).lower()
-    return dataset.obs.index[
-        dataset.obs[labelset].astype(str).str.lower() == cell_label_lower
-        ].tolist()
-
-
-def calculate_labelset_rank(input_list: List[str]) -> Dict[str, int]:
-    """
-    Assign ranks to items in a list.
-
-    Args:
-        input_list (List[str]): The list of items.
-
-    Returns:
-        Dict[str, int]: A dictionary where keys are items from the input list and
-        values are their corresponding ranks (0-based).
-
-    """
-    return {item: rank for rank, item in enumerate(input_list)}
-
-
 def custom_lowercase_transform(s):
     """
     Transforms the given string to lowercase except for words that are acronyms or specific cell type names
-    which are three characters or less.
+    which are three characters or fewer.
 
     Args:
         s (str): The input string.
@@ -142,7 +116,7 @@ def custom_lowercase_transform(s):
     # Define a function to decide whether a word should stay uppercase
     def transform_word(match):
         word = match.group()
-        # If a word is three characters or less, it stays uppercase
+        # If a word is three characters or fewer, it stays uppercase
         if len(word) <= 3:
             return word
         # Otherwise, convert the word to lowercase
@@ -156,12 +130,12 @@ def custom_lowercase_transform(s):
 
 
 def spreadsheet2cas(
-        spreadsheet_file_path: str,
-        sheet_name: Optional[str],
-        anndata_file_path: Optional[str],
-        labelset_list: Optional[List[str]],
-        schema_name: Optional[str],
-        output_file_path: str,
+    spreadsheet_file_path: str,
+    sheet_name: Optional[str],
+    anndata_file_path: Optional[str],
+    labelset_list: Optional[List[str]],
+    schema_name: Optional[str],
+    output_file_path: str,
 ):
     """
     Convert a spreadsheet to Cell Annotation Schema (CAS) JSON.
@@ -180,55 +154,47 @@ def spreadsheet2cas(
         spreadsheet_file_path, sheet_name, cell_annotation_schema
     )
 
-    dataset_anndata, matrix_file_id = load_or_fetch_anndata(
-        anndata_file_path, meta_data_result
-    )
+    anndata, matrix_file_id = load_or_fetch_anndata(anndata_file_path, meta_data_result)
+
+    if not labelset_list:
+        labelset_list = raw_data_result["labelset"].unique().tolist()
+
+    labelset_dict = calculate_labelset(anndata.obs, labelset_list)
 
     cas = initialize_cas_structure(matrix_file_id, meta_data_result)
 
-    labelsets = process_and_add_annotations(cas, dataset_anndata, raw_data_result,
-                                            column_names_result, cell_annotation_schema)
+    add_labelsets_to_cas(cas, labelset_dict)
 
-    process_and_add_labelsets(cas, labelset_list, labelsets)
+    parent_cell_look_up = generate_parent_cell_lookup(anndata, labelset_dict)
+
+    add_annotations_to_cas(
+        cas,
+        raw_data_result,
+        column_names_result,
+        cell_annotation_schema,
+        parent_cell_look_up,
+    )
+
+    add_parent_cell_hierarchy(parent_cell_look_up)
+    add_parent_hierarchy_to_annotations(cas, parent_cell_look_up)
 
     # Write the JSON data to the file
     with open(output_file_path, "w") as json_file:
         json.dump(cas, json_file, indent=2)
 
 
-def process_and_add_labelsets(
-        cas: dict, labelset_list: Optional[List[str]], labelsets: OrderedDict
-):
-    """
-    Adds labelsets with ranks to the CAS structure, using either a provided list or keys from `labelsets`.
-
-    Args:
-        cas (dict): The CAS structure to update.
-        labelset_list (Optional[List[str]]): Custom list to define labelset ranks. If None, uses `labelsets` keys.
-        labelsets (OrderedDict): Processed labelsets, used if no custom list is provided.
-
-    Uses `calculate_labelset_rank` to determine ranks, appending each labelset to CAS with its rank.
-    """
-    labelset_rank_dict = calculate_labelset_rank(
-        labelset_list if labelset_list else list(labelsets.keys())
-    )
-    for labelset, rank in labelset_rank_dict.items():
-        cas.get("labelsets").append(
-            {"name": labelset, "description": None, "rank": str(rank)}
-        )
-
-
-def process_and_add_annotations(cas, dataset_anndata, raw_data_result, columns, schema):
+def add_annotations_to_cas(cas, raw_data_result, columns, schema, parent_cell_look_up):
     """
     Adds processed annotations from raw data to the CAS structure and tracks labelsets.
     Assumes certain external definitions for column names and transformation functions.
 
     Args:
         cas (dict): The CAS structure to update with annotations.
-        dataset_anndata (AnnData): Dataset for annotation context.
         raw_data_result (DataFrame): Raw annotation data.
         columns (list): Column names of raw data to process.
-        schema (dict): Cell annotation schema
+        schema (dict): Cell annotation schema.
+        parent_cell_look_up (Dict[str, Any]): A precomputed dictionary containing hierarchical metadata about cell
+            labels.
 
     Returns:
         OrderedDict: Tracks labelsets encountered, initialized to None.
@@ -239,13 +205,12 @@ def process_and_add_annotations(cas, dataset_anndata, raw_data_result, columns, 
     stripped_data_result = raw_data_result.map(
         lambda x: x.strip() if isinstance(x, str) else x
     )
-    labelsets = OrderedDict()
     for index, row in stripped_data_result.iterrows():
-        annotation_properties = schema["definitions"]["Annotation"]["properties"]
-
-        labelsets[row["labelset"]] = None
         anno = {}
         user_annotations = {}
+        label = row["cell_label"]
+        annotation_properties = schema["definitions"]["Annotation"]["properties"]
+
         for column_name in columns:
             if column_name in annotation_properties:
                 anno[column_name] = row[column_name]
@@ -254,11 +219,19 @@ def process_and_add_annotations(cas, dataset_anndata, raw_data_result, columns, 
             elif row[column_name]:
                 user_annotations[column_name] = row[column_name]
 
-        anno.update({"cell_ids": get_cell_ids(dataset_anndata, anno["labelset"], anno["cell_label"])})
+        anno.update(
+            {
+                "cell_ids": list(parent_cell_look_up[label]["cell_ids"]),
+                "cell_set_accession": parent_cell_look_up[label]["accession"],
+                "cell_ontology_term_id": parent_cell_look_up[label][
+                    "cell_ontology_term_id"
+                ],
+                "cell_ontology_term": parent_cell_look_up[label]["cell_ontology_term"],
+            }
+        )
         if user_annotations:
             anno["user_annotations"] = user_annotations
         cas.get("annotations").append(anno)
-    return labelsets
 
 
 def initialize_cas_structure(matrix_file_id: str, meta_data_result: dict):
@@ -275,12 +248,14 @@ def initialize_cas_structure(matrix_file_id: str, meta_data_result: dict):
               for future data. Excludes fields that remain None.
     """
     cas_init = {k: v for k, v in meta_data_result.items()}
-    cas_init.update({
-        "matrix_file_id": f"cxg_dataset:{matrix_file_id}",
-        "cellannotation_url": meta_data_result["matrix_file_id"],
-        "annotations": [],
-        "labelsets": [],
-    })
+    cas_init.update(
+        {
+            "matrix_file_id": f"cxg_dataset:{matrix_file_id}",
+            "cellannotation_url": meta_data_result["matrix_file_id"],
+            "annotations": [],
+            "labelsets": [],
+        }
+    )
     cas = {k: v for k, v in cas_init.items() if v is not None}
     return cas
 
