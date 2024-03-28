@@ -11,7 +11,13 @@ from cas_schema import schemas
 from cas.anndata_to_cas import calculate_labelset
 from cas.cxg_utils import download_dataset_with_id
 from cas.file_utils import read_anndata_file
-from cas.utils.conversion_utils import get_cell_ids
+from cas.utils.conversion_utils import (
+    add_labelsets_to_cas,
+    add_parent_cell_hierarchy,
+    add_parent_hierarchy_to_annotations,
+    generate_parent_cell_lookup,
+    get_cell_ids,
+)
 from cas.validate import SCHEMA_FILE_MAPPING
 
 logging.basicConfig(level=logging.INFO)
@@ -148,62 +154,47 @@ def spreadsheet2cas(
         spreadsheet_file_path, sheet_name, cell_annotation_schema
     )
 
-    dataset_anndata, matrix_file_id = load_or_fetch_anndata(
-        anndata_file_path, meta_data_result
-    )
+    anndata, matrix_file_id = load_or_fetch_anndata(anndata_file_path, meta_data_result)
 
     if not labelset_list:
         labelset_list = raw_data_result["labelset"].unique().tolist()
 
-    labelset_dict = calculate_labelset(dataset_anndata.obs, labelset_list)
+    labelset_dict = calculate_labelset(anndata.obs, labelset_list)
 
     cas = initialize_cas_structure(matrix_file_id, meta_data_result)
 
-    process_and_add_labelsets(cas, labelset_dict)
+    add_labelsets_to_cas(cas, labelset_dict)
 
-    process_and_add_annotations(
+    parent_cell_look_up = generate_parent_cell_lookup(anndata, labelset_dict)
+
+    add_annotations_to_cas(
         cas,
-        dataset_anndata,
         raw_data_result,
         column_names_result,
         cell_annotation_schema,
+        parent_cell_look_up,
     )
+
+    add_parent_cell_hierarchy(parent_cell_look_up)
+    add_parent_hierarchy_to_annotations(cas, parent_cell_look_up)
 
     # Write the JSON data to the file
     with open(output_file_path, "w") as json_file:
         json.dump(cas, json_file, indent=2)
 
 
-def process_and_add_labelsets(cas: dict, labelsets: dict):
-    """
-    Adds labelsets with ranks to the CAS structure, using either a provided list or keys from `labelsets`.
-
-    Args:
-        cas (dict): The CAS structure to update.
-        labelsets (dict): Processed labelsets, used if no custom list is provided.
-
-    Uses `calculate_labelset_rank` to determine ranks, appending each labelset to CAS with its rank.
-    """
-    # labelset_rank_dict = calculate_labelset_rank(
-    #     labelset_list if labelset_list else list(labelsets.keys())
-    # )
-    for labelset, value in labelsets.items():
-        cas.get("labelsets").append(
-            {"name": labelset, "description": None, "rank": str(value.get("rank", ""))}
-        )
-
-
-def process_and_add_annotations(cas, dataset_anndata, raw_data_result, columns, schema):
+def add_annotations_to_cas(cas, raw_data_result, columns, schema, parent_cell_look_up):
     """
     Adds processed annotations from raw data to the CAS structure and tracks labelsets.
     Assumes certain external definitions for column names and transformation functions.
 
     Args:
         cas (dict): The CAS structure to update with annotations.
-        dataset_anndata (AnnData): Dataset for annotation context.
         raw_data_result (DataFrame): Raw annotation data.
         columns (list): Column names of raw data to process.
-        schema (dict): Cell annotation schema
+        schema (dict): Cell annotation schema.
+        parent_cell_look_up (Dict[str, Any]): A precomputed dictionary containing hierarchical metadata about cell
+            labels.
 
     Returns:
         OrderedDict: Tracks labelsets encountered, initialized to None.
@@ -215,22 +206,10 @@ def process_and_add_annotations(cas, dataset_anndata, raw_data_result, columns, 
         lambda x: x.strip() if isinstance(x, str) else x
     )
     for index, row in stripped_data_result.iterrows():
-        annotation_properties = schema["definitions"]["Annotation"]["properties"]
-
         anno = {}
         user_annotations = {}
-
-        # if include_hierarchy:
-        #     if cell_label in parent_cell_look_up:
-        #         parent_cell_look_up[cell_label].get("cell_ids").update(cell_ids)
-        #     else:
-        #         parent_cell_look_up[cell_label] = {
-        #             "cell_ids": set(cell_ids),
-        #             "accession": cell_set_accession,
-        #             "rank": v.get("rank"),
-        #             "cell_ontology_term_id": cell_ontology_term_id,
-        #             "cell_ontology_term": cell_ontology_term,
-        #         }
+        label = row["cell_label"]
+        annotation_properties = schema["definitions"]["Annotation"]["properties"]
 
         for column_name in columns:
             if column_name in annotation_properties:
@@ -242,9 +221,12 @@ def process_and_add_annotations(cas, dataset_anndata, raw_data_result, columns, 
 
         anno.update(
             {
-                "cell_ids": get_cell_ids(
-                    dataset_anndata.obs, anno["labelset"], anno["cell_label"]
-                )
+                "cell_ids": list(parent_cell_look_up[label]["cell_ids"]),
+                "cell_set_accession": parent_cell_look_up[label]["accession"],
+                "cell_ontology_term_id": parent_cell_look_up[label][
+                    "cell_ontology_term_id"
+                ],
+                "cell_ontology_term": parent_cell_look_up[label]["cell_ontology_term"],
             }
         )
         if user_annotations:
