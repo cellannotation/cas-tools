@@ -51,6 +51,21 @@ def calculate_labelset(
     return labelset_dict
 
 
+def add_labelsets_to_cas(cas: Dict[str, Any], labelset_dict: Dict[str, Dict[str, Any]]):
+    """
+    Updates a CAS dictionary with labelsets derived from a labelset information dictionary.
+
+    Args:
+        cas: The CAS dictionary to update.
+        labelset_dict: Contains labelset names as keys and dicts with 'rank' (and potentially other info) as values.
+
+    """
+    for labelset, value in labelset_dict.items():
+        cas.get("labelsets").append(
+            {"name": labelset, "description": "", "rank": str(value.get("rank"))}
+        )
+
+
 def get_cell_ids(
     anndata_obs: pd.DataFrame, labelset: str, cell_label: str
 ) -> List[str]:
@@ -138,72 +153,6 @@ def generate_parent_cell_lookup(anndata, labelset_dict):
                     "cell_ontology_term": cell_ontology_term,
                 }
     return parent_cell_look_up
-
-
-def generate_cas_annotations(
-    anndata: ad.AnnData,
-    cas: Dict[str, Any],
-    labelset_dict: Dict[str, Any],
-    parent_cell_look_up: Dict[str, Any],  # Add this parameter
-):
-    """
-    Generates CAS annotations based on the provided AnnData object and updates the CAS
-    dictionary with new annotations. This function can optionally use a precomputed
-    parent cell lookup dictionary to enrich the annotations with hierarchical information.
-
-    Args:
-        anndata (ad.AnnData): The AnnData object containing the single-cell dataset, including metadata in anndata.obs.
-        cas (Dict[str, Any]): The CAS dictionary to be updated with annotations. Expected to have a key
-            'annotations' where new annotations will be appended.
-        labelset_dict (Dict[str, Any]): A dictionary defining labelsets and their members. This is used to match cell
-            labels with their respective metadata and annotations.
-        parent_cell_look_up (Dict[str, Any]): A precomputed dictionary containing hierarchical metadata about cell
-            labels, which is used to enrich annotations if `include_hierarchy` is True.
-
-    Returns:
-        None: The function directly updates the `cas` dictionary with new annotations. The `parent_cell_look_up` is
-        used for enrichment and must be generated beforehand if hierarchical information is to be included.
-    """
-    # accession_manager = HashAccessionManager()
-
-    for k, v in labelset_dict.items():
-        for label in v["members"]:
-            labelset = k
-            cell_ids = get_cell_ids(anndata.obs, k, label)
-            # cell_set_accession = accession_manager.generate_accession_id(cell_ids=cell_ids, labelset=labelset)
-
-            rationale = None
-            rationale_dois = None
-            marker_gene_evidence = None
-            synonyms = None
-            category_fullname = None
-            category_cell_ontology_exists = None
-            category_cell_ontology_term_id = None
-            category_cell_ontology_term = None
-
-            anno_init = {
-                "labelset": labelset,
-                "cell_label": label,
-                "cell_fullname": label,
-                "cell_set_accession": parent_cell_look_up[label]["accession"],
-                "cell_ontology_term_id": parent_cell_look_up[label][
-                    "cell_ontology_term_id"
-                ],
-                "cell_ontology_term": parent_cell_look_up[label]["cell_ontology_term"],
-                "cell_ids": cell_ids,
-                "rationale": rationale,
-                "rationale_dois": rationale_dois,
-                "marker_gene_evidence": marker_gene_evidence,
-                "synonyms": synonyms,
-                "category_fullname": category_fullname,
-                "category_cell_ontology_exists": category_cell_ontology_exists,
-                "category_cell_ontology_term_id": category_cell_ontology_term_id,
-                "category_cell_ontology_term": category_cell_ontology_term,
-            }
-            # Exclude keys with None values
-            cas.get("annotations").append(
-                {k: v for k, v in anno_init.items() if v is not None}
-            )
 
 
 def update_parent_info(
