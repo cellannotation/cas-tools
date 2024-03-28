@@ -19,9 +19,7 @@ def calculate_labelset_rank(input_list: List[str]) -> Dict[str, int]:
         values are their corresponding ranks (0-based).
 
     """
-    list_length = len(input_list)
-    return {item: list_length - 1 - rank for rank, item in enumerate(input_list)}
-    # return {item: rank for rank, item in enumerate(input_list)}
+    return {item: rank for rank, item in enumerate(input_list)}
 
 
 def calculate_labelset(
