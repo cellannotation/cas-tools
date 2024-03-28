@@ -190,8 +190,8 @@ def create_spreadsheet2cas_operation_parser(subparsers):
     --anndata       : Path to the AnnData file. If not provided, AnnData will be downloaded using CxG LINK in
                     spreadsheet.
     --labelsets     : List of names of observation (obs) fields used to record author cell type names,
-    which determine the rank of labelsets in a spreadsheet. If not provided, ranks will be determined based on
-    the order of the fields specified in the CELL LABELSET NAME column.
+        which determine the rank of labelsets in a spreadsheet. If not provided, ranks will be determined based on
+        the order of the fields specified in the CELL LABELSET NAME column.
     --schema        : Name of cell annotation schema used to in spreadsheet. It can be one of 'base', 'bican' or 'cap'.
     --output        : Output CAS file name (default: output.json).
 
