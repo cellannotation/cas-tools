@@ -14,6 +14,10 @@ TEST_SPREADSHEET = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
     "./test_data/sample_spreadsheet_data.xlsx",
 )
+MINI_TEST_SPREADSHEET = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)),
+    "./test_data/mini_spreadsheet_data.xlsx",
+)
 
 
 def generate_mock_dataset():
@@ -212,7 +216,7 @@ class SpreadsheetToCasTests(unittest.TestCase):
         "cas.spreadsheet_to_cas.read_anndata_file", return_value=generate_mock_dataset()
     )
     def test_spreadsheet2cas(self, mock_read_anndata_file, mock_download_source_h5ad):
-        spreadsheet2cas(TEST_SPREADSHEET, None, None, None, None, "output.json")
+        spreadsheet2cas(MINI_TEST_SPREADSHEET, None, None, None, None, "output.json")
 
         json_file_path = "output.json"
 
@@ -221,8 +225,8 @@ class SpreadsheetToCasTests(unittest.TestCase):
                 json_data = json.load(json_file)
 
             self.assertEqual(len(json_data), 8)
-            self.assertEqual(len(json_data["annotations"]), 73)
-            self.assertEqual(len(json_data["annotations"][0]), 4)
+            self.assertEqual(len(json_data["annotations"]), 8)
+            self.assertEqual(len(json_data["annotations"][0]), 7)
             self.assertEqual(len(json_data["labelsets"]), 2)
         finally:
             # Remove the JSON file after the test
