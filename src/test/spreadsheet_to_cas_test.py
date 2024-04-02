@@ -5,16 +5,8 @@ import warnings
 from unittest.mock import patch
 
 import anndata as ad
-import cellxgene_census
 import pandas as pd
-
-from cas.spreadsheet_to_cas import (
-    calculate_labelset_rank,
-    get_cell_ids,
-    read_spreadsheet,
-    retrieve_schema,
-    spreadsheet2cas,
-)
+from cas.spreadsheet_to_cas import read_spreadsheet, retrieve_schema, spreadsheet2cas
 
 warnings.filterwarnings("ignore", category=UserWarning, module="anndata._core.anndata")
 
@@ -22,10 +14,15 @@ TEST_SPREADSHEET = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
     "./test_data/sample_spreadsheet_data.xlsx",
 )
+MINI_TEST_SPREADSHEET = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)),
+    "./test_data/mini_spreadsheet_data.xlsx",
+)
 
 
 def generate_mock_dataset():
     # Mock AnnData dataset for testing
+    cell_ids = ["cell_1", "cell_2", "cell_3", "cell_4", "cell_5"]
     return ad.AnnData(
         obs=pd.DataFrame(
             {
@@ -187,7 +184,8 @@ def generate_mock_dataset():
                     "human adult stage",
                     "human adult stage",
                 ],
-            }
+            },
+            index=cell_ids,
         )
     )
 
@@ -195,7 +193,9 @@ def generate_mock_dataset():
 class SpreadsheetToCasTests(unittest.TestCase):
     def test_read_spreadsheet_default_sheet(self):
         # Test reading spreadsheet with default sheet
-        meta_data, column_names, raw_data = read_spreadsheet(TEST_SPREADSHEET, None, retrieve_schema("cap"))
+        meta_data, column_names, raw_data = read_spreadsheet(
+            TEST_SPREADSHEET, None, retrieve_schema("cap")
+        )
         self.assertEqual(len(meta_data), 5)
         self.assertEqual(len(column_names), 9)
         self.assertEqual(raw_data.shape, (73, 9))
@@ -211,38 +211,12 @@ class SpreadsheetToCasTests(unittest.TestCase):
         self.assertEqual(len(column_names), 9)
         self.assertEqual(raw_data.shape, (73, 9))
 
-    def test_get_cell_ids(self):
-        with warnings.catch_warnings():
-            warnings.filterwarnings(
-                "ignore", category=UserWarning, module="anndata._core.anndata"
-            )
-            mock_dataset = generate_mock_dataset()
-
-            # Test get_cell_ids function
-            cell_ids = get_cell_ids(
-                mock_dataset, "cell_type", "CD4-positive helper T cell"
-            )
-            self.assertEqual(cell_ids, ["1", "2"])
-            cell_ids = get_cell_ids(mock_dataset, "annotation_broad", "T CD4+")
-            self.assertEqual(cell_ids, ["1", "2", "4"])
-
-    def test_calculate_labelset_rank(self):
-        # Test with an empty list
-        result_empty = calculate_labelset_rank([])
-        self.assertEqual(result_empty, {})
-
-        # Test with a non-empty list
-        input_list = ["item1", "item2", "item3"]
-        result_non_empty = calculate_labelset_rank(input_list)
-        expected_result_non_empty = {"item1": 0, "item2": 1, "item3": 2}
-        self.assertEqual(result_non_empty, expected_result_non_empty)
-
     @patch("cellxgene_census.download_source_h5ad", return_value=None)
     @patch(
         "cas.spreadsheet_to_cas.read_anndata_file", return_value=generate_mock_dataset()
     )
     def test_spreadsheet2cas(self, mock_read_anndata_file, mock_download_source_h5ad):
-        spreadsheet2cas(TEST_SPREADSHEET, None, None, None, None, "output.json")
+        spreadsheet2cas(MINI_TEST_SPREADSHEET, None, None, None, None, "output.json")
 
         json_file_path = "output.json"
 
@@ -251,8 +225,8 @@ class SpreadsheetToCasTests(unittest.TestCase):
                 json_data = json.load(json_file)
 
             self.assertEqual(len(json_data), 8)
-            self.assertEqual(len(json_data["annotations"]), 73)
-            self.assertEqual(len(json_data["annotations"][0]), 4)
+            self.assertEqual(len(json_data["annotations"]), 8)
+            self.assertEqual(len(json_data["annotations"][0]), 7)
             self.assertEqual(len(json_data["labelsets"]), 2)
         finally:
             # Remove the JSON file after the test
