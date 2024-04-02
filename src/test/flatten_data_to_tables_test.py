@@ -1,3 +1,4 @@
+import json
 import os
 import shutil
 import unittest
@@ -181,6 +182,15 @@ class TabularSerialisationTests(unittest.TestCase):
         self.assertEqual("CrossArea_subclass:8fa477a378", cluster_1["parent_cell_set_accession"])
         self.assertEqual("Sst", cluster_1["parent_cell_set_name"])
         self.assertEqual("CrossArea_cluster", cluster_1["labelset"])
+
+        self.assertTrue("review_comments" in cluster_1)
+
+        reviews = json.loads(cluster_1["review_comments"])
+        self.assertEqual(2, len(reviews))
+        self.assertEqual("2024-04-01T18:25:43.511Z", reviews[0]["time"])
+        self.assertEqual("Jane Doe", reviews[0]["name"])
+        self.assertEqual("Disagree", reviews[0]["review"])
+        self.assertEqual("This is not a Sst cell.", reviews[0]["explanation"])
 
         cluster_sst = records["CrossArea_subclass:8fa477a378"]
         self.assertEqual("Sst", cluster_sst["cell_label"])

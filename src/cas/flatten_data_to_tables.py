@@ -1,10 +1,13 @@
 import os
+import json
+
 from dataclasses import asdict
 
 import pandas as pd
 
 from cas.accession.incremental_accession_manager import IncrementalAccessionManager
 from cas.accession.hash_accession_manager import HashAccessionManager, is_hash_accession
+from cas.utils.conversion_utils import json_serializer
 
 
 def serialize_to_tables(cta, file_name_prefix, out_folder, project_config):
@@ -229,6 +232,8 @@ def generate_annotation_table(accession_prefix, cta, out_folder):
                     record[normalize_column_name(user_annot["labelset"])] = user_annot[
                         "cell_label"
                     ]
+            if "reviews" in annotation_object and annotation_object["reviews"]:
+                record["review_comments"] = json.dumps(annotation_object["reviews"], default=json_serializer)
             # record["cell_ids"] = annotation_object.get("cell_ids", "")
             std_records.append(record)
         else:

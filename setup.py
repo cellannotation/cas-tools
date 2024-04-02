@@ -35,7 +35,9 @@ setup(
         "deepmerge==1.1.0",
         "cell-annotation-schema==0.2b0",
         "h5py==3.10.0",
-        "numpy==1.26.4"
+        "numpy==1.26.4",
+        "marshmallow==3.21.1",
+        "python-dateutil==2.9.0"
     ],
     entry_points={
         "console_scripts": [

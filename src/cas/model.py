@@ -1,9 +1,12 @@
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from typing import Any, List, Optional
+from datetime import datetime
+from dateutil.parser import isoparse
+from marshmallow import fields
 
 import dataclasses_json
 import pandas as pd
-from dataclasses_json import DataClassJsonMixin
+from dataclasses_json import DataClassJsonMixin, config
 
 from cas.reports import get_all_annotations
 
@@ -89,6 +92,29 @@ class UserAnnotation(EncoderMixin):
 
 
 @dataclass
+class Review(EncoderMixin):
+    """Annotation review."""
+
+    time: Optional[datetime] = field(metadata=config(
+                                         encoder=lambda x: x.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + "Z"
+                                         if x is not None else None,
+                                         decoder=lambda x: isoparse(x)
+                                         if x is not None else None,
+                                         mm_field=fields.DateTime(format='iso')
+                                     ), default=None)
+    """The unique name of the set of cell annotations associated with a single file."""
+
+    name: Optional[str] = None
+    """Name of the reviewer."""
+
+    review: Optional[str] = None
+    """Either “Agree” or “Disagree”. This records whether the user agreed or disagreed."""
+
+    explanation: Optional[str] = None
+    """Free-text of the message explaining the reasoning why the user disagreed. If “Agree”, then put in NA."""
+
+
+@dataclass
 class Annotation(EncoderMixin):
     """
     A collection of fields recording a cell type/class/state annotation on some set os cells, supporting evidence and
@@ -155,6 +181,9 @@ class Annotation(EncoderMixin):
 
     # TODO modified: moved from CTA to Annotation class
     transferred_annotations: Optional[AnnotationTransfer] = None
+
+    # TODO modified: added
+    reviews: Optional[List[Review]] = None
 
     def add_user_annotation(self, user_annotation_set, user_annotation_label):
         """

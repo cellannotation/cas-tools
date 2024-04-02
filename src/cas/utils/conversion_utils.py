@@ -1,5 +1,6 @@
 import itertools
 from typing import Any, Dict, List, Tuple
+from datetime import date, datetime
 
 import anndata as ad
 import pandas as pd
@@ -249,3 +250,21 @@ def add_parent_hierarchy_to_annotations(
             ):
                 annotation.pop("cell_ontology_term_id", None)
                 annotation.pop("cell_ontology_term", None)
+
+
+def json_serializer(obj):
+    """
+    JSON serializer for objects not serializable by default json code.
+    Usage: json.dumps(my_dict, default=json_serializer)
+
+    Args:
+        obj: object to serialize
+
+    Returns:
+        Serialized object.
+    """
+
+    if isinstance(obj, (datetime, date)):
+        # return obj.isoformat()
+        return obj.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + "Z"
+    raise TypeError("Type %s not serializable" % type(obj))
