@@ -33,7 +33,7 @@ jobs:
 #        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
 #      run: |
 #        twine upload dist/*
-    - name: Publish Package
+    - name: Publish Package to TestPyPI
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         repository-url: https://test.pypi.org/legacy/
