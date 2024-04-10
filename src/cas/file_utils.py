@@ -134,7 +134,7 @@ def read_csv_to_dict(
         id_column_name: Alternative to the numeric id_column, id_column_name specifies id_column by its header string.
         delimiter: Value delimiter. Default is comma.
         id_to_lower: applies string lowercase operation to the key
-        generated_ids: If 'True', uses row number as the key of the dict. Initial key is 0.
+        generated_ids: If 'True', uses row number as the key of the dict. Initial key is 1.
 
     Returns:
         Function provides two return values: first; headers of the table and second; the CSV content dict. Key of the

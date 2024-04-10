@@ -143,6 +143,46 @@ class TabularSerialisationTests(unittest.TestCase):
         self.assertEqual("", records[1]["source_taxonomy"])
         self.assertEqual("", records[1]["source_node_accession"])
 
+    def test_review_table(self):
+        cta = ingest_user_data(RAW_DATA, TEST_CONFIG)
+        tables = serialize_to_tables(cta, "Test_table", OUT_FOLDER, {"accession_id_prefix": "TST_"})
+
+        table_path = os.path.join(OUT_FOLDER, "review.tsv")
+        self.assertEqual(table_path, tables[4])
+        self.assertTrue(os.path.isfile(table_path))
+
+        headers, records = read_csv_to_dict(
+            table_path, generated_ids=True, delimiter="\t"
+        )
+        self.assertEqual(0, len(records))
+        self.assertEqual(5, len(headers))
+        self.assertEqual(["target_node_accession", "time", "name", "review", "explanation"], headers)
+
+    def test_review_table2(self):
+        cta = read_cas_json_file(TEST_JSON2)
+        tables = serialize_to_tables(cta, "Test_table", OUT_FOLDER, {"accession_id_prefix": "TST_"})
+
+        table_path = os.path.join(OUT_FOLDER, "review.tsv")
+        self.assertEqual(table_path, tables[4])
+        self.assertTrue(os.path.isfile(table_path))
+
+        headers, records = read_csv_to_dict(
+            table_path, generated_ids=True, delimiter="\t"
+        )
+        self.assertEqual(2, len(records))
+
+        self.assertEqual("CrossArea_cluster:4062c5afea", records[1]["target_node_accession"])
+        self.assertEqual("2024-04-01T18:25:43.511Z", records[1]["time"])
+        self.assertEqual("Jane Doe", records[1]["name"])
+        self.assertEqual("Disagree", records[1]["review"])
+        self.assertEqual("This is not a Sst cell.", records[1]["explanation"])
+
+        self.assertEqual("CrossArea_cluster:4062c5afea", records[2]["target_node_accession"])
+        self.assertEqual("2024-04-02T20:00:43.511Z", records[2]["time"])
+        self.assertEqual("John Doe", records[2]["name"])
+        self.assertEqual("Agree", records[2]["review"])
+        self.assertEqual("Further expreiments reveal that this a Sst cell.", records[2]["explanation"])
+
     def test_loading_from_json(self):
         cta = read_cas_json_file(TEST_JSON)
         tables = serialize_to_tables(cta, "Test_table", OUT_FOLDER, {"accession_id_prefix": "CS202210140_"})
@@ -182,15 +222,6 @@ class TabularSerialisationTests(unittest.TestCase):
         self.assertEqual("CrossArea_subclass:8fa477a378", cluster_1["parent_cell_set_accession"])
         self.assertEqual("Sst", cluster_1["parent_cell_set_name"])
         self.assertEqual("CrossArea_cluster", cluster_1["labelset"])
-
-        self.assertTrue("review_comments" in cluster_1)
-
-        reviews = json.loads(cluster_1["review_comments"])
-        self.assertEqual(2, len(reviews))
-        self.assertEqual("2024-04-01T18:25:43.511Z", reviews[0]["time"])
-        self.assertEqual("Jane Doe", reviews[0]["name"])
-        self.assertEqual("Disagree", reviews[0]["review"])
-        self.assertEqual("This is not a Sst cell.", reviews[0]["explanation"])
 
         cluster_sst = records["CrossArea_subclass:8fa477a378"]
         self.assertEqual("Sst", cluster_sst["cell_label"])
