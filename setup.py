@@ -8,7 +8,7 @@ README = (HERE / "README.md").read_text()
 
 setup(
     name="cas-tools",
-    version="0.0.1.dev42",
+    version="0.0.1.dev38",
     description="Cell Annotation Schema tools.",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -25,7 +25,7 @@ setup(
     include_package_data=True,
     install_requires=[
         "anndata==0.10.3",
-        # "cellxgene-census==1.10.2",
+        "cellxgene-census==1.10.2",
         "openpyxl==3.1.2",
         "dataclasses-json==0.6.4",
         "pandas==2.2.1",
