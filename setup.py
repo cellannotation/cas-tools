@@ -8,7 +8,7 @@ README = (HERE / "README.md").read_text()
 
 setup(
     name="cas-tools",
-    version="0.0.1.dev37",
+    version="0.0.1.dev38",
     description="Cell Annotation Schema tools.",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -35,7 +35,9 @@ setup(
         "deepmerge==1.1.0",
         "cell-annotation-schema==0.2b0",
         "h5py==3.10.0",
-        "numpy==1.26.4"
+        "numpy==1.26.4",
+        "marshmallow==3.21.1",
+        "python-dateutil==2.9.0"
     ],
     entry_points={
         "console_scripts": [

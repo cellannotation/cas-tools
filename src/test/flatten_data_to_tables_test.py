@@ -1,11 +1,10 @@
 import os
-import shutil
 import unittest
 
+from cas.accession.hash_accession_manager import is_hash_accession
 from cas.file_utils import read_cas_json_file, read_csv_to_dict
 from cas.flatten_data_to_tables import serialize_to_tables
 from cas.ingest.ingest_user_table import ingest_user_data
-from cas.accession.hash_accession_manager import is_hash_accession
 
 RAW_DATA = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
@@ -47,7 +46,9 @@ class TabularSerialisationTests(unittest.TestCase):
 
     def test_annotation_table(self):
         cta = ingest_user_data(RAW_DATA, TEST_CONFIG)
-        tables = serialize_to_tables(cta, "Test_table", OUT_FOLDER, {"accession_id_prefix": "TST_"})
+        tables = serialize_to_tables(
+            cta, "Test_table", OUT_FOLDER, {"accession_id_prefix": "TST_"}
+        )
 
         annotation_table_path = os.path.join(OUT_FOLDER, "annotation.tsv")
         self.assertEqual(annotation_table_path, tables[0])
@@ -63,7 +64,7 @@ class TabularSerialisationTests(unittest.TestCase):
         self.assertEqual("TST_300", cluster_1["parent_cell_set_accession"])
         self.assertEqual("D1-Matrix", cluster_1["parent_cell_set_name"])
         self.assertEqual("cluster", cluster_1["labelset"])
-        self.assertEqual('EPYC|RELN|GULP1', cluster_1["marker_gene_evidence"])
+        self.assertEqual("EPYC|RELN|GULP1", cluster_1["marker_gene_evidence"])
         self.assertEqual("PuR(0.52) | CaH(0.39)", cluster_1["region.info _Frequency_"])
         # self.assertEqual("", cluster_1["cell_ids"])
 
@@ -87,7 +88,9 @@ class TabularSerialisationTests(unittest.TestCase):
 
     def test_labelset_table(self):
         cta = ingest_user_data(RAW_DATA, TEST_CONFIG)
-        tables = serialize_to_tables(cta, "Test_table", OUT_FOLDER, {"accession_id_prefix": "TST_"})
+        tables = serialize_to_tables(
+            cta, "Test_table", OUT_FOLDER, {"accession_id_prefix": "TST_"}
+        )
 
         table_path = os.path.join(OUT_FOLDER, "labelset.tsv")
         self.assertEqual(table_path, tables[1])
@@ -109,7 +112,9 @@ class TabularSerialisationTests(unittest.TestCase):
 
     def test_metadata_table(self):
         cta = ingest_user_data(RAW_DATA, TEST_CONFIG)
-        tables = serialize_to_tables(cta, "Test_table", OUT_FOLDER, {"accession_id_prefix": "TST_"})
+        tables = serialize_to_tables(
+            cta, "Test_table", OUT_FOLDER, {"accession_id_prefix": "TST_"}
+        )
 
         table_path = os.path.join(OUT_FOLDER, "metadata.tsv")
         self.assertEqual(table_path, tables[2])
@@ -126,7 +131,9 @@ class TabularSerialisationTests(unittest.TestCase):
 
     def test_annotation_transfer_table(self):
         cta = ingest_user_data(RAW_DATA, TEST_CONFIG)
-        tables = serialize_to_tables(cta, "Test_table", OUT_FOLDER, {"accession_id_prefix": "TST_"})
+        tables = serialize_to_tables(
+            cta, "Test_table", OUT_FOLDER, {"accession_id_prefix": "TST_"}
+        )
 
         table_path = os.path.join(OUT_FOLDER, "annotation_transfer.tsv")
         self.assertEqual(table_path, tables[3])
@@ -142,9 +149,64 @@ class TabularSerialisationTests(unittest.TestCase):
         self.assertEqual("", records[1]["source_taxonomy"])
         self.assertEqual("", records[1]["source_node_accession"])
 
+    def test_review_table(self):
+        cta = ingest_user_data(RAW_DATA, TEST_CONFIG)
+        tables = serialize_to_tables(
+            cta, "Test_table", OUT_FOLDER, {"accession_id_prefix": "TST_"}
+        )
+
+        table_path = os.path.join(OUT_FOLDER, "review.tsv")
+        self.assertEqual(table_path, tables[4])
+        self.assertTrue(os.path.isfile(table_path))
+
+        headers, records = read_csv_to_dict(
+            table_path, generated_ids=True, delimiter="\t"
+        )
+        self.assertEqual(0, len(records))
+        self.assertEqual(5, len(headers))
+        self.assertEqual(
+            ["target_node_accession", "time", "name", "review", "explanation"], headers
+        )
+
+    def test_review_table2(self):
+        cta = read_cas_json_file(TEST_JSON2)
+        tables = serialize_to_tables(
+            cta, "Test_table", OUT_FOLDER, {"accession_id_prefix": "TST_"}
+        )
+
+        table_path = os.path.join(OUT_FOLDER, "review.tsv")
+        self.assertEqual(table_path, tables[4])
+        self.assertTrue(os.path.isfile(table_path))
+
+        headers, records = read_csv_to_dict(
+            table_path, generated_ids=True, delimiter="\t"
+        )
+        self.assertEqual(2, len(records))
+
+        self.assertEqual(
+            "CrossArea_cluster:4062c5afea", records[1]["target_node_accession"]
+        )
+        self.assertEqual("2024-04-01T18:25:43.511Z", records[1]["time"])
+        self.assertEqual("Jane Doe", records[1]["name"])
+        self.assertEqual("Disagree", records[1]["review"])
+        self.assertEqual("This is not a Sst cell.", records[1]["explanation"])
+
+        self.assertEqual(
+            "CrossArea_cluster:4062c5afea", records[2]["target_node_accession"]
+        )
+        self.assertEqual("2024-04-02T20:00:43.511Z", records[2]["time"])
+        self.assertEqual("John Doe", records[2]["name"])
+        self.assertEqual("Agree", records[2]["review"])
+        self.assertEqual(
+            "Further expreiments reveal that this a Sst cell.",
+            records[2]["explanation"],
+        )
+
     def test_loading_from_json(self):
         cta = read_cas_json_file(TEST_JSON)
-        tables = serialize_to_tables(cta, "Test_table", OUT_FOLDER, {"accession_id_prefix": "CS202210140_"})
+        tables = serialize_to_tables(
+            cta, "Test_table", OUT_FOLDER, {"accession_id_prefix": "CS202210140_"}
+        )
 
         annotation_table_path = os.path.join(OUT_FOLDER, "annotation.tsv")
         self.assertEqual(annotation_table_path, tables[0])
@@ -165,7 +227,9 @@ class TabularSerialisationTests(unittest.TestCase):
 
     def test_loading_from_json2(self):
         cta = read_cas_json_file(TEST_JSON2)
-        tables = serialize_to_tables(cta, "Test_table", OUT_FOLDER, {"accession_id_prefix": "TST_"})
+        tables = serialize_to_tables(
+            cta, "Test_table", OUT_FOLDER, {"accession_id_prefix": "TST_"}
+        )
 
         annotation_table_path = os.path.join(OUT_FOLDER, "annotation.tsv")
         self.assertEqual(annotation_table_path, tables[0])
@@ -178,7 +242,9 @@ class TabularSerialisationTests(unittest.TestCase):
 
         cluster_1 = records["CrossArea_cluster:4062c5afea"]
         self.assertEqual("Sst_14", cluster_1["cell_label"])
-        self.assertEqual("CrossArea_subclass:8fa477a378", cluster_1["parent_cell_set_accession"])
+        self.assertEqual(
+            "CrossArea_subclass:8fa477a378", cluster_1["parent_cell_set_accession"]
+        )
         self.assertEqual("Sst", cluster_1["parent_cell_set_name"])
         self.assertEqual("CrossArea_cluster", cluster_1["labelset"])
 

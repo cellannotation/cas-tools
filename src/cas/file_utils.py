@@ -68,7 +68,7 @@ def read_cas_from_anndata(anndata_path: str) -> CellTypeAnnotation:
 
 
 def write_json_file(
-        cas: CellTypeAnnotation, out_file: str, print_undefined: bool = False
+    cas: CellTypeAnnotation, out_file: str, print_undefined: bool = False
 ):
     """
     Writes cell type annotation object to a json file.
@@ -118,12 +118,12 @@ def read_tsv_to_dict(tsv_path, id_column=0, generated_ids=False):
 
 
 def read_csv_to_dict(
-        csv_path,
-        id_column=0,
-        id_column_name="",
-        delimiter=",",
-        id_to_lower=False,
-        generated_ids=False,
+    csv_path,
+    id_column=0,
+    id_column_name="",
+    delimiter=",",
+    id_to_lower=False,
+    generated_ids=False,
 ):
     """
     Reads tsv file content into a dict. Key is the first column value and the value is dict representation of the
@@ -134,7 +134,7 @@ def read_csv_to_dict(
         id_column_name: Alternative to the numeric id_column, id_column_name specifies id_column by its header string.
         delimiter: Value delimiter. Default is comma.
         id_to_lower: applies string lowercase operation to the key
-        generated_ids: If 'True', uses row number as the key of the dict. Initial key is 0.
+        generated_ids: If 'True', uses row number as the key of the dict. Initial key is 1.
 
     Returns:
         Function provides two return values: first; headers of the table and second; the CSV content dict. Key of the
