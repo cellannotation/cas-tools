@@ -1,12 +1,12 @@
 from dataclasses import asdict, dataclass, field
-from typing import Any, List, Optional
 from datetime import datetime
-from dateutil.parser import isoparse
-from marshmallow import fields
+from typing import Any, List, Optional
 
 import dataclasses_json
 import pandas as pd
 from dataclasses_json import DataClassJsonMixin, config
+from dateutil.parser import isoparse
+from marshmallow import fields
 
 from cas.reports import get_all_annotations
 
@@ -95,13 +95,16 @@ class UserAnnotation(EncoderMixin):
 class Review(EncoderMixin):
     """Annotation review."""
 
-    time: Optional[datetime] = field(metadata=config(
-                                         encoder=lambda x: x.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + "Z"
-                                         if x is not None else None,
-                                         decoder=lambda x: isoparse(x)
-                                         if x is not None else None,
-                                         mm_field=fields.DateTime(format='iso')
-                                     ), default=None)
+    time: Optional[datetime] = field(
+        metadata=config(
+            encoder=lambda x: (
+                x.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z" if x is not None else None
+            ),
+            decoder=lambda x: isoparse(x) if x is not None else None,
+            mm_field=fields.DateTime(format="iso"),
+        ),
+        default=None,
+    )
     """The unique name of the set of cell annotations associated with a single file."""
 
     name: Optional[str] = None

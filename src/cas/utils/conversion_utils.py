@@ -1,6 +1,6 @@
 import itertools
-from typing import Any, Dict, List, Tuple
 from datetime import date, datetime
+from typing import Any, Dict, List, Tuple
 
 import anndata as ad
 import pandas as pd
@@ -266,5 +266,5 @@ def json_serializer(obj):
 
     if isinstance(obj, (datetime, date)):
         # return obj.isoformat()
-        return obj.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + "Z"
+        return obj.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
     raise TypeError("Type %s not serializable" % type(obj))

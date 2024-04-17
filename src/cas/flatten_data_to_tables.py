@@ -1,12 +1,11 @@
-import os
 import csv
-
+import os
 from dataclasses import asdict
 
 import pandas as pd
 
-from cas.accession.incremental_accession_manager import IncrementalAccessionManager
 from cas.accession.hash_accession_manager import HashAccessionManager, is_hash_accession
+from cas.accession.incremental_accession_manager import IncrementalAccessionManager
 
 
 def serialize_to_tables(cta, file_name_prefix, out_folder, project_config):
@@ -35,7 +34,7 @@ def serialize_to_tables(cta, file_name_prefix, out_folder, project_config):
         labelset_table_path,
         metadata_table_path,
         annotation_transfer_table_path,
-        reviews_table_path
+        reviews_table_path,
     ]
 
 
@@ -188,11 +187,13 @@ def generate_annotation_table(accession_prefix, cta, out_folder):
         accession_manager = IncrementalAccessionManager(accession_prefix)
         # sort annotations by accession ids incrementing (if there is)
         cta["annotations"].sort(
-            key=lambda x: int(str(x["cell_set_accession"]).split(":")[-1].split("_")[-1])
-            if "cell_set_accession" in x
-               and x["cell_set_accession"]
-               and "_" in x["cell_set_accession"]
-            else 0
+            key=lambda x: (
+                int(str(x["cell_set_accession"]).split(":")[-1].split("_")[-1])
+                if "cell_set_accession" in x
+                and x["cell_set_accession"]
+                and "_" in x["cell_set_accession"]
+                else 0
+            )
         )
 
     for annotation_object in cta["annotations"]:
@@ -203,7 +204,8 @@ def generate_annotation_table(accession_prefix, cta, out_folder):
         ):
             labelset = str(annotation_object.get("labelset", "")).replace("_name", "")
             record["cell_set_accession"] = accession_manager.generate_accession_id(
-                id_recommendation=annotation_object.get("cell_set_accession", ""), labelset=labelset
+                id_recommendation=annotation_object.get("cell_set_accession", ""),
+                labelset=labelset,
             )
             annotation_object["cell_set_accession"] = record["cell_set_accession"]
             record["cell_label"] = annotation_object.get("cell_label", "")
@@ -259,9 +261,9 @@ def generate_annotation_table(accession_prefix, cta, out_folder):
             else:
                 children = list()
                 children.append(record)
-                std_parent_records_dict[
-                    annotation_object["parent_cell_set_name"]
-                ] = children
+                std_parent_records_dict[annotation_object["parent_cell_set_name"]] = (
+                    children
+                )
         if "parent_cell_set_accession" in annotation_object:
             record["parent_cell_set_accession"] = annotation_object[
                 "parent_cell_set_accession"
@@ -296,21 +298,26 @@ def generate_reviews_table(accession_prefix, cta, out_folder):
         accession_manager = IncrementalAccessionManager(accession_prefix)
         # sort annotations by accession ids incrementing (if there is)
         cta["annotations"].sort(
-            key=lambda x: int(str(x["cell_set_accession"]).split(":")[-1].split("_")[-1])
-            if "cell_set_accession" in x
-               and x["cell_set_accession"]
-               and "_" in x["cell_set_accession"]
-            else 0
+            key=lambda x: (
+                int(str(x["cell_set_accession"]).split(":")[-1].split("_")[-1])
+                if "cell_set_accession" in x
+                and x["cell_set_accession"]
+                and "_" in x["cell_set_accession"]
+                else 0
+            )
         )
 
     for annotation_object in cta["annotations"]:
         if (
             "cell_set_accession" in annotation_object
-            and annotation_object["cell_set_accession"] and "reviews" in annotation_object and annotation_object["reviews"]
+            and annotation_object["cell_set_accession"]
+            and "reviews" in annotation_object
+            and annotation_object["reviews"]
         ):
             labelset = str(annotation_object.get("labelset", "")).replace("_name", "")
             accession = accession_manager.generate_accession_id(
-                id_recommendation=annotation_object.get("cell_set_accession", ""), labelset=labelset
+                id_recommendation=annotation_object.get("cell_set_accession", ""),
+                labelset=labelset,
             )
             for review in annotation_object["reviews"]:
                 record = dict()
@@ -318,7 +325,9 @@ def generate_reviews_table(accession_prefix, cta, out_folder):
                 record["time"] = review.get("time", "")
                 if record["time"]:
                     # convert time to ISO 8601 format
-                    record["time"] = record["time"].strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + "Z"
+                    record["time"] = (
+                        record["time"].strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
+                    )
                 record["name"] = review.get("name", "")
                 record["review"] = review.get("review", "")
                 record["explanation"] = review.get("explanation", "")
@@ -329,8 +338,8 @@ def generate_reviews_table(accession_prefix, cta, out_folder):
         std_records_df.to_csv(std_data_path, sep="\t", index=False)
     else:
         row = ["target_node_accession", "time", "name", "review", "explanation"]
-        with open(std_data_path, 'w') as f_output:
-            tsv_output = csv.writer(f_output, delimiter='\t')
+        with open(std_data_path, "w") as f_output:
+            tsv_output = csv.writer(f_output, delimiter="\t")
             tsv_output.writerow(row)
 
     return std_data_path
