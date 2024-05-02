@@ -371,6 +371,7 @@ def create_populate_cells_operation_parser(subparsers):
     --json      : Path to the CAS JSON schema file.
     --anndata   : Path to the AnnData file. Ideally, the location will be specified by a resolvable path in the CAS file.
     --labelsets : List of labelsets to update with IDs from AnnData. If value is not provided, rank '0' labelset is used.
+    The labelsets should be provided in order, starting from rank 0 (leaf nodes) and ascending to higher ranks.
 
     Usage Example:
     --------------

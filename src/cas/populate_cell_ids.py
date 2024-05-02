@@ -33,7 +33,8 @@ def add_cell_ids(cas: dict, ad: Optional[anndata.AnnData], labelsets: list = Non
     Parameters:
         cas: CAS JSON object
         ad: anndata object
-        labelsets: List of labelsets to update with IDs from AnnData. If value is null, rank '0' labelset is used.
+        labelsets: List of labelsets to update with IDs from AnnData. If value is null, rank '0' labelset is used. The
+        labelsets should be provided in order, starting from rank 0 (leaf nodes) and ascending to higher ranks.
     """
 
     rank_zero_labelset = [
@@ -42,14 +43,16 @@ def add_cell_ids(cas: dict, ad: Optional[anndata.AnnData], labelsets: list = Non
     if not labelsets:
         labelsets = rank_zero_labelset
 
-    cluster_identifier_column = get_obs_cluster_identifier_column(ad)
+    cluster_identifier_column = get_obs_cluster_identifier_column(ad, labelsets)
 
     if cluster_identifier_column:
         cid_lookup = {}
         for anno in cas["annotations"]:
             if anno["labelset"] == rank_zero_labelset and anno["labelset"] in labelsets:
                 cell_ids = []
+
                 if cluster_identifier_column.lower() == "cluster_id":
+                    # cluster column value is integer cluster id
                     cluster_id = anno["user_annotations"][0]["cell_label"]
                     cell_ids = list(
                         ad.obs.loc[
@@ -57,12 +60,13 @@ def add_cell_ids(cas: dict, ad: Optional[anndata.AnnData], labelsets: list = Non
                             cluster_identifier_column,
                         ].index
                     )
-                elif cluster_identifier_column.lower() == "cluster":
+                else:
+                    # cluster column value is cell label
                     cluster_label = anno["cell_label"]
                     cell_ids = list(
                         ad.obs.loc[
                             ad.obs[cluster_identifier_column] == cluster_label
-                        ].index
+                            ].index
                     )
                 anno["cell_ids"] = cell_ids
                 if "parent_cell_set_name" in anno:
@@ -86,18 +90,21 @@ def add_cell_ids(cas: dict, ad: Optional[anndata.AnnData], labelsets: list = Non
     return None
 
 
-def get_obs_cluster_identifier_column(ad):
+def get_obs_cluster_identifier_column(ad, labelsets: list = None):
     """
     Anndata files may use different column names to uniquely identify Clusters. Get the cluster identifier column name for the current file.
     Args:
         ad: anndata object
-
+        labelsets: List of labelsets to update with IDs from AnnData. The labelsets should be provided in order,
+        starting from rank 0 (leaf nodes) and ascending to higher ranks.
     Returns:
         cluster identifier column name
     """
     obs_keys = ad.obs_keys()
     cluster_identifier_column = ""
-    if "Cluster_id" in obs_keys:
+    if labelsets and labelsets[0] in obs_keys:
+        cluster_identifier_column = labelsets[0]
+    elif "Cluster_id" in obs_keys:
         cluster_identifier_column = "Cluster_id"
     elif "cluster_id" in obs_keys:
         cluster_identifier_column = "cluster_id"
