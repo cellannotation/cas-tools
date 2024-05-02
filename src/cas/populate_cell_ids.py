@@ -33,7 +33,8 @@ def add_cell_ids(cas: dict, ad: Optional[anndata.AnnData], labelsets: list = Non
     Parameters:
         cas: CAS JSON object
         ad: anndata object
-        labelsets: List of labelsets to update with IDs from AnnData. If value is null, rank '0' labelset is used.
+        labelsets: List of labelsets to update with IDs from AnnData. If value is null, rank '0' labelset is used. The
+        labelsets should be provided in order, starting from rank 0 (leaf nodes) and ascending to higher ranks.
     """
 
     rank_zero_labelset = [
@@ -91,7 +92,8 @@ def get_obs_cluster_identifier_column(ad, labelsets: list = None):
     Anndata files may use different column names to uniquely identify Clusters. Get the cluster identifier column name for the current file.
     Args:
         ad: anndata object
-        labelsets: List of labelsets to update with IDs from AnnData.
+        labelsets: List of labelsets to update with IDs from AnnData. The labelsets should be provided in order,
+        starting from rank 0 (leaf nodes) and ascending to higher ranks.
     Returns:
         cluster identifier column name
     """
