@@ -50,7 +50,9 @@ def add_cell_ids(cas: dict, ad: Optional[anndata.AnnData], labelsets: list = Non
         for anno in cas["annotations"]:
             if anno["labelset"] == rank_zero_labelset and anno["labelset"] in labelsets:
                 cell_ids = []
+
                 if cluster_identifier_column.lower() == "cluster_id":
+                    # cluster column value is integer cluster id
                     cluster_id = anno["user_annotations"][0]["cell_label"]
                     cell_ids = list(
                         ad.obs.loc[
@@ -58,12 +60,13 @@ def add_cell_ids(cas: dict, ad: Optional[anndata.AnnData], labelsets: list = Non
                             cluster_identifier_column,
                         ].index
                     )
-                elif cluster_identifier_column.lower() == "cluster":
+                else:
+                    # cluster column value is cell label
                     cluster_label = anno["cell_label"]
                     cell_ids = list(
                         ad.obs.loc[
                             ad.obs[cluster_identifier_column] == cluster_label
-                        ].index
+                            ].index
                     )
                 anno["cell_ids"] = cell_ids
                 if "parent_cell_set_name" in anno:
