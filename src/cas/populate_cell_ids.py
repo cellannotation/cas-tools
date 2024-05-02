@@ -42,7 +42,7 @@ def add_cell_ids(cas: dict, ad: Optional[anndata.AnnData], labelsets: list = Non
     if not labelsets:
         labelsets = rank_zero_labelset
 
-    cluster_identifier_column = get_obs_cluster_identifier_column(ad)
+    cluster_identifier_column = get_obs_cluster_identifier_column(ad, labelsets)
 
     if cluster_identifier_column:
         cid_lookup = {}
@@ -86,18 +86,20 @@ def add_cell_ids(cas: dict, ad: Optional[anndata.AnnData], labelsets: list = Non
     return None
 
 
-def get_obs_cluster_identifier_column(ad):
+def get_obs_cluster_identifier_column(ad, labelsets: list = None):
     """
     Anndata files may use different column names to uniquely identify Clusters. Get the cluster identifier column name for the current file.
     Args:
         ad: anndata object
-
+        labelsets: List of labelsets to update with IDs from AnnData.
     Returns:
         cluster identifier column name
     """
     obs_keys = ad.obs_keys()
     cluster_identifier_column = ""
-    if "Cluster_id" in obs_keys:
+    if labelsets and labelsets[0] in obs_keys:
+        cluster_identifier_column = labelsets[0]
+    elif "Cluster_id" in obs_keys:
         cluster_identifier_column = "Cluster_id"
     elif "cluster_id" in obs_keys:
         cluster_identifier_column = "cluster_id"
