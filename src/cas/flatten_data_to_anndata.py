@@ -154,18 +154,20 @@ def generate_uns_json(input_json):
     root_keys.remove(ANNOTATIONS)
     for key in root_keys:
         value = input_json[key]
+        metadata_json = {}
         if is_list_of_strings(value):
             uns_json[key] = ", ".join(sorted(value))
         elif isinstance(value, str):
             uns_json[key] = value
         else:
             for labelset in value:
-                metadata_key = f"{labelset.get(LABELSET_NAME, '')}--metadata"
-                uns_json.update({metadata_key: {}})
+                metadata_key = labelset.get(LABELSET_NAME, '')
+                metadata_json.update({metadata_key: {}})
                 for k, v in labelset.items():
                     if k == LABELSET_NAME:
                         continue
-                    uns_json.get(metadata_key, {}).update({k: v})
+                    metadata_json.get(metadata_key, {}).update({k: v})
+        uns_json["cellannotation_metadata"] = metadata_json
     return uns_json
 
 

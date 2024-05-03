@@ -108,8 +108,11 @@ def get_cl_annotations_from_anndata(
     """
     filtered_df = anndata_obs[anndata_obs[columns_name] == cell_label]
 
-    cell_ontology_term_id = filtered_df["cell_type_ontology_term_id"].iloc[0]
-    cell_ontology_term = filtered_df["cell_type"].iloc[0]
+    ontology_term_ids = filtered_df["cell_type_ontology_term_id"].unique().tolist()
+    ontology_terms = filtered_df["cell_type"].unique().tolist()
+
+    cell_ontology_term_id = filtered_df["cell_type_ontology_term_id"].iloc[0] if len(ontology_term_ids) == 1 else None
+    cell_ontology_term = filtered_df["cell_type"].iloc[0] if len(ontology_terms) == 1 else None
 
     return cell_ontology_term_id, cell_ontology_term
 
