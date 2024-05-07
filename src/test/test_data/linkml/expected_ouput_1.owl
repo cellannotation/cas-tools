@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+   xml:base="https://purl.brain-bican.org/ontology/AIT_MTG/"
+   xmlns:General_Cell_Annotation_Open_Standard="https://cellular-semantics.sanger.ac.uk/ontology/CAS/"
+   xmlns:obo="http://purl.obolibrary.org/obo/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+   xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+>
+  <rdf:Description rdf:about="CrossArea_cluster#1b1d42bb38">
+    <General_Cell_Annotation_Open_Standard:has_labelset>CrossArea_cluster</General_Cell_Annotation_Open_Standard:has_labelset>
+    <rdfs:label>VLMC_1</rdfs:label>
+    <skos:preflabel>VLMC_1</skos:preflabel>
+    <obo:RO_0002473 rdf:resource="http://purl.obolibrary.org/obo/CL_0002144"/>
+    <General_Cell_Annotation_Open_Standard:cell_ontology_term>capillary endothelial cell</General_Cell_Annotation_Open_Standard:cell_ontology_term>
+    <General_Cell_Annotation_Open_Standard:cell_ids>TTCACGCGTAGCTTAC-33L8TX_191126_01_H01</General_Cell_Annotation_Open_Standard:cell_ids>
+    <General_Cell_Annotation_Open_Standard:cell_ids>ATGATCGTCCATAGAC-34L8TX_191126_02_G02</General_Cell_Annotation_Open_Standard:cell_ids>
+    <General_Cell_Annotation_Open_Standard:cell_ids>GTCAAGTGTCTCAGGC-34L8TX_191126_02_G02</General_Cell_Annotation_Open_Standard:cell_ids>
+    <General_Cell_Annotation_Open_Standard:cell_ids>GTTCGCTGTTGCATTG-34L8TX_191126_02_G02</General_Cell_Annotation_Open_Standard:cell_ids>
+    <General_Cell_Annotation_Open_Standard:cell_ids>GAACGTTCAGACCCGT-35L8TX_191126_02_H02</General_Cell_Annotation_Open_Standard:cell_ids>
+    <General_Cell_Annotation_Open_Standard:cell_ids>TTCCACGAGTCTGGTT-35L8TX_191126_02_H02</General_Cell_Annotation_Open_Standard:cell_ids>
+    <General_Cell_Annotation_Open_Standard:cell_ids>CTAGACAAGTTCATCG-19L8TX_200107_01_A09</General_Cell_Annotation_Open_Standard:cell_ids>
+    <General_Cell_Annotation_Open_Standard:cell_ids>ACTATTCAGTCTGGAG-4LKTX_191204_01_D01</General_Cell_Annotation_Open_Standard:cell_ids>
+    <General_Cell_Annotation_Open_Standard:cell_ids>AACGAAAGTTCTTAGG-19L8TX_200107_01_A09</General_Cell_Annotation_Open_Standard:cell_ids>
+    <General_Cell_Annotation_Open_Standard:cell_ids>AAGCGTTCATAATCGC-19L8TX_200107_01_A09</General_Cell_Annotation_Open_Standard:cell_ids>
+    <General_Cell_Annotation_Open_Standard:cell_ids>ACCTGAAGTGTCCCTT-19L8TX_200107_01_A09</General_Cell_Annotation_Open_Standard:cell_ids>
+    <General_Cell_Annotation_Open_Standard:cell_ids>CAACAACAGAACGCGT-19L8TX_200107_01_A09</General_Cell_Annotation_Open_Standard:cell_ids>
+    <General_Cell_Annotation_Open_Standard:cell_ids>CATTCCGCACACCAGC-19L8TX_200107_01_A09</General_Cell_Annotation_Open_Standard:cell_ids>
+    <General_Cell_Annotation_Open_Standard:cell_ids>CCACTTGGTGCAATGG-19L8TX_200107_01_A09</General_Cell_Annotation_Open_Standard:cell_ids>
+    <General_Cell_Annotation_Open_Standard:cell_ids>TCACATTAGAAAGCGA-19L8TX_200107_01_A09</General_Cell_Annotation_Open_Standard:cell_ids>
+    <General_Cell_Annotation_Open_Standard:cell_ids>TGAGCATAGTTTCTTC-19L8TX_200107_01_A09</General_Cell_Annotation_Open_Standard:cell_ids>
+    <General_Cell_Annotation_Open_Standard:cell_ids>AGACACTGTGCCTAAT-19L8TX_200107_01_A09</General_Cell_Annotation_Open_Standard:cell_ids>
+    <obo:RO_0015003 rdf:resource="CrossArea_subclass#f6b98fd9f4"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/PCL_0010001"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://cellular-semantics.sanger.ac.uk/ontology/CAS/AIT_MTG">
+    <General_Cell_Annotation_Open_Standard:author_name>Trygve E Bakken</General_Cell_Annotation_Open_Standard:author_name>
+    <General_Cell_Annotation_Open_Standard:labelsets rdf:resource="CrossArea_cluster"/>
+    <General_Cell_Annotation_Open_Standard:labelsets rdf:resource="CrossArea_subclass"/>
+    <General_Cell_Annotation_Open_Standard:labelsets rdf:resource="Class"/>
+    <General_Cell_Annotation_Open_Standard:annotations rdf:resource="CrossArea_cluster#1b1d42bb38"/>
+    <General_Cell_Annotation_Open_Standard:matrix_file_id>CellXGene_dataset:8e10f1c4-8e98-41e5-b65f-8cd89a887122</General_Cell_Annotation_Open_Standard:matrix_file_id>
+    <General_Cell_Annotation_Open_Standard:cellannotation_schema_version>4.0.0</General_Cell_Annotation_Open_Standard:cellannotation_schema_version>
+    <rdf:type rdf:resource="https://cellular-semantics.sanger.ac.uk/ontology/CAS/GeneralCellAnnotationOpenStandard"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="Class">
+    <rdfs:label>Class</rdfs:label>
+    <obo:IAO_0000115></obo:IAO_0000115>
+    <General_Cell_Annotation_Open_Standard:rank rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</General_Cell_Annotation_Open_Standard:rank>
+    <rdf:type rdf:resource="https://cellular-semantics.sanger.ac.uk/ontology/CAS/Labelset"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="CrossArea_cluster">
+    <rdfs:label>CrossArea_cluster</rdfs:label>
+    <obo:IAO_0000115></obo:IAO_0000115>
+    <General_Cell_Annotation_Open_Standard:rank rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</General_Cell_Annotation_Open_Standard:rank>
+    <rdf:type rdf:resource="https://cellular-semantics.sanger.ac.uk/ontology/CAS/Labelset"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="CrossArea_subclass">
+    <rdfs:label>CrossArea_subclass</rdfs:label>
+    <obo:IAO_0000115></obo:IAO_0000115>
+    <General_Cell_Annotation_Open_Standard:rank rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</General_Cell_Annotation_Open_Standard:rank>
+    <rdf:type rdf:resource="https://cellular-semantics.sanger.ac.uk/ontology/CAS/Labelset"/>
+  </rdf:Description>
+</rdf:RDF>
