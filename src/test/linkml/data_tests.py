@@ -34,6 +34,10 @@ class LinkMLDataTestCase(unittest.TestCase):
         for stmt in expected_graph:
             self.assertTrue(stmt in rdf_graph)
 
+    def test_validate(self):
+        # TODO: Implement test
+        pass
+
 
 if __name__ == "__main__":
     unittest.main()

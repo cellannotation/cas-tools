@@ -2,6 +2,9 @@ import csv
 import json
 import pathlib
 from typing import Optional
+from importlib import resources
+
+from cas_schema import schemas
 
 import anndata
 import numpy as np
@@ -260,3 +263,41 @@ def write_json_to_hdf5(group, data):
                     subgroup.create_dataset(str(i), data=item)
         else:
             group.create_dataset(key, data=value)
+
+
+def get_cas_schema_names() -> dict:
+    """
+    Returns the list of available CAS schema names.
+
+    Returns:
+        dict: The available CAS schema names.
+    """
+    return {
+        "base": "general_schema.json",
+        "cap": "CAP_schema.json",
+        "bican": "BICAN_schema.json",
+    }
+
+
+def get_cas_schema(schema_name: Optional[str] = "base") -> dict:
+    """
+    Reads the schema file from the CAS module and returns as a dictionary.
+    Args:
+        schema_name: The name of the schema to be returned. Default is 'base'.
+
+    Returns:
+        dict: The schema as a dictionary.
+    """
+    if not schema_name:
+        schema_name = "base"
+
+    schema_name = schema_name.strip().lower()
+    if schema_name not in get_cas_schema_names():
+        raise ValueError(
+            "Schema name should be one of: " + ", ".join(get_cas_schema_names().keys())
+        )
+
+    schema_file = resources.files(schemas) / get_cas_schema_names()[schema_name]
+    with schema_file.open("rt") as f:
+        schema = json.loads(f.read())
+    return schema

@@ -3,6 +3,7 @@ import rdflib
 from pathlib import Path
 from typing import Union, Optional, List
 
+from cas.linkml.schema import CAS_ROOT_CLASS, DEFAULT_PREFIXES
 from cas.file_utils import read_json_file
 
 from linkml_runtime.utils.compile_python import compile_python
@@ -14,20 +15,6 @@ from linkml.validator import Validator
 from linkml import generators
 
 
-CAS_ROOT_CLASS = "GeneralCellAnnotationOpenStandard"
-
-CAS_NAMESPACE = "https://cellular-semantics.sanger.ac.uk/ontology/CAS"
-DEFAULT_PREFIXES = {
-    "CAS": CAS_NAMESPACE + "/",
-    CAS_ROOT_CLASS: CAS_NAMESPACE + "/",
-    "obo": "http://purl.obolibrary.org/obo/",
-    "CL": "http://purl.obolibrary.org/obo/CL_",
-    "PCL": "http://purl.obolibrary.org/obo/PCL_",
-    "RO": "http://purl.obolibrary.org/obo/RO_",
-    "skos": "http://www.w3.org/2004/02/skos/core#",
-}
-
-
 def dump_to_rdf(
     schema: Union[str, Path, dict],
     instance: Union[str, dict],
@@ -36,7 +23,7 @@ def dump_to_rdf(
     labelsets: Optional[List[str]] = None,
     output_path: str = None,
     validate: bool = True,
-) -> rdflib.Graph:
+) -> Optional[rdflib.Graph]:
     """
     Dumps the given data to an RDF file based on the given schema file.
     Args:
@@ -85,7 +72,19 @@ def dump_to_rdf(
     )
     if output_path:
         g.serialize(format="xml", destination=output_path)
+
+    add_cl_existential_restrictions(g)
     return g
+
+
+def add_cl_existential_restrictions(g: rdflib.Graph):
+    """
+    Adds existential restrictions to the CL class in the given RDF graph.
+    Args:
+        g: The RDF graph to be updated.
+    """
+    # TODO add existential restrictions to the CL class
+    pass
 
 
 def validate_data(schema: SchemaDefinition, instance: dict) -> bool:
