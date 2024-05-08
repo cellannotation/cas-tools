@@ -1,7 +1,11 @@
 import os
 import unittest
 
-from cas.linkml.schema import convert_cas_schema_to_linkml, decorate_linkml_schema, expand_schema
+from cas.linkml.schema import (
+    convert_cas_schema_to_linkml,
+    decorate_linkml_schema,
+    expand_schema,
+)
 
 
 TESTDATA = os.path.join(
@@ -56,15 +60,16 @@ class LinkMLSchemaCase(unittest.TestCase):
             ontology_iri="https://purl.brain-bican.org/ontology/AIT_MTG/",
             labelsets=["CrossArea_cluster", "CrossArea_subclass", "Class"],
         )
-        expanded_schema = expand_schema(config=None,
-                                    yaml_obj=decorated_schema,
-                                    value_set_names=["CellTypeEnum"])
+        expanded_schema = expand_schema(
+            config=None, yaml_obj=decorated_schema, value_set_names=["CellTypeEnum"]
+        )
         self.assertIsNotNone(expanded_schema)
 
         self.assertEqual(2, len(expanded_schema["enums"]))
         self.assertTrue("CellTypeEnum" in expanded_schema["enums"])
-        self.assertTrue(len(expanded_schema["enums"]["CellTypeEnum"]["permissible_values"]) > 20)
-
+        self.assertTrue(
+            len(expanded_schema["enums"]["CellTypeEnum"]["permissible_values"]) > 20
+        )
 
 
 if __name__ == "__main__":

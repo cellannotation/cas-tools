@@ -34,15 +34,15 @@ class LinkMLDataTestCase(unittest.TestCase):
         )
         self.assertIsNotNone(rdf_graph)
 
-        # TODO improve assertions
-        # expected_graph = Graph()
-        # expected_graph.parse(
-        #     os.path.join(TESTDATA, "expected_ouput_1.owl"), format="xml"
-        # )
-        #
-        # self.assertEqual(len(rdf_graph), len(expected_graph))
-        # for stmt in expected_graph:
-        #     self.assertTrue(stmt in rdf_graph)
+        # expected graph (excluding existential restrictions)
+        expected_graph = Graph()
+        expected_graph.parse(
+            os.path.join(TESTDATA, "expected_ouput_1.owl"), format="xml"
+        )
+
+        self.assertTrue(len(rdf_graph) > len(expected_graph))
+        for stmt in expected_graph:
+            self.assertTrue(stmt in rdf_graph)
 
     def test_validate(self):
         # TODO: Implement test

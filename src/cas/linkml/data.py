@@ -3,7 +3,7 @@ import rdflib
 from pathlib import Path
 from typing import Union, Optional, List
 
-from cas.linkml.schema import CAS_ROOT_CLASS, DEFAULT_PREFIXES
+from cas.linkml.schema import CAS_ROOT_CLASS, DEFAULT_PREFIXES, CAS_NAMESPACE
 from cas.file_utils import read_json_file
 
 from linkml_runtime.utils.compile_python import compile_python
@@ -14,6 +14,8 @@ from linkml_runtime.dumpers import rdflib_dumper
 from linkml.validator import Validator
 from linkml import generators
 
+CELL_RELATION = "has_cellid"
+
 
 def dump_to_rdf(
     schema: Union[str, Path, dict],
@@ -23,6 +25,7 @@ def dump_to_rdf(
     labelsets: Optional[List[str]] = None,
     output_path: str = None,
     validate: bool = True,
+    include_cells: bool = True,
 ) -> Optional[rdflib.Graph]:
     """
     Dumps the given data to an RDF file based on the given schema file.
@@ -34,6 +37,7 @@ def dump_to_rdf(
         labelsets: (Optional) The labelsets used in the taxonomy (such as `["Cluster", "Subclass", "Class"]`).
         output_path: (Optional) The output RDF file path.
         validate: (Optional) Boolean to determine if data-schema validation checks will be performed. True by default.
+        include_cells: (Optional) Boolean to determine if cell data will be included in the RDF output. True by default.
 
     Returns:
         RDFlib graph object
@@ -73,6 +77,8 @@ def dump_to_rdf(
     )
 
     add_cl_existential_restrictions(g)
+    if not include_cells:
+        g.remove((None, rdflib.URIRef(CAS_NAMESPACE + "/" + CELL_RELATION), None))
 
     if output_path:
         g.serialize(format="xml", destination=output_path)
@@ -152,7 +158,10 @@ def populate_ids(
         json object with populated id properties
     """
     if isinstance(instance, str):
-        instance = read_json_file(instance)
+        data = read_json_file(instance)
+        if data is None:
+            raise ValueError("No such file: " + instance)
+        instance = data
 
     if "id" in instance and instance["id"]:
         return instance

@@ -1,4 +1,3 @@
-from pathlib import Path
 from typing import Union, Optional, List
 from ruamel.yaml import YAML
 
@@ -12,7 +11,10 @@ from linkml_runtime.dumpers import json_dumper
 from schema_automator.utils.schemautils import write_schema
 from schema_automator.importers.jsonschema_import_engine import JsonSchemaImportEngine
 
-from oaklib.utilities.subsets.value_set_expander import ValueSetExpander, ValueSetConfiguration
+from oaklib.utilities.subsets.value_set_expander import (
+    ValueSetExpander,
+    ValueSetConfiguration,
+)
 
 
 CAS_ROOT_CLASS = "GeneralCellAnnotationOpenStandard"
@@ -20,7 +22,7 @@ CAS_ROOT_CLASS = "GeneralCellAnnotationOpenStandard"
 CAS_NAMESPACE = "https://cellular-semantics.sanger.ac.uk/ontology/CAS"
 CAS_ROOT_NS = "General_Cell_Annotation_Open_Standard"
 DEFAULT_PREFIXES = {
-    CAS_ROOT_NS: CAS_NAMESPACE + "#",
+    CAS_ROOT_NS: CAS_NAMESPACE + "/",
     "CAS": CAS_NAMESPACE + "/",
     "obo": "http://purl.obolibrary.org/obo/",
     "CL": "http://purl.obolibrary.org/obo/CL_",
@@ -144,7 +146,12 @@ def decorate_linkml_schema(
     return schema_obj
 
 
-def expand_schema(config: Optional[str], yaml_obj: dict, value_set_names: List[str], output_path: Optional[str] = None):
+def expand_schema(
+    config: Optional[str],
+    yaml_obj: dict,
+    value_set_names: List[str],
+    output_path: Optional[str] = None,
+):
     """
     Dynamic Value set expander. Expands the yaml_obj schema inplace with the given value set names.
     Source code from https://github.com/INCATools/ontology-access-kit/blob/main/src/oaklib/utilities/subsets/value_set_expander.py
@@ -161,7 +168,9 @@ def expand_schema(config: Optional[str], yaml_obj: dict, value_set_names: List[s
     """
     expander = ValueSetExpander()
     if config:
-        expander.configuration = yaml_loader.load(config, target_class=ValueSetConfiguration)
+        expander.configuration = yaml_loader.load(
+            config, target_class=ValueSetConfiguration
+        )
 
     yaml = YAML()
     schema = yaml_loader.load(yaml_obj, target_class=SchemaDefinition)
