@@ -20,7 +20,7 @@ CAS_ROOT_CLASS = "GeneralCellAnnotationOpenStandard"
 CAS_NAMESPACE = "https://cellular-semantics.sanger.ac.uk/ontology/CAS"
 CAS_ROOT_NS = "General_Cell_Annotation_Open_Standard"
 DEFAULT_PREFIXES = {
-    CAS_ROOT_NS: CAS_NAMESPACE + "/",
+    CAS_ROOT_NS: CAS_NAMESPACE + "#",
     "CAS": CAS_NAMESPACE + "/",
     "obo": "http://purl.obolibrary.org/obo/",
     "CL": "http://purl.obolibrary.org/obo/CL_",
@@ -119,12 +119,14 @@ def decorate_linkml_schema(
     schema_obj["slots"]["cell_fullname"]["slot_uri"] = "skos:preflabel"
     schema_obj["slots"]["cell_ontology_term_id"]["slot_uri"] = "RO:0002473"
     schema_obj["slots"]["cell_ontology_term_id"]["range"] = "CellTypeEnum"
+    schema_obj["slots"]["cell_ids"]["slot_uri"] = "CAS:has_cellid"
     schema_obj["slots"]["cell_set_accession"]["identifier"] = True
     schema_obj["slots"]["parent_cell_set_accession"]["slot_uri"] = "RO:0015003"
     schema_obj["slots"]["parent_cell_set_accession"]["range"] = "Annotation"
     schema_obj["slots"]["source_taxonomy"]["range"] = "uriorcurie"
     schema_obj["slots"]["comment"]["slot_uri"] = "IAO:0000115"
     schema_obj["slots"]["labelset"]["slot_uri"] = "CAS:has_labelset"
+    schema_obj["slots"]["labelset"]["range"] = "Labelset"
     schema_obj["slots"]["labelsets"]["inlined"] = True
     schema_obj["slots"]["annotations"]["inlined"] = True
 

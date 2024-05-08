@@ -44,6 +44,7 @@ def dump_to_rdf(
 
     if isinstance(instance, str):
         instance = read_json_file(instance)
+    instance = remove_empty_strings(instance)
 
     if validate:
         validate_data(schema_def, instance)
@@ -70,10 +71,11 @@ def dump_to_rdf(
         schemaview=SchemaView(schema_def),
         prefix_map=prefixes,
     )
-    if output_path:
-        g.serialize(format="xml", destination=output_path)
 
     add_cl_existential_restrictions(g)
+
+    if output_path:
+        g.serialize(format="xml", destination=output_path)
     return g
 
 
@@ -83,8 +85,30 @@ def add_cl_existential_restrictions(g: rdflib.Graph):
     Args:
         g: The RDF graph to be updated.
     """
-    # TODO add existential restrictions to the CL class
-    pass
+    sparql_query = """
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX owl: <http://www.w3.org/2002/07/owl#>
+        PREFIX PCL: <http://purl.obolibrary.org/obo/PCL_>
+        PREFIX RO: <http://purl.obolibrary.org/obo/RO_>
+        
+        
+        DELETE {
+            ?annotation RO:0002473 ?cl_term .
+        }
+        INSERT { 
+            ?annotation rdf:type [
+                a  owl:Restriction ;
+               owl:onProperty  RO:0002473 ;
+               owl:someValuesFrom ?cl_term
+            ] .
+        }
+        WHERE {
+          ?annotation a PCL:0010001.
+          ?annotation RO:0002473 ?cl_term .
+        }
+    """
+    g.update(sparql_query)
 
 
 def validate_data(schema: SchemaDefinition, instance: dict) -> bool:
@@ -145,3 +169,24 @@ def populate_ids(
     # TODO add id to other properties as well
 
     return instance
+
+
+def remove_empty_strings(json_data: dict) -> Union[dict, list]:
+    """
+    Recursively removes empty strings from the given JSON data.
+    Args:
+        json_data: The JSON data to be cleaned.
+
+    Returns:
+        JSON data with empty strings removed.
+    """
+    if isinstance(json_data, dict):
+        return {
+            key: remove_empty_strings(value)
+            for key, value in json_data.items()
+            if value != ""
+        }
+    elif isinstance(json_data, list):
+        return [remove_empty_strings(item) for item in json_data if item != ""]
+    else:
+        return json_data

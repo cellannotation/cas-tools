@@ -4,8 +4,8 @@ imports:
 - linkml:types
 prefixes:
   linkml: https://w3id.org/linkml/
-  CAS: https://cellular-semantics.sanger.ac.uk/ontology/CAS/
   General_Cell_Annotation_Open_Standard: https://cellular-semantics.sanger.ac.uk/ontology/CAS/
+  CAS: https://cellular-semantics.sanger.ac.uk/ontology/CAS/
   _base: https://purl.brain-bican.org/ontology/AIT_MTG/
   MTG: https://purl.brain-bican.org/ontology/AIT_MTG/
   obo: http://purl.obolibrary.org/obo/
@@ -16612,6 +16612,7 @@ slots:
       for this to be a valid 'cellannotation_setname'."
     required: true
     slot_uri: CAS:has_labelset
+    range: Labelset
   cell_label:
     description: "This denotes any free-text term which the author uses to annotate
       cells, i.e. the preferred cell label name used by the author. Abbreviations
@@ -16656,6 +16657,7 @@ slots:
       within the AnnData/Seurat matrix. Any and all cell barcode sequences/UUIDs MUST
       be included in the AnnData/Seurat matrix.
     multivalued: true
+    slot_uri: CAS:has_cellid
   rationale:
     description: "The free-text rationale which users provide as justification/evidence
       for their cell annotations. \nResearchers are encouraged to use this field to

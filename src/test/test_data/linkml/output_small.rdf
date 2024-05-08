@@ -42,6 +42,12 @@
     <CAS:has_cellid>AGACACTGTGCCTAAT-19L8TX_200107_01_A09</CAS:has_cellid>
     <obo:RO_0015003 rdf:resource="CrossArea_subclass#f6b98fd9f4"/>
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/PCL_0010001"/>
+    <rdf:type rdf:nodeID="N3b895a1e15c94bc7a93708f6a31a9a2c"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N3b895a1e15c94bc7a93708f6a31a9a2c">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://purl.obolibrary.org/obo/RO_0002473"/>
+    <owl:someValuesFrom rdf:resource="http://purl.obolibrary.org/obo/CL_0002144"/>
   </rdf:Description>
   <rdf:Description rdf:about="CrossArea_subclass">
     <rdfs:label>CrossArea_subclass</rdfs:label>
