@@ -229,7 +229,7 @@ def update_obs_dataset(obs_dataset, flatten_data):
             columns = columns[columns != key]
             obs_dataset.attrs["column-order"] = columns
 
-        obs_dataset.create_dataset(key, data=value.values.astype("O"))
+        obs_dataset.create_dataset(key, data=value.values)
 
         if key not in obs_dataset.attrs["column-order"]:
             columns = np.append(obs_dataset.attrs["column-order"], key)

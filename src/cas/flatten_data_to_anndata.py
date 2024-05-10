@@ -111,25 +111,39 @@ def process_annotations(annotations, obs_index, parent_cell_ids):
         cell_ids = ann.get(
             CELL_IDS, parent_cell_ids.get(ann.get("cell_set_accession", []))
         )
-        if not cell_ids:  # only happens if data has multi-inheritance (as in basal ganglia data)
+        if not cell_ids:
             continue
-        # Convert cell_ids to a list if it's not already for np.isin
         if not isinstance(cell_ids, list):
             cell_ids = list(cell_ids)
         mask = np.isin(obs_index, cell_ids)
 
+        ontology_term_present = False
+
         for k, v in ann.items():
             if k in [CELL_IDS, LABELSET]:
                 continue
-                
+            # Set ontology_term_exists to True if not present in this annotation
+            if k in ["cell_ontology_term_id", "cell_ontology_term"]:
+                ontology_term_present = True
+                key = f"{ann[LABELSET]}--cell_ontology_exists"
+                if key not in flatten_data:
+                    flatten_data[key] = pd.Series(False, index=obs_index)
+                flatten_data[key].loc[mask] = True
+
             key = f"{ann[LABELSET]}--{k}" if k != CELL_LABEL else ann[LABELSET]
             value = ", ".join(
-                sorted([str(value) for value in v] if isinstance(v, list) else [str(v)])
+                sorted(str(value) for value in (v if isinstance(v, list) else [v]))
             )
-
             if key not in flatten_data:
                 flatten_data[key] = pd.Series("", index=obs_index)
             flatten_data[key].loc[mask] = value
+
+        # Set ontology_term_exists to False if not present in this annotation
+        if not ontology_term_present:
+            key = f"{ann[LABELSET]}--cell_ontology_exists"
+            if key not in flatten_data:
+                flatten_data[key] = pd.Series(False, index=obs_index)
+            flatten_data[key].loc[mask] = False
 
     return flatten_data
 
@@ -167,7 +181,7 @@ def generate_uns_json(input_json):
                     if k == LABELSET_NAME:
                         continue
                     metadata_json.get(metadata_key, {}).update({k: v})
-        uns_json["cellannotation_metadata"] = metadata_json
+            uns_json["cellannotation_metadata"] = metadata_json
     return uns_json
 
 
