@@ -177,6 +177,7 @@ def update_parent_info(
             "parent": parent_key,
             "p_accession": parent_value.get("accession"),
             "parent_rank": parent_value.get("rank"),
+            "parent_ontology_term_id": parent_value.get("cell_ontology_term_id")
         }
     )
 
@@ -236,12 +237,16 @@ def add_parent_hierarchy_to_annotations(
         parent_info = parent_cell_look_up.get(annotation.get("cell_label"), {})
         parent = parent_info.get("parent")
         p_accession = parent_info.get("p_accession")
+        parent_ontology_term_id = parent_info.get("parent_ontology_term_id")
         if parent and p_accession:
             # Add parent data to the annotation
             annotation.update(
                 {
                     "parent_cell_set_name": parent,
                     "parent_cell_set_accession": p_accession,
+                    "category_cell_ontology_exists": True,
+                    "category_cell_ontology_term_id": parent_ontology_term_id,
+                    "category_cell_ontology_term": parent
                 }
             )
             # Remove redundant CL annotations

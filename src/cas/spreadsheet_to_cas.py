@@ -219,19 +219,18 @@ def add_annotations_to_cas(cas, raw_data_result, columns, schema, parent_cell_lo
             elif row[column_name]:
                 user_annotations[column_name] = row[column_name]
 
+        cell_ontology_term_id = parent_cell_look_up[label]["cell_ontology_term_id"]
         anno.update(
             {
                 "cell_ids": list(parent_cell_look_up[label]["cell_ids"]),
                 "cell_set_accession": parent_cell_look_up[label]["accession"],
-                "cell_ontology_term_id": parent_cell_look_up[label][
-                    "cell_ontology_term_id"
-                ],
+                "cell_ontology_term_id": cell_ontology_term_id,
                 "cell_ontology_term": parent_cell_look_up[label]["cell_ontology_term"],
             }
         )
         if user_annotations:
             anno["user_annotations"] = user_annotations
-        cas.get("annotations").append(anno)
+        cas.get("annotations").append({k: v for k, v in anno.items() if v is not None})
 
 
 def initialize_cas_structure(matrix_file_id: str, meta_data_result: dict):
