@@ -1,3 +1,5 @@
+import requests
+
 from typing import Union, Optional, List
 from ruamel.yaml import YAML
 
@@ -53,6 +55,17 @@ def convert_cas_schema_to_linkml(
         schema = ie.loads(
             cas_schema, name="cell-annotation-schema", root_class_name=None
         )
+    elif isinstance(cas_schema, str) and (cas_schema.startswith("http://") or cas_schema.startswith("https://")):
+        resp = requests.get(cas_schema)
+        if resp.status_code == 200:
+            schema = ie.loads(
+                resp.json(),
+                name="cell-annotation-schema",
+                root_class_name=None,
+            )
+        else:
+            raise ValueError(f"Failed to fetch schema from the given URL: {cas_schema}"
+                             f" with status code: {resp.status_code}")
     else:
         schema = ie.load(
             cas_schema,

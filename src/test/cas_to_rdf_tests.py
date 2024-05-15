@@ -18,9 +18,10 @@ class CAStoRDFTestCase(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        # if os.path.isfile(TEST_OUTPUT):
-        #     os.remove(TEST_OUTPUT)
-        pass
+        if os.path.isfile(TEST_OUTPUT):
+            os.remove(TEST_OUTPUT)
+        if os.path.isfile(os.path.join(TESTDATA, "CS202210140_non_neuronal.rdf")):
+            os.remove(os.path.join(TESTDATA, "CS202210140_non_neuronal.rdf"))
 
     def test_cas_to_rdf(self):
         ontology_namespace = "MTG"
@@ -68,6 +69,24 @@ class CAStoRDFTestCase(unittest.TestCase):
                 self.assertEqual("http://purl.obolibrary.org/obo/PCL_0010001", str(triple[2]))
             else:
                 self.fail("Unexpected triple: " + str(triple))
+
+    def test_cas_to_rdf2(self):
+        ontology_namespace = "CS202210140"
+        ontology_iri = "https://purl.brain-bican.org/ontology/CS202210140/"
+        labelsets = ["Cluster", "supercluster_term"]
+
+        rdf_graph = export_to_rdf(
+            # cas_schema="bican",
+            cas_schema="https://raw.githubusercontent.com/cellannotation/cell-annotation-schema/main/build/BICAN_schema.json",
+            # data=os.path.join(TESTDATA, "CS202210140.json"),
+            data=os.path.join(TESTDATA, "Siletti_all_non_neuronal_cells.json"),
+            ontology_namespace=ontology_namespace,
+            ontology_iri=ontology_iri,
+            labelsets=labelsets,
+            output_path=os.path.join(TESTDATA, "CS202210140_non_neuronal.rdf"),
+            validate=True,
+            include_cells=False
+        )
 
 
 if __name__ == "__main__":
