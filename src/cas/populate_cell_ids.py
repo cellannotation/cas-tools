@@ -50,10 +50,17 @@ def add_cell_ids(cas: dict, ad: Optional[anndata.AnnData], labelsets: list = Non
         for anno in cas["annotations"]:
             if anno["labelset"] == rank_zero_labelset and anno["labelset"] in labelsets:
                 cell_ids = []
-
                 if cluster_identifier_column.lower() == "cluster_id":
                     # cluster column value is integer cluster id
-                    cluster_id = anno["user_annotations"][0]["cell_label"]
+                    cluster_id = None
+                    if "author_annotation_fields" in anno and anno["author_annotation_fields"]:
+                        for key, value in anno["author_annotation_fields"].items():
+                            if key.lower() in ["cluster id", "cluster_id"]:
+                                cluster_id = value
+                                break
+                    if not cluster_id:
+                        raise ValueError("AnnData cluster identifier column ({}) is cluster id, but couldn't find "
+                                         "cluster id in CAS data.".format(cluster_identifier_column))
                     cell_ids = list(
                         ad.obs.loc[
                             ad.obs["cluster_id"] == int(cluster_id),

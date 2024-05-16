@@ -230,7 +230,7 @@ def add_annotations_to_cas(cas, raw_data_result, columns, schema, parent_cell_lo
             }
         )
         if user_annotations:
-            anno["user_annotations"] = user_annotations
+            anno["author_annotation_fields"] = user_annotations
         cas.get("annotations").append(anno)
 
 

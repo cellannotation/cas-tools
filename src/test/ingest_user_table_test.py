@@ -54,5 +54,5 @@ class CellTypeAnnotationTests(unittest.TestCase):
         self.assertTrue("RELN" in test_annotation["marker_gene_evidence"])
         self.assertTrue("GULP1" in test_annotation["marker_gene_evidence"])
 
-        self.assertTrue("user_annotations" in test_annotation)
-        self.assertEqual(6, len(test_annotation["user_annotations"]))
+        self.assertTrue("author_annotation_fields" in test_annotation)
+        self.assertEqual(6, len(test_annotation["author_annotation_fields"]))

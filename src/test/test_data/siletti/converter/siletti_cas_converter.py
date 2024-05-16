@@ -9,8 +9,7 @@ from cas.model import (
     AnnotationTransfer,
     AutomatedAnnotation,
     CellTypeAnnotation,
-    Labelset,
-    UserAnnotation,
+    Labelset
 )
 
 CLUSTERS_TSV = os.path.join(

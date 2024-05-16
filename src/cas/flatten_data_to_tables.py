@@ -228,13 +228,11 @@ def generate_annotation_table(accession_prefix, cta, out_folder):
             )
             record["synonyms"] = list_to_string(annotation_object.get("synonyms", []))
             if (
-                "user_annotations" in annotation_object
-                and annotation_object["user_annotations"]
+                "author_annotation_fields" in annotation_object
+                and annotation_object["author_annotation_fields"]
             ):
-                for user_annot in annotation_object["user_annotations"]:
-                    record[normalize_column_name(user_annot["labelset"])] = user_annot[
-                        "cell_label"
-                    ]
+                for key, value in annotation_object["author_annotation_fields"].items():
+                    record[normalize_column_name(key)] = value
             # record["cell_ids"] = annotation_object.get("cell_ids", "")
             std_records.append(record)
         else:
