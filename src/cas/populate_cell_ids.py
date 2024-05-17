@@ -53,7 +53,7 @@ def add_cell_ids(cas: dict, ad: Optional[anndata.AnnData], labelsets: list = Non
                 if cluster_identifier_column.lower() == "cluster_id":
                     # cluster column value is integer cluster id
                     cluster_id = None
-                    if anno.get("author_annotation_fields", dict()):
+                    if anno.get("author_annotation_fields"):
                         for key, value in anno["author_annotation_fields"].items():
                             if key.lower() in ["cluster id", "cluster_id"]:
                                 cluster_id = value
