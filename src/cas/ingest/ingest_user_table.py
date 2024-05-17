@@ -12,8 +12,7 @@ from cas.model import (
     AnnotationTransfer,
     AutomatedAnnotation,
     CellTypeAnnotation,
-    Labelset,
-    UserAnnotation,
+    Labelset
 )
 
 

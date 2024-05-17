@@ -81,17 +81,6 @@ class AnnotationTransfer(EncoderMixin):
 
 
 @dataclass
-class UserAnnotation(EncoderMixin):
-    """User defined custom annotations which are not part of the standard schema."""
-
-    labelset: str
-    """The unique name of the set of cell annotations associated with a single file."""
-
-    cell_label: Any
-    """This denotes any free-text term which the author uses to label cells."""
-
-
-@dataclass
 class Review(EncoderMixin):
     """Annotation review."""
 
@@ -171,16 +160,16 @@ class Annotation(EncoderMixin):
     """This field denotes any free-text term of a biological entity which the author associates as synonymous with the 
     biological entity listed in the field 'cell_label'."""
 
-    # TODO modified: added
-    parent_cell_set_name: Optional[str] = None
+    # TODO modified: added (exclude from json serialisation)
+    parent_cell_set_name: Optional[str] = field(default=None, metadata=config(exclude=lambda x: True))
 
-    # TODO modified: list -> str
     parent_cell_set_accession: Optional[str] = None
     """A list of accessions of cell sets that subsume this cell set. This can be used to compose hierarchies of 
     annotated cell sets, built from a fixed set of clusters."""
 
-    # TODO modified: added
-    user_annotations: Optional[List[UserAnnotation]] = None
+    author_annotation_fields: Optional[dict] = None
+    """"A dictionary of author defined key value pairs annotating the cell set. The names and aims of these fields MUST 
+    not clash with official annotation fields."""
 
     # TODO modified: moved from CTA to Annotation class
     transferred_annotations: Optional[AnnotationTransfer] = None
@@ -194,11 +183,9 @@ class Annotation(EncoderMixin):
         :param user_annotation_set: name of the user annotation set
         :param user_annotation_label: label of the user annotation set
         """
-        if not self.user_annotations:
-            self.user_annotations = list()
-        self.user_annotations.append(
-            UserAnnotation(user_annotation_set, user_annotation_label)
-        )
+        if not self.author_annotation_fields:
+            self.author_annotation_fields = dict()
+        self.author_annotation_fields[user_annotation_set] = user_annotation_label
 
 
 @dataclass
