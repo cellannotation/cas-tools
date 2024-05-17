@@ -1,5 +1,5 @@
 {
-  "author_name": "",
+  "author_name": "Kimberly Siletti",
   "annotations": [
     {
       "labelset": "supercluster_term",
@@ -312,14 +312,10 @@
         "PAX5",
         "FCRL1"
       ],
-      "parent_cell_set_name": "Miscellaneous",
       "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "0"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "0"
+      }
     },
     {
       "labelset": "Cluster",
@@ -337,14 +333,10 @@
         "CD8A",
         "CD3G"
       ],
-      "parent_cell_set_name": "Miscellaneous",
       "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "1"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "1"
+      }
     },
     {
       "labelset": "Cluster",
@@ -360,14 +352,10 @@
         "NCAM1",
         "GZMB"
       ],
-      "parent_cell_set_name": "Miscellaneous",
       "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "2"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "2"
+      }
     },
     {
       "labelset": "Cluster",
@@ -384,14 +372,10 @@
         "FCN1",
         "LYZ"
       ],
-      "parent_cell_set_name": "Miscellaneous",
       "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "3"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "3"
+      }
     },
     {
       "labelset": "Cluster",
@@ -406,14 +390,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer near-projecting",
       "parent_cell_set_accession": "CS202210140_473",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "83"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "83"
+      }
     },
     {
       "labelset": "Cluster",
@@ -428,14 +408,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer corticothalamic and 6b",
       "parent_cell_set_accession": "CS202210140_474",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "84"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "84"
+      }
     },
     {
       "labelset": "Cluster",
@@ -450,14 +426,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer near-projecting",
       "parent_cell_set_accession": "CS202210140_473",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "85"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "85"
+      }
     },
     {
       "labelset": "Cluster",
@@ -472,14 +444,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer near-projecting",
       "parent_cell_set_accession": "CS202210140_473",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "86"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "86"
+      }
     },
     {
       "labelset": "Cluster",
@@ -494,14 +462,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer near-projecting",
       "parent_cell_set_accession": "CS202210140_473",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "87"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "87"
+      }
     },
     {
       "labelset": "Cluster",
@@ -516,14 +480,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer near-projecting",
       "parent_cell_set_accession": "CS202210140_473",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "88"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "88"
+      }
     },
     {
       "labelset": "Cluster",
@@ -538,14 +498,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer near-projecting",
       "parent_cell_set_accession": "CS202210140_473",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "89"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "89"
+      }
     },
     {
       "labelset": "Cluster",
@@ -560,14 +516,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer near-projecting",
       "parent_cell_set_accession": "CS202210140_473",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "90"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "90"
+      }
     },
     {
       "labelset": "Cluster",
@@ -582,14 +534,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer near-projecting",
       "parent_cell_set_accession": "CS202210140_473",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "91"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "91"
+      }
     },
     {
       "labelset": "Cluster",
@@ -604,14 +552,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer near-projecting",
       "parent_cell_set_accession": "CS202210140_473",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "92"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "92"
+      }
     },
     {
       "labelset": "Cluster",
@@ -626,14 +570,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer near-projecting",
       "parent_cell_set_accession": "CS202210140_473",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "93"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "93"
+      }
     },
     {
       "labelset": "Cluster",
@@ -648,14 +588,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer near-projecting",
       "parent_cell_set_accession": "CS202210140_473",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "94"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "94"
+      }
     },
     {
       "labelset": "Cluster",
@@ -670,14 +606,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer near-projecting",
       "parent_cell_set_accession": "CS202210140_473",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "95"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "95"
+      }
     },
     {
       "labelset": "Cluster",
@@ -692,14 +624,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer near-projecting",
       "parent_cell_set_accession": "CS202210140_473",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "96"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "96"
+      }
     },
     {
       "labelset": "Cluster",
@@ -714,14 +642,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer corticothalamic and 6b",
       "parent_cell_set_accession": "CS202210140_474",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "97"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "97"
+      }
     },
     {
       "labelset": "Cluster",
@@ -736,14 +660,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer corticothalamic and 6b",
       "parent_cell_set_accession": "CS202210140_474",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "98"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "98"
+      }
     },
     {
       "labelset": "Cluster",
@@ -758,14 +678,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer corticothalamic and 6b",
       "parent_cell_set_accession": "CS202210140_474",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "99"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "99"
+      }
     },
     {
       "labelset": "Cluster",
@@ -780,14 +696,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer corticothalamic and 6b",
       "parent_cell_set_accession": "CS202210140_474",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "100"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "100"
+      }
     },
     {
       "labelset": "Cluster",
@@ -802,14 +714,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer corticothalamic and 6b",
       "parent_cell_set_accession": "CS202210140_474",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "101"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "101"
+      }
     },
     {
       "labelset": "Cluster",
@@ -824,14 +732,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer corticothalamic and 6b",
       "parent_cell_set_accession": "CS202210140_474",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "102"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "102"
+      }
     },
     {
       "labelset": "Cluster",
@@ -846,14 +750,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer corticothalamic and 6b",
       "parent_cell_set_accession": "CS202210140_474",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "103"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "103"
+      }
     },
     {
       "labelset": "Cluster",
@@ -868,14 +768,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer corticothalamic and 6b",
       "parent_cell_set_accession": "CS202210140_474",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "104"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "104"
+      }
     },
     {
       "labelset": "Cluster",
@@ -890,14 +786,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer corticothalamic and 6b",
       "parent_cell_set_accession": "CS202210140_474",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "105"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "105"
+      }
     },
     {
       "labelset": "Cluster",
@@ -912,14 +804,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer corticothalamic and 6b",
       "parent_cell_set_accession": "CS202210140_474",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "106"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "106"
+      }
     },
     {
       "labelset": "Cluster",
@@ -934,14 +822,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer corticothalamic and 6b",
       "parent_cell_set_accession": "CS202210140_474",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "107"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "107"
+      }
     },
     {
       "labelset": "Cluster",
@@ -956,14 +840,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer corticothalamic and 6b",
       "parent_cell_set_accession": "CS202210140_474",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "108"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "108"
+      }
     },
     {
       "labelset": "Cluster",
@@ -978,14 +858,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer corticothalamic and 6b",
       "parent_cell_set_accession": "CS202210140_474",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "109"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "109"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1000,14 +876,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer corticothalamic and 6b",
       "parent_cell_set_accession": "CS202210140_474",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "110"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "110"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1022,14 +894,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer corticothalamic and 6b",
       "parent_cell_set_accession": "CS202210140_474",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "111"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "111"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1044,14 +912,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer corticothalamic and 6b",
       "parent_cell_set_accession": "CS202210140_474",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "112"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "112"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1069,14 +933,10 @@
         "POU3F1",
         "TXK"
       ],
-      "parent_cell_set_name": "Miscellaneous",
       "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "113"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "113"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1094,14 +954,10 @@
         "POU3F1",
         "TXK"
       ],
-      "parent_cell_set_name": "Miscellaneous",
       "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "114"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "114"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1116,14 +972,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Hippocampal CA1-3",
       "parent_cell_set_accession": "CS202210140_475",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "115"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "115"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1138,14 +990,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Miscellaneous",
       "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "116"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "116"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1163,14 +1011,10 @@
         "ITGA4",
         "BMP3"
       ],
-      "parent_cell_set_name": "Miscellaneous",
       "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "117"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "117"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1188,14 +1032,10 @@
         "POU3F1",
         "TXK"
       ],
-      "parent_cell_set_name": "Miscellaneous",
       "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "118"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "118"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1210,14 +1050,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Hippocampal CA1-3",
       "parent_cell_set_accession": "CS202210140_475",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "119"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "119"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1232,14 +1068,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Upper-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_476",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "120"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "120"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1254,14 +1086,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Upper-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_476",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "121"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "121"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1276,14 +1104,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Upper-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_476",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "122"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "122"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1298,14 +1122,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Upper-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_476",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "123"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "123"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1320,14 +1140,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Upper-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_476",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "124"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "124"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1342,14 +1158,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Upper-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_476",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "125"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "125"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1364,14 +1176,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Upper-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_476",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "126"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "126"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1386,14 +1194,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Upper-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_476",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "127"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "127"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1408,14 +1212,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Upper-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_476",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "128"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "128"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1430,14 +1230,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Upper-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_476",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "129"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "129"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1452,14 +1248,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Upper-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_476",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "130"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "130"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1474,14 +1266,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Upper-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_476",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "131"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "131"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1496,14 +1284,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Miscellaneous",
       "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "132"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "132"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1518,14 +1302,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Upper-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_476",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "133"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "133"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1540,14 +1320,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Upper-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_476",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "134"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "134"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1562,14 +1338,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Upper-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_476",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "135"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "135"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1584,14 +1356,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_477",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "136"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "136"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1606,14 +1374,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_477",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "137"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "137"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1628,14 +1392,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Upper-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_476",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "138"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "138"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1650,14 +1410,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_477",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "139"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "139"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1672,14 +1428,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_477",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "140"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "140"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1694,14 +1446,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_477",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "141"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "141"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1716,14 +1464,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_477",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "142"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "142"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1738,14 +1482,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_477",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "143"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "143"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1760,14 +1500,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_477",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "144"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "144"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1782,14 +1518,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_477",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "145"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "145"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1804,14 +1536,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_477",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "146"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "146"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1826,14 +1554,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_477",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "147"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "147"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1848,14 +1572,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_477",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "148"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "148"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1870,14 +1590,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_477",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "149"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "149"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1892,14 +1608,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_477",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "150"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "150"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1914,14 +1626,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_477",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "151"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "151"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1936,14 +1644,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Deep-layer intratelencephalic",
       "parent_cell_set_accession": "CS202210140_477",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "152"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "152"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1958,14 +1662,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Amygdala excitatory",
       "parent_cell_set_accession": "CS202210140_478",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "153"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "153"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1980,14 +1680,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Amygdala excitatory",
       "parent_cell_set_accession": "CS202210140_478",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "154"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "154"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2002,14 +1698,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Amygdala excitatory",
       "parent_cell_set_accession": "CS202210140_478",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "155"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "155"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2024,14 +1716,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Amygdala excitatory",
       "parent_cell_set_accession": "CS202210140_478",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "156"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "156"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2046,14 +1734,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Amygdala excitatory",
       "parent_cell_set_accession": "CS202210140_478",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "157"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "157"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2068,14 +1752,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Amygdala excitatory",
       "parent_cell_set_accession": "CS202210140_478",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "158"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "158"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2090,14 +1770,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Amygdala excitatory",
       "parent_cell_set_accession": "CS202210140_478",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "159"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "159"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2112,14 +1788,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Amygdala excitatory",
       "parent_cell_set_accession": "CS202210140_478",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "160"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "160"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2134,14 +1806,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Amygdala excitatory",
       "parent_cell_set_accession": "CS202210140_478",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "161"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "161"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2156,14 +1824,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Amygdala excitatory",
       "parent_cell_set_accession": "CS202210140_478",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "162"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "162"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2178,14 +1842,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Hippocampal CA1-3",
       "parent_cell_set_accession": "CS202210140_475",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "163"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "163"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2200,14 +1860,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Miscellaneous",
       "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "164"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "164"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2222,14 +1878,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Miscellaneous",
       "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "165"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "165"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2244,14 +1896,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Miscellaneous",
       "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "166"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "166"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2266,14 +1914,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Miscellaneous",
       "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "167"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "167"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2288,14 +1932,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Miscellaneous",
       "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "168"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "168"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2310,14 +1950,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Hippocampal CA1-3",
       "parent_cell_set_accession": "CS202210140_475",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "169"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "169"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2332,14 +1968,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Miscellaneous",
       "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "170"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "170"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2354,14 +1986,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Amygdala excitatory",
       "parent_cell_set_accession": "CS202210140_478",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "171"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "171"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2376,14 +2004,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Amygdala excitatory",
       "parent_cell_set_accession": "CS202210140_478",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "172"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "172"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2398,14 +2022,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Amygdala excitatory",
       "parent_cell_set_accession": "CS202210140_478",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "173"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "173"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2420,14 +2040,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Amygdala excitatory",
       "parent_cell_set_accession": "CS202210140_478",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "174"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "174"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2442,14 +2058,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Amygdala excitatory",
       "parent_cell_set_accession": "CS202210140_478",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "175"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "175"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2464,14 +2076,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Miscellaneous",
       "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "176"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "176"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2486,14 +2094,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Miscellaneous",
       "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "177"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "177"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2508,14 +2112,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Miscellaneous",
       "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "178"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "178"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2530,14 +2130,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Hippocampal CA1-3",
       "parent_cell_set_accession": "CS202210140_475",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "179"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "179"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2552,14 +2148,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Hippocampal CA1-3",
       "parent_cell_set_accession": "CS202210140_475",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "180"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "180"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2574,14 +2166,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Hippocampal CA1-3",
       "parent_cell_set_accession": "CS202210140_475",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "181"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "181"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2596,14 +2184,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Hippocampal CA1-3",
       "parent_cell_set_accession": "CS202210140_475",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "182"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "182"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2618,14 +2202,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Hippocampal CA1-3",
       "parent_cell_set_accession": "CS202210140_475",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "183"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "183"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2640,14 +2220,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Hippocampal CA1-3",
       "parent_cell_set_accession": "CS202210140_475",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "184"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "184"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2662,14 +2238,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Hippocampal CA1-3",
       "parent_cell_set_accession": "CS202210140_475",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "185"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "185"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2684,14 +2256,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Hippocampal CA1-3",
       "parent_cell_set_accession": "CS202210140_475",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "186"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "186"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2706,14 +2274,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Hippocampal CA1-3",
       "parent_cell_set_accession": "CS202210140_475",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "187"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "187"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2728,14 +2292,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Hippocampal CA1-3",
       "parent_cell_set_accession": "CS202210140_475",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "188"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "188"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2750,14 +2310,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Hippocampal CA1-3",
       "parent_cell_set_accession": "CS202210140_475",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "189"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "189"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2772,14 +2328,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Hippocampal CA4",
       "parent_cell_set_accession": "CS202210140_479",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "190"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "190"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2794,14 +2346,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Hippocampal CA4",
       "parent_cell_set_accession": "CS202210140_479",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "191"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "191"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2816,14 +2364,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Hippocampal CA4",
       "parent_cell_set_accession": "CS202210140_479",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "192"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "192"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2838,14 +2382,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Hippocampal CA4",
       "parent_cell_set_accession": "CS202210140_479",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "193"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "193"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2860,14 +2400,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Hippocampal CA4",
       "parent_cell_set_accession": "CS202210140_479",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "194"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "194"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2882,14 +2418,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Hippocampal CA4",
       "parent_cell_set_accession": "CS202210140_479",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "195"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "195"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2904,14 +2436,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Hippocampal CA4",
       "parent_cell_set_accession": "CS202210140_479",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "196"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "196"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2926,14 +2454,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Hippocampal CA4",
       "parent_cell_set_accession": "CS202210140_479",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "197"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "197"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2948,14 +2472,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Hippocampal CA4",
       "parent_cell_set_accession": "CS202210140_479",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "198"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "198"
+      }
     },
     {
       "labelset": "Cluster",
@@ -2976,14 +2496,10 @@
         "DPF3",
         "CEBPD"
       ],
-      "parent_cell_set_name": "Hippocampal dentate gyrus",
       "parent_cell_set_accession": "CS202210140_480",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "199"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "199"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3004,14 +2520,10 @@
         "DPF3",
         "CEBPD"
       ],
-      "parent_cell_set_name": "Hippocampal dentate gyrus",
       "parent_cell_set_accession": "CS202210140_480",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "200"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "200"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3032,14 +2544,10 @@
         "DPF3",
         "CEBPD"
       ],
-      "parent_cell_set_name": "Hippocampal dentate gyrus",
       "parent_cell_set_accession": "CS202210140_480",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "201"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "201"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3060,14 +2568,10 @@
         "DPF3",
         "CEBPD"
       ],
-      "parent_cell_set_name": "Hippocampal dentate gyrus",
       "parent_cell_set_accession": "CS202210140_480",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "202"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "202"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3088,14 +2592,10 @@
         "DPF3",
         "CEBPD"
       ],
-      "parent_cell_set_name": "Hippocampal dentate gyrus",
       "parent_cell_set_accession": "CS202210140_480",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "203"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "203"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3116,14 +2616,10 @@
         "DPF3",
         "CEBPD"
       ],
-      "parent_cell_set_name": "Hippocampal dentate gyrus",
       "parent_cell_set_accession": "CS202210140_480",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "204"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "204"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3144,14 +2640,10 @@
         "DPF3",
         "CEBPD"
       ],
-      "parent_cell_set_name": "Hippocampal dentate gyrus",
       "parent_cell_set_accession": "CS202210140_480",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "205"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "205"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3166,14 +2658,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_481",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "206"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "206"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3194,14 +2682,10 @@
         "RGS9",
         "GPR88"
       ],
-      "parent_cell_set_name": "Medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_481",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "207"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "207"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3222,14 +2706,10 @@
         "RGS9",
         "GPR88"
       ],
-      "parent_cell_set_name": "Medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_481",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "208"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "208"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3251,14 +2731,10 @@
         "RGS9",
         "GPR88"
       ],
-      "parent_cell_set_name": "Medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_481",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "209"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "209"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3280,14 +2756,10 @@
         "RGS9",
         "GPR88"
       ],
-      "parent_cell_set_name": "Medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_481",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "210"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "210"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3309,14 +2781,10 @@
         "RGS9",
         "GPR88"
       ],
-      "parent_cell_set_name": "Medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_481",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "211"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "211"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3337,14 +2805,10 @@
         "RGS9",
         "GPR88"
       ],
-      "parent_cell_set_name": "Medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_481",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "212"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "212"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3365,14 +2829,10 @@
         "RGS9",
         "GPR88"
       ],
-      "parent_cell_set_name": "Medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_481",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "213"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "213"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3394,14 +2854,10 @@
         "RGS9",
         "GPR88"
       ],
-      "parent_cell_set_name": "Medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_481",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "214"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "214"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3423,14 +2879,10 @@
         "RGS9",
         "GPR88"
       ],
-      "parent_cell_set_name": "Medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_481",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "215"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "215"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3451,14 +2903,10 @@
         "RGS9",
         "GPR88"
       ],
-      "parent_cell_set_name": "Medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_481",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "216"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "216"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3479,14 +2927,10 @@
         "RGS9",
         "GPR88"
       ],
-      "parent_cell_set_name": "Medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_481",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "217"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "217"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3501,14 +2945,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_481",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "218"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "218"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3530,14 +2970,10 @@
         "RGS9",
         "GPR88"
       ],
-      "parent_cell_set_name": "Medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_481",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "219"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "219"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3559,14 +2995,10 @@
         "RGS9",
         "GPR88"
       ],
-      "parent_cell_set_name": "Medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_481",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "220"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "220"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3587,14 +3019,10 @@
         "RGS9",
         "GPR88"
       ],
-      "parent_cell_set_name": "Medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_481",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "221"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "221"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3609,14 +3037,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Eccentric medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_482",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "222"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "222"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3631,14 +3055,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Eccentric medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_482",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "223"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "223"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3653,14 +3073,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Eccentric medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_482",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "224"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "224"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3675,14 +3091,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Eccentric medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_482",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "225"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "225"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3697,14 +3109,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Eccentric medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_482",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "226"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "226"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3719,14 +3127,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Eccentric medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_482",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "227"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "227"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3741,14 +3145,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Eccentric medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_482",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "228"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "228"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3763,14 +3163,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Eccentric medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_482",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "229"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "229"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3785,14 +3181,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Eccentric medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_482",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "230"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "230"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3807,14 +3199,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Eccentric medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_482",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "231"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "231"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3829,14 +3217,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Eccentric medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_482",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "232"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "232"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3851,14 +3235,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Eccentric medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_482",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "233"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "233"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3873,14 +3253,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Eccentric medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_482",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "234"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "234"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3901,14 +3277,10 @@
         "NOS1",
         "CORT"
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "235"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "235"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3928,14 +3300,10 @@
         "GAD2",
         "SST"
       ],
-      "parent_cell_set_name": "MGE interneuron",
       "parent_cell_set_accession": "CS202210140_484",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "236"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "236"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3955,14 +3323,10 @@
         "GAD2",
         "SST"
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "237"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "237"
+      }
     },
     {
       "labelset": "Cluster",
@@ -3977,14 +3341,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "238"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "238"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4004,14 +3364,10 @@
         "GAD2",
         "SST"
       ],
-      "parent_cell_set_name": "MGE interneuron",
       "parent_cell_set_accession": "CS202210140_484",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "239"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "239"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4031,14 +3387,10 @@
         "GAD2",
         "SST"
       ],
-      "parent_cell_set_name": "MGE interneuron",
       "parent_cell_set_accession": "CS202210140_484",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "240"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "240"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4058,14 +3410,10 @@
         "GAD2",
         "SST"
       ],
-      "parent_cell_set_name": "MGE interneuron",
       "parent_cell_set_accession": "CS202210140_484",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "241"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "241"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4080,14 +3428,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "MGE interneuron",
       "parent_cell_set_accession": "CS202210140_484",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "242"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "242"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4107,14 +3451,10 @@
         "GAD2",
         "SST"
       ],
-      "parent_cell_set_name": "MGE interneuron",
       "parent_cell_set_accession": "CS202210140_484",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "243"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "243"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4129,14 +3469,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "MGE interneuron",
       "parent_cell_set_accession": "CS202210140_484",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "244"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "244"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4151,14 +3487,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "MGE interneuron",
       "parent_cell_set_accession": "CS202210140_484",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "245"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "245"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4178,14 +3510,10 @@
         "GAD2",
         "SST"
       ],
-      "parent_cell_set_name": "MGE interneuron",
       "parent_cell_set_accession": "CS202210140_484",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "246"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "246"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4200,14 +3528,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "MGE interneuron",
       "parent_cell_set_accession": "CS202210140_484",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "247"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "247"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4227,14 +3551,10 @@
         "GAD2",
         "SST"
       ],
-      "parent_cell_set_name": "MGE interneuron",
       "parent_cell_set_accession": "CS202210140_484",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "248"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "248"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4254,14 +3574,10 @@
         "GAD2",
         "SST"
       ],
-      "parent_cell_set_name": "MGE interneuron",
       "parent_cell_set_accession": "CS202210140_484",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "249"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "249"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4276,14 +3592,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "MGE interneuron",
       "parent_cell_set_accession": "CS202210140_484",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "250"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "250"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4298,14 +3610,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "MGE interneuron",
       "parent_cell_set_accession": "CS202210140_484",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "251"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "251"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4325,14 +3633,10 @@
         "GAD2",
         "SST"
       ],
-      "parent_cell_set_name": "MGE interneuron",
       "parent_cell_set_accession": "CS202210140_484",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "252"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "252"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4352,14 +3656,10 @@
         "GAD2",
         "SST"
       ],
-      "parent_cell_set_name": "MGE interneuron",
       "parent_cell_set_accession": "CS202210140_484",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "253"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "253"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4379,14 +3679,10 @@
         "GAD2",
         "SST"
       ],
-      "parent_cell_set_name": "MGE interneuron",
       "parent_cell_set_accession": "CS202210140_484",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "254"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "254"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4401,14 +3697,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "MGE interneuron",
       "parent_cell_set_accession": "CS202210140_484",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "255"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "255"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4428,14 +3720,10 @@
         "GAD2",
         "PVALB"
       ],
-      "parent_cell_set_name": "MGE interneuron",
       "parent_cell_set_accession": "CS202210140_484",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "256"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "256"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4455,14 +3743,10 @@
         "GAD2",
         "PVALB"
       ],
-      "parent_cell_set_name": "MGE interneuron",
       "parent_cell_set_accession": "CS202210140_484",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "257"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "257"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4482,14 +3766,10 @@
         "GAD2",
         "SST"
       ],
-      "parent_cell_set_name": "MGE interneuron",
       "parent_cell_set_accession": "CS202210140_484",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "258"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "258"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4509,14 +3789,10 @@
         "GAD2",
         "PVALB"
       ],
-      "parent_cell_set_name": "MGE interneuron",
       "parent_cell_set_accession": "CS202210140_484",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "259"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "259"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4536,14 +3812,10 @@
         "GAD2",
         "PVALB"
       ],
-      "parent_cell_set_name": "MGE interneuron",
       "parent_cell_set_accession": "CS202210140_484",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "260"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "260"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4563,14 +3835,10 @@
         "GAD2",
         "PVALB"
       ],
-      "parent_cell_set_name": "MGE interneuron",
       "parent_cell_set_accession": "CS202210140_484",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "261"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "261"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4590,14 +3858,10 @@
         "GAD2",
         "PVALB"
       ],
-      "parent_cell_set_name": "MGE interneuron",
       "parent_cell_set_accession": "CS202210140_484",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "262"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "262"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4612,14 +3876,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "MGE interneuron",
       "parent_cell_set_accession": "CS202210140_484",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "263"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "263"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4641,14 +3901,10 @@
         "CA8",
         "PLEKHH2"
       ],
-      "parent_cell_set_name": "LAMP5-LHX6 and Chandelier",
       "parent_cell_set_accession": "CS202210140_485",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "264"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "264"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4670,14 +3926,10 @@
         "CA8",
         "PLEKHH2"
       ],
-      "parent_cell_set_name": "LAMP5-LHX6 and Chandelier",
       "parent_cell_set_accession": "CS202210140_485",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "265"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "265"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4699,14 +3951,10 @@
         "CA8",
         "PLEKHH2"
       ],
-      "parent_cell_set_name": "LAMP5-LHX6 and Chandelier",
       "parent_cell_set_accession": "CS202210140_485",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "266"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "266"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4721,14 +3969,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "LAMP5-LHX6 and Chandelier",
       "parent_cell_set_accession": "CS202210140_485",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "267"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "267"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4743,14 +3987,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "LAMP5-LHX6 and Chandelier",
       "parent_cell_set_accession": "CS202210140_485",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "268"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "268"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4765,14 +4005,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "LAMP5-LHX6 and Chandelier",
       "parent_cell_set_accession": "CS202210140_485",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "269"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "269"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4787,14 +4023,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "LAMP5-LHX6 and Chandelier",
       "parent_cell_set_accession": "CS202210140_485",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "270"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "270"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4809,14 +4041,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "LAMP5-LHX6 and Chandelier",
       "parent_cell_set_accession": "CS202210140_485",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "271"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "271"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4831,14 +4059,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "LAMP5-LHX6 and Chandelier",
       "parent_cell_set_accession": "CS202210140_485",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "272"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "272"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4853,14 +4077,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "LAMP5-LHX6 and Chandelier",
       "parent_cell_set_accession": "CS202210140_485",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "273"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "273"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4875,14 +4095,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "LAMP5-LHX6 and Chandelier",
       "parent_cell_set_accession": "CS202210140_485",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "274"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "274"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4897,14 +4113,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "LAMP5-LHX6 and Chandelier",
       "parent_cell_set_accession": "CS202210140_485",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "275"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "275"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4925,14 +4137,10 @@
         "GAD2",
         "VIP"
       ],
-      "parent_cell_set_name": "CGE interneuron",
       "parent_cell_set_accession": "CS202210140_486",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "276"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "276"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4947,14 +4155,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "CGE interneuron",
       "parent_cell_set_accession": "CS202210140_486",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "277"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "277"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4969,14 +4173,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "CGE interneuron",
       "parent_cell_set_accession": "CS202210140_486",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "278"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "278"
+      }
     },
     {
       "labelset": "Cluster",
@@ -4997,14 +4197,10 @@
         "GAD2",
         "VIP"
       ],
-      "parent_cell_set_name": "CGE interneuron",
       "parent_cell_set_accession": "CS202210140_486",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "279"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "279"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5025,14 +4221,10 @@
         "GAD2",
         "VIP"
       ],
-      "parent_cell_set_name": "CGE interneuron",
       "parent_cell_set_accession": "CS202210140_486",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "280"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "280"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5053,14 +4245,10 @@
         "GAD2",
         "VIP"
       ],
-      "parent_cell_set_name": "CGE interneuron",
       "parent_cell_set_accession": "CS202210140_486",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "281"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "281"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5075,14 +4263,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "CGE interneuron",
       "parent_cell_set_accession": "CS202210140_486",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "282"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "282"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5097,14 +4281,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "CGE interneuron",
       "parent_cell_set_accession": "CS202210140_486",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "283"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "283"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5125,14 +4305,10 @@
         "GAD2",
         "VIP"
       ],
-      "parent_cell_set_name": "CGE interneuron",
       "parent_cell_set_accession": "CS202210140_486",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "284"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "284"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5153,14 +4329,10 @@
         "GAD2",
         "VIP"
       ],
-      "parent_cell_set_name": "CGE interneuron",
       "parent_cell_set_accession": "CS202210140_486",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "285"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "285"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5180,14 +4352,10 @@
         "LHX6",
         "GAD2"
       ],
-      "parent_cell_set_name": "CGE interneuron",
       "parent_cell_set_accession": "CS202210140_486",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "286"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "286"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5207,14 +4375,10 @@
         "LHX6",
         "GAD2"
       ],
-      "parent_cell_set_name": "CGE interneuron",
       "parent_cell_set_accession": "CS202210140_486",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "287"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "287"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5234,14 +4398,10 @@
         "LHX6",
         "GAD2"
       ],
-      "parent_cell_set_name": "CGE interneuron",
       "parent_cell_set_accession": "CS202210140_486",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "288"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "288"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5262,14 +4422,10 @@
         "GAD2",
         "VIP"
       ],
-      "parent_cell_set_name": "CGE interneuron",
       "parent_cell_set_accession": "CS202210140_486",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "289"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "289"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5290,14 +4446,10 @@
         "GAD2",
         "VIP"
       ],
-      "parent_cell_set_name": "CGE interneuron",
       "parent_cell_set_accession": "CS202210140_486",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "290"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "290"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5318,14 +4470,10 @@
         "GAD2",
         "VIP"
       ],
-      "parent_cell_set_name": "CGE interneuron",
       "parent_cell_set_accession": "CS202210140_486",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "291"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "291"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5346,14 +4494,10 @@
         "GAD2",
         "VIP"
       ],
-      "parent_cell_set_name": "CGE interneuron",
       "parent_cell_set_accession": "CS202210140_486",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "292"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "292"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5374,14 +4518,10 @@
         "GAD2",
         "VIP"
       ],
-      "parent_cell_set_name": "CGE interneuron",
       "parent_cell_set_accession": "CS202210140_486",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "293"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "293"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5402,14 +4542,10 @@
         "GAD2",
         "VIP"
       ],
-      "parent_cell_set_name": "CGE interneuron",
       "parent_cell_set_accession": "CS202210140_486",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "294"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "294"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5430,14 +4566,10 @@
         "GAD2",
         "VIP"
       ],
-      "parent_cell_set_name": "CGE interneuron",
       "parent_cell_set_accession": "CS202210140_486",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "295"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "295"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5458,14 +4590,10 @@
         "GAD2",
         "VIP"
       ],
-      "parent_cell_set_name": "CGE interneuron",
       "parent_cell_set_accession": "CS202210140_486",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "296"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "296"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5480,14 +4608,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Upper rhombic lip",
       "parent_cell_set_accession": "CS202210140_487",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "297"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "297"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5502,14 +4626,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Cerebellar inhibitory",
       "parent_cell_set_accession": "CS202210140_488",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "298"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "298"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5524,14 +4644,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Cerebellar inhibitory",
       "parent_cell_set_accession": "CS202210140_488",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "299"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "299"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5546,14 +4662,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Cerebellar inhibitory",
       "parent_cell_set_accession": "CS202210140_488",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "300"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "300"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5568,14 +4680,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Cerebellar inhibitory",
       "parent_cell_set_accession": "CS202210140_488",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "301"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "301"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5590,14 +4698,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Cerebellar inhibitory",
       "parent_cell_set_accession": "CS202210140_488",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "302"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "302"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5612,14 +4716,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Cerebellar inhibitory",
       "parent_cell_set_accession": "CS202210140_488",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "303"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "303"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5634,14 +4734,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Cerebellar inhibitory",
       "parent_cell_set_accession": "CS202210140_488",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "304"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "304"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5656,14 +4752,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Cerebellar inhibitory",
       "parent_cell_set_accession": "CS202210140_488",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "305"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "305"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5678,14 +4770,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Cerebellar inhibitory",
       "parent_cell_set_accession": "CS202210140_488",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "306"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "306"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5700,14 +4788,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Cerebellar inhibitory",
       "parent_cell_set_accession": "CS202210140_488",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "307"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "307"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5723,14 +4807,10 @@
         "LMX1A",
         "EOMES"
       ],
-      "parent_cell_set_name": "Upper rhombic lip",
       "parent_cell_set_accession": "CS202210140_487",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "308"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "308"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5745,14 +4825,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Upper rhombic lip",
       "parent_cell_set_accession": "CS202210140_487",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "309"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "309"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5769,14 +4845,10 @@
         "CBLN3",
         "GABRA6"
       ],
-      "parent_cell_set_name": "Upper rhombic lip",
       "parent_cell_set_accession": "CS202210140_487",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "310"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "310"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5793,14 +4865,10 @@
         "CBLN3",
         "GABRA6"
       ],
-      "parent_cell_set_name": "Upper rhombic lip",
       "parent_cell_set_accession": "CS202210140_487",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "311"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "311"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5817,14 +4885,10 @@
         "CBLN3",
         "GABRA6"
       ],
-      "parent_cell_set_name": "Upper rhombic lip",
       "parent_cell_set_accession": "CS202210140_487",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "312"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "312"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5839,14 +4903,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "313"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "313"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5864,14 +4924,10 @@
         "PVALB",
         "GAD2"
       ],
-      "parent_cell_set_name": "Miscellaneous",
       "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "314"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "314"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5886,14 +4942,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Lower rhombic lip",
       "parent_cell_set_accession": "CS202210140_489",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "315"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "315"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5908,14 +4960,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Lower rhombic lip",
       "parent_cell_set_accession": "CS202210140_489",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "316"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "316"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5930,14 +4978,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Lower rhombic lip",
       "parent_cell_set_accession": "CS202210140_489",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "317"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "317"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5952,14 +4996,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Lower rhombic lip",
       "parent_cell_set_accession": "CS202210140_489",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "318"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "318"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5974,14 +5014,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Lower rhombic lip",
       "parent_cell_set_accession": "CS202210140_489",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "319"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "319"
+      }
     },
     {
       "labelset": "Cluster",
@@ -5996,14 +5032,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Lower rhombic lip",
       "parent_cell_set_accession": "CS202210140_489",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "320"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "320"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6018,14 +5050,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Lower rhombic lip",
       "parent_cell_set_accession": "CS202210140_489",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "321"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "321"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6040,14 +5068,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Lower rhombic lip",
       "parent_cell_set_accession": "CS202210140_489",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "322"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "322"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6062,14 +5086,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Mammillary body",
       "parent_cell_set_accession": "CS202210140_490",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "323"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "323"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6084,14 +5104,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Mammillary body",
       "parent_cell_set_accession": "CS202210140_490",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "324"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "324"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6106,14 +5122,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Mammillary body",
       "parent_cell_set_accession": "CS202210140_490",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "325"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "325"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6128,14 +5140,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Mammillary body",
       "parent_cell_set_accession": "CS202210140_490",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "326"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "326"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6150,14 +5158,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Mammillary body",
       "parent_cell_set_accession": "CS202210140_490",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "327"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "327"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6172,14 +5176,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Mammillary body",
       "parent_cell_set_accession": "CS202210140_490",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "328"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "328"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6194,14 +5194,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Mammillary body",
       "parent_cell_set_accession": "CS202210140_490",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "329"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "329"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6216,14 +5212,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Mammillary body",
       "parent_cell_set_accession": "CS202210140_490",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "330"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "330"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6238,14 +5230,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Mammillary body",
       "parent_cell_set_accession": "CS202210140_490",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "331"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "331"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6260,14 +5248,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Mammillary body",
       "parent_cell_set_accession": "CS202210140_490",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "332"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "332"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6282,14 +5266,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Mammillary body",
       "parent_cell_set_accession": "CS202210140_490",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "333"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "333"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6304,14 +5284,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "334"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "334"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6326,14 +5302,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "335"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "335"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6348,14 +5320,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "336"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "336"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6370,14 +5338,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "337"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "337"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6392,14 +5356,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "338"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "338"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6414,14 +5374,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "339"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "339"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6436,14 +5392,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "340"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "340"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6458,14 +5410,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "341"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "341"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6480,14 +5428,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "342"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "342"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6502,14 +5446,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "343"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "343"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6524,14 +5464,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "344"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "344"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6546,14 +5482,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "345"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "345"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6568,14 +5500,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "346"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "346"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6590,14 +5518,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "347"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "347"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6612,14 +5536,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "348"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "348"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6634,14 +5554,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "349"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "349"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6656,14 +5572,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "350"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "350"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6678,14 +5590,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "351"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "351"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6700,14 +5608,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "352"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "352"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6722,14 +5626,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "353"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "353"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6744,14 +5644,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "354"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "354"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6766,14 +5662,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "355"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "355"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6788,14 +5680,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "356"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "356"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6810,14 +5698,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "357"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "357"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6832,14 +5716,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "358"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "358"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6854,14 +5734,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "359"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "359"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6876,14 +5752,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "360"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "360"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6898,14 +5770,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "361"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "361"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6920,14 +5788,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "362"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "362"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6942,14 +5806,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "363"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "363"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6964,14 +5824,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "364"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "364"
+      }
     },
     {
       "labelset": "Cluster",
@@ -6986,14 +5842,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "365"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "365"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7008,14 +5860,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "366"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "366"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7030,14 +5878,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "367"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "367"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7052,14 +5896,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "368"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "368"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7074,14 +5914,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "369"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "369"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7096,14 +5932,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "370"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "370"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7118,14 +5950,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "371"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "371"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7140,14 +5968,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Thalamic excitatory",
       "parent_cell_set_accession": "CS202210140_491",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "372"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "372"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7162,14 +5986,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "373"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "373"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7184,14 +6004,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "374"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "374"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7206,14 +6022,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "375"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "375"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7228,14 +6040,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "376"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "376"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7250,14 +6058,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "377"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "377"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7272,14 +6076,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "378"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "378"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7294,14 +6094,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "379"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "379"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7316,14 +6112,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "380"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "380"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7338,14 +6130,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "381"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "381"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7360,14 +6148,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "382"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "382"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7382,14 +6166,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "383"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "383"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7404,14 +6184,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "384"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "384"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7426,14 +6202,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "385"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "385"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7448,14 +6220,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "386"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "386"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7470,14 +6238,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "387"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "387"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7492,14 +6256,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "388"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "388"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7514,14 +6274,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "389"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "389"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7536,14 +6292,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "390"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "390"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7558,14 +6310,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "391"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "391"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7580,14 +6328,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "392"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "392"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7602,14 +6346,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "393"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "393"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7624,14 +6364,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "394"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "394"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7646,14 +6382,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "395"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "395"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7668,14 +6400,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "396"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "396"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7690,14 +6418,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "397"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "397"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7712,14 +6436,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "398"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "398"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7734,14 +6454,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "399"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "399"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7756,14 +6472,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "400"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "400"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7778,14 +6490,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Miscellaneous",
       "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "401"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "401"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7800,14 +6508,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "402"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "402"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7822,14 +6526,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "403"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "403"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7844,14 +6544,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Miscellaneous",
       "parent_cell_set_accession": "CS202210140_463",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "404"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "404"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7866,14 +6562,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Amygdala excitatory",
       "parent_cell_set_accession": "CS202210140_478",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "405"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "405"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7888,14 +6580,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Amygdala excitatory",
       "parent_cell_set_accession": "CS202210140_478",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "406"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "406"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7910,14 +6598,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Amygdala excitatory",
       "parent_cell_set_accession": "CS202210140_478",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "407"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "407"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7932,14 +6616,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Amygdala excitatory",
       "parent_cell_set_accession": "CS202210140_478",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "408"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "408"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7954,14 +6634,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "409"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "409"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7976,14 +6652,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "410"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "410"
+      }
     },
     {
       "labelset": "Cluster",
@@ -7998,14 +6670,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "411"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "411"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8020,14 +6688,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "412"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "412"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8042,14 +6706,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "413"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "413"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8064,14 +6724,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "414"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "414"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8086,14 +6742,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "415"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "415"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8108,14 +6760,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "416"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "416"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8130,14 +6778,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "417"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "417"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8152,14 +6796,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "418"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "418"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8174,14 +6814,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Amygdala excitatory",
       "parent_cell_set_accession": "CS202210140_478",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "419"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "419"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8196,14 +6832,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "420"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "420"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8218,14 +6850,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "421"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "421"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8240,14 +6868,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "422"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "422"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8262,14 +6886,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "423"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "423"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8284,14 +6904,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "424"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "424"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8306,14 +6922,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "425"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "425"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8328,14 +6940,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Eccentric medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_482",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "426"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "426"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8357,14 +6965,10 @@
         "RGS9",
         "GPR88"
       ],
-      "parent_cell_set_name": "Medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_481",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "427"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "427"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8379,14 +6983,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "428"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "428"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8401,14 +7001,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "429"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "429"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8423,14 +7019,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Medium spiny neuron",
       "parent_cell_set_accession": "CS202210140_481",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "430"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "430"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8445,14 +7037,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "431"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "431"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8467,14 +7055,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Splatter",
       "parent_cell_set_accession": "CS202210140_483",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "432"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "432"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8489,14 +7073,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Midbrain-derived inhibitory",
       "parent_cell_set_accession": "CS202210140_492",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "433"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "433"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8511,14 +7091,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Midbrain-derived inhibitory",
       "parent_cell_set_accession": "CS202210140_492",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "434"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "434"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8533,14 +7109,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Midbrain-derived inhibitory",
       "parent_cell_set_accession": "CS202210140_492",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "435"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "435"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8555,14 +7127,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Midbrain-derived inhibitory",
       "parent_cell_set_accession": "CS202210140_492",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "436"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "436"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8577,14 +7145,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Midbrain-derived inhibitory",
       "parent_cell_set_accession": "CS202210140_492",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "437"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "437"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8599,14 +7163,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Midbrain-derived inhibitory",
       "parent_cell_set_accession": "CS202210140_492",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "438"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "438"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8621,14 +7181,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Midbrain-derived inhibitory",
       "parent_cell_set_accession": "CS202210140_492",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "439"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "439"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8643,14 +7199,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Midbrain-derived inhibitory",
       "parent_cell_set_accession": "CS202210140_492",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "440"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "440"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8665,14 +7217,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Midbrain-derived inhibitory",
       "parent_cell_set_accession": "CS202210140_492",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "441"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "441"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8687,14 +7235,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Midbrain-derived inhibitory",
       "parent_cell_set_accession": "CS202210140_492",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "442"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "442"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8709,14 +7253,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Midbrain-derived inhibitory",
       "parent_cell_set_accession": "CS202210140_492",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "443"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "443"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8731,14 +7271,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Midbrain-derived inhibitory",
       "parent_cell_set_accession": "CS202210140_492",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "444"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "444"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8753,14 +7289,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Thalamic excitatory",
       "parent_cell_set_accession": "CS202210140_491",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "445"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "445"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8775,14 +7307,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Thalamic excitatory",
       "parent_cell_set_accession": "CS202210140_491",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "446"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "446"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8797,14 +7325,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Thalamic excitatory",
       "parent_cell_set_accession": "CS202210140_491",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "447"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "447"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8819,14 +7343,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Thalamic excitatory",
       "parent_cell_set_accession": "CS202210140_491",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "448"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "448"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8841,14 +7361,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Thalamic excitatory",
       "parent_cell_set_accession": "CS202210140_491",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "449"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "449"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8863,14 +7379,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Thalamic excitatory",
       "parent_cell_set_accession": "CS202210140_491",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "450"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "450"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8885,14 +7397,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Thalamic excitatory",
       "parent_cell_set_accession": "CS202210140_491",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "451"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "451"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8907,14 +7415,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Thalamic excitatory",
       "parent_cell_set_accession": "CS202210140_491",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "452"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "452"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8929,14 +7433,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Thalamic excitatory",
       "parent_cell_set_accession": "CS202210140_491",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "453"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "453"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8951,14 +7451,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Thalamic excitatory",
       "parent_cell_set_accession": "CS202210140_491",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "454"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "454"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8973,14 +7469,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Thalamic excitatory",
       "parent_cell_set_accession": "CS202210140_491",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "455"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "455"
+      }
     },
     {
       "labelset": "Cluster",
@@ -8995,14 +7487,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Thalamic excitatory",
       "parent_cell_set_accession": "CS202210140_491",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "456"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "456"
+      }
     },
     {
       "labelset": "Cluster",
@@ -9017,14 +7505,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Thalamic excitatory",
       "parent_cell_set_accession": "CS202210140_491",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "457"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "457"
+      }
     },
     {
       "labelset": "Cluster",
@@ -9039,14 +7523,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Thalamic excitatory",
       "parent_cell_set_accession": "CS202210140_491",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "458"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "458"
+      }
     },
     {
       "labelset": "Cluster",
@@ -9061,14 +7541,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Thalamic excitatory",
       "parent_cell_set_accession": "CS202210140_491",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "459"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "459"
+      }
     },
     {
       "labelset": "Cluster",
@@ -9083,16 +7559,13 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Thalamic excitatory",
       "parent_cell_set_accession": "CS202210140_491",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "460"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "460"
+      }
     }
   ],
+  "matrix_file_id": "CellXGene_dataset:8e10f1c4-8e98-41e5-b65f-8cd89a887122",
   "labelsets": [
     {
       "name": "Cluster",
@@ -9102,5 +7575,7 @@
       "name": "supercluster_term",
       "rank": "1"
     }
-  ]
+  ],
+  "orcid": "https://orcid.org/0000-0001-7620-8973",
+  "cellannotation_schema_version": "0.2b0"
 }

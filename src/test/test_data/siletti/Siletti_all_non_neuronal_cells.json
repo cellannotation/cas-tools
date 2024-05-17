@@ -1,5 +1,5 @@
 {
-  "author_name": "",
+  "author_name": "Kimberly Siletti",
   "annotations": [
     {
       "labelset": "supercluster_term",
@@ -163,14 +163,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Microglia",
       "parent_cell_set_accession": "CS202210140_464",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "4"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "4"
+      }
     },
     {
       "labelset": "Cluster",
@@ -185,14 +181,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Microglia",
       "parent_cell_set_accession": "CS202210140_464",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "5"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "5"
+      }
     },
     {
       "labelset": "Cluster",
@@ -207,14 +199,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Microglia",
       "parent_cell_set_accession": "CS202210140_464",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "6"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "6"
+      }
     },
     {
       "labelset": "Cluster",
@@ -229,14 +217,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Microglia",
       "parent_cell_set_accession": "CS202210140_464",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "7"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "7"
+      }
     },
     {
       "labelset": "Cluster",
@@ -251,14 +235,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Microglia",
       "parent_cell_set_accession": "CS202210140_464",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "8"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "8"
+      }
     },
     {
       "labelset": "Cluster",
@@ -273,14 +253,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Microglia",
       "parent_cell_set_accession": "CS202210140_464",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "9"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "9"
+      }
     },
     {
       "labelset": "Cluster",
@@ -295,14 +271,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Microglia",
       "parent_cell_set_accession": "CS202210140_464",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "10"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "10"
+      }
     },
     {
       "labelset": "Cluster",
@@ -317,14 +289,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Microglia",
       "parent_cell_set_accession": "CS202210140_464",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "11"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "11"
+      }
     },
     {
       "labelset": "Cluster",
@@ -339,14 +307,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Microglia",
       "parent_cell_set_accession": "CS202210140_464",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "12"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "12"
+      }
     },
     {
       "labelset": "Cluster",
@@ -361,14 +325,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Vascular",
       "parent_cell_set_accession": "CS202210140_465",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "13"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "13"
+      }
     },
     {
       "labelset": "Cluster",
@@ -383,14 +343,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Vascular",
       "parent_cell_set_accession": "CS202210140_465",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "14"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "14"
+      }
     },
     {
       "labelset": "Cluster",
@@ -408,14 +364,10 @@
         "PECAM1",
         "MFSD2A"
       ],
-      "parent_cell_set_name": "Vascular",
       "parent_cell_set_accession": "CS202210140_465",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "15"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "15"
+      }
     },
     {
       "labelset": "Cluster",
@@ -430,14 +382,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Vascular",
       "parent_cell_set_accession": "CS202210140_465",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "16"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "16"
+      }
     },
     {
       "labelset": "Cluster",
@@ -452,14 +400,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Vascular",
       "parent_cell_set_accession": "CS202210140_465",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "17"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "17"
+      }
     },
     {
       "labelset": "Cluster",
@@ -479,14 +423,10 @@
         "VEGFC",
         "JUNB"
       ],
-      "parent_cell_set_name": "Vascular",
       "parent_cell_set_accession": "CS202210140_465",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "18"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "18"
+      }
     },
     {
       "labelset": "Cluster",
@@ -501,14 +441,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Vascular",
       "parent_cell_set_accession": "CS202210140_465",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "19"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "19"
+      }
     },
     {
       "labelset": "Cluster",
@@ -528,14 +464,10 @@
         "ACTA2",
         "MYH11"
       ],
-      "parent_cell_set_name": "Vascular",
       "parent_cell_set_accession": "CS202210140_465",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "20"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "20"
+      }
     },
     {
       "labelset": "Cluster",
@@ -553,14 +485,10 @@
         "PDGFRB",
         "CSPG4"
       ],
-      "parent_cell_set_name": "Vascular",
       "parent_cell_set_accession": "CS202210140_465",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "21"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "21"
+      }
     },
     {
       "labelset": "Cluster",
@@ -578,14 +506,10 @@
         "PDGFRB",
         "CSPG4"
       ],
-      "parent_cell_set_name": "Vascular",
       "parent_cell_set_accession": "CS202210140_465",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "22"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "22"
+      }
     },
     {
       "labelset": "Cluster",
@@ -600,14 +524,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Vascular",
       "parent_cell_set_accession": "CS202210140_465",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "23"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "23"
+      }
     },
     {
       "labelset": "Cluster",
@@ -622,14 +542,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Fibroblast",
       "parent_cell_set_accession": "CS202210140_466",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "24"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "24"
+      }
     },
     {
       "labelset": "Cluster",
@@ -644,14 +560,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Fibroblast",
       "parent_cell_set_accession": "CS202210140_466",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "25"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "25"
+      }
     },
     {
       "labelset": "Cluster",
@@ -666,14 +578,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Fibroblast",
       "parent_cell_set_accession": "CS202210140_466",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "26"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "26"
+      }
     },
     {
       "labelset": "Cluster",
@@ -688,14 +596,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Fibroblast",
       "parent_cell_set_accession": "CS202210140_466",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "27"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "27"
+      }
     },
     {
       "labelset": "Cluster",
@@ -710,14 +614,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Fibroblast",
       "parent_cell_set_accession": "CS202210140_466",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "28"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "28"
+      }
     },
     {
       "labelset": "Cluster",
@@ -732,14 +632,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Fibroblast",
       "parent_cell_set_accession": "CS202210140_466",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "29"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "29"
+      }
     },
     {
       "labelset": "Cluster",
@@ -754,14 +650,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Fibroblast",
       "parent_cell_set_accession": "CS202210140_466",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "30"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "30"
+      }
     },
     {
       "labelset": "Cluster",
@@ -780,14 +672,10 @@
         "WIF1",
         "LGR6"
       ],
-      "parent_cell_set_name": "Fibroblast",
       "parent_cell_set_accession": "CS202210140_466",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "31"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "31"
+      }
     },
     {
       "labelset": "Cluster",
@@ -802,14 +690,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Oligodendrocyte precursor",
       "parent_cell_set_accession": "CS202210140_467",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "32"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "32"
+      }
     },
     {
       "labelset": "Cluster",
@@ -824,14 +708,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Oligodendrocyte precursor",
       "parent_cell_set_accession": "CS202210140_467",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "33"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "33"
+      }
     },
     {
       "labelset": "Cluster",
@@ -846,14 +726,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Oligodendrocyte precursor",
       "parent_cell_set_accession": "CS202210140_467",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "34"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "34"
+      }
     },
     {
       "labelset": "Cluster",
@@ -868,14 +744,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Oligodendrocyte precursor",
       "parent_cell_set_accession": "CS202210140_467",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "35"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "35"
+      }
     },
     {
       "labelset": "Cluster",
@@ -890,14 +762,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Oligodendrocyte precursor",
       "parent_cell_set_accession": "CS202210140_467",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "36"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "36"
+      }
     },
     {
       "labelset": "Cluster",
@@ -912,14 +780,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Committed oligodendrocyte precursor",
       "parent_cell_set_accession": "CS202210140_468",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "37"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "37"
+      }
     },
     {
       "labelset": "Cluster",
@@ -934,14 +798,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Committed oligodendrocyte precursor",
       "parent_cell_set_accession": "CS202210140_468",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "38"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "38"
+      }
     },
     {
       "labelset": "Cluster",
@@ -956,14 +816,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Committed oligodendrocyte precursor",
       "parent_cell_set_accession": "CS202210140_468",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "39"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "39"
+      }
     },
     {
       "labelset": "Cluster",
@@ -978,14 +834,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Oligodendrocyte",
       "parent_cell_set_accession": "CS202210140_469",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "40"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "40"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1000,14 +852,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Committed oligodendrocyte precursor",
       "parent_cell_set_accession": "CS202210140_468",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "41"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "41"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1022,14 +870,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Committed oligodendrocyte precursor",
       "parent_cell_set_accession": "CS202210140_468",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "42"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "42"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1044,14 +888,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Committed oligodendrocyte precursor",
       "parent_cell_set_accession": "CS202210140_468",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "43"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "43"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1066,14 +906,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Oligodendrocyte",
       "parent_cell_set_accession": "CS202210140_469",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "44"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "44"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1088,14 +924,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Oligodendrocyte",
       "parent_cell_set_accession": "CS202210140_469",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "45"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "45"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1110,14 +942,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Oligodendrocyte",
       "parent_cell_set_accession": "CS202210140_469",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "46"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "46"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1132,14 +960,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Oligodendrocyte",
       "parent_cell_set_accession": "CS202210140_469",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "47"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "47"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1154,14 +978,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Oligodendrocyte",
       "parent_cell_set_accession": "CS202210140_469",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "48"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "48"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1176,14 +996,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Oligodendrocyte",
       "parent_cell_set_accession": "CS202210140_469",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "49"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "49"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1198,14 +1014,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Oligodendrocyte",
       "parent_cell_set_accession": "CS202210140_469",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "50"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "50"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1220,14 +1032,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Bergmann glia",
       "parent_cell_set_accession": "CS202210140_493",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "51"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "51"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1242,14 +1050,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Astrocyte",
       "parent_cell_set_accession": "CS202210140_470",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "52"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "52"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1264,14 +1068,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Astrocyte",
       "parent_cell_set_accession": "CS202210140_470",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "53"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "53"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1286,14 +1086,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Astrocyte",
       "parent_cell_set_accession": "CS202210140_470",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "54"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "54"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1308,14 +1104,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Astrocyte",
       "parent_cell_set_accession": "CS202210140_470",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "55"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "55"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1330,14 +1122,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Astrocyte",
       "parent_cell_set_accession": "CS202210140_470",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "56"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "56"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1352,14 +1140,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Astrocyte",
       "parent_cell_set_accession": "CS202210140_470",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "57"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "57"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1374,14 +1158,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Astrocyte",
       "parent_cell_set_accession": "CS202210140_470",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "58"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "58"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1396,14 +1176,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Astrocyte",
       "parent_cell_set_accession": "CS202210140_470",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "59"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "59"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1418,14 +1194,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Astrocyte",
       "parent_cell_set_accession": "CS202210140_470",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "60"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "60"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1440,14 +1212,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Astrocyte",
       "parent_cell_set_accession": "CS202210140_470",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "61"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "61"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1462,14 +1230,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Astrocyte",
       "parent_cell_set_accession": "CS202210140_470",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "62"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "62"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1484,14 +1248,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Astrocyte",
       "parent_cell_set_accession": "CS202210140_470",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "63"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "63"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1506,14 +1266,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Astrocyte",
       "parent_cell_set_accession": "CS202210140_470",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "64"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "64"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1528,14 +1284,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Ependymal",
       "parent_cell_set_accession": "CS202210140_471",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "65"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "65"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1550,14 +1302,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Ependymal",
       "parent_cell_set_accession": "CS202210140_471",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "66"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "66"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1572,14 +1320,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Ependymal",
       "parent_cell_set_accession": "CS202210140_471",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "67"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "67"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1594,14 +1338,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Ependymal",
       "parent_cell_set_accession": "CS202210140_471",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "68"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "68"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1616,14 +1356,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Ependymal",
       "parent_cell_set_accession": "CS202210140_471",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "69"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "69"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1638,14 +1374,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Ependymal",
       "parent_cell_set_accession": "CS202210140_471",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "70"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "70"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1660,14 +1392,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Ependymal",
       "parent_cell_set_accession": "CS202210140_471",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "71"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "71"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1682,14 +1410,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Ependymal",
       "parent_cell_set_accession": "CS202210140_471",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "72"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "72"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1704,14 +1428,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Ependymal",
       "parent_cell_set_accession": "CS202210140_471",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "73"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "73"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1726,14 +1446,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Ependymal",
       "parent_cell_set_accession": "CS202210140_471",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "74"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "74"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1748,14 +1464,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Committed oligodendrocyte precursor",
       "parent_cell_set_accession": "CS202210140_468",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "75"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "75"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1770,14 +1482,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Choroid plexus",
       "parent_cell_set_accession": "CS202210140_472",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "76"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "76"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1792,14 +1500,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Choroid plexus",
       "parent_cell_set_accession": "CS202210140_472",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "77"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "77"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1814,14 +1518,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Choroid plexus",
       "parent_cell_set_accession": "CS202210140_472",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "78"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "78"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1836,14 +1536,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Choroid plexus",
       "parent_cell_set_accession": "CS202210140_472",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "79"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "79"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1858,14 +1554,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Choroid plexus",
       "parent_cell_set_accession": "CS202210140_472",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "80"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "80"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1880,14 +1572,10 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Choroid plexus",
       "parent_cell_set_accession": "CS202210140_472",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "81"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "81"
+      }
     },
     {
       "labelset": "Cluster",
@@ -1902,16 +1590,13 @@
       "marker_gene_evidence": [
         ""
       ],
-      "parent_cell_set_name": "Choroid plexus",
       "parent_cell_set_accession": "CS202210140_472",
-      "user_annotations": [
-        {
-          "labelset": "Cluster ID",
-          "cell_label": "82"
-        }
-      ]
+      "author_annotation_fields": {
+        "Cluster ID": "82"
+      }
     }
   ],
+  "matrix_file_id": "CellXGene_dataset:8e10f1c4-8e98-41e5-b65f-8cd89a887122",
   "labelsets": [
     {
       "name": "Cluster",
@@ -1921,5 +1606,7 @@
       "name": "supercluster_term",
       "rank": "1"
     }
-  ]
+  ],
+  "orcid": "https://orcid.org/0000-0001-7620-8973",
+  "cellannotation_schema_version": "0.2b0"
 }

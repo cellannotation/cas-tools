@@ -1,6 +1,7 @@
 # Script to generate Siletti CAS json representation.
-
 import os
+
+from importlib.metadata import version
 
 from cas.accession.incremental_accession_manager import IncrementalAccessionManager
 from cas.file_utils import read_csv_to_dict, write_json_file
@@ -30,8 +31,15 @@ NOMENCLATURE_TABLE = os.path.join(
 
 
 def main():
-    cas_neuronal = CellTypeAnnotation("", list())
-    cas_non_neuronal = CellTypeAnnotation("", list())
+    cas_neuronal = CellTypeAnnotation("Kimberly Siletti", list())
+    cas_non_neuronal = CellTypeAnnotation("Kimberly Siletti", list())
+
+    cas_neuronal.orcid = "https://orcid.org/0000-0001-7620-8973"
+    cas_non_neuronal.orcid = "https://orcid.org/0000-0001-7620-8973"
+    cas_neuronal.matrix_file_id = "CellXGene_dataset:8e10f1c4-8e98-41e5-b65f-8cd89a887122"
+    cas_non_neuronal.matrix_file_id = "CellXGene_dataset:8e10f1c4-8e98-41e5-b65f-8cd89a887122"
+    cas_neuronal.cellannotation_schema_version = version("cell-annotation-schema")
+    cas_non_neuronal.cellannotation_schema_version = version("cell-annotation-schema")
 
     labelsets = list()
     cluster_ls = Labelset("Cluster")
