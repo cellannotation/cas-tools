@@ -1,8 +1,8 @@
 import os
 import pkg_resources
-
 from pathlib import Path
 from typing import get_type_hints
+from importlib.metadata import version
 
 from cas.file_utils import read_config, read_tsv_to_dict, write_json_file
 from cas.flatten_data_to_tables import serialize_to_tables
@@ -62,7 +62,7 @@ def ingest_user_data(data_file: str, config_file: str):
     if not is_config_valid:
         raise Exception("Configuration file is not valid!")
     cas = CellTypeAnnotation(config["author_name"], list())
-    cas.cellannotation_schema_version = pkg_resources.get_distribution("cell-annotation-schema").version
+    cas.cellannotation_schema_version = version("cell-annotation-schema")
     headers, records = read_tsv_to_dict(data_file, generated_ids=True)
     config_fields = config["fields"]
     populate_labelsets(cas, config_fields)

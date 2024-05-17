@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from cas.linkml.data import dump_to_rdf, populate_ids
+from cas.linkml_ops.data import dump_to_rdf, populate_ids
 from rdflib import Graph
 
 
@@ -44,9 +44,9 @@ class LinkMLDataTestCase(unittest.TestCase):
         for stmt in expected_graph:
             self.assertTrue(stmt in rdf_graph)
 
-    def test_validate(self):
-        # TODO: Implement test
-        pass
+    # def test_validate(self):
+    #     # TODO: Implement test
+    #     pass
 
 
 if __name__ == "__main__":

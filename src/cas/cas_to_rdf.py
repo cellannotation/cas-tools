@@ -2,12 +2,12 @@ import rdflib
 
 from typing import Union, Optional, List
 
-from cas.linkml.schema import (
+from cas.linkml_ops.schema import (
     convert_cas_schema_to_linkml,
     decorate_linkml_schema,
     expand_schema,
 )
-from cas.linkml.data import dump_to_rdf, populate_ids
+from cas.linkml_ops.data import dump_to_rdf, populate_ids
 
 
 def export_to_rdf(

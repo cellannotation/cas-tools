@@ -3,15 +3,20 @@ import unittest
 
 from rdflib import URIRef, Graph
 
-
 from cas.cas_to_rdf import export_to_rdf
 
+
 CAS_NS = "https://cellular-semantics.sanger.ac.uk/ontology/CAS/"
+dataset_type = URIRef(CAS_NS + "GeneralCellAnnotationOpenStandard")
+annotation_type = URIRef("http://purl.obolibrary.org/obo/PCL_0010001")
+labelset_type = URIRef(CAS_NS + "Labelset")
+rdftype = URIRef("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
 
 TESTDATA = os.path.join(
     os.path.dirname(os.path.realpath(__file__)), "./test_data/linkml/"
 )
 TEST_OUTPUT = os.path.join(TESTDATA, "output.rdf")
+TEST_OUTPUT2 = os.path.join(TESTDATA, "CS202210140_non_neuronal.rdf")
 
 
 class CAStoRDFTestCase(unittest.TestCase):
@@ -20,8 +25,8 @@ class CAStoRDFTestCase(unittest.TestCase):
     def tearDownClass(cls):
         if os.path.isfile(TEST_OUTPUT):
             os.remove(TEST_OUTPUT)
-        if os.path.isfile(os.path.join(TESTDATA, "CS202210140_non_neuronal.rdf")):
-            os.remove(os.path.join(TESTDATA, "CS202210140_non_neuronal.rdf"))
+        if os.path.isfile(TEST_OUTPUT2):
+            os.remove(TEST_OUTPUT2)
 
     def test_cas_to_rdf(self):
         ontology_namespace = "MTG"
@@ -39,11 +44,6 @@ class CAStoRDFTestCase(unittest.TestCase):
             include_cells=False
         )
         self.assertTrue(os.path.isfile(TEST_OUTPUT))
-
-        dataset_type = URIRef(CAS_NS + "GeneralCellAnnotationOpenStandard")
-        annotation_type = URIRef("http://purl.obolibrary.org/obo/PCL_0010001")
-        labelset_type = URIRef(CAS_NS + "Labelset")
-        rdftype = URIRef("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
 
         self.assertEqual(1, len(list(rdf_graph.triples((None, rdftype, dataset_type)))))
         self.assertEqual(
@@ -70,7 +70,7 @@ class CAStoRDFTestCase(unittest.TestCase):
             else:
                 self.fail("Unexpected triple: " + str(triple))
 
-    def test_cas_to_rdf2(self):
+    def test_cas_to_rdf_siletti(self):
         ontology_namespace = "CS202210140"
         ontology_iri = "https://purl.brain-bican.org/ontology/CS202210140/"
         labelsets = ["Cluster", "supercluster_term"]
@@ -83,10 +83,36 @@ class CAStoRDFTestCase(unittest.TestCase):
             ontology_namespace=ontology_namespace,
             ontology_iri=ontology_iri,
             labelsets=labelsets,
-            output_path=os.path.join(TESTDATA, "CS202210140_non_neuronal.rdf"),
+            output_path=TEST_OUTPUT2,
             validate=True,
             include_cells=False
         )
+
+        self.assertTrue(os.path.isfile(TEST_OUTPUT2))
+        self.assertEqual(1, len(list(rdf_graph.triples((None, rdftype, dataset_type)))))
+        self.assertEqual(
+            2, len(list(rdf_graph.triples((None, rdftype, labelset_type))))
+        )
+        self.assertEqual(
+            89, len(list(rdf_graph.triples((None, rdftype, annotation_type))))
+        )
+
+        Epen_69 = URIRef(ontology_iri + "CS202210140_70")
+        triples = list(rdf_graph.triples((Epen_69, None, None)))
+        self.assertEqual(5, len(triples))
+        for triple in triples:
+            if str(triple[1]) == CAS_NS + "has_labelset":
+                self.assertEqual(ontology_iri + "Cluster", str(triple[2]))
+            elif str(triple[1]) == "http://www.w3.org/2000/01/rdf-schema#label":
+                self.assertEqual("Epen_69", str(triple[2]))
+            elif str(triple[1]) == "http://purl.obolibrary.org/obo/RO_0015003":
+                self.assertEqual(ontology_iri + "CS202210140_471", str(triple[2]))
+            elif str(triple[1]) == CAS_NS + "author_annotation_fields":
+                self.assertEqual("{\"Cluster ID\": \"69\"}", str(triple[2]))
+            elif triple[1] == rdftype:
+                self.assertEqual("http://purl.obolibrary.org/obo/PCL_0010001", str(triple[2]))
+            else:
+                self.fail("Unexpected triple: " + str(triple))
 
 
 if __name__ == "__main__":

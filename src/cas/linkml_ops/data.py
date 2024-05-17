@@ -1,9 +1,10 @@
 import rdflib
+import json
 
 from pathlib import Path
 from typing import Union, Optional, List
 
-from cas.linkml.schema import CAS_ROOT_CLASS, DEFAULT_PREFIXES, CAS_NAMESPACE
+from cas.linkml_ops.schema import CAS_ROOT_CLASS, DEFAULT_PREFIXES, CAS_NAMESPACE
 from cas.file_utils import read_json_file
 
 from linkml_runtime.utils.compile_python import compile_python
@@ -52,6 +53,7 @@ def dump_to_rdf(
 
     if validate:
         validate_data(schema_def, instance)
+    instance = serialise_author_annotation(instance)
 
     gen = generators.PythonGenerator(schema_def)
     output = gen.serialize()
@@ -144,7 +146,7 @@ def validate_data(schema: SchemaDefinition, instance: dict) -> bool:
 
 
 def populate_ids(
-    instance: Union[str, dict], ontology_namespace: str, ontology_id: str
+    instance: Union[str, Path, dict], ontology_namespace: str, ontology_id: str
 ) -> dict:
     """
     Population of id fields in the data instance that are required for the RDF conversion.
@@ -157,6 +159,8 @@ def populate_ids(
     Returns:
         json object with populated id properties
     """
+    if isinstance(instance, Path):
+        instance = str(instance)
     if isinstance(instance, str):
         data = read_json_file(instance)
         if data is None:
@@ -199,3 +203,19 @@ def remove_empty_strings(json_data: dict) -> Union[dict, list]:
         return [remove_empty_strings(item) for item in json_data if item != ""]
     else:
         return json_data
+
+
+def serialise_author_annotation(instance: dict) -> dict:
+    """
+    Author annotations fiel value is a dict and needs to be serialised to a json string for better representation in RDF.
+    Serializes the author annotation data in the instance to a json string.
+    Args:
+        instance: The instance to be updated.
+
+    Returns:
+        The updated instance.
+    """
+    for annotation in instance.get("annotations", []):
+        if "author_annotation_fields" in annotation and annotation["author_annotation_fields"]:
+            annotation["author_annotation_fields"] = json.dumps(annotation["author_annotation_fields"])
+    return instance

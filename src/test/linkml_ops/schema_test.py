@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from cas.linkml.schema import (
+from cas.linkml_ops.schema import (
     convert_cas_schema_to_linkml,
     decorate_linkml_schema,
     expand_schema,

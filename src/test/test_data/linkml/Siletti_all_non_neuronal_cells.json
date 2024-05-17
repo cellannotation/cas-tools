@@ -1,0 +1,1612 @@
+{
+  "author_name": "Kimberly Siletti",
+  "annotations": [
+    {
+      "labelset": "supercluster_term",
+      "cell_label": "Microglia",
+      "cell_set_accession": "CS202210140_464",
+      "cell_ontology_term_id": "CL:0000129",
+      "cell_ontology_term": "microglia",
+      "rationale": "Supported by marker expression and annotation transfer from Middle Temporal Gyrus dataset (Jorstad et al., 2023)",
+      "rationale_dois": [
+        "DOI:10.1126/science.adf6812"
+      ],
+      "marker_gene_evidence": [
+        "PTPRC"
+      ]
+    },
+    {
+      "labelset": "supercluster_term",
+      "cell_label": "Vascular",
+      "cell_set_accession": "CS202210140_465",
+      "cell_ontology_term_id": "CL:0002139",
+      "cell_ontology_term": "endothelial cell of vascular tree",
+      "rationale": "Supported by marker expression and annotation transfer from Middle Temporal Gyrus dataset (Jorstad et al., 2023)",
+      "rationale_dois": [
+        "DOI:10.1126/science.adf6812"
+      ],
+      "marker_gene_evidence": [
+        "CLDN5",
+        "ACTA2"
+      ]
+    },
+    {
+      "labelset": "supercluster_term",
+      "cell_label": "Fibroblast",
+      "cell_set_accession": "CS202210140_466",
+      "cell_ontology_term_id": "CL:0000057",
+      "cell_ontology_term": "fibroblast",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        "LUM"
+      ]
+    },
+    {
+      "labelset": "supercluster_term",
+      "cell_label": "Oligodendrocyte precursor",
+      "cell_set_accession": "CS202210140_467",
+      "cell_ontology_term_id": "CL:0002453",
+      "cell_ontology_term": "oligodendrocyte precursor cell",
+      "rationale": "Supported by marker expression and annotation transfer from Middle Temporal Gyrus dataset (Jorstad et al., 2023)",
+      "rationale_dois": [
+        "DOI:10.1126/science.adf6812"
+      ],
+      "marker_gene_evidence": [
+        "PDGFRA",
+        "SOX10"
+      ]
+    },
+    {
+      "labelset": "supercluster_term",
+      "cell_label": "Committed oligodendrocyte precursor",
+      "cell_set_accession": "CS202210140_468",
+      "cell_ontology_term_id": "CL:4023059",
+      "cell_ontology_term": "differentiation-committed oligodendrcyte precursor",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        "SOX10",
+        "GPR17"
+      ]
+    },
+    {
+      "labelset": "supercluster_term",
+      "cell_label": "Oligodendrocyte",
+      "cell_set_accession": "CS202210140_469",
+      "cell_ontology_term_id": "CL:0000128",
+      "cell_ontology_term": "oligodendrocyte",
+      "rationale": "Supported by marker expression and annotation transfer from Middle Temporal Gyrus dataset (Jorstad et al., 2023)",
+      "rationale_dois": [
+        "DOI:10.1126/science.adf6812"
+      ],
+      "marker_gene_evidence": [
+        "SOX10",
+        "PLP1"
+      ]
+    },
+    {
+      "labelset": "supercluster_term",
+      "cell_label": "Bergmann glia",
+      "cell_set_accession": "CS202210140_493",
+      "cell_ontology_term_id": "CL:0000644",
+      "cell_ontology_term": "Bergmann glial cell",
+      "rationale": "GDF10 marks Bergmann glia in the mouse Other markers from adult human data",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        "AQP4",
+        "GDF10",
+        "GABRG3",
+        "WIF1",
+        "LGR6"
+      ]
+    },
+    {
+      "labelset": "supercluster_term",
+      "cell_label": "Astrocyte",
+      "cell_set_accession": "CS202210140_470",
+      "cell_ontology_term_id": "CL:0000127",
+      "cell_ontology_term": "astrocyte",
+      "rationale": "Supported by marker expression and annotation transfer from Middle Temporal Gyrus dataset (Jorstad et al., 2023)",
+      "rationale_dois": [
+        "DOI:10.1126/science.adf6812"
+      ],
+      "marker_gene_evidence": [
+        "AQP4"
+      ]
+    },
+    {
+      "labelset": "supercluster_term",
+      "cell_label": "Ependymal",
+      "cell_set_accession": "CS202210140_471",
+      "cell_ontology_term_id": "CL:0000065",
+      "cell_ontology_term": "ependymal cell",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        "FOXJ1"
+      ]
+    },
+    {
+      "labelset": "supercluster_term",
+      "cell_label": "Choroid plexus",
+      "cell_set_accession": "CS202210140_472",
+      "cell_ontology_term_id": "CL:0000706",
+      "cell_ontology_term": "choroid plexus epithelial cell",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        "FOXJ1",
+        "TTR"
+      ]
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Mgl_4",
+      "cell_set_accession": "CS202210140_5",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_464",
+      "author_annotation_fields": {
+        "Cluster ID": "4"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Mgl_5",
+      "cell_set_accession": "CS202210140_6",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_464",
+      "author_annotation_fields": {
+        "Cluster ID": "5"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Mgl_6",
+      "cell_set_accession": "CS202210140_7",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_464",
+      "author_annotation_fields": {
+        "Cluster ID": "6"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Mgl_7",
+      "cell_set_accession": "CS202210140_8",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_464",
+      "author_annotation_fields": {
+        "Cluster ID": "7"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Mgl_8",
+      "cell_set_accession": "CS202210140_9",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_464",
+      "author_annotation_fields": {
+        "Cluster ID": "8"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Mgl_9",
+      "cell_set_accession": "CS202210140_10",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_464",
+      "author_annotation_fields": {
+        "Cluster ID": "9"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Mgl_10",
+      "cell_set_accession": "CS202210140_11",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_464",
+      "author_annotation_fields": {
+        "Cluster ID": "10"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Mgl_11",
+      "cell_set_accession": "CS202210140_12",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_464",
+      "author_annotation_fields": {
+        "Cluster ID": "11"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Mgl_12",
+      "cell_set_accession": "CS202210140_13",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_464",
+      "author_annotation_fields": {
+        "Cluster ID": "12"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "VendPLVAP_13",
+      "cell_set_accession": "CS202210140_14",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_465",
+      "author_annotation_fields": {
+        "Cluster ID": "13"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "VendAC_14",
+      "cell_set_accession": "CS202210140_15",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_465",
+      "author_annotation_fields": {
+        "Cluster ID": "14"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "VendC_15",
+      "cell_set_accession": "CS202210140_16",
+      "cell_ontology_term_id": "CL:0002144",
+      "cell_ontology_term": "capillary endothelial cell",
+      "rationale": "BMX = large artery",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        "FLT1",
+        "CLDN5",
+        "PECAM1",
+        "MFSD2A"
+      ],
+      "parent_cell_set_accession": "CS202210140_465",
+      "author_annotation_fields": {
+        "Cluster ID": "15"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "VendVC_16",
+      "cell_set_accession": "CS202210140_17",
+      "cell_ontology_term_id": "CL:0002144",
+      "cell_ontology_term": "capillary endothelial cell",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_465",
+      "author_annotation_fields": {
+        "Cluster ID": "16"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "VendV_17",
+      "cell_set_accession": "CS202210140_18",
+      "cell_ontology_term_id": "CL:0002543",
+      "cell_ontology_term": "vein endothelial cell",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_465",
+      "author_annotation_fields": {
+        "Cluster ID": "17"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "VendA_18",
+      "cell_set_accession": "CS202210140_19",
+      "cell_ontology_term_id": "CL:1000413",
+      "cell_ontology_term": "endothelial cell of artery",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        "FLT1",
+        "CLDN5",
+        "PECAM1",
+        "BMX",
+        "VEGFC",
+        "JUNB"
+      ],
+      "parent_cell_set_accession": "CS202210140_465",
+      "author_annotation_fields": {
+        "Cluster ID": "18"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Vsmc_19",
+      "cell_set_accession": "CS202210140_20",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_465",
+      "author_annotation_fields": {
+        "Cluster ID": "19"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Vsmc_20",
+      "cell_set_accession": "CS202210140_21",
+      "cell_ontology_term_id": "CL:0002590",
+      "cell_ontology_term": "smooth muscle cell of the brain vasculature",
+      "rationale": "Inferred from expression of: RGS5 (Cho et al., 2003); PDGFRB (Sweeney et al., 2016); MYH11, MYOCD, CNN1, NG2 / CSPG4 (Kumar et al., 2017).   For example, the absence of \u03b1\u2010smooth muscle actin (SMA) on NG2\u2010positive cells in CNS capillaries has led some workers to the erroneous conclusion that NG2 is expressed by endothelial cells, rather than mural cells, in this microvasculature (Schrappe et al., 1991; Grako and Stallcup, 1995). Our current results demonstrate that, although SMA is an excellent marker for smooth muscle cells, it is not always an appropriate marker for pericytes in vivo. (Ozerdem et al., 2001)",
+      "rationale_dois": [
+        "https://doi.org/10.1096/fj.02-0340fje",
+        "https://doi.org/10.1038/nn.4288",
+        "https://doi.org/10.1016/j.celrep.2017.05.019",
+        "https://doi.org/10.1002/dvdy.1200"
+      ],
+      "marker_gene_evidence": [
+        "PDGFRB",
+        "ACTA2",
+        "MYH11"
+      ],
+      "parent_cell_set_accession": "CS202210140_465",
+      "author_annotation_fields": {
+        "Cluster ID": "20"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Per_21",
+      "cell_set_accession": "CS202210140_22",
+      "cell_ontology_term_id": "CL:0000669",
+      "cell_ontology_term": "pericyte",
+      "rationale": "Inferred from expression of: RGS5 (Cho et al., 2003);  PDGFRB, ANPEP (in a subset) (Sweeney et al., 2016); MYH11, MYOCD, CNN1, NG2 / CSPG4 (Kumar et al., 2017).   For example, the absence of \u03b1\u2010smooth muscle actin (SMA) on NG2\u2010positive cells in CNS capillaries has led some workers to the erroneous conclusion that NG2 is expressed by endothelial cells, rather than mural cells, in this microvasculature (Schrappe et al., 1991; Grako and Stallcup, 1995). Our current results demonstrate that, although SMA is an excellent marker for smooth muscle cells, it is not always an appropriate marker for pericytes in vivo. (Ozerdem et al., 2001)",
+      "rationale_dois": [
+        "https://doi.org/10.1096/fj.02-0340fje",
+        "https://doi.org/10.1038/nn.4288",
+        "https://doi.org/10.1016/j.celrep.2017.05.019"
+      ],
+      "marker_gene_evidence": [
+        "PDGFRB",
+        "CSPG4"
+      ],
+      "parent_cell_set_accession": "CS202210140_465",
+      "author_annotation_fields": {
+        "Cluster ID": "21"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Per_22",
+      "cell_set_accession": "CS202210140_23",
+      "cell_ontology_term_id": "CL:0000669",
+      "cell_ontology_term": "pericyte",
+      "rationale": "Inferred from expression of: RGS5 (Cho et al., 2003);  PDGFRB, ANPEP (in a subset) (Sweeney et al., 2016); MYH11, MYOCD, CNN1, NG2 / CSPG4 (Kumar et al., 2017).   For example, the absence of \u03b1\u2010smooth muscle actin (SMA) on NG2\u2010positive cells in CNS capillaries has led some workers to the erroneous conclusion that NG2 is expressed by endothelial cells, rather than mural cells, in this microvasculature (Schrappe et al., 1991; Grako and Stallcup, 1995). Our current results demonstrate that, although SMA is an excellent marker for smooth muscle cells, it is not always an appropriate marker for pericytes in vivo. (Ozerdem et al., 2001)",
+      "rationale_dois": [
+        "https://doi.org/10.1096/fj.02-0340fje",
+        "https://doi.org/10.1038/nn.4288",
+        "https://doi.org/10.1016/j.celrep.2017.05.019"
+      ],
+      "marker_gene_evidence": [
+        "PDGFRB",
+        "CSPG4"
+      ],
+      "parent_cell_set_accession": "CS202210140_465",
+      "author_annotation_fields": {
+        "Cluster ID": "22"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Per_23",
+      "cell_set_accession": "CS202210140_24",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_465",
+      "author_annotation_fields": {
+        "Cluster ID": "23"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Fbl_24",
+      "cell_set_accession": "CS202210140_25",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_466",
+      "author_annotation_fields": {
+        "Cluster ID": "24"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Fbl_25",
+      "cell_set_accession": "CS202210140_26",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_466",
+      "author_annotation_fields": {
+        "Cluster ID": "25"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Fbl_26",
+      "cell_set_accession": "CS202210140_27",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_466",
+      "author_annotation_fields": {
+        "Cluster ID": "26"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Fbl_27",
+      "cell_set_accession": "CS202210140_28",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_466",
+      "author_annotation_fields": {
+        "Cluster ID": "27"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Fbl_28",
+      "cell_set_accession": "CS202210140_29",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_466",
+      "author_annotation_fields": {
+        "Cluster ID": "28"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Fbl_29",
+      "cell_set_accession": "CS202210140_30",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_466",
+      "author_annotation_fields": {
+        "Cluster ID": "29"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Fbl_30",
+      "cell_set_accession": "CS202210140_31",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_466",
+      "author_annotation_fields": {
+        "Cluster ID": "30"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Fbl_31",
+      "cell_set_accession": "CS202210140_32",
+      "cell_ontology_term_id": "CL:4023097",
+      "cell_ontology_term": "arachnoid barrier cell",
+      "rationale": "",
+      "rationale_dois": [
+        "https://doi.org/10.1016/j.devcel.2020.06.009"
+      ],
+      "marker_gene_evidence": [
+        "AQP4",
+        "GDF10",
+        "GABRG3",
+        "WIF1",
+        "LGR6"
+      ],
+      "parent_cell_set_accession": "CS202210140_466",
+      "author_annotation_fields": {
+        "Cluster ID": "31"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "OPC_32",
+      "cell_set_accession": "CS202210140_33",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_467",
+      "author_annotation_fields": {
+        "Cluster ID": "32"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "OPC_33",
+      "cell_set_accession": "CS202210140_34",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_467",
+      "author_annotation_fields": {
+        "Cluster ID": "33"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "OPC_34",
+      "cell_set_accession": "CS202210140_35",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_467",
+      "author_annotation_fields": {
+        "Cluster ID": "34"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "OPC_35",
+      "cell_set_accession": "CS202210140_36",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_467",
+      "author_annotation_fields": {
+        "Cluster ID": "35"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "OPC_36",
+      "cell_set_accession": "CS202210140_37",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_467",
+      "author_annotation_fields": {
+        "Cluster ID": "36"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "COP_37",
+      "cell_set_accession": "CS202210140_38",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_468",
+      "author_annotation_fields": {
+        "Cluster ID": "37"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "COP_38",
+      "cell_set_accession": "CS202210140_39",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_468",
+      "author_annotation_fields": {
+        "Cluster ID": "38"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "COP_39",
+      "cell_set_accession": "CS202210140_40",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_468",
+      "author_annotation_fields": {
+        "Cluster ID": "39"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Oligo_40",
+      "cell_set_accession": "CS202210140_41",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_469",
+      "author_annotation_fields": {
+        "Cluster ID": "40"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "COP_41",
+      "cell_set_accession": "CS202210140_42",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_468",
+      "author_annotation_fields": {
+        "Cluster ID": "41"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "COP_42",
+      "cell_set_accession": "CS202210140_43",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_468",
+      "author_annotation_fields": {
+        "Cluster ID": "42"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "COP_43",
+      "cell_set_accession": "CS202210140_44",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_468",
+      "author_annotation_fields": {
+        "Cluster ID": "43"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Oligo_44",
+      "cell_set_accession": "CS202210140_45",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_469",
+      "author_annotation_fields": {
+        "Cluster ID": "44"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Oligo_45",
+      "cell_set_accession": "CS202210140_46",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_469",
+      "author_annotation_fields": {
+        "Cluster ID": "45"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Oligo_46",
+      "cell_set_accession": "CS202210140_47",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_469",
+      "author_annotation_fields": {
+        "Cluster ID": "46"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Oligo_47",
+      "cell_set_accession": "CS202210140_48",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_469",
+      "author_annotation_fields": {
+        "Cluster ID": "47"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Oligo_48",
+      "cell_set_accession": "CS202210140_49",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_469",
+      "author_annotation_fields": {
+        "Cluster ID": "48"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Oligo_49",
+      "cell_set_accession": "CS202210140_50",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_469",
+      "author_annotation_fields": {
+        "Cluster ID": "49"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Oligo_50",
+      "cell_set_accession": "CS202210140_51",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_469",
+      "author_annotation_fields": {
+        "Cluster ID": "50"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Bgl_51",
+      "cell_set_accession": "CS202210140_52",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_493",
+      "author_annotation_fields": {
+        "Cluster ID": "51"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Astro_52",
+      "cell_set_accession": "CS202210140_53",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_470",
+      "author_annotation_fields": {
+        "Cluster ID": "52"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Astro_53",
+      "cell_set_accession": "CS202210140_54",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_470",
+      "author_annotation_fields": {
+        "Cluster ID": "53"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Astro_54",
+      "cell_set_accession": "CS202210140_55",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_470",
+      "author_annotation_fields": {
+        "Cluster ID": "54"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Astro_55",
+      "cell_set_accession": "CS202210140_56",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_470",
+      "author_annotation_fields": {
+        "Cluster ID": "55"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Astro_56",
+      "cell_set_accession": "CS202210140_57",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_470",
+      "author_annotation_fields": {
+        "Cluster ID": "56"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Astro_57",
+      "cell_set_accession": "CS202210140_58",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_470",
+      "author_annotation_fields": {
+        "Cluster ID": "57"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Astro_58",
+      "cell_set_accession": "CS202210140_59",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_470",
+      "author_annotation_fields": {
+        "Cluster ID": "58"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Astro_59",
+      "cell_set_accession": "CS202210140_60",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_470",
+      "author_annotation_fields": {
+        "Cluster ID": "59"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Astro_60",
+      "cell_set_accession": "CS202210140_61",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_470",
+      "author_annotation_fields": {
+        "Cluster ID": "60"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Astro_61",
+      "cell_set_accession": "CS202210140_62",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_470",
+      "author_annotation_fields": {
+        "Cluster ID": "61"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Astro_62",
+      "cell_set_accession": "CS202210140_63",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_470",
+      "author_annotation_fields": {
+        "Cluster ID": "62"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Astro_63",
+      "cell_set_accession": "CS202210140_64",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_470",
+      "author_annotation_fields": {
+        "Cluster ID": "63"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Astro_64",
+      "cell_set_accession": "CS202210140_65",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_470",
+      "author_annotation_fields": {
+        "Cluster ID": "64"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Epen_65",
+      "cell_set_accession": "CS202210140_66",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_471",
+      "author_annotation_fields": {
+        "Cluster ID": "65"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Epen_66",
+      "cell_set_accession": "CS202210140_67",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_471",
+      "author_annotation_fields": {
+        "Cluster ID": "66"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Epen_67",
+      "cell_set_accession": "CS202210140_68",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_471",
+      "author_annotation_fields": {
+        "Cluster ID": "67"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Epen_68",
+      "cell_set_accession": "CS202210140_69",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_471",
+      "author_annotation_fields": {
+        "Cluster ID": "68"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Epen_69",
+      "cell_set_accession": "CS202210140_70",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_471",
+      "author_annotation_fields": {
+        "Cluster ID": "69"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Epen_70",
+      "cell_set_accession": "CS202210140_71",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_471",
+      "author_annotation_fields": {
+        "Cluster ID": "70"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Epen_71",
+      "cell_set_accession": "CS202210140_72",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_471",
+      "author_annotation_fields": {
+        "Cluster ID": "71"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Epen_72",
+      "cell_set_accession": "CS202210140_73",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_471",
+      "author_annotation_fields": {
+        "Cluster ID": "72"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Epen_73",
+      "cell_set_accession": "CS202210140_74",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_471",
+      "author_annotation_fields": {
+        "Cluster ID": "73"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Epen_74",
+      "cell_set_accession": "CS202210140_75",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_471",
+      "author_annotation_fields": {
+        "Cluster ID": "74"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "COP_75",
+      "cell_set_accession": "CS202210140_76",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_468",
+      "author_annotation_fields": {
+        "Cluster ID": "75"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Chrp_76",
+      "cell_set_accession": "CS202210140_77",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_472",
+      "author_annotation_fields": {
+        "Cluster ID": "76"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Chrp_77",
+      "cell_set_accession": "CS202210140_78",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_472",
+      "author_annotation_fields": {
+        "Cluster ID": "77"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Chrp_78",
+      "cell_set_accession": "CS202210140_79",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_472",
+      "author_annotation_fields": {
+        "Cluster ID": "78"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Chrp_79",
+      "cell_set_accession": "CS202210140_80",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_472",
+      "author_annotation_fields": {
+        "Cluster ID": "79"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Chrp_80",
+      "cell_set_accession": "CS202210140_81",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_472",
+      "author_annotation_fields": {
+        "Cluster ID": "80"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Chrp_81",
+      "cell_set_accession": "CS202210140_82",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_472",
+      "author_annotation_fields": {
+        "Cluster ID": "81"
+      }
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "Chrp_82",
+      "cell_set_accession": "CS202210140_83",
+      "cell_ontology_term_id": "",
+      "cell_ontology_term": "",
+      "rationale": "",
+      "rationale_dois": [
+        ""
+      ],
+      "marker_gene_evidence": [
+        ""
+      ],
+      "parent_cell_set_accession": "CS202210140_472",
+      "author_annotation_fields": {
+        "Cluster ID": "82"
+      }
+    }
+  ],
+  "matrix_file_id": "CellXGene_dataset:8e10f1c4-8e98-41e5-b65f-8cd89a887122",
+  "labelsets": [
+    {
+      "name": "Cluster",
+      "rank": "0"
+    },
+    {
+      "name": "supercluster_term",
+      "rank": "1"
+    }
+  ],
+  "orcid": "https://orcid.org/0000-0001-7620-8973",
+  "cellannotation_schema_version": "0.2b0"
+}
