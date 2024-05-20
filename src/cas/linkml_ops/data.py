@@ -29,19 +29,18 @@ def dump_to_rdf(
     include_cells: bool = True,
 ) -> rdflib.Graph:
     """
-    Dumps the given data to an RDF file based on the given schema file.
+    Dumps the given data to an RDF file based on the provided schema.
     Args:
-        schema: The schema path/dict to be used for the RDF generation.
-        instance: The data json file path or json object dict
-        ontology_namespace: The namespace of the ontology (such as `MTG`).
-        ontology_iri: The IRI of the ontology (such as `https://purl.brain-bican.org/ontology/AIT_MTG/`).
-        labelsets: (Optional) The labelsets used in the taxonomy (such as `["Cluster", "Subclass", "Class"]`).
-        output_path: (Optional) The output RDF file path.
-        validate: (Optional) Boolean to determine if data-schema validation checks will be performed. True by default.
-        include_cells: (Optional) Boolean to determine if cell data will be included in the RDF output. True by default.
-
+        schema (Union[str, Path, dict]): The schema path, dictionary, or file to be used for RDF generation.
+        instance (Union[str, dict]): The data JSON file path or JSON object dictionary.
+        ontology_namespace (str): Namespace of the ontology (e.g., `MTG`).
+        ontology_iri (str): IRI of the ontology (e.g., `https://purl.brain-bican.org/ontology/AIT_MTG/`).
+        labelsets (Optional[List[str]]): Labelsets used in the taxonomy, such as `["Cluster", "Subclass", "Class"]`.
+        output_path (Optional[str]):  Path to the output RDF file, if specified.
+        validate (bool): Determines if data-schema validation checks will be performed. True by default.
+        include_cells (bool): Determines if cell data will be included in the RDF output. True by default.
     Returns:
-        RDFlib graph object
+        An RDFlib graph object.
     """
     schema_def: SchemaDefinition = yaml_loader.load(
         schema, target_class=SchemaDefinition
@@ -121,14 +120,14 @@ def add_cl_existential_restrictions(g: rdflib.Graph):
 
 def validate_data(schema: SchemaDefinition, instance: dict) -> bool:
     """
-    Validates the given data instance against the given schema.
+    Validates the given data instance against the specified schema.
     Args:
-        schema: The schema to be used for the validation.
-        instance: The data instance to be validated.
-
+        schema (SchemaDefinition): The schema to be used for the validation.
+        instance (dict): The data instance to be validated.
     Returns:
-        Returns `True` if data is valid. Logs the validation errors and raises an exception if data is invalid.
+        bool: Returns `True` if the data is valid; otherwise, logs the validation errors and raises an exception.
     """
+
     validator = Validator(schema)
     report = validator.validate(instance)
     if report.results:
@@ -149,16 +148,16 @@ def populate_ids(
     instance: Union[str, Path, dict], ontology_namespace: str, ontology_id: str
 ) -> dict:
     """
-    Population of id fields in the data instance that are required for the RDF conversion.
-    Operation updates the instance object inplace if it is a dict.
+    Populates ID fields in the data instance required for RDF conversion. Updates the instance in-place if it is a
+    dictionary.
     Args:
-        instance: The data json file path or json object dict
-        ontology_namespace: The namespace of the ontology (such as `MTG`).
-        ontology_id: The ontology id to be used for the instance (such as `AIT_MTG`).
-
+        instance (Union[str, Path, dict]): The data JSON file path or JSON object dictionary.
+        ontology_namespace (str): The namespace of the ontology, such as 'MTG'.
+        ontology_id (str): The ontology ID to be used for the instance, such as 'AIT_MTG'.
     Returns:
-        json object with populated id properties
+        dict: A JSON object with populated ID properties.
     """
+
     if isinstance(instance, Path):
         instance = str(instance)
     if isinstance(instance, str):
@@ -188,10 +187,9 @@ def remove_empty_strings(json_data: dict) -> Union[dict, list]:
     """
     Recursively removes empty strings from the given JSON data.
     Args:
-        json_data: The JSON data to be cleaned.
-
+        json_data (dict): The JSON data to be cleaned.
     Returns:
-        JSON data with empty strings removed.
+        dict: JSON data with all empty strings removed.
     """
     if isinstance(json_data, dict):
         return {
@@ -207,11 +205,10 @@ def remove_empty_strings(json_data: dict) -> Union[dict, list]:
 
 def serialise_author_annotation(instance: dict) -> dict:
     """
-    Author annotations fiel value is a dict and needs to be serialised to a json string for better representation in RDF.
-    Serializes the author annotation data in the instance to a json string.
+    Author annotations field value is a dict and needs to be serialised to a json string for better representation in RDF.
+    Serialises the author annotation data in the instance to a json string.
     Args:
         instance: The instance to be updated.
-
     Returns:
         The updated instance.
     """

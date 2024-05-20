@@ -40,12 +40,11 @@ def convert_cas_schema_to_linkml(
     """
     Converts a CAS schema to a LinkML schema.
     Args:
-        cas_schema: Path to the CAS schema file or cas schema json object. If not provided, reads the base CAS schema
-        from the cas module.
-        output_path: (Optional) The output LinkML schema file path. (Default: None)
-
+        cas_schema (Union[str, dict], optional): Path to the CAS schema file or CAS schema JSON object. If not
+        provided, the base CAS schema is read from the CAS module.
+        output_path (Optional[str]): The output path for the LinkML schema file. If not specified, no file is written.
     Returns:
-        LinkML SchemaDefinition object
+        SchemaDefinition: A LinkML SchemaDefinition object.
     """
     if cas_schema is None or cas_schema in get_cas_schema_names().keys():
         cas_schema = get_cas_schema(cas_schema)
@@ -87,21 +86,18 @@ def decorate_linkml_schema(
     output_path: Optional[str] = None,
 ) -> dict:
     """
-    Adds additional properties to the LinkML schema that are required for OWL conversion.
+    Adds additional properties to the LinkML schema necessary for OWL conversion.
     Args:
-        schema_obj: dict or SchemaDefinition
-            Link ML schema object
-        ontology_namespace: str
-            Ontology namespace (e.g. `MTG`)
-        ontology_iri: str
-            Ontology IRI (e.g. `https://purl.brain-bican.org/ontology/AIT_MTG/`)
-        labelsets: Optional[List[str]]
-            Labelsets used in the taxonomy (such as `["Cluster", "Subclass", "Class"]`).
-        output_path: Optional[str]
-            (Optional) Path to the output schema file
+        schema_obj (Union[dict, SchemaDefinition]): The LinkML schema object, either as a dictionary or a
+        SchemaDefinition.
+        ontology_namespace (str): The namespace of the ontology (e.g., 'MTG').
+        ontology_iri (str): The ontology IRI (e.g., 'https://purl.brain-bican.org/ontology/AIT_MTG/').
+        labelsets (Optional[List[str]]): Labelsets used in the taxonomy, such as ['Cluster', 'Subclass', 'Class'].
+        output_path (Optional[str]): Path to the output schema file, if specified.
     Returns:
-        Decorated schema
+        dict: The schema decorated with additional properties for OWL conversion.
     """
+
     if isinstance(schema_obj, SchemaDefinition):
         schema_obj = schema_as_dict(schema_obj)
 
@@ -166,18 +162,14 @@ def expand_schema(
     output_path: Optional[str] = None,
 ):
     """
-    Dynamic Value set expander. Expands the yaml_obj schema inplace with the given value set names.
-    Source code from https://github.com/INCATools/ontology-access-kit/blob/main/src/oaklib/utilities/subsets/value_set_expander.py
-
+    Dynamically expands the yaml_obj schema in-place using specified value set names.
     Args:
-        config: str
-            Configuration file path
-        yaml_obj: dict
-            Yaml schema object
-        value_set_names: List[str]
-            Value set names to expand
-        output_path: str
-            (Optional) Output expanded schema file path
+        config (Optional[str]): Path to the configuration file. If None, a default configuration is used.
+        yaml_obj (dict): YAML schema object that will be expanded.
+        value_set_names (List[str]): Names of the value sets to be included in the expansion.
+        output_path (Optional[str]): Path where the expanded schema file will be saved, if specified.
+    Note:
+        Source code referenced from: https://github.com/INCATools/ontology-access-kit/blob/main/src/oaklib/utilities/subsets/value_set_expander.py
     """
     expander = ValueSetExpander()
     if config:
