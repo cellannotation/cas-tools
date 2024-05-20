@@ -27,7 +27,7 @@ def dump_to_rdf(
     output_path: str = None,
     validate: bool = True,
     include_cells: bool = True,
-) -> Optional[rdflib.Graph]:
+) -> rdflib.Graph:
     """
     Dumps the given data to an RDF file based on the given schema file.
     Args:

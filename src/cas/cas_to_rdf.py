@@ -19,9 +19,9 @@ def export_to_rdf(
     output_path: str = None,
     validate: bool = True,
     include_cells: bool = True,
-) -> Optional[rdflib.Graph]:
+) -> rdflib.Graph:
     """
-    Dumps the given data to an RDF file based on the given CAS schema.
+    Generates and returns an RDF graph from the provided data and CAS schema, with an option to write the RDF graph to a file.
 
     Args:
         cas_schema: (Optional)
@@ -44,8 +44,6 @@ def export_to_rdf(
 
     Returns:
         RDFlib graph object
-    Returns:
-
     """
     # Prepare the linkml schema
     base_linkml_schema = convert_cas_schema_to_linkml(cas_schema)
