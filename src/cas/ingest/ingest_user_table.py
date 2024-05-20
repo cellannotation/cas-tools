@@ -1,5 +1,5 @@
 import os
-import pkg_resources
+
 from pathlib import Path
 from typing import get_type_hints
 from importlib.metadata import version
@@ -12,8 +12,7 @@ from cas.model import (
     AnnotationTransfer,
     AutomatedAnnotation,
     CellTypeAnnotation,
-    Labelset,
-    UserAnnotation,
+    Labelset
 )
 
 
