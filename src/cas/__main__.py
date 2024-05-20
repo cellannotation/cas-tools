@@ -10,6 +10,7 @@ from cas.flatten_data_to_anndata import flatten
 from cas.populate_cell_ids import populate_cell_ids
 from cas.spreadsheet_to_cas import spreadsheet2cas
 from cas.validate import validate as schema_validate
+from cas.cas_to_rdf import export_to_rdf
 
 warnings.filterwarnings("always")
 
@@ -28,6 +29,7 @@ def main():
     create_cas2abc_operation_parser(subparsers)
     create_populate_cells_operation_parser(subparsers)
     create_schema_validation_operation_parser(subparsers)
+    create_cas2rdf_operation_parser(subparsers)
 
     args = parser.parse_args()
 
@@ -104,6 +106,18 @@ def main():
         schema = args.schema
         data_file_path = args.data
         schema_validate(schema, data_file_path)
+    elif args.action == "cas2rdf":
+        args = parser.parse_args()
+        export_to_rdf(
+            cas_schema=args.schema,
+            data=args.data,
+            ontology_namespace=args.ontology_ns,
+            ontology_iri=args.ontology_iri,
+            labelsets=args.labelsets,
+            output_path=args.out,
+            validate=not args.skip_validate,
+            include_cells=not args.exclude_cells,
+        )
 
 
 def create_merge_operation_parser(subparsers):
@@ -421,6 +435,85 @@ def create_schema_validation_operation_parser(subparsers):
         required=True,
         help="Path to the data file (or folder) to validate",
         type=pathlib.Path,
+    )
+
+
+def create_cas2rdf_operation_parser(subparsers):
+    """
+    Command-line Arguments:
+    -----------------------
+    --schema    : (Optional) Name of the CAS release (such as one of `base`, `cap`, `bican`) or path to the
+                    CAS schema file or url of the schema file. If not provided, reads the `base` CAS schema from the cas module.
+    --data   : Path to the json data file
+    --ontology_ns    : Ontology namespace (e.g. `MTG`)
+    --ontology_iri    : Ontology IRI (e.g. `https://purl.brain-bican.org/ontology/AIT_MTG/`)
+    --labelsets    : (Optional) Labelsets used in the taxonomy (such as `["Cluster", "Subclass", "Class"]`).
+    --out    : The output RDF file path.
+    --skip_validate    : (Optional) Determines if data-schema validation checks will be performed. Validations are performed by default.
+    --exclude_cells    : (Optional) Determines if cell data will be included in the RDF output. Cell data is exported to RDF by default.
+
+    Usage Example:
+    --------------
+    cd src
+    python -m cas cas2rdf --schema bican --data path/to/file.json --ontology_ns MTG --ontology_iri https://purl.brain-bican.org/ontology/AIT_MTG/ --labelsets Cluster Subclass Class --out path/to/output.rdf --exclude_cells
+    """
+    parser_cas2rdf = subparsers.add_parser(
+        "cas2rdf",
+        description="CAS to RDF convertor.",
+        help="Converts given CAS data into RDF format.",
+        usage="cas cas2rdf --schema bican --data path/to/file.json --ontology_ns MTG --ontology_iri https://purl.brain-bican.org/ontology/AIT_MTG/ --labelsets Cluster Subclass Class --out path/to/output.rdf --exclude_cells",
+
+    )
+
+    parser_cas2rdf.add_argument(
+        "-s",
+        "--schema",
+        help="Name of the CAS release (such as one of `base`, `cap`, `bican`) or path to the CAS schema file or url of the schema file. If not provided, reads the `base` CAS schema from the cas module.",
+        default="base",
+    )
+    parser_cas2rdf.add_argument(
+        "-d",
+        "--data",
+        required=True,
+        help="Path to the json data file",
+        type=pathlib.Path,
+    )
+    parser_cas2rdf.add_argument(
+        "-ns",
+        "--ontology_ns",
+        required=True,
+        help="Ontology namespace (e.g. `MTG`)",
+    )
+    parser_cas2rdf.add_argument(
+        "-iri",
+        "--ontology_iri",
+        required=True,
+        help="Ontology IRI (e.g. `https://purl.brain-bican.org/ontology/AIT_MTG/`)",
+    )
+    parser_cas2rdf.add_argument(
+        "-ls",
+        "--labelsets",
+        nargs="+",
+        help="List of labelsets used in the taxonomy (such as `Cluster Subclass Class`)",
+    )
+    parser_cas2rdf.add_argument(
+        "-o",
+        "--out",
+        required=True,
+        help="The output RDF file path.",
+        type=pathlib.Path,
+    )
+    parser_cas2rdf.add_argument(
+        "-sv",
+        "--skip_validate",
+        action="store_true",
+        help="Determines if data-schema validation checks will be performed. Validations are performed by default.",
+    )
+    parser_cas2rdf.add_argument(
+        "-ec",
+        "--exclude_cells",
+        action="store_true",
+        help="Determines if cell data will be included in the RDF output. Cell data is exported to RDF by default.",
     )
 
 

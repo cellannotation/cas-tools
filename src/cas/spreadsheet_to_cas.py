@@ -18,7 +18,7 @@ from cas.utils.conversion_utils import (
     generate_parent_cell_lookup,
     get_cell_ids,
 )
-from cas.validate import SCHEMA_FILE_MAPPING
+from cas.file_utils import get_cas_schema_names
 
 logging.basicConfig(level=logging.INFO)
 
@@ -93,9 +93,9 @@ def read_spreadsheet(file_path: str, sheet_name: Optional[str], schema: dict):
 
 def retrieve_schema(schema_name):
     schema_name = str(schema_name).strip().lower()
-    if schema_name not in SCHEMA_FILE_MAPPING:
+    if schema_name not in get_cas_schema_names():
         raise Exception("Schema name should be one of 'base', 'bican' or 'cap'")
-    schema_file = resources.files(schemas) / SCHEMA_FILE_MAPPING[schema_name]
+    schema_file = resources.files(schemas) / get_cas_schema_names()[schema_name]
     with schema_file.open("rt") as f:
         schema = json.loads(f.read())
     return schema

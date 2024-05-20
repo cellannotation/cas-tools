@@ -140,3 +140,22 @@ cas populate_cells --json path/to/json_file.json --anndata path/to/anndata_file.
 - `--json`      : Path to the CAS JSON schema file.
 - `--anndata`   : Path to the AnnData file. Ideally, the location will be specified by a resolvable path in the CAS file.
 - `--labelsets` : (Optional) List of labelsets to update with IDs from AnnData. If value is not provided, rank '0' labelset is used.
+
+## Convert CAS data to RDF
+
+Converts the given CAS data to RDF format.
+
+```commandline
+cas cas2rdf --schema bican --data path/to/file.json --ontology_ns MTG --ontology_iri https://purl.brain-bican.org/ontology/AIT_MTG/ --labelsets Cluster Subclass Class --out path/to/output.rdf --exclude_cells
+```
+
+**Command-line Arguments:**
+--schema    : (Optional) Name of the CAS release (such as one of `base`, `cap`, `bican`) or path to the
+                CAS schema file or url of the schema file. If not provided, reads the `base` CAS schema from the cas module.
+--data   : Path to the json data file
+--ontology_ns    : Ontology namespace (e.g. `MTG`)
+--ontology_iri    : Ontology IRI (e.g. `https://purl.brain-bican.org/ontology/AIT_MTG/`)
+--labelsets    : (Optional) Labelsets used in the taxonomy (such as `["Cluster", "Subclass", "Class"]`).
+--out    : The output RDF file path.
+--skip_validate    : (Optional) Determines if data-schema validation checks will be performed. Validations are performed by default.
+--exclude_cells    : (Optional) Determines if cell data will be included in the RDF output. Cell data is exported to RDF by default.

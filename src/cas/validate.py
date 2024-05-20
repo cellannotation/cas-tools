@@ -4,14 +4,9 @@ import warnings
 from importlib import resources
 
 from cas_schema import schema_validator, schemas
+from cas.file_utils import get_cas_schema, get_cas_schema_names
 
 warnings.filterwarnings("always")
-
-SCHEMA_FILE_MAPPING = {
-    "base": "general_schema.json",
-    "cap": "CAP_schema.json",
-    "bican": "BICAN_schema.json",
-}
 
 
 def validate(schema_name: str, data_path: str):
@@ -23,18 +18,13 @@ def validate(schema_name: str, data_path: str):
         schema_name: One of 'base', 'bican' or 'cap'. Identifies the CAS schema to validate data against.
         data_path: Path to the data file (or folder) to validate
     """
-    schema_name = str(schema_name).strip().lower()
-    if schema_name not in SCHEMA_FILE_MAPPING:
-        raise Exception("Schema name should be one of 'base', 'bican' or 'cap'")
+    schema_name = schema_name.strip().lower()
+    schema = get_cas_schema(schema_name)
     if not os.path.exists(data_path):
         raise Exception("Please provide a valid 'data_path': {}".format(data_path))
 
-    schema_file = resources.files(schemas) / SCHEMA_FILE_MAPPING[schema_name]
-    with schema_file.open("rt") as f:
-        schema = json.loads(f.read())
-
     result = schema_validator.validate(
-        schema, SCHEMA_FILE_MAPPING[schema_name], data_path
+        schema, get_cas_schema_names()[schema_name], data_path
     )
     if not result:
         raise Exception("Validation Failed")

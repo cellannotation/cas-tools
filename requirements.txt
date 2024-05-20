@@ -7,8 +7,14 @@ ruamel.yaml==0.18.6
 jsonschema==4.4.0
 ordered-set==4.1.0
 deepmerge==1.1.0
-cell-annotation-schema==0.2b0
+cell-annotation-schema==0.3b0
 h5py==3.10.0
 numpy==1.26.4
 marshmallow==3.21.1
 python-dateutil==2.9.0
+schema-automator==0.5.1
+linkml==1.7.8
+oaklib==0.6.4
+defusedxml==0.7.1
+rdflib==7.0.0
+requests==2.31.0
