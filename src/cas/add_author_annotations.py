@@ -1,5 +1,6 @@
 import json
 from typing import Any, Dict, List, Optional, Union
+
 import pandas as pd
 
 from cas.file_utils import read_json_file
@@ -26,11 +27,18 @@ def add_author_annotations(
         Dict[str, Any]: The CAS dictionary updated with new annotation fields.
     """
     validate_columns(df, join_column, columns)
+    validate_values(df, join_column, cas)
     annotations = cas["annotations"]
     for annotation in annotations:
         labelset = annotation["labelset"]
-        filter_value = annotation[join_column] if isinstance(join_column, str) else annotation["cell_label"]
-        author_annotation_dict = dataframe_to_dict(df, join_column, labelset, filter_value, columns)
+        filter_value = (
+            annotation[join_column]
+            if isinstance(join_column, str)
+            else annotation["cell_label"]
+        )
+        author_annotation_dict = dataframe_to_dict(
+            df, join_column, labelset, filter_value, columns
+        )
         if "author_annotation_fields" in annotation:
             annotation["author_annotation_fields"].update(author_annotation_dict)
         else:
@@ -92,6 +100,45 @@ def validate_columns(
         raise ValueError(f"Missing columns in DataFrame: {', '.join(missing_columns)}")
 
 
+def validate_values(
+    df: pd.DataFrame, join_column: Union[str, List[str]], cas: Dict[str, Any]
+):
+    """
+    Validates that all keys generated from specified DataFrame columns exist within the CAS annotations.
+    If there are any keys in the DataFrame that are not found in the CAS annotations, it raises an exception
+    indicating these are extra, undesired keys.
+
+    Parameters:
+        df (pd.DataFrame): DataFrame containing the data to validate.
+        join_column (Union[str, List[str]]): Column or list of columns in the DataFrame used to form the keys.
+            If a list of two strings is provided, these columns are concatenated to form the keys.
+        cas (Dict[str, Any]): Dictionary containing CAS annotations, each annotation expected to contain the keys.
+
+    Raises:
+        ValueError: If there are extra keys in the DataFrame that do not exist in the CAS annotations.
+    """
+    cas_key_list = []
+    for annotation in cas["annotations"]:
+        if isinstance(join_column, list) and len(join_column) == 2:
+            key_value = annotation.get(join_column[0], "") + annotation.get(
+                join_column[1], ""
+            )
+            cas_key_list.append(key_value)
+        else:
+            cas_key_list.append(annotation.get(join_column, ""))
+
+    if isinstance(join_column, list) and len(join_column) == 2:
+        df_key_list = df[join_column[0]].str.cat(df[join_column[1]], sep="").tolist()
+    else:
+        df_key_list = df[join_column].tolist()
+
+    extra_keys = [key for key in df_key_list if key not in cas_key_list]
+    if extra_keys:
+        raise ValueError(
+            f"Extra keys in DataFrame that are not in CAS data: {extra_keys}"
+        )
+
+
 def dataframe_to_dict(
     df: pd.DataFrame,
     join_column: Union[str, List[str]],
@@ -120,14 +167,20 @@ def dataframe_to_dict(
         filtered_df = df[df[join_column] == filter_value]
     elif isinstance(join_column, list) and len(join_column) == 2:
         # Expect cell_label to be a tuple or list with corresponding values
-        filtered_df = df[(df[join_column[0]] == labelset) & (df[join_column[1]] == filter_value)]
+        filtered_df = df[
+            (df[join_column[0]] == labelset) & (df[join_column[1]] == filter_value)
+        ]
     else:
-        raise ValueError("join_column must be either a string or a list of two strings.")
+        raise ValueError(
+            "join_column must be either a string or a list of two strings."
+        )
 
     # Determine columns to include in the output dictionary
     if columns is None:
         # Exclude join_column(s) from the output
-        exclude_columns = join_column if isinstance(join_column, list) else [join_column]
+        exclude_columns = (
+            join_column if isinstance(join_column, list) else [join_column]
+        )
         columns = [col for col in df.columns if col not in exclude_columns]
 
     # Select the specified columns to include
