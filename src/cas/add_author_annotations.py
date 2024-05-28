@@ -1,6 +1,7 @@
 import json
 from typing import Any, Dict, List, Optional, Union
 
+import numpy as np
 import pandas as pd
 
 from cas.file_utils import read_json_file
@@ -186,6 +187,7 @@ def dataframe_to_dict(
     # Select the specified columns to include
     filtered_df = filtered_df[columns]
 
+    filtered_df.replace(' ', np.nan, inplace=True)
     result_dict = filtered_df.to_dict(orient="list")
     # Unpack lists that contain only a single item
     for key, value in result_dict.items():
