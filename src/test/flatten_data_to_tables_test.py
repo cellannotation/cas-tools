@@ -165,7 +165,7 @@ class TabularSerialisationTests(unittest.TestCase):
         self.assertEqual(0, len(records))
         self.assertEqual(5, len(headers))
         self.assertEqual(
-            ["target_node_accession", "time", "name", "review", "explanation"], headers
+            ["target_node_accession", "datestamp", "reviewer", "review", "explanation"], headers
         )
 
     def test_review_table2(self):
@@ -186,16 +186,16 @@ class TabularSerialisationTests(unittest.TestCase):
         self.assertEqual(
             "CrossArea_cluster:4062c5afea", records[1]["target_node_accession"]
         )
-        self.assertEqual("2024-04-01T18:25:43.511Z", records[1]["time"])
-        self.assertEqual("Jane Doe", records[1]["name"])
+        self.assertEqual("2024-04-01T18:25:43.511Z", records[1]["datestamp"])
+        self.assertEqual("Jane Doe", records[1]["reviewer"])
         self.assertEqual("Disagree", records[1]["review"])
         self.assertEqual("This is not a Sst cell.", records[1]["explanation"])
 
         self.assertEqual(
             "CrossArea_cluster:4062c5afea", records[2]["target_node_accession"]
         )
-        self.assertEqual("2024-04-02T20:00:43.511Z", records[2]["time"])
-        self.assertEqual("John Doe", records[2]["name"])
+        self.assertEqual("2024-04-02T20:00:43.511Z", records[2]["datestamp"])
+        self.assertEqual("John Doe", records[2]["reviewer"])
         self.assertEqual("Agree", records[2]["review"])
         self.assertEqual(
             "Further expreiments reveal that this a Sst cell.",
