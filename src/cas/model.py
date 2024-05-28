@@ -84,7 +84,7 @@ class AnnotationTransfer(EncoderMixin):
 class Review(EncoderMixin):
     """Annotation review."""
 
-    time: Optional[datetime] = field(
+    datestamp: Optional[datetime] = field(
         metadata=config(
             encoder=lambda x: (
                 x.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z" if x is not None else None
@@ -94,16 +94,16 @@ class Review(EncoderMixin):
         ),
         default=None,
     )
-    """The unique name of the set of cell annotations associated with a single file."""
+    """Time and date review was last edited."""
 
-    name: Optional[str] = None
-    """Name of the reviewer."""
+    reviewer: Optional[str] = None
+    """Review Author."""
 
     review: Optional[str] = None
-    """Either “Agree” or “Disagree”. This records whether the user agreed or disagreed."""
+    """Reviewer's verdict on the annotation.  Must be 'Agree' or 'Disagree'."""
 
     explanation: Optional[str] = None
-    """Free-text of the message explaining the reasoning why the user disagreed. If “Agree”, then put in NA."""
+    """Free-text review of annotation. This is required if the verdict is disagree and should include reasons for disagreement."""
 
 
 @dataclass
@@ -174,7 +174,6 @@ class Annotation(EncoderMixin):
     # TODO modified: moved from CTA to Annotation class
     transferred_annotations: Optional[AnnotationTransfer] = None
 
-    # TODO modified: added
     reviews: Optional[List[Review]] = None
 
     def add_user_annotation(self, user_annotation_set, user_annotation_label):

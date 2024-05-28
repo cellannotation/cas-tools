@@ -317,13 +317,13 @@ def generate_reviews_table(accession_prefix, cta, out_folder):
             for review in annotation_object["reviews"]:
                 record = dict()
                 record["target_node_accession"] = accession
-                record["time"] = review.get("time", "")
-                if record["time"]:
+                record["datestamp"] = review.get("datestamp", "")
+                if record["datestamp"]:
                     # convert time to ISO 8601 format
-                    record["time"] = (
-                        record["time"].strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
+                    record["datestamp"] = (
+                        record["datestamp"].strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
                     )
-                record["name"] = review.get("name", "")
+                record["reviewer"] = review.get("reviewer", "")
                 record["review"] = review.get("review", "")
                 record["explanation"] = review.get("explanation", "")
                 records.append(record)
@@ -332,7 +332,7 @@ def generate_reviews_table(accession_prefix, cta, out_folder):
         std_records_df = pd.DataFrame.from_records(records)
         std_records_df.to_csv(std_data_path, sep="\t", index=False)
     else:
-        row = ["target_node_accession", "time", "name", "review", "explanation"]
+        row = ["target_node_accession", "datestamp", "reviewer", "review", "explanation"]
         with open(std_data_path, "w") as f_output:
             tsv_output = csv.writer(f_output, delimiter="\t")
             tsv_output.writerow(row)
