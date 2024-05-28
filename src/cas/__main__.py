@@ -4,6 +4,7 @@ import pathlib
 import warnings
 
 from cas.abc_cas_converter import abc2cas, cas2abc
+from cas.add_author_annotations import add_author_annotations_from_file
 from cas.anndata_conversion import merge
 from cas.anndata_to_cas import anndata2cas
 from cas.flatten_data_to_anndata import flatten
@@ -30,6 +31,7 @@ def main():
     create_populate_cells_operation_parser(subparsers)
     create_schema_validation_operation_parser(subparsers)
     create_cas2rdf_operation_parser(subparsers)
+    create_add_author_annotations_parser(subparsers)
 
     args = parser.parse_args()
 
@@ -118,6 +120,20 @@ def main():
             validate=not args.skip_validate,
             include_cells=not args.exclude_cells,
         )
+    elif args.action == "add_author_annotations":
+        args = parser.parse_args()
+
+        # Determine the column(s) to use for joining based on the specified arguments
+        if args.join_on:
+            join_column = args.join_on
+        elif args.join_on_cellset_ids:
+            join_column = 'cell_set_accession'
+        elif args.join_on_labelset_label:
+            join_column = ['labelset', 'cell_label']
+        else:
+            raise ValueError("No valid join column specified.")
+
+        add_author_annotations_from_file(args.cas_json, args.csv, join_column, args.columns, args.output)
 
 
 def create_merge_operation_parser(subparsers):
@@ -514,6 +530,64 @@ def create_cas2rdf_operation_parser(subparsers):
         "--exclude_cells",
         action="store_true",
         help="Determines if cell data will be included in the RDF output. Cell data is exported to RDF by default.",
+    )
+
+
+def create_add_author_annotations_parser(subparsers):
+    """
+    Adds a command line parser for the operation to add author annotation fields to CAS JSON files using data from
+    a specified CSV file. This operation processes the input CSV and CAS JSON files based on the specified matching
+    columns, optionally using selected columns for annotations, and outputs the annotated CAS JSON to a specified file.
+    If specific columns are not provided, all columns from the CSV file will be used.
+
+    Command-line Arguments:
+    -----------------------
+    --cas_json    : Path to the CAS JSON file that will be updated with annotations.
+    --csv         : Specifies the path to the CSV file.
+    --join_on     : Specifies the single column name in the CSV used for matching records. Each row must have a unique value in this column.
+    --join_on_cell_set_id     : Use 'cell_set_id' as the column for matching records.
+    --join_on_labelset_label : Use a pair of 'labelset', 'cell_label' columns for matching records.
+    --columns     : Optionally specifies which columns in the CSV will be used for annotations. If not provided,
+    all columns will be used. Column names containing spaces must be enclosed in quotes (e.g., "Columns Name").
+    --output      : Specifies the output file name for the annotated CAS JSON (default: output.json).
+
+    Usage Example:
+    --------------
+    cd src
+    python -m cas add_author_annotations --cas_json path_to_cas.json --csv path_to_csv --join_on CrossArea_cluster --columns random_annotation_x random_annotation_y --output annotated_output.json
+    python -m cas add_author_annotations --cas_json path_to_cas.json --csv path_to_csv --join_on_cell_set_id --output annotated_output.json
+    python -m cas add_author_annotations --cas_json path_to_cas.json --csv path_to_csv --join_on_labelset_label --output annotated_output.json
+    """
+    parser_add_annotations = subparsers.add_parser(
+        "add_author_annotations",
+        description="Add author annotation fields to a CAS JSON file from specified CSV columns. If no columns are specified, all columns are used.",
+        help="Adds annotation fields from CSV to a specified CAS JSON file, using all columns if none are specified."
+    )
+    parser_add_annotations.add_argument(
+        "--cas_json", required=True, help="Path to the CAS JSON file to be annotated."
+    )
+    parser_add_annotations.add_argument(
+        "--csv", required=True, help="Path to the CSV file containing annotation data."
+    )
+    parser_add_annotations.add_argument(
+        "--join_on", help="Specifies the single column name in the CSV used for matching records. Each row must have a unique value in this column."
+    )
+    parser_add_annotations.add_argument(
+        "--join_on_cellset_ids", action='store_true', help="Use 'cell_ids' as the column for matching CAS records."
+    )
+    parser_add_annotations.add_argument(
+        "--join_on_labelset_label", action='store_true', help="Use a pair of 'labelset', 'cell_label' columns for matching CAS records."
+    )
+    parser_add_annotations.add_argument(
+        "--columns",
+        nargs="+",
+        help="Optional space-separated list of column names in the CSV to be added as annotations. All columns are "
+             "used if none are specified. Column names containing spaces must be enclosed in quotes (e.g., 'Columns Name')."
+    )
+    parser_add_annotations.add_argument(
+        "--output",
+        default="output.json",
+        help="Output CAS file name (default: output.json).",
     )
 
 
