@@ -159,3 +159,24 @@ cas cas2rdf --schema bican --data path/to/file.json --ontology_ns MTG --ontology
 --out    : The output RDF file path.
 --skip_validate    : (Optional) Determines if data-schema validation checks will be performed. Validations are performed by default.
 --exclude_cells    : (Optional) Determines if cell data will be included in the RDF output. Cell data is exported to RDF by default.
+
+## Add Author Annotations to CAS JSON
+
+This tool processes input CSV and CAS JSON files to add annotation fields to the CAS JSON based on matching columns specified by the user. It can optionally use selected columns from the CSV for annotations and outputs the annotated CAS JSON to a specified file. If no specific columns are provided, all columns from the CSV file will be used.
+
+### Command-line Arguments:
+- **--cas_json**: Path to the CAS JSON file that will be updated with annotations. This parameter is required.
+- **--csv**: Specifies the path to the CSV file containing the data for annotation. This parameter is required.
+- **--join_on**: Specifies the single column name in the CSV used for matching records. Each row must have a unique value in this column.
+- **--join_on_cell_set_id**: Use 'cell_set_id' as the column for matching records. This option is triggered with a flag.
+- **--join_on_labelset_label**: Use a pair of 'labelset', 'cell_label' columns for matching records. This option is triggered with a flag.
+- **--columns**: Optionally specifies which columns in the CSV will be used for annotations. If not provided, all columns are used. Column names containing spaces must be enclosed in quotes (e.g., `"Column Name"`).
+- **--output**: Specifies the output file name for the annotated CAS JSON. Defaults to `output.json`.
+
+### Usage Examples:
+```commandline
+cd src
+python -m cas add_author_annotations --cas_json path_to_cas.json --csv path_to_csv --join_on CrossArea_cluster --columns random_annotation_x random_annotation_y --output annotated_output.json
+python -m cas add_author_annotations --cas_json path_to_cas.json --csv path_to_csv --join_on_cell_set_id --output annotated_output.json
+python -m cas add_author_annotations --cas_json path_to_cas.json --csv path_to_csv --join_on_labelset_label --output annotated_output.json
+```
