@@ -27,6 +27,12 @@ class TestAuthorAnnotations(unittest.TestCase):
                     "cell_set_accession": "c_2",
                     "author_annotation_fields": {},
                 },
+                {
+                    "labelset": "set3",
+                    "cell_label": "303",
+                    "cell_set_accession": "c_3",
+                    "author_annotation_fields": {},
+                },
             ]
         }
 

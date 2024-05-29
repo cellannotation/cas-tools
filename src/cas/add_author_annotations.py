@@ -1,10 +1,16 @@
 import json
+import logging
 from typing import Any, Dict, List, Optional, Union
 
 import numpy as np
 import pandas as pd
 
 from cas.file_utils import read_json_file
+
+
+# Configure logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 def add_author_annotations(
@@ -134,10 +140,15 @@ def validate_values(
         df_key_list = df[join_column].tolist()
 
     extra_keys = [key for key in df_key_list if key not in cas_key_list]
+    empty_rows = [key for key in cas_key_list if key not in df_key_list]
     if extra_keys:
         raise ValueError(
             f"Extra keys in DataFrame that are not in CAS data: {extra_keys}"
         )
+    if empty_rows:
+        logging.info(f"Following values in {' '.join(join_column) if isinstance(join_column, list) else join_column} exist in "
+                     f"CAS data but missing from DataFrame:"
+                     f" {' '.join(empty_rows)}")
 
 
 def dataframe_to_dict(
@@ -148,13 +159,13 @@ def dataframe_to_dict(
     columns: Optional[List[str]],
 ) -> dict:
     """
-    Converts specified columns of a DataFrame into a dictionary, where columns are keys and their values are the values.
-    If columns are not specified, the entire DataFrame for rows matching the condition is converted.
+    Converts specified columns of a DataFrame into a dictionary. If columns are not specified, the entire DataFrame
+    for rows matching the condition is converted.
 
     Args:
         df: DataFrame to extract data from.
         join_column: The column or columns used to filter the DataFrame based on cell_label.
-        labelset:
+        labelset: Labelset of a CAS annotation.
         filter_value: The value in join_column used to filter rows.
         columns: List of column names to convert to dictionary. If None, all columns are used.
 
