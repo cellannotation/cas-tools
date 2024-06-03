@@ -18,7 +18,6 @@ import numpy as np
 import pandas as pd
 
 from cas.file_utils import read_json_file, update_obs_dataset, write_json_to_hdf5
-from cas.utils.validation_utils import validate_labelset_markers
 
 LABELSET_NAME = "name"
 
@@ -82,12 +81,11 @@ def flatten_cas_object(input_json, anndata_file_path, output_file_path):
     parent_cell_ids = collect_parent_cell_ids(input_json)
 
     with h5py.File(anndata_file_path, "r+") as f:
-        marker_list = np.array(f["var"]["Gene"]["categories"][()], dtype=str)
         obs_dataset = f["obs"]
         obs_index = np.array(obs_dataset[obs_dataset.attrs['_index']], dtype=str)
 
         # obs
-        flatten_data = process_annotations(annotations, obs_index, parent_cell_ids, marker_list)
+        flatten_data = process_annotations(annotations, obs_index, parent_cell_ids)
         update_obs_dataset(obs_dataset, flatten_data)
 
         # uns
@@ -96,7 +94,7 @@ def flatten_cas_object(input_json, anndata_file_path, output_file_path):
         write_json_to_hdf5(uns_dataset, uns_json)
 
 
-def process_annotations(annotations, obs_index, parent_cell_ids, marker_list):
+def process_annotations(annotations, obs_index, parent_cell_ids):
     """
     Processes annotations and generates flattened data for obs dataset.
 
@@ -104,16 +102,12 @@ def process_annotations(annotations, obs_index, parent_cell_ids, marker_list):
         annotations (list): List of annotations.
         obs_index (np.ndarray): Array representing the index of the obs dataset.
         parent_cell_ids (dict): Dictionary containing parent cell ids.
-        marker_list (np.ndarray): List of marker genes from the var dataset.
 
     Returns:
         dict: Dictionary containing flattened data.
     """
     flatten_data = {}
     for ann in annotations:
-        # marker validation report
-        validate_labelset_markers(ann, list(marker_list))
-
         cell_ids = ann.get(
             CELL_IDS, parent_cell_ids.get(ann.get("cell_set_accession", []))
         )
