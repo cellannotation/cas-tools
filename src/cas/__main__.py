@@ -32,6 +32,7 @@ def main():
     create_schema_validation_operation_parser(subparsers)
     create_cas2rdf_operation_parser(subparsers)
     create_add_author_annotations_parser(subparsers)
+    create_split_cas_parser(subparsers)
 
     args = parser.parse_args()
 
@@ -588,6 +589,32 @@ def create_add_author_annotations_parser(subparsers):
         "--output",
         default="output.json",
         help="Output CAS file name (default: output.json).",
+    )
+
+
+def create_split_cas_parser(subparsers):
+    """
+    Command-line Arguments:
+    -----------------------
+    --cas_json    : Path to the CAS JSON file that will be updated with annotations.
+    --split_on    : Cell label/s to split the CAS file.
+    Usage Example:
+    --------------
+    cd src
+    python -m cas validate --schema bican --data path/to/file
+    """
+    parser_split_cas = subparsers.add_parser(
+        "split_cas",
+        description="",
+        help=""
+    )
+    parser_split_cas.add_argument(
+        "--cas_json", required=True, help="Path to the CAS JSON file to be annotated."
+    )
+    parser_split_cas.add_argument(
+        "--split_on",
+        nargs="+",
+        help="Cell label/s to split the CAS file."
     )
 
 
