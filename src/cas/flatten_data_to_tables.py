@@ -176,6 +176,7 @@ def generate_annotation_table(accession_prefix, cta, out_folder):
         out_folder: output folder path.
         accession_prefix: accession id prefix
     """
+    global accession_manager
     std_data_path = os.path.join(out_folder, "annotation.tsv")
 
     cta = asdict(cta)
@@ -300,10 +301,13 @@ def generate_reviews_table(cta, out_folder):
             and annotation_object["reviews"]
         ):
             labelset = str(annotation_object.get("labelset", "")).replace("_name", "")
-            accession = accession_manager.generate_accession_id(
-                id_recommendation=annotation_object.get("cell_set_accession", ""),
-                labelset=labelset,
-            )
+            if accession_manager:
+                accession = accession_manager.generate_accession_id(
+                    id_recommendation=annotation_object.get("cell_set_accession", ""),
+                    labelset=labelset,
+                )
+            else:
+                accession = annotation_object.get("cell_set_accession")
             for review in annotation_object["reviews"]:
                 record = dict()
                 record["target_node_accession"] = accession
