@@ -25,6 +25,11 @@ TEST_JSON2 = os.path.join(
     "./test_data/jorstad_mtg.json",
 )
 
+TEST_JSON_WMB = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)),
+    "./test_data/WMB.json",
+)
+
 OUT_FOLDER = os.path.join(
     os.path.dirname(os.path.realpath(__file__)), "./test_data/table_out/"
 )
@@ -253,6 +258,53 @@ class TabularSerialisationTests(unittest.TestCase):
         self.assertEqual("Class:d4ef18755c", cluster_sst["parent_cell_set_accession"])
         self.assertEqual("inhibitory", cluster_sst["parent_cell_set_name"])
         self.assertEqual("CrossArea_subclass", cluster_sst["labelset"])
+
+    def test_loading_from_json_wmb(self):
+        cta = read_cas_json_file(TEST_JSON_WMB)
+        tables = serialize_to_tables(
+            cta, "Test_table", OUT_FOLDER, {}
+        )
+
+        annotation_table_path = os.path.join(OUT_FOLDER, "annotation.tsv")
+        self.assertEqual(annotation_table_path, tables[0])
+        self.assertTrue(os.path.isfile(annotation_table_path))
+
+        headers, records = read_csv_to_dict(
+            annotation_table_path, id_column_name="cell_set_accession", delimiter="\t"
+        )
+        self.assertEqual(6905, len(records))
+
+        record_1 = records["CS20230722_CLAS_01"]
+        self.assertEqual("01 IT-ET Glut", record_1["cell_label"])
+        self.assertEqual("", record_1.get("parent_cell_set_accession"))
+        self.assertEqual("", record_1.get("parent_cell_set_name"))
+        self.assertEqual("class", record_1["labelset"])
+        self.assertEqual("Pallium-Glut", record_1["neighborhood"])
+
+        record_2 = records["CS20230722_SUBC_315"]
+        self.assertEqual("315 DCO UBC Glut", record_2["cell_label"])
+        self.assertEqual("CS20230722_CLAS_29", record_2["parent_cell_set_accession"])
+        self.assertEqual("29 CB Glut", record_2["parent_cell_set_name"])
+        self.assertEqual("subclass", record_2["labelset"])
+        self.assertEqual("CL:4023161", record_2["cell_ontology_term_id"])
+        self.assertEqual("unipolar brush cell", record_2["cell_ontology_term"])
+        self.assertEqual("Sln|Lmx1a", record_2["marker_gene_evidence"])
+        self.assertEqual("NN-IMN-GC", record_2["neighborhood"])
+        self.assertEqual("Eomes,Lmx1a,Klf3", record_2["subclass.tf.markers.combo"])
+
+        record_3 = records["CS20230722_CLUS_4566"]
+        self.assertEqual("4566 VCO Mafa Meis2 Glut_4", record_3["cell_label"])
+        self.assertEqual("CS20230722_SUPT_1016", record_3["parent_cell_set_accession"])
+        self.assertEqual("1016 VCO Mafa Meis2 Glut_4", record_3["parent_cell_set_name"])
+        self.assertEqual("cluster", record_3["labelset"])
+        self.assertEqual("", record_3["cell_ontology_term_id"])
+        self.assertEqual("", record_3["cell_ontology_term"])
+        self.assertEqual("Il22|Onecut1", record_3["marker_gene_evidence"])
+        self.assertEqual("MB-HB-Glut-Sero-Dopa", record_3["neighborhood"])
+        self.assertEqual("DCO", record_3["anatomical_annotation"])
+        self.assertEqual("Tnnt1,Ppp1r17,Lhx9", record_3["merfish.markers.combo"])
+        self.assertEqual("Onecut1,Mycn,Hoxd3", record_3["cluster.TF.markers.combo"])
+        self.assertEqual("Ppfibp1", record_3["cluster.markers.combo _within subclass_"])
 
     def test_is_hash_accession(self):
         self.assertTrue(is_hash_accession("01d93e7878"))
