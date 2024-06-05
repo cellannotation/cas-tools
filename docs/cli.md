@@ -180,3 +180,19 @@ python -m cas add_author_annotations --cas_json path_to_cas.json --csv path_to_c
 python -m cas add_author_annotations --cas_json path_to_cas.json --csv path_to_csv --join_on_cell_set_id --output annotated_output.json
 python -m cas add_author_annotations --cas_json path_to_cas.json --csv path_to_csv --join_on_labelset_label --output annotated_output.json
 ```
+
+## Split CAS JSON by Cell Label
+
+This tool allows you to split a CAS JSON file based on specified cell labels. It supports creating multiple output files, each corresponding to one of the specified labels, or a single output file containing all specified labels, depending on the user's choice.
+
+### Command-line Arguments:
+- **--cas_json**: Path to the CAS JSON file that will be updated. This parameter is required.
+- **--split_on**: Specifies the cell labels used to split the CAS file. Multiple labels can be provided.
+- **--multiple_outputs**: If set, creates multiple output files for each label provided in `--split_on`. If not set, creates a single output file containing all child terms from the split.
+
+### Usage Examples:
+```commandline
+cd src
+python -m cas split_cas --cas_json path/to/cas.json --split_on term1
+python -m cas split_cas --cas_json path/to/cas.json --split_on term1 term2
+python -m cas split_cas --cas_json path/to/cas.json --split_on term1 term2 --multiple_outputs
