@@ -132,6 +132,7 @@ def get_matching_obs_keys(input_anndata, input_json):
 
 
 def handle_matching_labelset(ann, cell_label, input_anndata, validate):
+    # Used for label changes
     if cell_label != ann[CELL_LABEL]:
         print(
             f"{ann[CELL_LABEL]} cell ids from CAS match with the cell ids in {cell_label} from anndata. "
@@ -150,6 +151,7 @@ def handle_matching_labelset(ann, cell_label, input_anndata, validate):
 
 
 def handle_non_matching_labelset(ann, input_anndata, validate, derived_cell_ids):
+    # Used for hierarchy changes
     print(
         f"{ann[CELL_LABEL]} cell ids from CAS do not match with the cell ids from anndata. "
         "Please update your CAS json."
