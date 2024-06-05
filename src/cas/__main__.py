@@ -602,7 +602,7 @@ def create_split_cas_parser(subparsers):
     """
     Command-line Arguments:
     -----------------------
-    --cas_json          : Path to the CAS JSON file that will be updated with annotations.
+    --cas_json          : Path to the CAS JSON file that will be split.
     --split_on          : Cell label/s to split the CAS file.
     --multiple_outputs  : If set, create multiple output files for each term provided in split_on.
                           If not set, create a single output file containing all child terms.
