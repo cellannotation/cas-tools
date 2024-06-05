@@ -86,6 +86,11 @@ def write_json_file(
         out_file.write(output_data)
 
 
+def write_dict_to_json_file(output_file_path: str, dictionary: dict):
+    with open(output_file_path, "w") as json_file:
+        json.dump(dictionary, json_file, indent=2)
+
+
 def read_anndata_file(file_path: str) -> Optional[anndata.AnnData]:
     """Load anndata object from a file.
 
