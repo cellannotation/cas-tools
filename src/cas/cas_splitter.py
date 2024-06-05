@@ -5,10 +5,11 @@ from cas.file_utils import read_json_file, write_dict_to_json_file
 
 ANNOTATIONS = "annotations"
 CELL_LABEL = "cell_label"
+CELL_SET_ACCESSION = "cell_set_accession"
 LABELSET = "labelset"
 LABELSETS = "labelsets"
 LABELSETS_NAME = "name"
-PARENT_CELL_SET_NAME = "parent_cell_set_name"
+PARENT_CELL_SET_ACCESSION = "parent_cell_set_accession"
 
 
 def split_cas_to_file(
@@ -52,9 +53,9 @@ def split_cas(
         ValueError: If any split_terms do not exist in the CAS data under 'parent_cell_set_name'.
     """
     parent_cell_list = {
-        annotation[CELL_LABEL]: annotation[PARENT_CELL_SET_NAME]
+        annotation[CELL_SET_ACCESSION]: annotation[PARENT_CELL_SET_ACCESSION]
         for annotation in cas[ANNOTATIONS]
-        if (PARENT_CELL_SET_NAME in annotation)
+        if (PARENT_CELL_SET_ACCESSION in annotation)
     }
     parent_cell_dict = defaultdict(list)
     for child_cell, parent_cell in parent_cell_list.items():
@@ -99,7 +100,7 @@ def filter_and_copy_cas_entries(
     output_dict[LABELSETS] = []
     labelset_dict = set()
     for annotation in cas[ANNOTATIONS]:
-        if annotation[CELL_LABEL] in label_to_copy_list:
+        if annotation[CELL_SET_ACCESSION] in label_to_copy_list:
             output_dict[ANNOTATIONS].append(annotation)
             labelset_dict.add(annotation[LABELSET])
     for labelset in cas[LABELSETS]:

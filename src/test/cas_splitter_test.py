@@ -13,16 +13,16 @@ class TestCASSplitter(unittest.TestCase):
     def setUp(self):
         self.sample_cas = {
             "annotations": [
-                {"cell_label": "X", "labelset": "Alpha"},
-                {"cell_label": "Y", "labelset": "Alpha"},
-                {"cell_label": "Z", "labelset": "Alpha"},
-                {"cell_label": "A", "parent_cell_set_name": "X", "labelset": "Beta"},
-                {"cell_label": "B", "parent_cell_set_name": "Y", "labelset": "Beta"},
-                {"cell_label": "BB", "parent_cell_set_name": "Y", "labelset": "Beta"},
-                {"cell_label": "C", "parent_cell_set_name": "Z", "labelset": "Beta"},
-                {"cell_label": "A1", "parent_cell_set_name": "A", "labelset": "Gamma"},
-                {"cell_label": "B1", "parent_cell_set_name": "B", "labelset": "Gamma"},
-                {"cell_label": "B2", "parent_cell_set_name": "BB", "labelset": "Gamma"},
+                {"cell_set_accession": "X", "labelset": "Alpha"},
+                {"cell_set_accession": "Y", "labelset": "Alpha"},
+                {"cell_set_accession": "Z", "labelset": "Alpha"},
+                {"cell_set_accession": "A", "parent_cell_set_accession": "X", "labelset": "Beta"},
+                {"cell_set_accession": "B", "parent_cell_set_accession": "Y", "labelset": "Beta"},
+                {"cell_set_accession": "BB", "parent_cell_set_accession": "Y", "labelset": "Beta"},
+                {"cell_set_accession": "C", "parent_cell_set_accession": "Z", "labelset": "Beta"},
+                {"cell_set_accession": "A1", "parent_cell_set_accession": "A", "labelset": "Gamma"},
+                {"cell_set_accession": "B1", "parent_cell_set_accession": "B", "labelset": "Gamma"},
+                {"cell_set_accession": "B2", "parent_cell_set_accession": "BB", "labelset": "Gamma"},
             ],
             "labelsets": [{"name": "Alpha"}, {"name": "Beta"}, {"name": "Gamma"}],
         }
