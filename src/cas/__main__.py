@@ -619,7 +619,7 @@ def create_split_cas_parser(subparsers):
         help="Split a CAS JSON file into multiple files based on one or more labels."
     )
     parser_split_cas.add_argument(
-        "--cas_json", required=True, help="Path to the CAS JSON file to be annotated."
+        "--cas_json", required=True, help="Path to the CAS JSON file that will be split"
     )
     parser_split_cas.add_argument(
         "--split_on",
@@ -629,7 +629,7 @@ def create_split_cas_parser(subparsers):
     parser_split_cas.add_argument(
         "--multiple_outputs",
         action="store_true",
-        help="Create multiple output files for each split_on term; if not set, create a single output file."
+        help="If set, create multiple output files for each split_on term; if not set, create a single output file."
     )
 
 
