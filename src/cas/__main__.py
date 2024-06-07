@@ -616,7 +616,7 @@ def create_split_cas_parser(subparsers):
     parser_split_cas = subparsers.add_parser(
         "split_cas",
         description="Split CAS JSON file based on specified cell label/s.",
-        help="Split a CAS JSON file into multiple files based on one or more labels."
+        help="Split a CAS JSON file into multiple files based on one or more cell accession_id(s)."
     )
     parser_split_cas.add_argument(
         "--cas_json", required=True, help="Path to the CAS JSON file that will be split"
