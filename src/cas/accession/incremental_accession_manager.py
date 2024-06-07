@@ -12,6 +12,8 @@ class IncrementalAccessionManager(BaseAccessionManager):
         Params:
             accession_prefix: accession_id prefix
         """
+        if accession_prefix is None:
+            accession_prefix = ""
         self.accession_prefix = accession_prefix
         self.last_accession_id = last_accession_id
         self.accession_ids = list()
@@ -27,14 +29,20 @@ class IncrementalAccessionManager(BaseAccessionManager):
         """
         if id_recommendation:
             id_recommendation = id_recommendation.replace(self.accession_prefix, "")
+            if id_recommendation.startswith("_"):
+                id_recommendation = id_recommendation[1:]
 
         if (
             id_recommendation
             and id_recommendation not in self.accession_ids
+            and id_recommendation.isdigit()
             and int(id_recommendation) > self.last_accession_id
         ):
             accession_id = id_recommendation
             self.last_accession_id = int(id_recommendation)
+        elif id_recommendation and not id_recommendation.isdigit():
+            # non-numeric accession id
+            accession_id = id_recommendation
         else:
             id_candidate = self.last_accession_id + 1
             while str(id_candidate) in self.accession_ids:
@@ -43,7 +51,7 @@ class IncrementalAccessionManager(BaseAccessionManager):
             self.last_accession_id = id_candidate
 
         self.accession_ids.append(accession_id)
-        if self.accession_prefix:
+        if self.accession_prefix and not accession_id.startswith(self.accession_prefix):
             accession_id = self.accession_prefix + accession_id
 
         return accession_id

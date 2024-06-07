@@ -8,6 +8,9 @@ from cas.accession.hash_accession_manager import HashAccessionManager, is_hash_a
 from cas.accession.incremental_accession_manager import IncrementalAccessionManager
 
 
+accession_manager = None
+
+
 def serialize_to_tables(cta, file_name_prefix, out_folder, project_config):
     """
     Writes cell type annotation object to a series of tsv files.
@@ -23,12 +26,12 @@ def serialize_to_tables(cta, file_name_prefix, out_folder, project_config):
         out_folder: output folder path.
         project_config: project configuration with extra metadata
     """
-    accession_prefix = project_config["accession_id_prefix"]
+    accession_prefix = project_config.get("accession_id_prefix")
     annotation_table_path = generate_annotation_table(accession_prefix, cta, out_folder)
     labelset_table_path = generate_labelset_table(cta, out_folder)
     metadata_table_path = generate_metadata_table(cta, project_config, out_folder)
     annotation_transfer_table_path = generate_annotation_transfer_table(cta, out_folder)
-    reviews_table_path = generate_reviews_table(accession_prefix, cta, out_folder)
+    reviews_table_path = generate_reviews_table(cta, out_folder)
     return [
         annotation_table_path,
         labelset_table_path,
@@ -173,6 +176,7 @@ def generate_annotation_table(accession_prefix, cta, out_folder):
         out_folder: output folder path.
         accession_prefix: accession id prefix
     """
+    global accession_manager
     std_data_path = os.path.join(out_folder, "annotation.tsv")
 
     cta = asdict(cta)
@@ -186,16 +190,18 @@ def generate_annotation_table(accession_prefix, cta, out_folder):
     else:
         accession_manager = IncrementalAccessionManager(accession_prefix)
         # sort annotations by accession ids incrementing (if there is)
-        cta["annotations"].sort(
-            key=lambda x: (
-                int(str(x["cell_set_accession"]).split(":")[-1].split("_")[-1])
-                if "cell_set_accession" in x
-                and x["cell_set_accession"]
-                and "_" in x["cell_set_accession"]
-                else 0
+        if str(first_accession).split(":")[-1].split("_")[-1].isdigit():
+            cta["annotations"].sort(
+                key=lambda x: (
+                    int(str(x["cell_set_accession"]).split(":")[-1].split("_")[-1])
+                    if "cell_set_accession" in x
+                    and x["cell_set_accession"]
+                    and "_" in x["cell_set_accession"]
+                    else 0
+                )
             )
-        )
 
+    id_index = dict()
     for annotation_object in cta["annotations"]:
         record = dict()
         if (
@@ -232,6 +238,7 @@ def generate_annotation_table(accession_prefix, cta, out_folder):
                     record[normalize_column_name(key)] = value
             # record["cell_ids"] = annotation_object.get("cell_ids", "")
             std_records.append(record)
+            id_index[record["cell_set_accession"]] = record
         else:
             # parent nodes
             parent_label = annotation_object["cell_label"]
@@ -266,41 +273,25 @@ def generate_annotation_table(accession_prefix, cta, out_folder):
     assign_parent_accession_ids(
         accession_manager, std_parent_records, std_parent_records_dict, cta["labelsets"]
     )
+    assign_parent_cell_set_names(id_index)
     std_records.extend(std_parent_records)
     std_records_df = pd.DataFrame.from_records(std_records)
     std_records_df.to_csv(std_data_path, sep="\t", index=False)
     return std_data_path
 
 
-def generate_reviews_table(accession_prefix, cta, out_folder):
+def generate_reviews_table(cta, out_folder):
     """
     Generates annotation reviews table.
 
     Parameters:
         cta: cell type annotation object to serialize.
         out_folder: output folder path.
-        accession_prefix: accession id prefix
     """
     std_data_path = os.path.join(out_folder, "review.tsv")
 
     cta = asdict(cta)
     records = list()
-
-    first_accession = cta["annotations"][0].get("cell_set_accession", "")
-    if is_hash_accession(first_accession):
-        accession_manager = HashAccessionManager()
-    else:
-        accession_manager = IncrementalAccessionManager(accession_prefix)
-        # sort annotations by accession ids incrementing (if there is)
-        cta["annotations"].sort(
-            key=lambda x: (
-                int(str(x["cell_set_accession"]).split(":")[-1].split("_")[-1])
-                if "cell_set_accession" in x
-                and x["cell_set_accession"]
-                and "_" in x["cell_set_accession"]
-                else 0
-            )
-        )
 
     for annotation_object in cta["annotations"]:
         if (
@@ -310,10 +301,13 @@ def generate_reviews_table(accession_prefix, cta, out_folder):
             and annotation_object["reviews"]
         ):
             labelset = str(annotation_object.get("labelset", "")).replace("_name", "")
-            accession = accession_manager.generate_accession_id(
-                id_recommendation=annotation_object.get("cell_set_accession", ""),
-                labelset=labelset,
-            )
+            if accession_manager:
+                accession = accession_manager.generate_accession_id(
+                    id_recommendation=annotation_object.get("cell_set_accession", ""),
+                    labelset=labelset,
+                )
+            else:
+                accession = annotation_object.get("cell_set_accession")
             for review in annotation_object["reviews"]:
                 record = dict()
                 record["target_node_accession"] = accession
@@ -381,6 +375,19 @@ def assign_parent_accession_ids(
         children = std_parent_records_dict.get(std_parent_record["cell_label"], list())
         for child in children:
             child["parent_cell_set_accession"] = accession_id
+
+
+def assign_parent_cell_set_names(id_index: dict):
+    """
+    Assigns parent cell set names to the child cell sets.
+    Parameters:
+        id_index: dictionary of cell set accessions and their corresponding records
+    """
+    for key, value in id_index.items():
+        if value["parent_cell_set_accession"]:
+            parent_record = id_index.get(value["parent_cell_set_accession"])
+            if parent_record:
+                value["parent_cell_set_name"] = parent_record["cell_label"]
 
 
 def normalize_column_name(column_name: str) -> str:
