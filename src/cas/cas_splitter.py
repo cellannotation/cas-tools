@@ -30,7 +30,11 @@ def split_cas_to_file(
         result = [result]
     for idx, cas_item in enumerate(result):
         write_dict_to_json_file(
-            f"cas_{split_terms[idx]}.json" if multiple_outputs else "split_cas.json",
+            (
+                f"cas_{split_terms[idx].replace(':', '_')}.json"
+                if multiple_outputs
+                else "split_cas.json"
+            ),
             cas_item,
         )
 
@@ -52,22 +56,21 @@ def split_cas(
     Raises:
         ValueError: If any split_terms do not exist in the CAS data under 'parent_cell_set_name'.
     """
-    parent_cell_list = {
+    cell_dict = {
         annotation[CELL_SET_ACCESSION]: annotation[PARENT_CELL_SET_ACCESSION]
         for annotation in cas[ANNOTATIONS]
         if (PARENT_CELL_SET_ACCESSION in annotation)
     }
     parent_cell_dict = defaultdict(list)
-    for child_cell, parent_cell in parent_cell_list.items():
+    for child_cell, parent_cell in cell_dict.items():
         parent_cell_dict[parent_cell].append(child_cell)
     if isinstance(split_terms, str):
         split_terms = [split_terms]
-    missing_terms = [
-        term for term in split_terms if term not in parent_cell_dict.keys()
-    ]
+    keys_and_values = list(parent_cell_dict.keys()) + [item for sublist in parent_cell_dict.values() if isinstance(sublist, list) for item in sublist]
+    missing_terms = [term for term in split_terms if term not in keys_and_values]
     if missing_terms:
         raise ValueError(
-            f"{', '.join(missing_terms)} do not exist in CAS as 'parent_cell_set_name'"
+            f"{', '.join(missing_terms)} do not exist in CAS as 'cell_set_name'"
         )
     if multiple_outputs:
         splitted_cas_list = []
