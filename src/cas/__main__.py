@@ -603,7 +603,7 @@ def create_split_cas_parser(subparsers):
     Command-line Arguments:
     -----------------------
     --cas_json          : Path to the CAS JSON file that will be split.
-    --split_on          : Cell label/s to split the CAS file.
+    --split_on          : Cell accession_id(s) to split the CAS file.
     --multiple_outputs  : If set, create multiple output files for each term provided in split_on.
                           If not set, create a single output file containing all child terms.
     Usage Example:
@@ -624,7 +624,7 @@ def create_split_cas_parser(subparsers):
     parser_split_cas.add_argument(
         "--split_on",
         nargs="+",
-        help="Cell label/s to split the CAS file."
+        help="Cell accession_id(s) to split the CAS file."
     )
     parser_split_cas.add_argument(
         "--multiple_outputs",
