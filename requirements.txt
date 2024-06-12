@@ -17,4 +17,4 @@ linkml==1.7.8
 oaklib==0.6.4
 defusedxml==0.7.1
 rdflib==7.0.0
-requests==2.31.0
+requests==2.32.0

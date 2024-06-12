@@ -12,6 +12,7 @@ from cas.populate_cell_ids import populate_cell_ids
 from cas.spreadsheet_to_cas import spreadsheet2cas
 from cas.validate import validate as schema_validate
 from cas.cas_to_rdf import export_to_rdf
+from cas.cas_splitter import split_cas_to_file
 
 warnings.filterwarnings("always")
 
@@ -32,6 +33,7 @@ def main():
     create_schema_validation_operation_parser(subparsers)
     create_cas2rdf_operation_parser(subparsers)
     create_add_author_annotations_parser(subparsers)
+    create_split_cas_parser(subparsers)
 
     args = parser.parse_args()
 
@@ -122,7 +124,6 @@ def main():
         )
     elif args.action == "add_author_annotations":
         args = parser.parse_args()
-
         # Determine the column(s) to use for joining based on the specified arguments
         if args.join_on:
             join_column = args.join_on
@@ -134,6 +135,12 @@ def main():
             raise ValueError("No valid join column specified.")
 
         add_author_annotations_from_file(args.cas_json, args.csv, join_column, args.columns, args.output)
+    elif args.action == "split_cas":
+        cas_json_path = args.cas_json
+        split_terms = args.split_on
+        multiple_outputs = args.multiple_outputs
+
+        split_cas_to_file(cas_json_path, split_terms, multiple_outputs)
 
 
 def create_merge_operation_parser(subparsers):
@@ -588,6 +595,41 @@ def create_add_author_annotations_parser(subparsers):
         "--output",
         default="output.json",
         help="Output CAS file name (default: output.json).",
+    )
+
+
+def create_split_cas_parser(subparsers):
+    """
+    Command-line Arguments:
+    -----------------------
+    --cas_json          : Path to the CAS JSON file that will be split.
+    --split_on          : Cell accession_id(s) to split the CAS file.
+    --multiple_outputs  : If set, create multiple output files for each term provided in split_on.
+                          If not set, create a single output file containing all child terms.
+    Usage Example:
+    --------------
+    cd src
+    python -m cas split_cas --cas_json path/to/cas.json --split_on term1
+    python -m cas split_cas --cas_json path/to/cas.json --split_on term1 term2
+    python -m cas split_cas --cas_json path/to/cas.json --split_on term1 term2 --multiple_outputs
+    """
+    parser_split_cas = subparsers.add_parser(
+        "split_cas",
+        description="Split CAS JSON file based on specified cell label/s.",
+        help="Split a CAS JSON file into multiple files based on one or more cell accession_id(s)."
+    )
+    parser_split_cas.add_argument(
+        "--cas_json", required=True, help="Path to the CAS JSON file that will be split"
+    )
+    parser_split_cas.add_argument(
+        "--split_on",
+        nargs="+",
+        help="Cell accession_id(s) to split the CAS file."
+    )
+    parser_split_cas.add_argument(
+        "--multiple_outputs",
+        action="store_true",
+        help="If set, create multiple output files for each split_on term; if not set, create a single output file."
     )
 
 
