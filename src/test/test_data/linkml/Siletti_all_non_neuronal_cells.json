@@ -1,5 +1,6 @@
 {
   "author_name": "Kimberly Siletti",
+  "title": "Cell type annotations for the whole human brain",
   "annotations": [
     {
       "labelset": "supercluster_term",
