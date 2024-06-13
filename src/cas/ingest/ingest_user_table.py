@@ -60,7 +60,8 @@ def ingest_user_data(data_file: str, config_file: str):
     is_config_valid = validate(config)
     if not is_config_valid:
         raise Exception("Configuration file is not valid!")
-    cas = CellTypeAnnotation(config["author_name"], list())
+    cas = CellTypeAnnotation(config["author_name"], list(), config.get("title", ""))
+    cas.description = config.get("description", "")
     cas.cellannotation_schema_version = version("cell-annotation-schema")
     headers, records = read_tsv_to_dict(data_file, generated_ids=True)
     config_fields = config["fields"]

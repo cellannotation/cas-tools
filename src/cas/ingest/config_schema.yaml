@@ -2,7 +2,7 @@ $schema: "http://json-schema.org/draft-07/schema#"
 title: Cell Type Annotation
 type: object
 additionalProperties: False
-required: [ 'author_name', 'fields' ]
+required: [ 'author_name', 'title', 'fields' ]
 
 
 definitions:
@@ -68,6 +68,14 @@ properties:
   taxonomy_id:
     type: string
     description: "Taxonomy identifier"
+
+  title:
+    type: string
+    description: "Title of the taxonomy"
+
+  description:
+    type: string
+    description: "Description of the taxonomy"
 
   species_ids:
     type: array

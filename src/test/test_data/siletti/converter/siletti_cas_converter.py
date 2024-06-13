@@ -31,8 +31,8 @@ NOMENCLATURE_TABLE = os.path.join(
 
 
 def main():
-    cas_neuronal = CellTypeAnnotation("Kimberly Siletti", list())
-    cas_non_neuronal = CellTypeAnnotation("Kimberly Siletti", list())
+    cas_neuronal = CellTypeAnnotation("Kimberly Siletti", list(), "Human Brain Cell Atlas v1.0 Taxonomy (Neurons)")
+    cas_non_neuronal = CellTypeAnnotation("Kimberly Siletti", list(), "Human Brain Cell Atlas v1.0 Taxonomy (Non-Neuronal)")
 
     cas_neuronal.orcid = "https://orcid.org/0000-0001-7620-8973"
     cas_non_neuronal.orcid = "https://orcid.org/0000-0001-7620-8973"
