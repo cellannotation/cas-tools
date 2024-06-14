@@ -109,7 +109,7 @@ def generate_metadata_table(cta, project_config, out_folder):
     record["orcid"] = project_config.get("author", "")
     record["author_list"] = cta.get("author_list", "")
     record["matrix_file_id"] = project_config.get("matrix_file_id", "")
-    record["title"] = project_config.get("title", "")
+    record["title"] = cta.get("title", "")
     record["description"] = project_config.get("description", "")
     record["cellannotation_schema_version"] = cta.get(
         "cellannotation_schema_version", ""

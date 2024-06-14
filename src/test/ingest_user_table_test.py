@@ -34,6 +34,9 @@ class CellTypeAnnotationTests(unittest.TestCase):
         self.assertTrue("author_name" in result)
         self.assertEqual("Test User", result["author_name"])
 
+        self.assertTrue("title" in result)
+        self.assertEqual("NHP Basal Ganglia", result["title"])
+
         self.assertTrue("cellannotation_schema_version" in result)
         self.assertTrue("." in result["cellannotation_schema_version"])
 
