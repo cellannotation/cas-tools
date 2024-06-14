@@ -189,9 +189,6 @@ class Annotation(EncoderMixin):
 
 @dataclass
 class CellTypeAnnotation(EncoderMixin):
-    # data_url: str
-    # annotation_objects: List[Annotation]
-    # taxonomy: TaxonomyMetadata = None
 
     author_name: str
     """This MUST be a string in the format `[FIRST NAME] [LAST NAME]`"""
@@ -201,12 +198,22 @@ class CellTypeAnnotation(EncoderMixin):
     and provenance. As this is intended as a general schema, compulsory fields are kept to a minimum. However, tools 
     using this schema are encouarged to specify a larger set of compulsory fields for publication."""
 
+    title: str
+    """The title of the dataset. This MUST be less than or equal to 200 characters. e.g. 'Human retina cell atlas - 
+    retinal ganglion cells'."""
+
+    description: Optional[str] = None
+    """The description of the dataset. e.g. 'A total of 15 retinal ganglion cell clusters were identified from over 99K 
+    retinal ganglion cell nuclei in the current atlas. Utilizing previous characterized markers from macaque, 5 clusters
+     can be annotated.'"""
+
     matrix_file_id: Optional[str] = None
     """A resolvable ID for a cell by gene matrix file in the form namespace:accession, e.g. 
     CellXGene_dataset:8e10f1c4-8e98-41e5-b65f-8cd89a887122. Please see https://github.com/cellannotation/cell-annotation
     -schema/registry/registry.json for supported namespaces."""
 
     labelsets: Optional[List[Labelset]] = None
+    """A list of labelsets that are used in the annotations."""
 
     author_contact: Optional[str] = None
     """This MUST be a valid email address of the author"""

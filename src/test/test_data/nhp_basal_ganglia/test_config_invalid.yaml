@@ -1,4 +1,5 @@
 author_name: Test User
+title: title
 
 fields:
   - column_name: cluster_id
