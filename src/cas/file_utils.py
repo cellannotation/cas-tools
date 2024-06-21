@@ -108,6 +108,25 @@ def read_anndata_file(file_path: str) -> Optional[anndata.AnnData]:
         return None
 
 
+def read_table_to_dict(table_path, id_column=0, generated_ids=False):
+    """
+    Reads table file content into a dict. Key is the first column value and the value is dict representation of the
+    Args:
+        table_path: Path of the table file
+        id_column:  Id column becomes the key of the dict. This column should be unique. Default value is first column.
+        generated_ids: If 'True', uses row number as the key of the dict. Initial key is 0.
+    Returns:
+        Function provides two return values: first; headers of the table and second; the TSV content dict. Key of the
+        content is the first column value and the values are dict of row values.
+    """
+    if table_path.endswith(".tsv"):
+        return read_tsv_to_dict(table_path, id_column=id_column, generated_ids=generated_ids)
+    elif table_path.endswith(".csv"):
+        return read_csv_to_dict(table_path, id_column=id_column, generated_ids=generated_ids)
+    else:
+        raise Exception("Table file should be either tsv or csv file.")
+
+
 def read_tsv_to_dict(tsv_path, id_column=0, generated_ids=False):
     """
     Reads tsv file content into a dict. Key is the first column value and the value is dict representation of the

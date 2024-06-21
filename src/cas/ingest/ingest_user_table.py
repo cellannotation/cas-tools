@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import get_type_hints
 from importlib.metadata import version
 
-from cas.file_utils import read_config, read_tsv_to_dict, write_json_file
+from cas.file_utils import read_config, read_table_to_dict, write_json_file
 from cas.flatten_data_to_tables import serialize_to_tables
 from cas.ingest.config_validator import validate
 from cas.model import (
@@ -63,7 +63,7 @@ def ingest_user_data(data_file: str, config_file: str):
     cas = CellTypeAnnotation(config["author_name"], list(), config["title"])
     cas.description = config.get("description", "")
     cas.cellannotation_schema_version = version("cell-annotation-schema")
-    headers, records = read_tsv_to_dict(data_file, generated_ids=True)
+    headers, records = read_table_to_dict(data_file, generated_ids=True)
     config_fields = config["fields"]
     populate_labelsets(cas, config_fields)
     ao_names = dict()
