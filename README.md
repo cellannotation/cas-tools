@@ -1,7 +1,5 @@
 # CAS Tools
 
-**Note: CAS-Tools is currently under active development. Its behavior and interfaces may change as new features are added and existing ones are refined. Use with caution in production environments.**
-
 CAS-Tools is a comprehensive utility package designed to facilitate the effective use and manipulation of the [Cell Annotation Schema](https://github.com/cellannotation/cell-annotation-schema) (CAS) in single-cell transcriptomics data analysis.  CAS supports recording the rationale and evidence for single cell annotation, including gene expression evidence and details of automated annotation transfer. The standard can be saved as a separate JSON file with a resolvable link to a martix (AnnData) file containing annotated data, or embedded in the annotated AnnData file. 
 
 ## Installation
