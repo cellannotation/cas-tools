@@ -2,17 +2,7 @@
 
 **Note: CAS-Tools is currently under active development. Its behavior and interfaces may change as new features are added and existing ones are refined. Use with caution in production environments.**
 
-CAS-Tools is a comprehensive utility package designed to facilitate the effective use and manipulation of the Cell Annotation Schema (CAS) in single-cell transcriptomics data analysis.
-
-## Overview
-
-The Cell Annotation Schema (CAS) addresses the inherent variability in annotating cell types/classes in single-cell transcriptomics datasets. While annotations lack the reasoning behind the choice of labels, CAS enables the recording of additional metadata about individual cell type annotations. This includes marker genes used as evidence and details of automated annotation transfer.
-
-CAS-Tools simplifies the utilization of CAS by offering a set of programmatically accessible operations to:
-
-- Integration with AnnData: Flatten CAS onto observations in AnnData format for seamless integration and analysis.
-- Flatten Onto Dataframes: Decompose the schema into individual tables suitable for use in dataframes/TSVs.
-- Validate Annotations: Validate annotations against the CAS standard to ensure compliance and consistency.
+CAS-Tools is a comprehensive utility package designed to facilitate the effective use and manipulation of the [Cell Annotation Schema](https://github.com/cellannotation/cell-annotation-schema) (CAS) in single-cell transcriptomics data analysis.  CAS supports recording the rationale and evidence for single cell annotation, including gene expression evidence and details of automated annotation transfer. The standard can be saved as a separate JSON file with a resolvable link to a martix (AnnData) file containing annotated data, or embedded in the annotated AnnData file. 
 
 ## Installation
 
@@ -22,9 +12,20 @@ You can install CAS-Tools [pypi package](https://pypi.org/project/cas-tools/) us
 pip install cas-tools
 ```
 
+## Overview
+
+CAS-Tools simplifies the use of CAS by offering a set of programmatically accessible operations including:
+
+- Validate Annotations: Validate annotations against the CAS standard to ensure compliance and consistency.
+- Validation of markers against linked AnnData file
+- Merge to Anndata - updating annotations in the AnnData file and saving JSON to the AnnData header.
+- Reporting: Generation of dataframe reports of CAS content from JSON.
+- Export to CAP-Anndata format: Merges into AnnData file following a derived, flattened representation of CAS, used by the Cell Annotation Platform (CAP) ([CAP-Anndata](https://github.com/cellannotation/cell-annotation-schema/blob/main/docs/cap_anndata_schema.md)). 
+- Import from [Allen Brain Cell Atlas (ABC) format DataFrames](https://github.com/AllenInstitute/abc_atlas_access): 
+
 ## Getting Started
 
-Please see related guides:
+CAS-tools functionality can be accessed via imported object in python or via a command line tool. For CLI tool function details please see:
 
 - [Command line interface](docs/cli.md)
 
