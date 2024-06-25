@@ -85,22 +85,8 @@ def ingest_user_data(data_file: str, config_file: str):
                     utilized_columns.add(field["column_name"])
                 elif field["column_type"] == "cell_set":
                     if record[field["column_name"]]:
-                        # ao.cell_label = str(record[field["column_name"]])
-                        if record[field["column_name"]] in ao_names:
-                            parent_ao = ao_names[record[field["column_name"]]]
-                        else:
-                            parent_ao = Annotation(field["column_name"], record[field["column_name"]])
-                        if parent_ao.labelset and parent_ao.labelset != field["column_name"]:
-                            # handle annotations existing in the multiple ranks, only keep the highest rank
-                            if labelset_ranks[parent_ao.labelset] < int(str(field["rank"]).strip()):
-                                parents.insert(labelset_ranks[parent_ao.labelset], None)
-                                parent_ao.labelset = field["column_name"]
-                                parent_ao.rank = int(str(field["rank"]).strip())
-                                parents.insert(int(str(field["rank"]).strip()), parent_ao)
-                        else:
-                            parent_ao.labelset = field["column_name"]
-                            parent_ao.rank = int(str(field["rank"]).strip())
-                            parents.insert(int(str(field["rank"]).strip()), parent_ao)
+                        parent_ao = get_annotation(ao_names, field, record)
+                        register_parent(field, labelset_ranks, parent_ao, parents)
                     utilized_columns.add(field["column_name"])
                 else:
                     # handle annotation columns
@@ -118,6 +104,42 @@ def ingest_user_data(data_file: str, config_file: str):
         ao_names[ao.cell_label] = ao
         cas.add_annotation_object(ao)
     return cas
+
+
+def register_parent(field, labelset_ranks, parent_ao, parents):
+    """
+    Registers the parent annotation object to the parents list.
+    Args:
+        field: config field
+        labelset_ranks: labelset ranks dictionary
+        parent_ao: parent to add
+        parents: sparse parents list
+    """
+    if parent_ao.labelset and parent_ao.labelset != field["column_name"]:
+        # handle annotations existing in the multiple ranks, only keep the highest rank
+        if labelset_ranks[parent_ao.labelset] < int(str(field["rank"]).strip()):
+            parents.insert(labelset_ranks[parent_ao.labelset], None)
+            parents.insert(int(str(field["rank"]).strip()), parent_ao)
+    else:
+        parents.insert(int(str(field["rank"]).strip()), parent_ao)
+
+
+def get_annotation(ao_names, field, record):
+    """
+    Creates a annotation object if it does not exist in the ao_names dictionary.
+    Args:
+        ao_names: list of existing annotation objects
+        field: config field
+        record: data record
+
+    Returns: annotation object
+    """
+    if record[field["column_name"]] in ao_names:
+        ao = ao_names[record[field["column_name"]]]
+    else:
+        ao = Annotation(field["column_name"], record[field["column_name"]])
+    ao.labelset = field["column_name"]
+    return ao
 
 
 def add_user_annotations(ao, headers, record, utilized_columns):
