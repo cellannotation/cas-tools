@@ -1,0 +1,33 @@
+taxonomy_id: CCN20230601
+brain_region_names:
+  - Basal Ganglia
+species_names:
+  - Macaca Mulatta
+author_name: Nelson Johansen
+title: NHP Basal Ganglia taxonomy
+
+fields:
+  - column_name: cluster_id
+    column_type: cluster_id
+    rank: 0
+
+  - column_name: cluster_name
+    column_type: cluster_name
+    rank: 0
+
+  - column_name: supertype
+    column_type: cell_set
+    rank: 1
+
+  - column_name: subclass
+    column_type: cell_set
+    rank: 2
+
+  - column_name: class
+    column_type: cell_set
+    rank: 3
+
+  - column_name: neighborhood
+    column_type: cell_set
+    rank: 4
+

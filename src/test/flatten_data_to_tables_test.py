@@ -1,4 +1,5 @@
 import os
+import shutil
 import unittest
 
 from cas.accession.hash_accession_manager import is_hash_accession
@@ -34,6 +35,16 @@ OUT_FOLDER = os.path.join(
     os.path.dirname(os.path.realpath(__file__)), "./test_data/table_out/"
 )
 
+RAW_DATAv2 = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)),
+    "./test_data/nhp_basal_ganglia/v2/AIT117_joint_annotation_sheet.tsv",
+)
+
+TEST_CONFIGv2 = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)),
+    "./test_data/nhp_basal_ganglia/v2/ingestion_config.yaml",
+)
+
 
 class TabularSerialisationTests(unittest.TestCase):
     def setUp(self):
@@ -45,9 +56,9 @@ class TabularSerialisationTests(unittest.TestCase):
             if item.endswith(".tsv"):
                 os.remove(os.path.join(OUT_FOLDER, item))
 
-    # @classmethod
-    # def tearDownClass(cls):
-    #     shutil.rmtree(OUT_FOLDER)
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(OUT_FOLDER)
 
     def test_annotation_table(self):
         cta = ingest_user_data(RAW_DATA, TEST_CONFIG)
@@ -66,30 +77,74 @@ class TabularSerialisationTests(unittest.TestCase):
 
         cluster_1 = records["TST_1"]
         self.assertEqual("1_MSN", cluster_1["cell_label"])
-        self.assertEqual("TST_300", cluster_1["parent_cell_set_accession"])
+        self.assertEqual("TST_288", cluster_1["parent_cell_set_accession"])
         self.assertEqual("D1-Matrix", cluster_1["parent_cell_set_name"])
         self.assertEqual("cluster", cluster_1["labelset"])
         self.assertEqual("EPYC|RELN|GULP1", cluster_1["marker_gene_evidence"])
         self.assertEqual("PuR(0.52) | CaH(0.39)", cluster_1["region.info _Frequency_"])
         # self.assertEqual("", cluster_1["cell_ids"])
 
-        cluster_300 = records["TST_300"]
-        self.assertEqual("D1-Matrix", cluster_300["cell_label"])
-        self.assertEqual("TST_339", cluster_300["parent_cell_set_accession"])
-        self.assertEqual("D1-MSN", cluster_300["parent_cell_set_name"])
-        self.assertEqual("level 3 (subclass)", cluster_300["labelset"])
+        cluster_288 = records["TST_288"]
+        self.assertEqual("D1-Matrix", cluster_288["cell_label"])
+        self.assertEqual("TST_327", cluster_288["parent_cell_set_accession"])
+        self.assertEqual("D1-MSN", cluster_288["parent_cell_set_name"])
+        self.assertEqual("level 3 (subclass)", cluster_288["labelset"])
 
-        cluster_339 = records["TST_339"]
-        self.assertEqual("D1-MSN", cluster_339["cell_label"])
-        self.assertEqual("TST_365", cluster_339["parent_cell_set_accession"])
-        self.assertEqual("MSN", cluster_339["parent_cell_set_name"])
-        self.assertEqual("level 2 (neighborhood)", cluster_339["labelset"])
+        cluster_327 = records["TST_327"]
+        self.assertEqual("D1-MSN", cluster_327["cell_label"])
+        self.assertEqual("TST_353", cluster_327["parent_cell_set_accession"])
+        self.assertEqual("MSN", cluster_327["parent_cell_set_name"])
+        self.assertEqual("level 2 (neighborhood)", cluster_327["labelset"])
 
-        cluster_365 = records["TST_365"]
-        self.assertEqual("MSN", cluster_365["cell_label"])
-        self.assertEqual("", cluster_365["parent_cell_set_accession"])
-        self.assertEqual("", cluster_365["parent_cell_set_name"])
-        self.assertEqual("level1 (class)", cluster_365["labelset"])
+        cluster_353 = records["TST_353"]
+        self.assertEqual("MSN", cluster_353["cell_label"])
+        self.assertEqual("", cluster_353["parent_cell_set_accession"])
+        self.assertEqual("", cluster_353["parent_cell_set_name"])
+        self.assertEqual("level1 (class)", cluster_353["labelset"])
+
+    def test_annotation_table_nhp_v2(self):
+        cta = ingest_user_data(RAW_DATAv2, TEST_CONFIGv2)
+        tables = serialize_to_tables(
+            cta, "Test_table", OUT_FOLDER, {"accession_id_prefix": "AIT117_"}
+        )
+
+        annotation_table_path = os.path.join(OUT_FOLDER, "annotation.tsv")
+        self.assertEqual(annotation_table_path, tables[0])
+        self.assertTrue(os.path.isfile(annotation_table_path))
+
+        headers, records = read_csv_to_dict(
+            annotation_table_path, id_column_name="cell_set_accession", delimiter="\t"
+        )
+        # self.assertEqual(361, len(records))
+
+        cluster = [records[rec_id] for rec_id in records if records[rec_id]["cell_label"] == "1_MSN"][0]
+        self.assertEqual("AIT117_1", cluster["cell_set_accession"])
+        self.assertEqual("1_MSN", cluster["cell_label"])
+        # self.assertEqual("AIT117_278", cluster["parent_cell_set_accession"])
+        self.assertEqual("D1-Matrix", cluster["parent_cell_set_name"])
+        self.assertEqual("cluster", cluster["labelset"])
+
+        # 10_NN is a child of a subclass (not supertype as usual)
+        cluster = [records[rec_id] for rec_id in records if records[rec_id]["cell_label"] == "10_NN"][0]
+        # self.assertEqual("AIT117_110", cluster["cell_set_accession"])
+        self.assertEqual("10_NN", cluster["cell_label"])
+        # self.assertEqual("AIT117_300", cluster["parent_cell_set_accession"])
+        self.assertEqual("Astrocytes", cluster["parent_cell_set_name"])
+        self.assertEqual("cluster", cluster["labelset"])
+        parent = [records[rec_id] for rec_id in records if records[rec_id]["cell_label"] == "Astrocytes"][0]
+        self.assertEqual("Astrocytes", parent["cell_label"])
+        self.assertEqual("subclass", parent["labelset"])
+
+        # 164_IN is a child of a class (not supertype as usual)
+        cluster = [records[rec_id] for rec_id in records if records[rec_id]["cell_label"] == "164_IN"][0]
+        # self.assertEqual("AIT117_110", cluster["cell_set_accession"])
+        self.assertEqual("164_IN", cluster["cell_label"])
+        # self.assertEqual("AIT117_300", cluster["parent_cell_set_accession"])
+        self.assertEqual("CN MGE GABA", cluster["parent_cell_set_name"])
+        self.assertEqual("cluster", cluster["labelset"])
+        parent = [records[rec_id] for rec_id in records if records[rec_id]["cell_label"] == "CN MGE GABA"][0]
+        self.assertEqual("CN MGE GABA", parent["cell_label"])
+        self.assertEqual("class", parent["labelset"])
 
     def test_labelset_table(self):
         cta = ingest_user_data(RAW_DATA, TEST_CONFIG)

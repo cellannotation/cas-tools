@@ -36,10 +36,12 @@ class IncrementalAccessionManager(BaseAccessionManager):
             id_recommendation
             and id_recommendation not in self.accession_ids
             and id_recommendation.isdigit()
-            and int(id_recommendation) > self.last_accession_id
+            # and int(id_recommendation) > self.last_accession_id
+            and int(id_recommendation) not in self.accession_ids
         ):
             accession_id = id_recommendation
-            self.last_accession_id = int(id_recommendation)
+            if self.last_accession_id < int(id_recommendation):
+                self.last_accession_id = int(id_recommendation)
         elif id_recommendation and not id_recommendation.isdigit():
             # non-numeric accession id
             accession_id = id_recommendation
