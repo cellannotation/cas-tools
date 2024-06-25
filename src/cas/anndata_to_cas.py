@@ -7,6 +7,7 @@ from cas.utils.conversion_utils import (
     add_parent_cell_hierarchy,
     add_parent_hierarchy_to_annotations,
     calculate_labelset,
+    get_authors_from_doi,
     generate_parent_cell_lookup,
 )
 
@@ -66,20 +67,16 @@ def generate_cas_metadata(uns: Dict[str, Any]) -> Dict[str, Any]:
     cellannotation_timestamp = None
     cellannotation_version = None
     cellannotation_url = None
-    author_name = (
-        "John Doe"  # Adding default author_name as it is required in the schema
-    )
-    author_contact = None
-    orcid = None
+    author_list = get_authors_from_doi(uns["citation"].split(" ")[1]) if "citation" in uns else None
+    title = uns.get("title")
     cas_init = {
         "matrix_file_id": matrix_file_id,
         "cellannotation_schema_version": cellannotation_schema_version,
         "cellannotation_timestamp": cellannotation_timestamp,
         "cellannotation_version": cellannotation_version,
         "cellannotation_url": cellannotation_url,
-        "author_name": author_name,
-        "author_contact": author_contact,
-        "orcid": orcid,
+        "author_list": author_list,
+        "title": title,
         "annotations": [],
         "labelsets": [],
     }
