@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from cas.ingest.ingest_user_table import ingest_data
+from cas.ingest.ingest_user_table import ingest_data, ingest_user_data
 
 RAW_DATA = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
@@ -10,6 +10,14 @@ RAW_DATA = os.path.join(
 TEST_CONFIG = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
     "./test_data/nhp_basal_ganglia/test_config.yaml",
+)
+RAW_DATAv2 = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)),
+    "./test_data/nhp_basal_ganglia/v2/AIT117_joint_annotation_sheet.tsv",
+)
+TEST_CONFIGv2 = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)),
+    "./test_data/nhp_basal_ganglia/v2/ingestion_config.yaml",
 )
 OUT_FILE = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
@@ -59,3 +67,40 @@ class CellTypeAnnotationTests(unittest.TestCase):
 
         self.assertTrue("author_annotation_fields" in test_annotation)
         self.assertEqual(6, len(test_annotation["author_annotation_fields"]))
+
+    def test_data_formatting_nhp_v2(self):
+        result = ingest_user_data(RAW_DATAv2, TEST_CONFIGv2,)
+
+        self.assertTrue(result)
+        self.assertTrue(result.author_name)
+        self.assertEqual("Nelson Johansen", result.author_name)
+
+        self.assertIsNotNone(result.title)
+        self.assertEqual("NHP Basal Ganglia taxonomy", result.title)
+
+        self.assertIsNotNone(result.annotations)
+        # self.assertEqual(354, len(result.annotations))
+        # print(result["annotations"][:10])
+
+        test_annotation = [x for x in result.annotations if x.cell_label == "76_IN"][0]
+        # print(test_annotation.get("parent_cell_set_accession"))
+        self.assertIsNone(test_annotation.parent_cell_set_accession)
+        self.assertEqual("WDR49-ADAM12", test_annotation.parent_cell_set_name)
+        parent_annotation = [x for x in result.annotations if x.cell_label == test_annotation.parent_cell_set_name][0]
+        self.assertEqual("WDR49-ADAM12", parent_annotation.cell_label)
+        self.assertEqual("supertype", parent_annotation.labelset)
+
+        # 10_NN is a child of a subclass (not supertype as usual)
+        test_annotation = [x for x in result.annotations if x.cell_label == "10_NN"][0]
+        print(test_annotation.parent_cell_set_name)
+        parent_annotation = [x for x in result.annotations if x.cell_label == test_annotation.parent_cell_set_name][0]
+        self.assertEqual("Astrocytes", parent_annotation.cell_label)
+        self.assertEqual("subclass", parent_annotation.labelset)
+
+        # 164_IN is a child of a class (not supertype as usual)
+        test_annotation = [x for x in result.annotations if x.cell_label =="164_IN"][0]
+        parent_annotation = [x for x in result.annotations if x.cell_label == test_annotation.parent_cell_set_name][0]
+        self.assertEqual("CN MGE GABA", parent_annotation.cell_label)
+        self.assertEqual("class", parent_annotation.labelset)
+
+

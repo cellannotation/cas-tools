@@ -65,39 +65,52 @@ def ingest_user_data(data_file: str, config_file: str):
     cas.cellannotation_schema_version = version("cell-annotation-schema")
     headers, records = read_table_to_dict(data_file, generated_ids=True)
     config_fields = config["fields"]
-    populate_labelsets(cas, config_fields)
+    labelset_ranks = populate_labelsets(cas, config_fields)
     ao_names = dict()
     utilized_columns = set()
     for record_index in records:
         record = records[record_index]
-        ao = Annotation("", "")
-        parents = [None] * 10
-        for field in config_fields:
-            # handle hierarchical columns
-            if field["column_type"] == "cluster_name":
-                ao.labelset = field["column_name"]
-                ao.cell_label = str(record[field["column_name"]])
-                utilized_columns.add(field["column_name"])
-            elif field["column_type"] == "cluster_id":
-                ao.cell_set_accession = str(record[field["column_name"]])
-                ao.rank = int(str(field["rank"]).strip())
-                utilized_columns.add(field["column_name"])
-            elif field["column_type"] == "cell_set":
-                parent_ao = Annotation(
-                    field["column_name"], record[field["column_name"]]
-                )
-                parent_ao.rank = int(str(field["rank"]).strip())
-                parents.insert(int(str(field["rank"]).strip()), parent_ao)
-                utilized_columns.add(field["column_name"])
-            else:
-                # handle annotation columns
-                if "typing.List[str]" in str(get_type_hints(ao)[field["column_type"]]):
-                    list_value = str(record[field["column_name"]]).split(",")
-                    stripped = list(map(str.strip, list_value))
-                    setattr(ao, field["column_type"], stripped)
+        if not all(value == '' for value in record.values()):  # skip empty rows
+            ao = Annotation("", "")
+            parents = [None] * 10
+            for field in config_fields:
+                # handle hierarchical columns
+                if field["column_type"] == "cluster_name":
+                    ao.labelset = field["column_name"]
+                    ao.cell_label = str(record[field["column_name"]])
+                    utilized_columns.add(field["column_name"])
+                elif field["column_type"] == "cluster_id":
+                    ao.cell_set_accession = str(record[field["column_name"]])
+                    ao.rank = int(str(field["rank"]).strip())
+                    utilized_columns.add(field["column_name"])
+                elif field["column_type"] == "cell_set":
+                    if record[field["column_name"]]:
+                        # ao.cell_label = str(record[field["column_name"]])
+                        if record[field["column_name"]] in ao_names:
+                            parent_ao = ao_names[record[field["column_name"]]]
+                        else:
+                            parent_ao = Annotation(field["column_name"], record[field["column_name"]])
+                        if parent_ao.labelset and parent_ao.labelset != field["column_name"]:
+                            # handle annotations existing in the multiple ranks, only keep the highest rank
+                            if labelset_ranks[parent_ao.labelset] < int(str(field["rank"]).strip()):
+                                parents.insert(labelset_ranks[parent_ao.labelset], None)
+                                parent_ao.labelset = field["column_name"]
+                                parent_ao.rank = int(str(field["rank"]).strip())
+                                parents.insert(int(str(field["rank"]).strip()), parent_ao)
+                        else:
+                            parent_ao.labelset = field["column_name"]
+                            parent_ao.rank = int(str(field["rank"]).strip())
+                            parents.insert(int(str(field["rank"]).strip()), parent_ao)
+                    utilized_columns.add(field["column_name"])
                 else:
-                    setattr(ao, field["column_type"], record[field["column_name"]])
-                utilized_columns.add(field["column_name"])
+                    # handle annotation columns
+                    if "typing.List[str]" in str(get_type_hints(ao)[field["column_type"]]):
+                        list_value = str(record[field["column_name"]]).split(",")
+                        stripped = list(map(str.strip, list_value))
+                        setattr(ao, field["column_type"], stripped)
+                    else:
+                        setattr(ao, field["column_type"], record[field["column_name"]])
+                    utilized_columns.add(field["column_name"])
 
         add_user_annotations(ao, headers, record, utilized_columns)
         add_parent_node_names(ao, ao_names, cas, parents)
@@ -125,19 +138,26 @@ def add_user_annotations(ao, headers, record, utilized_columns):
 
 def add_parent_node_names(ao, ao_names, cas, parents):
     """
-    Creates parent nodes if necessary and creates a cluster hierarchy through assinging parent_node_names.
+    Creates parent nodes if necessary and creates a cluster hierarchy through assigning parent_node_names.
     :param ao: current annotation object
     :param ao_names: list of all created annotation objects
     :param cas: main object
     :param parents: list of current annotation object's parents
     """
     if parents:
-        ao.parent_cell_set_name = parents[1].cell_label
+        # get first non-null parent
+        direct_parent = [x for x in parents if x][0]
+        ao.parent_cell_set_name = direct_parent.cell_label
         prev = None
         for parent in reversed(parents):
             if parent:
                 if prev:
-                    parent.parent_cell_set_name = prev.cell_label
+                    if parent.parent_cell_set_name and parent.parent_cell_set_name != prev.cell_label:
+                        print(
+                            "Annotation {} has multiple parents: {} and {}".format(parent.cell_label, parent.parent_cell_set_name, prev.cell_label)
+                        )
+                    if parent.cell_label != prev.cell_label:  # avoid self-references
+                        parent.parent_cell_set_name = prev.cell_label
                 prev = parent
                 if parent.cell_label not in ao_names:
                     cas.add_annotation_object(parent)
@@ -149,13 +169,17 @@ def populate_labelsets(cas, config_fields):
     Populates labelsets list based on the fields of the config.
     :param cas: main object
     :param config_fields: config file fields
+    :return: ranks of the labelsets
     """
     labelsets = list()
+    ranks = dict()
     for field in config_fields:
         if field["column_type"] == "cell_set" or field["column_type"] == "cluster_name":
             label_set = Labelset(field["column_name"])
             if "rank" in field:
                 label_set.rank = str(field["rank"])
+                ranks[field["column_name"]] = int(field["rank"])
             labelsets.append(label_set)
     if labelsets:
         cas.labelsets = labelsets
+    return ranks
