@@ -284,6 +284,21 @@ def json_serializer(obj):
 
 
 def get_authors_from_doi(doi):
+    """
+    Fetches and returns a list of authors from a given DOI (Digital Object Identifier) using the CrossRef API.
+
+    Args:
+        doi (str): The DOI of the publication for which to retrieve author information.
+
+    Returns:
+        list of dict: A list of dictionaries where each dictionary contains details of one author, including
+                      their name ('author_name'), ORCID ID ('orcid'), GitHub username ('github_username'), and email ('email').
+                      Each field is a string, and fields without data will be None.
+
+    Raises:
+        KeyError: If the author data is not found in the response, indicating a potential issue with the DOI or the data format.
+
+    """
     response = requests.get(f"{CROSSREF_API_URL}{doi}")
     data = response.json()
 
