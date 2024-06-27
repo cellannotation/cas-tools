@@ -1,11 +1,15 @@
 import itertools
 from datetime import date, datetime
+import requests
 from typing import Any, Dict, List, Tuple
 
 import anndata as ad
 import pandas as pd
 
 from cas.accession.hash_accession_manager import HashAccessionManager
+
+
+CROSSREF_API_URL = "https://api.crossref.org/works/"
 
 
 def calculate_labelset_rank(input_list: List[str]) -> Dict[str, int]:
@@ -111,8 +115,14 @@ def get_cl_annotations_from_anndata(
     ontology_term_ids = filtered_df["cell_type_ontology_term_id"].unique().tolist()
     ontology_terms = filtered_df["cell_type"].unique().tolist()
 
-    cell_ontology_term_id = filtered_df["cell_type_ontology_term_id"].iloc[0] if len(ontology_term_ids) == 1 else None
-    cell_ontology_term = filtered_df["cell_type"].iloc[0] if len(ontology_terms) == 1 else None
+    cell_ontology_term_id = (
+        filtered_df["cell_type_ontology_term_id"].iloc[0]
+        if len(ontology_term_ids) == 1
+        else None
+    )
+    cell_ontology_term = (
+        filtered_df["cell_type"].iloc[0] if len(ontology_terms) == 1 else None
+    )
 
     return cell_ontology_term_id, cell_ontology_term
 
@@ -271,3 +281,38 @@ def json_serializer(obj):
         # return obj.isoformat()
         return obj.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
     raise TypeError("Type %s not serializable" % type(obj))
+
+
+def get_authors_from_doi(doi):
+    """
+    Fetches and returns a list of authors from a given DOI (Digital Object Identifier) using the CrossRef API.
+
+    Args:
+        doi (str): The DOI of the publication for which to retrieve author information.
+
+    Returns:
+        list of dict: A list of dictionaries where each dictionary contains details of one author, including
+                      their name ('author_name'), ORCID ID ('orcid'), GitHub username ('github_username'), and email ('email').
+                      Each field is a string, and fields without data will be None.
+
+    Raises:
+        KeyError: If the author data is not found in the response, indicating a potential issue with the DOI or the data format.
+
+    """
+    response = requests.get(f"{CROSSREF_API_URL}{doi}")
+    data = response.json()
+
+    try:
+        authors = data["message"]["author"]
+        author_dict = [
+            {
+                "author_name": f"{author.get('given')} {author.get('family')}".strip(),
+                "orcid": author.get("ORCID"),
+                "github_username": author.get("github_username"),
+                "email": author.get("email"),
+            }
+            for author in authors
+        ]
+        return author_dict
+    except KeyError:
+        return "Author information not available."
