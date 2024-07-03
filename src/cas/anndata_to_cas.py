@@ -126,12 +126,12 @@ def add_annotations_to_cas(
                 "labelset": labelset,
                 "cell_label": label,
                 "cell_fullname": label,
-                "cell_set_accession": parent_cell_look_up[label]["accession"],
-                "cell_ontology_term_id": parent_cell_look_up[label][
+                "cell_set_accession": parent_cell_look_up[f"{labelset}:{label}"]["accession"],
+                "cell_ontology_term_id": parent_cell_look_up[f"{labelset}:{label}"][
                     "cell_ontology_term_id"
                 ],
-                "cell_ontology_term": parent_cell_look_up[label]["cell_ontology_term"],
-                "cell_ids": list(parent_cell_look_up[label]["cell_ids"]),
+                "cell_ontology_term": parent_cell_look_up[f"{labelset}:{label}"]["cell_ontology_term"],
+                "cell_ids": list(parent_cell_look_up[f"{labelset}:{label}"]["cell_ids"]),
                 "rationale": rationale,
                 "rationale_dois": rationale_dois,
                 "marker_gene_evidence": marker_gene_evidence,
