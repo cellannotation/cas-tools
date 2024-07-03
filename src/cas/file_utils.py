@@ -275,6 +275,8 @@ def write_json_to_hdf5(group, data):
         None
     """
     for key, value in data.items():
+        if key in group:
+            del group[key]  # Delete the existing key to overwrite it
         if isinstance(value, dict):
             subgroup = group.create_group(key)
             write_json_to_hdf5(subgroup, value)
