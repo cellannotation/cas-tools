@@ -214,6 +214,8 @@ def add_annotations_to_cas(cas, raw_data_result, columns, schema, parent_cell_lo
         for column_name in columns:
             if column_name in annotation_properties:
                 anno[column_name] = row[column_name]
+                if column_name == "labelset":
+                    labelset = anno[column_name]
                 if annotation_properties[column_name]["type"] == "array":
                     anno[column_name] = re.split("[,|]", row[column_name])
             elif row[column_name]:
@@ -221,12 +223,12 @@ def add_annotations_to_cas(cas, raw_data_result, columns, schema, parent_cell_lo
 
         anno.update(
             {
-                "cell_ids": list(parent_cell_look_up[label]["cell_ids"]),
-                "cell_set_accession": parent_cell_look_up[label]["accession"],
-                "cell_ontology_term_id": parent_cell_look_up[label][
+                "cell_ids": list(parent_cell_look_up[f"{labelset}:{label}"]["cell_ids"]),
+                "cell_set_accession": parent_cell_look_up[f"{labelset}:{label}"]["accession"],
+                "cell_ontology_term_id": parent_cell_look_up[f"{labelset}:{label}"][
                     "cell_ontology_term_id"
                 ],
-                "cell_ontology_term": parent_cell_look_up[label]["cell_ontology_term"],
+                "cell_ontology_term": parent_cell_look_up[f"{labelset}:{label}"]["cell_ontology_term"],
             }
         )
         if user_annotations:
