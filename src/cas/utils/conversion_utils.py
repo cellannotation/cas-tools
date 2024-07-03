@@ -157,9 +157,9 @@ def generate_parent_cell_lookup(anndata, labelset_dict):
             )
 
             if label in parent_cell_look_up:
-                parent_cell_look_up[label]["cell_ids"].update(cell_ids)
+                parent_cell_look_up[f"{k}:{label}"]["cell_ids"].update(cell_ids)
             else:
-                parent_cell_look_up[label] = {
+                parent_cell_look_up[f"{k}:{label}"] = {
                     "cell_ids": set(cell_ids),
                     "accession": cell_set_accession,
                     "rank": v.get("rank"),
@@ -184,7 +184,7 @@ def update_parent_info(
     """
     value.update(
         {
-            "parent": parent_key,
+            "parent": parent_key.split(":")[-1],
             "p_accession": parent_value.get("accession"),
             "parent_rank": parent_value.get("rank"),
         }
@@ -243,7 +243,7 @@ def add_parent_hierarchy_to_annotations(
     """
     annotation_list = cas.get("annotations", [])
     for annotation in annotation_list:
-        parent_info = parent_cell_look_up.get(annotation.get("cell_label"), {})
+        parent_info = parent_cell_look_up.get(f'{annotation.get("labelset")}:{annotation.get("cell_label")}', {})
         parent = parent_info.get("parent")
         p_accession = parent_info.get("p_accession")
         if parent and p_accession:

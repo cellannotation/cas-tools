@@ -27,7 +27,7 @@ class TestConversionUtils(unittest.TestCase):
             }
         )
         self.parent_cell_look_up = {
-            "A": {
+            "labelset1:A": {
                 "cell_ids": {1, 2},
                 "accession": "A_123",
                 "parent": "P",
@@ -36,7 +36,7 @@ class TestConversionUtils(unittest.TestCase):
                 "cell_ontology_term_id": "CL:1234567",
                 "cell_ontology_term": "Test cell",
             },
-            "P": {
+            "labelset3:P": {
                 "cell_ids": {1, 2},
                 "accession": "P_123",
                 "rank": 1,
@@ -157,16 +157,17 @@ class TestConversionUtils(unittest.TestCase):
         add_parent_cell_hierarchy(parent_cell_look_up=self.parent_cell_look_up)
 
         # Ensure parent cell hierarchy information is added correctly
-        self.assertIn("parent", self.parent_cell_look_up["A"])
-        self.assertIn("p_accession", self.parent_cell_look_up["A"])
-        self.assertEqual(self.parent_cell_look_up["A"]["parent"], "P")
-        self.assertEqual(self.parent_cell_look_up["A"]["p_accession"], "P_123")
+        self.assertIn("parent", self.parent_cell_look_up["labelset1:A"])
+        self.assertIn("p_accession", self.parent_cell_look_up["labelset1:A"])
+        self.assertEqual(self.parent_cell_look_up["labelset1:A"]["parent"], "P")
+        self.assertEqual(self.parent_cell_look_up["labelset1:A"]["p_accession"], "P_123")
 
     def test_add_parent_hierarchy(self):
         cas = {
             "annotations": [
                 {
                     "cell_label": "A",
+                    "labelset": "labelset1",
                     "cell_ontology_term_id": "CL:1234567",
                     "cell_ontology_term": "Test cell",
                 }
@@ -176,8 +177,11 @@ class TestConversionUtils(unittest.TestCase):
         expected_annotations = [
             {
                 "cell_label": "A",
-                "parent_cell_set_name": "P",
+                "cell_ontology_term": "Test cell",
+                "cell_ontology_term_id": "CL:1234567",
+                "labelset": "labelset1",
                 "parent_cell_set_accession": "P_123",
+                "parent_cell_set_name": "P",
             }
         ]
 
