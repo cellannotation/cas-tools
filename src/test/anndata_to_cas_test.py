@@ -11,7 +11,7 @@ class TestAnndataToCas(unittest.TestCase):
     def setUp(self):
         self.uns = {"schema_version": "1.0"}
         self.parent_cell_look_up = {
-            "A": {
+            "labelset1:A": {
                 "cell_ids": {1, 2},
                 "accession": "A_123",
                 "parent": "P",
@@ -20,7 +20,7 @@ class TestAnndataToCas(unittest.TestCase):
                 "cell_ontology_term_id": "CL:1234567",
                 "cell_ontology_term": "Test cell",
             },
-            "P": {
+            "labelset1:P": {
                 "cell_ids": {1, 2},
                 "accession": "P_123",
                 "rank": 1,
