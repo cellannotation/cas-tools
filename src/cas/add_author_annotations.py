@@ -199,6 +199,7 @@ def dataframe_to_dict(
     filtered_df = filtered_df[columns]
 
     filtered_df.replace(' ', np.nan, inplace=True)
+    filtered_df.replace(np.nan, None, inplace=True)
     result_dict = filtered_df.to_dict(orient="list")
     # Unpack lists that contain only a single item
     for key, value in result_dict.items():

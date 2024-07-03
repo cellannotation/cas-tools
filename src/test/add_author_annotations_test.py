@@ -1,5 +1,6 @@
 import unittest
 
+import numpy as np
 import pandas as pd
 
 from cas.add_author_annotations import (
@@ -124,3 +125,17 @@ class TestAuthorAnnotations(unittest.TestCase):
             "Extra keys in DataFrame that are not in CAS data: ['c_3']",
             str(context.exception),
         )
+
+    def test_validate_values_with_empty_rows(self):
+        data = {
+            "cell_set_accession": ["c_1", "c_2"],
+            "labelset": ["set1", "set2"],
+            "cell_label": ["101", "202"],
+            "extra_data": ["value1", np.NaN],
+        }
+        df = pd.DataFrame(data)
+        print(df)
+        updated_cas = add_author_annotations(
+            self.cas, df, "cell_set_accession", ["extra_data"]
+        )
+        self.assertIsNone(updated_cas["annotations"][1]["author_annotation_fields"]["extra_data"])
