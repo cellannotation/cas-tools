@@ -64,19 +64,19 @@ class Labelset(EncoderMixin):
 
 @dataclass
 class AnnotationTransfer(EncoderMixin):
-    transferred_cell_label: Optional[str]
+    transferred_cell_label: Optional[str] = None
     """Transferred cell label"""
 
-    source_taxonomy: Optional[str]
+    source_taxonomy: Optional[str] = None
     """PURL of source taxonomy."""
 
-    source_node_accession: Optional[str]
+    source_node_accession: Optional[str] = None
     """accession of node that label was transferred from"""
 
-    algorithm_name: Optional[str]
+    algorithm_name: Optional[str] = None
     """The name of the algorithm used."""
 
-    comment: Optional[str]
+    comment: Optional[str] = None
     """Free text comment on annotation transfer"""
 
 
@@ -171,8 +171,7 @@ class Annotation(EncoderMixin):
     """"A dictionary of author defined key value pairs annotating the cell set. The names and aims of these fields MUST 
     not clash with official annotation fields."""
 
-    # TODO modified: moved from CTA to Annotation class
-    transferred_annotations: Optional[AnnotationTransfer] = None
+    transferred_annotations: Optional[List[AnnotationTransfer]] = None
 
     reviews: Optional[List[Review]] = None
 
