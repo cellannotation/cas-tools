@@ -196,7 +196,7 @@ class SpreadsheetToCasTests(unittest.TestCase):
         meta_data, column_names, raw_data = read_spreadsheet(
             TEST_SPREADSHEET, None, retrieve_schema("cap")
         )
-        self.assertEqual(len(meta_data), 5)
+        self.assertEqual(len(meta_data), 6)
         self.assertEqual(len(column_names), 9)
         self.assertEqual(raw_data.shape, (73, 9))
 
@@ -207,7 +207,7 @@ class SpreadsheetToCasTests(unittest.TestCase):
             sheet_name="PBMC3_Yoshida_2022_PBMC",
             schema=retrieve_schema("cap"),
         )
-        self.assertEqual(len(meta_data), 5)
+        self.assertEqual(len(meta_data), 6)
         self.assertEqual(len(column_names), 9)
         self.assertEqual(raw_data.shape, (73, 9))
 
@@ -224,7 +224,7 @@ class SpreadsheetToCasTests(unittest.TestCase):
             with open(json_file_path, "r") as json_file:
                 json_data = json.load(json_file)
 
-            self.assertEqual(len(json_data), 8)
+            self.assertEqual(len(json_data), 9)
             self.assertEqual(len(json_data["annotations"]), 8)
             self.assertEqual(len(json_data["annotations"][0]), 9)
             self.assertEqual(len(json_data["labelsets"]), 2)
