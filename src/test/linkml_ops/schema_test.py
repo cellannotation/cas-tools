@@ -31,8 +31,8 @@ class LinkMLSchemaCase(unittest.TestCase):
         self.assertEqual(
             "General_Cell_Annotation_Open_Standard", bican_linkml_schema.name
         )
-        self.assertEqual(5, len(bican_linkml_schema.classes))
-        self.assertEqual(38, len(bican_linkml_schema.slots))
+        self.assertEqual(7, len(bican_linkml_schema.classes))
+        self.assertEqual(49, len(bican_linkml_schema.slots))
         self.assertEqual(2, len(bican_linkml_schema.prefixes))
 
     def test_decorate_linkml_schema(self):
@@ -48,8 +48,8 @@ class LinkMLSchemaCase(unittest.TestCase):
         self.assertEqual(
             "General_Cell_Annotation_Open_Standard", decorated_schema["name"]
         )
-        self.assertEqual(5, len(decorated_schema["classes"]))
-        self.assertEqual(39, len(decorated_schema["slots"]))
+        self.assertEqual(7, len(decorated_schema["classes"]))
+        self.assertEqual(50, len(decorated_schema["slots"]))
         self.assertEqual(13, len(decorated_schema["prefixes"]))
 
     def test_expand_schema(self):

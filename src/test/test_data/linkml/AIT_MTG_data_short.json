@@ -1,6 +1,7 @@
 {
     "cellannotation_schema_version": "4.0.0",
     "author_name": "Trygve E Bakken",
+    "title": "MTG",
     "matrix_file_id": "CellXGene_dataset:8e10f1c4-8e98-41e5-b65f-8cd89a887122",
     "annotations": [
       {
