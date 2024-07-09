@@ -67,6 +67,7 @@ def generate_cas_metadata(uns: Dict[str, Any]) -> Dict[str, Any]:
     cellannotation_timestamp = None
     cellannotation_version = None
     cellannotation_url = None
+    title = uns.get("title")
     author_name = (
         "John Doe"  # Adding default author_name as it is required in the schema
     )
@@ -78,6 +79,7 @@ def generate_cas_metadata(uns: Dict[str, Any]) -> Dict[str, Any]:
         "cellannotation_timestamp": cellannotation_timestamp,
         "cellannotation_version": cellannotation_version,
         "cellannotation_url": cellannotation_url,
+        "title": title,
         "author_name": author_name,
         "author_contact": author_contact,
         "orcid": orcid,
