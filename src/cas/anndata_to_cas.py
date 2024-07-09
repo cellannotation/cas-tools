@@ -67,16 +67,22 @@ def generate_cas_metadata(uns: Dict[str, Any]) -> Dict[str, Any]:
     cellannotation_timestamp = None
     cellannotation_version = None
     cellannotation_url = None
-    author_list = get_authors_from_doi(uns["citation"].split(" ")[1]) if "citation" in uns else None
     title = uns.get("title")
+    author_name = (
+        "John Doe"  # Adding default author_name as it is required in the schema
+    )
+    author_contact = None
+    orcid = None
     cas_init = {
         "matrix_file_id": matrix_file_id,
         "cellannotation_schema_version": cellannotation_schema_version,
         "cellannotation_timestamp": cellannotation_timestamp,
         "cellannotation_version": cellannotation_version,
         "cellannotation_url": cellannotation_url,
-        "author_list": author_list,
         "title": title,
+        "author_name": author_name,
+        "author_contact": author_contact,
+        "orcid": orcid,
         "annotations": [],
         "labelsets": [],
     }
