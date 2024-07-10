@@ -57,7 +57,7 @@ class Labelset(EncoderMixin):
     """A set of fields for recording the details of the automated annotation algorithm used. (Common 'automated 
     annotation methods' would include PopV, Azimuth, CellTypist, scArches, etc.)"""
 
-    rank: Optional[str] = None
+    rank: Optional[int] = None
     """A number indicating relative granularity with 0 being the most specific.  Use this where a single dataset has 
     multiple keys that are used consistently to record annotations and different levels of granularity."""
 
