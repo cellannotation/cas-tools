@@ -141,7 +141,7 @@ def generate_labelset_table(cta, out_folder):
         record = dict()
         record["name"] = labelset.get("name", "").replace("_name", "")
         record["description"] = labelset.get("description", "")
-        record["rank"] = labelset.get("rank", "")
+        record["rank"] = str(labelset.get("rank", ""))
         record["annotation_method"] = labelset.get("annotation_method", "")
         if "automated_annotation" in labelset and labelset["automated_annotation"]:
             aut_annot = labelset["automated_annotation"]
