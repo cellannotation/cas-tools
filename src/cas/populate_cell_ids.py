@@ -57,7 +57,7 @@ def add_cell_ids(cas: dict, ad: Optional[anndata.AnnData], labelsets: list = Non
                                          "CAS author_annotation_fields.".format(cluster_identifier_column))
                     cell_ids = list(
                         ad.obs.loc[
-                            ad.obs["cluster_id"] == int(cluster_id),
+                            ad.obs[cluster_identifier_column] == int(cluster_id),
                             cluster_identifier_column,
                         ].index
                     )
