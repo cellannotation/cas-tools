@@ -1,3 +1,16 @@
+# Ignore macOS system files
+.DS_Store
+
+# Ignore all Python bytecode cache directories recursively
+**/__pycache__/
+
+# Ignore specific file types in the root directory
+/*.json
+/*.h5ad
+/*.xls
+/*.xlsx
+/*.csv
+
 venv/
 notebooks/*.h5ad
 .idea
