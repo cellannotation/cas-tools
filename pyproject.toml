@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cas-tools"
-version = "1.0.4"
+version = "1.0.5"
 description = "Cell Annotation Schema tools."
 authors = ["Huseyin Kir <hk9@sanger.ac.uk>", "Ugur Bayindir <ub2@sanger.ac.uk>"]
 license = "Apache-2.0 license"
@@ -13,7 +13,7 @@ repository = "https://github.com/cellannotation/cas-tools"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-anndata = "0.10.3"
+anndata = "0.10.5"
 cellxgene-census = { version = "1.10.2", python = ">=3.9,<3.12" }
 urllib3 = "<2"
 openpyxl = "3.1.2"
@@ -34,6 +34,7 @@ defusedxml = "0.7.1"
 rdflib = "7.0.0"
 requests = "2.32.3"
 ruamel-yaml = "0.18.6"
+cap-anndata = "^0.2.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"
