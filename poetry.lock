@@ -162,13 +162,13 @@ parse = ["beautifulsoup4 (>=4.10.0,<5.0)", "requests (>=2.12.0,<3)"]
 
 [[package]]
 name = "anndata"
-version = "0.10.3"
+version = "0.10.5"
 description = "Annotated data."
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "anndata-0.10.3-py3-none-any.whl", hash = "sha256:ec27c203c4d2f0b3a92fb9ca21692ac6022f71dd3fbc3e32d8c54cae59b5f7d8"},
-    {file = "anndata-0.10.3.tar.gz", hash = "sha256:3a40eb6a30e976a3f2678a09e89cd8819bb19b3944278b94eb2d568060d30344"},
+    {file = "anndata-0.10.5-py3-none-any.whl", hash = "sha256:fbcf934a3e99e7dda89b1d48f36f675504ea2e65ab4408daa9526bc305c14ebd"},
+    {file = "anndata-0.10.5.tar.gz", hash = "sha256:a55fcd75c2b445ad82938ecd41de1dd4caf66547290d2423327e0e89f71bf590"},
 ]
 
 [package.dependencies]
@@ -183,7 +183,7 @@ scipy = ">1.4"
 
 [package.extras]
 dev = ["pytest-xdist", "setuptools-scm"]
-doc = ["awkward (>=2.0.7)", "ipython", "myst-parser", "nbsphinx", "scanpydoc (>=0.9)", "sphinx (>=4.4)", "sphinx-autodoc-typehints (>=1.11.0)", "sphinx-book-theme (>=1.0.1)", "sphinx-copybutton", "sphinx-design (>=0.5.0)", "sphinx-issues", "sphinxext-opengraph", "zarr"]
+doc = ["awkward (>=2.0.7)", "ipython", "myst-parser", "nbsphinx", "readthedocs-sphinx-search", "scanpydoc[theme,typehints] (>=0.13.4)", "sphinx (>=4.4)", "sphinx-autodoc-typehints (>=1.11.0)", "sphinx-book-theme (>=1.1.0)", "sphinx-copybutton", "sphinx-design (>=0.5.0)", "sphinx-issues", "sphinxext-opengraph", "zarr"]
 gpu = ["cupy"]
 test = ["awkward (>=2.3)", "boltons", "dask[array,distributed]", "httpx", "joblib", "loompy (>=3.0.5)", "matplotlib", "openpyxl", "pyarrow", "pytest (>=6.0)", "pytest-cov (>=2.10)", "pytest-memray", "scanpy", "scikit-learn", "zarr"]
 
@@ -427,6 +427,26 @@ files = [
     {file = "cachetools-5.3.3-py3-none-any.whl", hash = "sha256:0abad1021d3f8325b2fc1d2e9c8b9c9d57b04c3932657a72465447332c24d945"},
     {file = "cachetools-5.3.3.tar.gz", hash = "sha256:ba29e2dfa0b8b556606f097407ed1aa62080ee108ab0dc5ec9d6a723a007d105"},
 ]
+
+[[package]]
+name = "cap-anndata"
+version = "0.2.1"
+description = "Partial read/write of AnnData (h5ad) files for low-memory operations with large datasets."
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "cap_anndata-0.2.1-py3-none-any.whl", hash = "sha256:e7ab90c2ff507e8a3dbb7ea43ed84f7f8e5b67ee8433c72cf7f4b4bd23617991"},
+    {file = "cap_anndata-0.2.1.tar.gz", hash = "sha256:390e3d009da5353d26c14d0dd394b6220530775b9c6b10f5ea0fec772d95847c"},
+]
+
+[package.dependencies]
+anndata = ">=0.10.5"
+h5py = ">=3.5.0"
+numpy = ">=1.26.3"
+pandas = ">=2.2.0"
+
+[package.extras]
+dev = ["pytest (>=8.0.0)", "setuptools (>=69.1.1,<69.2.0)"]
 
 [[package]]
 name = "cattrs"
@@ -5727,4 +5747,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "9dd5c14c15ed507aabc0a97247f2498f1e04dff58dcf3839e9072fb12b5c5728"
+content-hash = "b726ba8440c1f826ea53957f3bc96f53716f16291d46149232c54d12baa88be9"

@@ -7,7 +7,7 @@ from importlib import resources
 from cas_schema import schemas
 
 import anndata
-import numpy as np
+from cap_anndata import CapAnnDataDF
 from ruamel.yaml import YAML
 
 from cas.model import CellTypeAnnotation
@@ -241,54 +241,34 @@ def read_config(file_path: str) -> dict:
         )
 
 
-def update_obs_dataset(obs_dataset, flatten_data):
+def update_obs(obs: CapAnnDataDF, data: dict):
     """
-    Updates obs dataset with flattened data.
+    Updates the obs with data dict.
 
     Args:
-        obs_dataset (h5py.Dataset): Dataset representing the obs field in the AnnData file.
-        flatten_data (dict): Dictionary containing flattened data.
-    """
-    for key, value in flatten_data.items():
-        if key in obs_dataset:
-            del obs_dataset[key]
-            columns = obs_dataset.attrs["column-order"]
-            columns = columns[columns != key]
-            obs_dataset.attrs["column-order"] = columns
-
-        obs_dataset.create_dataset(key, data=value.values.astype("O"))
-
-        if key not in obs_dataset.attrs["column-order"]:
-            columns = np.append(obs_dataset.attrs["column-order"], key)
-            obs_dataset.attrs["column-order"] = columns
-
-
-def write_json_to_hdf5(group, data):
-    """
-    Recursively writes JSON-like data to an HDF5 group.
-
-    Args:
-        group (h5py.Group): The HDF5 group to write data to.
-        data (dict): A dictionary containing the data to be written.
-
-    Returns:
-        None
+        obs: Dataset representing the obs field in the AnnData file.
+        data: Dictionary containing flattened data.
     """
     for key, value in data.items():
-        if key in group:
-            del group[key]  # Delete the existing key to overwrite it
-        if isinstance(value, dict):
-            subgroup = group.create_group(key)
-            write_json_to_hdf5(subgroup, value)
-        elif isinstance(value, list):
-            if all(isinstance(item, str) for item in value):
-                group.create_dataset(key, data=", ".join(sorted(value)))
-            else:
-                subgroup = group.create_group(key)
-                for i, item in enumerate(value):
-                    subgroup.create_dataset(str(i), data=item)
+        if key in obs:
+            obs.remove_column(key)
+
+        obs[key] = value.values
+
+
+def update_uns(uns: CapAnnDataDF, data: dict):
+    """
+    Updates the uns with data dict.
+
+    Args:
+        uns: The HDF5 group to write data to.
+        data: Dictionary containing the data to be written.
+    """
+    for key, value in data.items():
+        if isinstance(value, list) and all(isinstance(item, str) for item in value):
+            uns[key] = ", ".join(sorted(value))
         else:
-            group.create_dataset(key, data=value)
+            uns[key] = value
 
 
 def get_cas_schema_names() -> dict:

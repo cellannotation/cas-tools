@@ -13,11 +13,11 @@ Key Features:
 """
 import shutil
 
-import h5py
+from cap_anndata import read_h5ad
 import numpy as np
 import pandas as pd
 
-from cas.file_utils import read_json_file, update_obs_dataset, write_json_to_hdf5
+from cas.file_utils import read_json_file, update_obs, update_uns
 
 LABELSET_NAME = "name"
 
@@ -80,18 +80,22 @@ def flatten_cas_object(input_json, anndata_file_path, output_file_path):
     annotations = input_json[ANNOTATIONS]
     parent_cell_ids = collect_parent_cell_ids(input_json)
 
-    with h5py.File(anndata_file_path, "r+") as f:
-        obs_dataset = f["obs"]
-        obs_index = np.array(obs_dataset[obs_dataset.attrs['_index']], dtype=str)
+    with read_h5ad(file_path=anndata_file_path, edit=True) as cap_adata:
+        cap_adata.read_obs()
+        obs = cap_adata.obs
+        obs_index = np.array(cap_adata.obs.axes[0].tolist())
 
         # obs
         flatten_data = process_annotations(annotations, obs_index, parent_cell_ids)
-        update_obs_dataset(obs_dataset, flatten_data)
+        update_obs(obs, flatten_data)
 
         # uns
         uns_json = generate_uns_json(input_json)
-        uns_dataset = f["uns"]
-        write_json_to_hdf5(uns_dataset, uns_json)
+        cap_adata.read_uns()
+        uns = cap_adata.uns
+        update_uns(uns, uns_json)
+
+        cap_adata.overwrite()
 
 
 def process_annotations(annotations, obs_index, parent_cell_ids):
