@@ -33,6 +33,9 @@ class CAStoRDFTestCase(unittest.TestCase):
         ontology_iri = "https://purl.brain-bican.org/ontology/AIT_MTG/"
         labelsets = ["CrossArea_cluster", "CrossArea_subclass", "Class"]
 
+        print("XXXX FAILING PATH:")
+        print(os.path.abspath(TEST_OUTPUT))
+        print(os.path.abspath(TESTDATA))
         rdf_graph = export_to_rdf(
             cas_schema="bican",
             data=os.path.join(TESTDATA, "AIT_MTG.json"),
