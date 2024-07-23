@@ -196,3 +196,22 @@ cd src
 python -m cas split_cas --cas_json path/to/cas.json --split_on term1
 python -m cas split_cas --cas_json path/to/cas.json --split_on term1 term2
 python -m cas split_cas --cas_json path/to/cas.json --split_on term1 term2 --multiple_outputs
+```
+
+python -m cas split_cas --cas_json path/to/cas.json --split_on term1 term2 --multiple_outputs
+## Split AnnData with CAS JSON
+
+This tool allows you to split an AnnData file based on specified CAS JSON files. It supports creating multiple output files, each corresponding to one of the specified CAS JSON files, or a single output file that contains all cells from the input CAS JSON files, depending on the user's choice.
+
+### Command-line Arguments:
+- **--anndata**: Path to the AnnData file. This parameter is required.
+- **--cas_json**: List of CAS JSON file paths that will be used to split the AnnData file. Multiple paths can be provided.
+- **--multiple_outputs**: If set, creates multiple output files for each CAS JSON file; if not set, creates a single output file containing all cells from the input CAS JSON files.
+
+### Usage Examples:
+```commandline
+cd src
+python -m cas split_anndata --anndata path/to/anndata.h5ad --cas_json path/to/cas.json
+python -m cas split_anndata --anndata path/to/anndata.h5ad --cas_json path/to/cas_1.json path/to/cas_2.json
+python -m cas split_anndata --anndata path/to/anndata.h5ad --cas_json path/to/cas_1.json path/to/cas_2.json --multiple_outputs
+```
