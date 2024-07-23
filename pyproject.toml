@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cas-tools"
-version = "1.0.5"
+version = "1.0.6"
 description = "Cell Annotation Schema tools."
 authors = ["Huseyin Kir <hk9@sanger.ac.uk>", "Ugur Bayindir <ub2@sanger.ac.uk>"]
 license = "Apache-2.0 license"
@@ -42,6 +42,7 @@ isort = "^5.12.0"
 flake8 = "^6.0.0"
 flake8-black = "^0.3.6"
 flake8-isort = "^6.0.0"
+scipy = "^1.13.1"
 
 [tool.poetry.scripts]
 cas = "cas.__main__:main"
