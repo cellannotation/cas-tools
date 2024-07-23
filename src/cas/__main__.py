@@ -6,6 +6,7 @@ import warnings
 from cas.abc_cas_converter import abc2cas, cas2abc
 from cas.add_author_annotations import add_author_annotations_from_file
 from cas.anndata_conversion import merge
+from cas.anndata_splitter import split_anndata_to_file
 from cas.anndata_to_cas import anndata2cas
 from cas.flatten_data_to_anndata import flatten
 from cas.populate_cell_ids import populate_cell_ids
@@ -34,6 +35,7 @@ def main():
     create_cas2rdf_operation_parser(subparsers)
     create_add_author_annotations_parser(subparsers)
     create_split_cas_parser(subparsers)
+    create_split_anndata_parser(subparsers)
 
     args = parser.parse_args()
 
@@ -141,6 +143,12 @@ def main():
         multiple_outputs = args.multiple_outputs
 
         split_cas_to_file(cas_json_path, split_terms, multiple_outputs)
+    elif args.action == "split_anndata":
+        anndata_file_path = args.anndata
+        cas_json_path_list = args.cas_json
+        multiple_outputs = args.multiple_outputs
+
+        split_anndata_to_file(anndata_file_path, cas_json_path_list, multiple_outputs)
 
 
 def create_merge_operation_parser(subparsers):
@@ -630,6 +638,40 @@ def create_split_cas_parser(subparsers):
         "--multiple_outputs",
         action="store_true",
         help="If set, create multiple output files for each split_on term; if not set, create a single output file."
+    )
+
+
+def create_split_anndata_parser(subparsers):
+    """
+    Command-line Arguments:
+    -----------------------
+    --anndata           : Path to the AnnData file.
+    --cas_json_list     : List of CAS JSON file paths that will be used to split the AnnData file.
+    --multiple_outputs  : If set, creates multiple output files for each term provided in split_on.
+                          If not set, creates a single output file containing all cell_ids from the input CAS JSON files.
+    Usage Example:
+    --------------
+    cd src
+    python -m cas split_anndata --anndata path/to/anndata.h5ad --cas_json path/to/cas.json
+    python -m cas split_anndata --anndata path/to/anndata.h5ad path/to/cas_1.json path/to/cas_2.json
+    python -m cas split_anndata --anndata path/to/anndata.h5ad path/to/cas_1.json path/to/cas_2.json --multiple_outputs
+    """
+    parser_split_anndata = subparsers.add_parser(
+        "split_anndata",
+        description="Splits an AnnData file based on specified CAS JSON files.",
+        help="Splits an AnnData file into multiple files based on one or more CAS JSON files."
+    )
+    parser_split_anndata.add_argument(
+        "--anndata", required=True, help="Path to the AnnData file."
+    )
+    parser_split_anndata.add_argument(
+        "--cas_json", required=True,
+        nargs="+", help="List of CAS JSON file paths that will be used to split the AnnData file."
+    )
+    parser_split_anndata.add_argument(
+        "--multiple_outputs",
+        action="store_true",
+        help="If set, creates multiple output files for each CAS JSON file; if not set, creates a single output file."
     )
 
 
