@@ -13,7 +13,7 @@ labelset_type = URIRef(CAS_NS + "Labelset")
 rdftype = URIRef("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
 
 TESTDATA = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)), "./test_data/linkml/"
+    os.path.dirname(os.path.realpath(__file__)), "test_data/linkml/"
 )
 TEST_OUTPUT = os.path.join(TESTDATA, "output.rdf")
 TEST_OUTPUT2 = os.path.join(TESTDATA, "CS202210140_non_neuronal.rdf")
