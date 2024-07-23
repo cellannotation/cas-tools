@@ -15,8 +15,8 @@ class LinkMLDataTestCase(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        # if os.path.isfile(TEST_OUTPUT):
-        #     os.remove(TEST_OUTPUT)
+        if os.path.isfile(TEST_OUTPUT):
+            os.remove(TEST_OUTPUT)
         pass
 
     def test_rdf_dump(self):

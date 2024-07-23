@@ -13,7 +13,7 @@ labelset_type = URIRef(CAS_NS + "Labelset")
 rdftype = URIRef("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
 
 TESTDATA = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)), "./test_data/linkml/"
+    os.path.dirname(os.path.realpath(__file__)), "test_data/linkml/"
 )
 TEST_OUTPUT = os.path.join(TESTDATA, "output.rdf")
 TEST_OUTPUT2 = os.path.join(TESTDATA, "CS202210140_non_neuronal.rdf")
@@ -33,6 +33,9 @@ class CAStoRDFTestCase(unittest.TestCase):
         ontology_iri = "https://purl.brain-bican.org/ontology/AIT_MTG/"
         labelsets = ["CrossArea_cluster", "CrossArea_subclass", "Class"]
 
+        print("XXXX FAILING PATH:")
+        print(os.path.abspath(TEST_OUTPUT))
+        print(os.path.abspath(TESTDATA))
         rdf_graph = export_to_rdf(
             cas_schema="bican",
             data=os.path.join(TESTDATA, "AIT_MTG.json"),
