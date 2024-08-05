@@ -68,6 +68,7 @@ def dump_to_rdf(
     prefixes = DEFAULT_PREFIXES.copy()
     prefixes["_base"] = ontology_iri
     prefixes[ontology_namespace] = ontology_iri
+    labelsets = get_labelsets(instance, labelsets)
     for labelset in labelsets:
         prefixes[labelset] = ontology_iri + f"{labelset}#"
 
@@ -84,6 +85,24 @@ def dump_to_rdf(
     if output_path:
         g.serialize(format="xml", destination=output_path)
     return g
+
+
+def get_labelsets(instance, labelsets):
+    """
+    Gets the labelsets from the instance data if not provided as parameter.
+    Args:
+        instance: The instance data.
+        labelsets: The labelsets to be used.
+    Returns: The labelsets to be used.
+    """
+    if labelsets is None:
+        ranked_lblsets = (ls for ls in instance["labelsets"] if "rank" in ls)
+        if ranked_lblsets:
+            labelset_objects = sorted(ranked_lblsets, key=lambda x: x["rank"])
+        else:
+            labelset_objects = instance["labelsets"]
+        labelsets = [ls["name"] for ls in labelset_objects]
+    return labelsets
 
 
 def add_cl_existential_restrictions(g: rdflib.Graph):

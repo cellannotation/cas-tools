@@ -18,7 +18,7 @@ def export_to_rdf(
     labelsets: Optional[List[str]] = None,
     output_path: str = None,
     validate: bool = True,
-    include_cells: bool = True,
+    include_cells: bool = True
 ) -> rdflib.Graph:
     """
     Generates and returns an RDF graph from the provided data and CAS schema, with an option to write the RDF graph to a file.
@@ -51,9 +51,8 @@ def export_to_rdf(
         ontology_iri=ontology_iri,
         labelsets=labelsets,
     )
-    expanded_schema = expand_schema(
-        config=None, yaml_obj=decorated_schema, value_set_names=["CellTypeEnum"]
-    )
+
+    expanded_schema = expand_schema(config=None, yaml_obj=decorated_schema, value_set_names=["CellTypeEnum"])
 
     # Prepare the data
     instance = populate_ids(
