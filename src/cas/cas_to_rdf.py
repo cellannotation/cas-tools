@@ -19,6 +19,7 @@ def export_to_rdf(
     output_path: str = None,
     validate: bool = True,
     include_cells: bool = True,
+    expand_value_sets: bool = True,
 ) -> rdflib.Graph:
     """
     Generates and returns an RDF graph from the provided data and CAS schema, with an option to write the RDF graph to a file.
@@ -40,6 +41,9 @@ def export_to_rdf(
             Determines if data-schema validation checks will be performed. True by default.
         include_cells (bool):
             Determines if cell data will be included in the RDF output. True by default.
+        expand_value_sets (bool):
+            Determines if the schema enum sets will be expanded before RDF generation. True by default. OAKLib
+            ValueSetExpander may fail in GitHub actions.
     Returns:
         An RDFlib graph object.
     """
@@ -51,9 +55,9 @@ def export_to_rdf(
         ontology_iri=ontology_iri,
         labelsets=labelsets,
     )
-    expanded_schema = expand_schema(
-        config=None, yaml_obj=decorated_schema, value_set_names=["CellTypeEnum"]
-    )
+
+    if expand_schema:
+        decorated_schema = expand_schema(config=None, yaml_obj=decorated_schema, value_set_names=["CellTypeEnum"])
 
     # Prepare the data
     instance = populate_ids(
@@ -62,7 +66,7 @@ def export_to_rdf(
         ontology_id=ontology_namespace,
     )
     rdf_graph = dump_to_rdf(
-        schema=expanded_schema,
+        schema=decorated_schema,
         instance=instance,
         ontology_namespace=ontology_namespace,
         ontology_iri=ontology_iri,

@@ -44,7 +44,8 @@ class CAStoRDFTestCase(unittest.TestCase):
             labelsets=labelsets,
             output_path=TEST_OUTPUT,
             validate=True,
-            include_cells=False
+            include_cells=False,
+            expand_value_sets=False
         )
         self.assertTrue(os.path.isfile(TEST_OUTPUT))
 
@@ -87,7 +88,8 @@ class CAStoRDFTestCase(unittest.TestCase):
             labelsets=None,
             output_path=TEST_OUTPUT2,
             validate=True,
-            include_cells=False
+            include_cells=False,
+            expand_value_sets=False
         )
 
         self.assertTrue(os.path.isfile(TEST_OUTPUT2))
