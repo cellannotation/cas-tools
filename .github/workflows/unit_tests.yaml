@@ -30,6 +30,12 @@ jobs:
         run: |
           poetry install
 
+      - name: Download OakLib dependency
+        run: |
+          mkdir -p $HOME/.data/oaklib
+          wget https://s3.amazonaws.com/bbop-sqlite/cl.db.gz -O $HOME/cl.db.gz
+          7z e $HOME/cl.db.gz -o$HOME/.data/oaklib/
+
       - name: Run tests
         run: |
           PYTHONPATH=src poetry run python -m unittest discover -s src -p '*_test.py'
