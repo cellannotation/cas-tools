@@ -32,4 +32,4 @@ jobs:
 
       - name: Run tests
         run: |
-          PYTHONPATH=src poetry run python -m unittest discover -s src -p *_test.py'
+          PYTHONPATH=src poetry run python -m unittest discover -s src -p '*_test.py'
