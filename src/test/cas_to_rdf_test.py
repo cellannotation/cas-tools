@@ -76,7 +76,6 @@ class CAStoRDFTestCase(unittest.TestCase):
     def test_cas_to_rdf_siletti(self):
         ontology_namespace = "CS202210140"
         ontology_iri = "https://purl.brain-bican.org/ontology/CS202210140/"
-        labelsets = ["Cluster", "supercluster_term"]
 
         rdf_graph = export_to_rdf(
             # cas_schema="bican",
@@ -85,7 +84,7 @@ class CAStoRDFTestCase(unittest.TestCase):
             data=os.path.join(TESTDATA, "Siletti_all_non_neuronal_cells.json"),
             ontology_namespace=ontology_namespace,
             ontology_iri=ontology_iri,
-            labelsets=labelsets,
+            labelsets=None,
             output_path=TEST_OUTPUT2,
             validate=True,
             include_cells=False
