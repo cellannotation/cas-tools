@@ -11,12 +11,14 @@ Key Features:
 3. Updates the AnnData object with information from the JSON annotations and root keys.
 4. Writes the modified AnnData object to a specified output file.
 """
+import json
 import shutil
 
-from cap_anndata import read_h5ad
 import numpy as np
 import pandas as pd
+from cap_anndata import read_h5ad
 
+from cas.accession.hash_accession_manager import HashAccessionManager, is_hash_accession
 from cas.file_utils import read_json_file, update_obs, update_uns
 
 LABELSET_NAME = "name"
@@ -110,12 +112,24 @@ def process_annotations(annotations, obs_index, parent_cell_ids):
     Returns:
         dict: Dictionary containing flattened data.
     """
+    accession_manager = HashAccessionManager()
     flatten_data = {}
     for ann in annotations:
         cell_ids = ann.get(
             CELL_IDS, parent_cell_ids.get(ann.get("cell_set_accession", []))
         )
-        if not cell_ids:  # only happens if data has multi-inheritance (as in basal ganglia data)
+
+        ann.get("author_annotation_fields", {}).update(
+            {
+                "cellhash": accession_manager.generate_accession_id(
+                    cell_ids=cell_ids,
+                    labelset=ann.get("labelset"),
+                )
+            }
+        )
+
+        if not cell_ids:
+            # only happens if data has multi-inheritance (as in basal ganglia data)
             continue
         # Convert cell_ids to a list if it's not already for np.isin
         if not isinstance(cell_ids, list):
@@ -125,7 +139,7 @@ def process_annotations(annotations, obs_index, parent_cell_ids):
         for k, v in ann.items():
             if k in [CELL_IDS, LABELSET]:
                 continue
-                
+
             key = f"{ann[LABELSET]}--{k}" if k != CELL_LABEL else ann[LABELSET]
             value = ", ".join(
                 sorted([str(value) for value in v] if isinstance(v, list) else [str(v)])
@@ -156,6 +170,7 @@ def generate_uns_json(input_json):
     uns_json = {}
     root_keys = list(input_json.keys())
     root_keys.remove(ANNOTATIONS)
+
     for key in root_keys:
         value = input_json[key]
         if is_list_of_strings(value):
@@ -165,13 +180,21 @@ def generate_uns_json(input_json):
         else:
             metadata_json = {}
             for labelset in value:
-                metadata_key = labelset.get(LABELSET_NAME, '')
+                metadata_key = labelset.get(LABELSET_NAME, "")
                 metadata_json.update({metadata_key: {}})
                 for k, v in labelset.items():
                     if k == LABELSET_NAME:
                         continue
                     metadata_json.get(metadata_key, {}).update({k: v})
             uns_json["cellannotation_metadata"] = metadata_json
+
+    uns_json["annotations"] = json.dumps(
+        [
+            {k: v for k, v in annotation.items() if k != CELL_IDS}
+            for annotation in input_json["annotations"]
+        ]
+    )
+
     return uns_json
 
 
