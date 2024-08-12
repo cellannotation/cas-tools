@@ -1,12 +1,12 @@
 import unittest
 from unittest.mock import patch
-import pandas as pd
 
+import pandas as pd
 from cap_anndata import read_h5ad
 
 from cas.flatten_data_to_anndata import (
-    unflatten_obs,
     create_cell_label_lookup,
+    unflatten_obs,
     update_cas_json,
 )
 
