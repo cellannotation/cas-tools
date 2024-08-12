@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cas-tools"
-version = "1.0.6"
+version = "1.0.7"
 description = "Cell Annotation Schema tools."
 authors = ["Huseyin Kir <hk9@sanger.ac.uk>", "Ugur Bayindir <ub2@sanger.ac.uk>"]
 license = "Apache-2.0 license"
