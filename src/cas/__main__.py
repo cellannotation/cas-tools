@@ -8,7 +8,7 @@ from cas.add_author_annotations import add_author_annotations_from_file
 from cas.anndata_conversion import merge
 from cas.anndata_splitter import split_anndata_to_file
 from cas.anndata_to_cas import anndata2cas
-from cas.flatten_data_to_anndata import flatten
+from cas.flatten_data_to_anndata import flatten, unflatten
 from cas.populate_cell_ids import populate_cell_ids
 from cas.spreadsheet_to_cas import spreadsheet2cas
 from cas.validate import validate as schema_validate
@@ -26,6 +26,7 @@ def main():
 
     create_merge_operation_parser(subparsers)
     create_flatten_operation_parser(subparsers)
+    create_unflatten_operation_parser(subparsers)
     create_spreadsheet2cas_operation_parser(subparsers)
     create_anndata2cas_operation_parser(subparsers)
     create_abc2cas_operation_parser(subparsers)
@@ -60,6 +61,22 @@ def main():
         ):
             raise ValueError("--anndata and --output cannot be the same")
         flatten(json_file_path, anndata_file_path, output_file_path)
+    elif args.action == "unflatten":
+        args = parser.parse_args()
+        json_file_path = args.json
+        anndata_file_path = args.anndata
+        output_anndata_path = args.output_anndata
+        output_json_path = args.output_json
+
+        if output_anndata_path and os.path.abspath(anndata_file_path) == os.path.abspath(
+            output_anndata_path
+        ):
+            raise ValueError("--anndata and --output_anndata cannot be the same")
+        if json_file_path and output_json_path and os.path.abspath(json_file_path) == os.path.abspath(
+            output_json_path
+        ):
+            raise ValueError("--json and --output_json cannot be the same")
+        unflatten(json_file_path, anndata_file_path, output_anndata_path, output_json_path)
     elif args.action == "spreadsheet2cas":
         args = parser.parse_args()
         spreadsheet_file_path = args.spreadsheet
@@ -208,8 +225,7 @@ def create_flatten_operation_parser(subparsers):
     parser_flatten = subparsers.add_parser(
         "flatten",
         description="Flattens all content of CAS annotations to an AnnData file.",
-        help="Flattens all content of CAS annotations to obs key:value pairs. "
-        "Flattens all other content to key_value pairs in uns.",
+        help="Flattens all content of CAS annotations to obs key:value pairs."
     )
 
     parser_flatten.add_argument("--json", required=True, help="Input JSON file path")
@@ -222,6 +238,52 @@ def create_flatten_operation_parser(subparsers):
         help="Output AnnData file name.",
     )
     parser_flatten.set_defaults(validate=False)
+
+
+def create_unflatten_operation_parser(subparsers):
+    """
+        Command-line Arguments:
+    -----------------------
+    --anndata           : Path to the AnnData file.
+    --json              : Optional path to the CAS JSON file. If not provided, the 'annotations' in uns will be used.
+    --output_anndata    : Optional output AnnData file name. If not provided, 'unflattened.h5ad' will be used as
+    default name.
+    --output_json       : Optional output CAS JSON file name. If not provided, 'cas.json' will be used as default name.
+
+    Usage Example:
+    --------------
+    cd src
+    python -m cas unflatten --anndata path/to/anndata_file.h5ad --json path/to/json_file.json --output_anndata
+    path/to/output_file.h5ad --output_json path/to/output_cas.json
+    """
+    parser_unflatten = subparsers.add_parser(
+        "unflatten",
+        description="Unflattens all content of a flattened AnnData file to a CAS JSON file. Also creates an "
+                    "unflattened AnnData file.",
+        help="Converts flattened AnnData content back to unflattened version and creates CAS JSON files."
+    )
+
+    parser_unflatten.add_argument(
+        "--anndata",
+        required=True,
+        help="Path to the input AnnData file that contains flattened data."
+    )
+    parser_unflatten.add_argument(
+        "--json",
+        required=False,
+        help="Optional path to the CAS JSON file. If not provided, annotations in 'uns' of the AnnData will be used."
+    )
+    parser_unflatten.add_argument(
+        "--output_anndata",
+        required=False,
+        help="Optional output AnnData file name. If not provided, 'unflattened.h5ad' will be used as default name."
+    )
+    parser_unflatten.add_argument(
+        "--output_json",
+        required=False,
+        default='cas.json',
+        help="Optional output CAS JSON file name. If not provided, 'cas.json' will be used as the default file name."
+    )
 
 
 def create_spreadsheet2cas_operation_parser(subparsers):
