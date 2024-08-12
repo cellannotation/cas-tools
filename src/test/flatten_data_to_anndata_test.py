@@ -5,7 +5,7 @@ import pandas as pd
 from cap_anndata import read_h5ad
 
 from cas.flatten_data_to_anndata import (
-    process_obs,
+    unflatten_obs,
     create_cell_label_lookup,
     update_cas_json,
 )
@@ -107,7 +107,7 @@ class TestAnnotationMethods(unittest.TestCase):
             ],
         }
 
-    def test_process_obs(self):
+    def test_unflatten_obs(self):
         # Expected output should be a processed JSON structure
         expected_output = {
             "author_name": "Jordan Lee",
@@ -198,7 +198,7 @@ class TestAnnotationMethods(unittest.TestCase):
                 cap_adata.read_obs()
                 obs = cap_adata.obs
                 obs_columns_count = len(obs.columns)
-                new_cas = process_obs(obs, self.cas_json)
+                new_cas = unflatten_obs(obs, self.cas_json)
                 col_count_diff = obs_columns_count - len(obs.columns)
 
             # Assertions
@@ -322,18 +322,18 @@ class TestAnnotationMethods(unittest.TestCase):
         # Assert the expected structure and contents
         self.assertIsInstance(result, dict)
         self.assertEqual(len(result.keys()), 10)
-        self.assertEqual(len(result["O49"]), 11)
-        self.assertIn("O50", result)
-        self.assertIn("O49", result)
-        self.assertIn("A62", result)
-        self.assertIn(CELL_IDS, result["O50"])
-        self.assertIn(AUTHOR_ANNOTATION_FIELDS, result["O50"])
-        self.assertIsInstance(result["O50"][CELL_IDS], list)
+        self.assertEqual(len(result["Cluster:O49"]), 11)
+        self.assertIn("Cluster:O50", result)
+        self.assertIn("Cluster:O49", result)
+        self.assertIn("Cluster:A62", result)
+        self.assertIn(CELL_IDS, result["Cluster:O50"])
+        self.assertIn(AUTHOR_ANNOTATION_FIELDS, result["Cluster:O50"])
+        self.assertIsInstance(result["Cluster:O50"][CELL_IDS], list)
 
     def test_update_cas_json(self):
         # Mock inputs based on synthetic data
         cas_dict = {
-            "A62": {
+            "Cluster:A62": {
                 "cell_ids": ["10X357_2:TGGGCTGAGAAACCCG", "10X319_7:TGCTCCATCATCACCC"],
                 "author_annotation_fields": {
                     "cellhash": "Cluster:0a1cfc9729",
@@ -365,7 +365,7 @@ class TestAnnotationMethods(unittest.TestCase):
                 "marker_gene_evidence": "AQP4",
                 "rationale_dois": "DOI:10.1126/science.adf6812",
             },
-            "O49": {
+            "Cluster:O49": {
                 "cell_ids": ["10X379_2:ATTCCATTCCCAGCGA", "10X383_4:GAAGTAAAGGTTCTTG"],
                 "author_annotation_fields": {
                     "cellhash": "Cluster:b81a00daa1",
@@ -397,7 +397,7 @@ class TestAnnotationMethods(unittest.TestCase):
                 "marker_gene_evidence": "PLP1, SOX10",
                 "rationale_dois": "DOI:10.1126/science.adf6812",
             },
-            "O500x": {
+            "Cluster:O500x": {
                 "cell_ids": ["10X362_3:TCAGTGAGTATTGACC", "10X362_5:TCCGTGTGTGAAAGTT"],
                 "author_annotation_fields": {
                     "cellhash": "Cluster:6e98fec3ec",
@@ -509,10 +509,18 @@ class TestAnnotationMethods(unittest.TestCase):
         self.assertIn("O500x", [a[CELL_LABEL] for a in result[ANNOTATIONS]])
         self.assertIn("O49", [a[CELL_LABEL] for a in result[ANNOTATIONS]])
         self.assertIn("A62", [a[CELL_LABEL] for a in result[ANNOTATIONS]])
-        self.assertIn("supercluster_term:1dc795d1ea", [a[CELL_LABEL] for a in result[ANNOTATIONS]])
-        self.assertIn("supercluster_term:1dc795d1ea", [a[CELL_LABEL] for a in result[ANNOTATIONS]])
-        self.assertIn("supercluster_term:21eaacf654", [a[CELL_LABEL] for a in result[ANNOTATIONS]])
-        self.assertIn("supercluster_term:21eaacf654", [a[CELL_LABEL] for a in result[ANNOTATIONS]])
+        self.assertIn(
+            "supercluster_term:1dc795d1ea", [a[CELL_LABEL] for a in result[ANNOTATIONS]]
+        )
+        self.assertIn(
+            "supercluster_term:1dc795d1ea", [a[CELL_LABEL] for a in result[ANNOTATIONS]]
+        )
+        self.assertIn(
+            "supercluster_term:21eaacf654", [a[CELL_LABEL] for a in result[ANNOTATIONS]]
+        )
+        self.assertIn(
+            "supercluster_term:21eaacf654", [a[CELL_LABEL] for a in result[ANNOTATIONS]]
+        )
         self.assertIn(
             "Cluster:6e98fec3ec",
             [a[AUTHOR_ANNOTATION_FIELDS][CELLHASH] for a in result[ANNOTATIONS]],

@@ -9,7 +9,12 @@ import pandas as pd
 from cap_anndata import read_h5ad
 
 from cas.accession.hash_accession_manager import HashAccessionManager, is_hash_accession
-from cas.file_utils import read_json_file, update_obs, update_uns, write_dict_to_json_file
+from cas.file_utils import (
+    read_json_file,
+    update_obs,
+    update_uns,
+    write_dict_to_json_file,
+)
 from cas.utils.conversion_utils import reformat_json
 
 # Configure logging
@@ -124,7 +129,6 @@ def process_annotations(annotations, obs_index, parent_cell_ids):
                 if is_hash_accession(ann.get("cell_set_accession", None))
                 else accession_manager.generate_accession_id(
                     cell_ids=cell_ids,
-                    labelset=ann.get(LABELSET),
                 )
             }
         )
@@ -253,12 +257,13 @@ def unflatten(
     if output_anndata_path:
         shutil.copy(anndata_file_path, output_anndata_path)
         anndata_file_path = output_anndata_path
-
+    cas = None
     if json_file_path:
         with open(json_file_path, "r") as file:
             cas = json.load(file)
-    else:
-        with read_h5ad(file_path=anndata_file_path, edit=True) as cap_adata:
+
+    with read_h5ad(file_path=anndata_file_path, edit=True) as cap_adata:
+        if not cas:
             cap_adata.read_uns()
             if "cas" not in cap_adata.uns:
                 raise KeyError(
@@ -266,12 +271,10 @@ def unflatten(
                 )
             cas = json.loads(cap_adata.uns["cas"])
 
-    with read_h5ad(file_path=anndata_file_path, edit=True) as cap_adata:
         cap_adata.read_obs()
         obs = cap_adata.obs
-        new_cas = process_obs(obs, cas)
+        new_cas = unflatten_obs(obs, cas)
 
-        cap_adata.read_uns()
         cap_adata.uns["cas"] = reformat_json(new_cas)
         # Save your changes to a new or the same AnnData file
         cap_adata.overwrite()
@@ -280,7 +283,7 @@ def unflatten(
         write_dict_to_json_file(output_json_path, new_cas)
 
 
-def process_obs(obs_df: pd.DataFrame, cas_json: Dict[str, Any]) -> Dict[str, Any]:
+def unflatten_obs(obs_df: pd.DataFrame, cas_json: Dict[str, Any]) -> Dict[str, Any]:
     """
     Reverse the flattening process to update the "annotations" section in a CAS object.
 
@@ -306,7 +309,12 @@ def process_obs(obs_df: pd.DataFrame, cas_json: Dict[str, Any]) -> Dict[str, Any
     # Check cell set membership and update cas
     updated_cas = update_cas_json(cas_dict, cas_json)
     # Discard flattened obs
-    flattened_columns = [col for labelset, column_list in obs_columns_by_labelset.items() for col in column_list if "--" in col]
+    flattened_columns = [
+        col
+        for labelset, column_list in obs_columns_by_labelset.items()
+        for col in column_list
+        if "--" in col
+    ]
     for flattened_column in flattened_columns:
         obs_df.remove_column(flattened_column)
 
@@ -335,19 +343,22 @@ def create_cell_label_lookup(df_dict: Dict[str, pd.DataFrame]) -> dict:
         for key, group in grouped:
             # Append indices of each group to cell_ids
             cell_id_list = group.index.tolist()
-            nested_dict[key][CELL_IDS].extend(cell_id_list)
+            key_pair = f"{df_key}:{key}"
+            nested_dict[key_pair][CELL_IDS].extend(cell_id_list)
 
             # Process each column in the group
             for col in df.columns:
                 if col == df_key:
                     # Store the labelset and cell label for the first column
-                    nested_dict[key][LABELSET] = col
-                    nested_dict[key][CELL_LABEL] = group[col].iloc[0]
+                    nested_dict[key_pair][LABELSET] = col
+                    nested_dict[key_pair][CELL_LABEL] = group[col].iloc[0]
                     # Store cellhash
                     cell_hash = accession_manager.generate_accession_id(
                         cell_ids=cell_id_list, labelset=col
                     )
-                    nested_dict[key][AUTHOR_ANNOTATION_FIELDS][CELLHASH] = cell_hash
+                    nested_dict[key_pair][AUTHOR_ANNOTATION_FIELDS][
+                        CELLHASH
+                    ] = cell_hash
                 else:
                     # Split annotation columns and store them in annotations
                     annotation_column = col.split("--")[-1]
@@ -358,11 +369,11 @@ def create_cell_label_lookup(df_dict: Dict[str, pd.DataFrame]) -> dict:
                         filtered_annotation_dict = {
                             k: v for k, v in annotation_dict.items() if k != CELLHASH
                         }
-                        nested_dict[key][annotation_column].update(
+                        nested_dict[key_pair][annotation_column].update(
                             filtered_annotation_dict
                         )
-                        continue
-                    nested_dict[key][annotation_column] = group[col].iloc[0]
+                    else:
+                        nested_dict[key_pair][annotation_column] = group[col].iloc[0]
 
     return {
         key_: dict(value)
@@ -394,28 +405,32 @@ def update_cas_json(
     # remaining_annotations_labels = list(key for key in cas_dict.keys() if not is_hash_accession(key))
 
     for annotation in cas_json[ANNOTATIONS]:
-        cas_cell_label = annotation[CELL_LABEL]
+        labelset_cell_label_pair = f"{annotation[LABELSET]}:{annotation[CELL_LABEL]}"
         cas_cellhash = annotation[AUTHOR_ANNOTATION_FIELDS][CELLHASH]
 
-        if cas_cell_label in cas_dict.keys():
-            obs_annotation = cas_dict[cas_cell_label]
-            obs_cellhash = cas_dict[cas_cell_label][AUTHOR_ANNOTATION_FIELDS][CELLHASH]
+        if labelset_cell_label_pair in cas_dict.keys():
+            obs_annotation = cas_dict[labelset_cell_label_pair]
+            obs_cellhash = cas_dict[labelset_cell_label_pair][AUTHOR_ANNOTATION_FIELDS][
+                CELLHASH
+            ]
 
             if cas_cellhash == obs_cellhash:
                 updated_cas_annotations.append(obs_annotation)
             else:
                 logging.warning(
-                    f"Cell set annotations for {cas_cell_label} are discarded because cell hashes do not match."
+                    f"Cell set annotations for {labelset_cell_label_pair} are discarded because cell hashes do not match."
                 )
-            index_to_remove = remaining_annotations_labels.index(cas_cell_label)
+            index_to_remove = remaining_annotations_labels.index(
+                labelset_cell_label_pair
+            )
             remaining_annotations_labels.pop(index_to_remove)
             remaining_annotations_labels.pop(index_to_remove)
-            # remaining_annotations_labels.remove(cas_cell_label)
+            # remaining_annotations_labels.remove(labelset_cell_label_pair)
         elif cas_cellhash in cas_dict.keys():
             obs_annotation = cas_dict[cas_cellhash]
             updated_cas_annotations.append(obs_annotation)
             logger.warning(
-                f"Cell id hashes, {cas_cellhash}, match but cell labels, {cas_cell_label}->"
+                f"Cell id hashes, {cas_cellhash}, match but cell labels, {labelset_cell_label_pair}->"
                 f"{obs_annotation[CELL_LABEL]}, do not. "
                 f"Annotations are updated anyway. There might be a change in Cell Label field!"
             )
@@ -427,5 +442,7 @@ def update_cas_json(
         updated_cas_annotations.append(cas_dict[label])
         logger.warning(f"New cell set has been added with label {label}.")
 
-    return {k: (updated_cas_annotations if k == ANNOTATIONS else v) for k, v in cas_json.items()}
-
+    return {
+        k: (updated_cas_annotations if k == ANNOTATIONS else v)
+        for k, v in cas_json.items()
+    }
