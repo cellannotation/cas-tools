@@ -1,5 +1,6 @@
 import itertools
 from datetime import date, datetime
+import json
 import requests
 from typing import Any, Dict, List, Tuple
 
@@ -316,3 +317,32 @@ def get_authors_from_doi(doi):
         return author_dict
     except KeyError:
         return "Author information not available."
+
+
+def reformat_json(input_json: Dict[str, Any], input_key: str = 'annotations', exclude_key: str = 'cell_ids') -> (
+        str):
+    """
+    Reformat the input JSON to create a new JSON structure, copying all fields and modifying the 'input_key' field.
+    This function serializes the modified JSON to a string.
+
+    Args:
+        input_json: The original JSON object as a Python dictionary.
+        input_key: The key in the original JSON where annotations are stored.
+        exclude_key: The key within annotations to exclude from the copied data.
+
+    Returns:
+        A JSON string of the reformatted JSON object.
+    """
+    output_json = {k: v for k, v in input_json.items() if k != input_key}
+
+    # Process the annotations field if it exists in the input JSON
+    if input_key in input_json:
+        # Filter out the specified key (e.g., 'cell_ids') from each annotation dictionary
+        filtered_annotations = [
+            {k: v for k, v in annotation.items() if k != exclude_key}
+            for annotation in input_json[input_key]
+        ]
+
+        output_json[input_key] = filtered_annotations
+
+    return json.dumps(output_json)
