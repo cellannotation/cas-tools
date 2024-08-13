@@ -24,7 +24,7 @@ ANNOTATIONS = "annotations"
 class TestAnnotationMethods(unittest.TestCase):
     def setUp(self):
         self.anndata_file_path = (
-            "/Users/ub2/github/castools/src/test/test_data/test_flatten_dataset.h5ad"
+            "src/test/test_data/test_flatten_dataset.h5ad"
         )
         # This is the synthetic CAS JSON for testing
         self.cas_json = {
