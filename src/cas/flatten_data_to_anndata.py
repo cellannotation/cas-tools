@@ -2,7 +2,7 @@ import json
 import logging
 import shutil
 from collections import defaultdict
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Union
 
 import numpy as np
 import pandas as pd
@@ -154,6 +154,13 @@ def process_annotations(annotations, obs_index, parent_cell_ids):
                 flatten_data[key] = pd.Series("", index=obs_index)
             flatten_data[key].loc[mask] = value
 
+    # Convert relevant columns to categorical after the loop
+    for key in flatten_data:
+        # Get unique values and convert the Series to categorical
+        unique_values = pd.unique(flatten_data[key])
+        flatten_data[key] = pd.Series(
+            pd.Categorical(flatten_data[key], categories=unique_values), index=obs_index
+        )
     return flatten_data
 
 
@@ -240,7 +247,7 @@ def collect_parent_cell_ids(cas):
 
 
 def unflatten(
-    json_file_path: str,
+    json_file_path: Union[None, str],
     anndata_file_path: str,
     output_anndata_path: str,
     output_json_path: str,
