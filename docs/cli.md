@@ -38,6 +38,36 @@ cas flatten --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --
 
 Please check the [related notebook](../notebooks/test_flatten.ipynb) to evaluate the output data format.
 
+## Unflatten Operation
+
+Unflattens all content of a flattened AnnData file into a CAS JSON file and creates an unflattened AnnData file.
+
+**Key Features:**
+1. Parses command-line arguments for input AnnData file and optional JSON and output files.
+2. Processes the input AnnData file and optionally a JSON file.
+3. Converts flattened AnnData content back to its unflattened version and creates corresponding CAS JSON files.
+4. Saves the unflattened AnnData and CAS JSON files to specified output locations.
+
+```commandline
+cd src
+python -m cas unflatten --anndata path/to/anndata_file.h5ad --json path/to/json_file.json --output_anndata path/to/output_file.h5ad --output_json path/to/output_cas.json
+python -m cas unflatten --anndata path/to/anndata_file.h5ad
+```
+
+**Command-line Arguments:**
+- `--anndata`        : Path to the input AnnData file that contains flattened data.
+- `--json`           : Optional path to the CAS JSON file. If not provided, the 'annotations' in `uns` will be used.
+- `--output_anndata` : Optional output AnnData file name. If not provided, `unflattened.h5ad` will be used as the default name.
+- `--output_json`    : Optional output CAS JSON file name. If not provided, `cas.json` will be used as the default name.
+
+### Usage Example
+To execute the `unflatten` operation, use the following command:
+
+```commandline
+cd src
+python -m cas unflatten --anndata path/to/anndata_file.h5ad --json path/to/json_file.json --output_anndata path/to/output_file.h5ad --output_json path/to/output_cas.json
+```
+
 ## Convert spreadsheet to CAS
 
 Convert a spreadsheet to Cell Annotation Schema (CAS) JSON.
