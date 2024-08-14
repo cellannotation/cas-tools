@@ -1,0 +1,106 @@
+{
+  "cellannotation_schema_version": "0.2b0",
+  "title": "Human Brain Cell Atlas v1.0 Taxonomy (Non-Neuronal)",
+  "author_name": "Kimberly Siletti",
+  "annotations": [
+    {
+      "labelset": "Cluster",
+      "cell_label": "A62",
+      "cell_fullname": "A62",
+      "cell_set_accession": "Cluster:c2b38b36d7",
+      "author_annotation_fields": {
+        "Cluster ID": "A62"
+      },
+      "cell_ids": [
+        "10X357_2:TGGGCTGAGAAACCCG",
+        "10X319_7:TGCTCCATCATCACCC"
+      ],
+      "parent_cell_set_name": "Astrocyte",
+      "parent_cell_set_accession": "supercluster_term:c2b38b36d7"
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "O40",
+      "cell_fullname": "O40",
+      "cell_set_accession": "Cluster:7c94e6181d",
+      "author_annotation_fields": {
+        "Cluster ID": "O40"
+      },
+      "cell_ids": [
+        "10X379_2:ATTCCATTCCCAGCGA",
+        "10X383_4:GAAGTAAAGGTTCTTG"
+      ],
+      "parent_cell_set_name": "Oligodendrocyte",
+      "parent_cell_set_accession": "supercluster_term:502566eede"
+    },
+    {
+      "labelset": "Cluster",
+      "cell_label": "O50",
+      "cell_fullname": "O50",
+      "cell_set_accession": "Cluster:5a972d4730",
+      "author_annotation_fields": {
+        "Cluster ID": "O50"
+      },
+      "cell_ids": [
+        "10X362_5:TCCGTGTGTGAAAGTT",
+        "10X362_3:TCAGTGAGTATTGACC"
+      ],
+      "parent_cell_set_name": "Oligodendrocyte",
+      "parent_cell_set_accession": "supercluster_term:502566eede"
+    },
+    {
+      "labelset": "supercluster_term",
+      "cell_label": "Oligodendrocyte",
+      "cell_fullname": "Oligodendrocyte",
+      "cell_set_accession": "supercluster_term:502566eede",
+      "cell_ontology_term_id": "CL:0000128",
+      "cell_ontology_term": "oligodendrocyte",
+      "rationale": "Supported by marker expression and annotation transfer from Middle Temporal Gyrus dataset (Jorstad et al., 2023)",
+      "rationale_dois": "DOI:10.1126/science.adf6812",
+      "marker_gene_evidence": "PLP1, SOX10",
+      "author_annotation_fields": {
+        "Cluster ID": "None"
+      },
+      "cell_ids": [
+        "10X362_5:TCCGTGTGTGAAAGTT",
+        "10X379_2:ATTCCATTCCCAGCGA",
+        "10X362_3:TCAGTGAGTATTGACC",
+        "10X383_4:GAAGTAAAGGTTCTTG"
+      ]
+    },
+    {
+      "labelset": "supercluster_term",
+      "cell_label": "Astrocyte",
+      "cell_fullname": "Astrocyte",
+      "cell_set_accession": "supercluster_term:c2b38b36d7",
+      "cell_ontology_term_id": "CL:0000127",
+      "cell_ontology_term": "astrocyte",
+      "rationale": "Supported by marker expression and annotation transfer from Middle Temporal Gyrus dataset (Jorstad et al., 2023)",
+      "rationale_dois": [
+        "DOI:10.1126/science.adf6812"
+      ],
+      "marker_gene_evidence": [
+        "AQP4"
+      ],
+      "author_annotation_fields": {
+        "Cluster ID": "None"
+      },
+      "cell_ids": [
+        "10X357_2:TGGGCTGAGAAACCCG",
+        "10X319_7:TGCTCCATCATCACCC"
+      ]
+    }
+  ],
+  "labelsets": [
+    {
+      "name": "Cluster",
+      "description": "",
+      "rank": "0"
+    },
+    {
+      "name": "supercluster_term",
+      "description": "",
+      "rank": "1"
+    }
+  ]
+}
