@@ -1,9 +1,9 @@
 import os
 import unittest
 
-from cas.linkml_ops.data import dump_to_rdf, populate_ids
 from rdflib import Graph
 
+from cas.linkml_ops.data import dump_to_rdf, populate_ids
 
 TESTDATA = os.path.join(
     os.path.dirname(os.path.realpath(__file__)), "../test_data/linkml/"
@@ -12,7 +12,6 @@ TEST_OUTPUT = os.path.join(TESTDATA, "output_small.rdf")
 
 
 class LinkMLDataTestCase(unittest.TestCase):
-
     @classmethod
     def tearDownClass(cls):
         if os.path.isfile(TEST_OUTPUT):
@@ -20,7 +19,11 @@ class LinkMLDataTestCase(unittest.TestCase):
         pass
 
     def test_rdf_dump(self):
-        data = populate_ids(os.path.join(TESTDATA, "AIT_MTG_data_short.json"), ontology_namespace="MTG", ontology_id="AIT_MTG")
+        data = populate_ids(
+            os.path.join(TESTDATA, "AIT_MTG_data_short.json"),
+            ontology_namespace="MTG",
+            ontology_id="AIT_MTG",
+        )
 
         rdf_graph = dump_to_rdf(
             schema=os.path.join(TESTDATA, "BICAN-schema-expanded-MTG.yaml"),
@@ -30,7 +33,6 @@ class LinkMLDataTestCase(unittest.TestCase):
             labelsets=["CrossArea_cluster", "CrossArea_subclass", "Class"],
             output_path=TEST_OUTPUT,
             validate=False,
-
         )
         self.assertIsNotNone(rdf_graph)
 

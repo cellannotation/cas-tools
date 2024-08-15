@@ -117,7 +117,11 @@ class TabularSerialisationTests(unittest.TestCase):
         )
         # self.assertEqual(361, len(records))
 
-        cluster = [records[rec_id] for rec_id in records if records[rec_id]["cell_label"] == "1_MSN"][0]
+        cluster = [
+            records[rec_id]
+            for rec_id in records
+            if records[rec_id]["cell_label"] == "1_MSN"
+        ][0]
         self.assertEqual("AIT117_1", cluster["cell_set_accession"])
         self.assertEqual("1_MSN", cluster["cell_label"])
         # self.assertEqual("AIT117_278", cluster["parent_cell_set_accession"])
@@ -125,24 +129,40 @@ class TabularSerialisationTests(unittest.TestCase):
         self.assertEqual("cluster", cluster["labelset"])
 
         # 10_NN is a child of a subclass (not supertype as usual)
-        cluster = [records[rec_id] for rec_id in records if records[rec_id]["cell_label"] == "10_NN"][0]
+        cluster = [
+            records[rec_id]
+            for rec_id in records
+            if records[rec_id]["cell_label"] == "10_NN"
+        ][0]
         # self.assertEqual("AIT117_110", cluster["cell_set_accession"])
         self.assertEqual("10_NN", cluster["cell_label"])
         # self.assertEqual("AIT117_300", cluster["parent_cell_set_accession"])
         self.assertEqual("Astrocytes", cluster["parent_cell_set_name"])
         self.assertEqual("cluster", cluster["labelset"])
-        parent = [records[rec_id] for rec_id in records if records[rec_id]["cell_label"] == "Astrocytes"][0]
+        parent = [
+            records[rec_id]
+            for rec_id in records
+            if records[rec_id]["cell_label"] == "Astrocytes"
+        ][0]
         self.assertEqual("Astrocytes", parent["cell_label"])
         self.assertEqual("subclass", parent["labelset"])
 
         # 164_IN is a child of a class (not supertype as usual)
-        cluster = [records[rec_id] for rec_id in records if records[rec_id]["cell_label"] == "164_IN"][0]
+        cluster = [
+            records[rec_id]
+            for rec_id in records
+            if records[rec_id]["cell_label"] == "164_IN"
+        ][0]
         # self.assertEqual("AIT117_110", cluster["cell_set_accession"])
         self.assertEqual("164_IN", cluster["cell_label"])
         # self.assertEqual("AIT117_300", cluster["parent_cell_set_accession"])
         self.assertEqual("CN MGE GABA", cluster["parent_cell_set_name"])
         self.assertEqual("cluster", cluster["labelset"])
-        parent = [records[rec_id] for rec_id in records if records[rec_id]["cell_label"] == "CN MGE GABA"][0]
+        parent = [
+            records[rec_id]
+            for rec_id in records
+            if records[rec_id]["cell_label"] == "CN MGE GABA"
+        ][0]
         self.assertEqual("CN MGE GABA", parent["cell_label"])
         self.assertEqual("class", parent["labelset"])
 
@@ -225,7 +245,8 @@ class TabularSerialisationTests(unittest.TestCase):
         self.assertEqual(0, len(records))
         self.assertEqual(5, len(headers))
         self.assertEqual(
-            ["target_node_accession", "datestamp", "reviewer", "review", "explanation"], headers
+            ["target_node_accession", "datestamp", "reviewer", "review", "explanation"],
+            headers,
         )
 
     def test_review_table2(self):
@@ -316,9 +337,7 @@ class TabularSerialisationTests(unittest.TestCase):
 
     def test_loading_from_json_wmb(self):
         cta = read_cas_json_file(TEST_JSON_WMB)
-        tables = serialize_to_tables(
-            cta, "Test_table", OUT_FOLDER, {}
-        )
+        tables = serialize_to_tables(cta, "Test_table", OUT_FOLDER, {})
 
         annotation_table_path = os.path.join(OUT_FOLDER, "annotation.tsv")
         self.assertEqual(annotation_table_path, tables[0])

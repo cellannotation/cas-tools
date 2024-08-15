@@ -7,7 +7,6 @@ import pandas as pd
 
 from cas.file_utils import read_json_file
 
-
 # Configure logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -146,9 +145,11 @@ def validate_values(
             f"Extra keys in DataFrame that are not in CAS data: {extra_keys}"
         )
     if empty_rows:
-        logging.info(f"Following values in {' '.join(join_column) if isinstance(join_column, list) else join_column} exist in "
-                     f"CAS data but missing from DataFrame:"
-                     f" {' '.join(empty_rows)}")
+        logging.info(
+            f"Following values in {' '.join(join_column) if isinstance(join_column, list) else join_column} exist in "
+            f"CAS data but missing from DataFrame:"
+            f" {' '.join(empty_rows)}"
+        )
 
 
 def dataframe_to_dict(
@@ -198,7 +199,7 @@ def dataframe_to_dict(
     # Select the specified columns to include
     filtered_df = filtered_df[columns]
 
-    filtered_df.replace(' ', np.nan, inplace=True)
+    filtered_df.replace(" ", np.nan, inplace=True)
     filtered_df.replace(np.nan, None, inplace=True)
     result_dict = filtered_df.to_dict(orient="list")
     # Unpack lists that contain only a single item

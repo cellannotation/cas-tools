@@ -4,6 +4,7 @@ import warnings
 from importlib import resources
 
 from cas_schema import schema_validator, schemas
+
 from cas.file_utils import get_cas_schema, get_cas_schema_names
 
 warnings.filterwarnings("always")

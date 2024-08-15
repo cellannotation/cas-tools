@@ -18,7 +18,6 @@ from cas.abc_cas_converter import (
 
 
 class TestABCConverter(unittest.TestCase):
-
     def setUp(self):
         # Sample data for testing
         self.cas = init_metadata()

@@ -1,23 +1,19 @@
-import requests
+from typing import List, Optional, Union
 
-from typing import Union, Optional, List
+import requests
+from linkml_runtime.dumpers import json_dumper
+from linkml_runtime.linkml_model import SchemaDefinition
+from linkml_runtime.loaders import yaml_loader
+from linkml_runtime.utils.schema_as_dict import schema_as_dict
+from oaklib.utilities.subsets.value_set_expander import (
+    ValueSetConfiguration,
+    ValueSetExpander,
+)
 from ruamel.yaml import YAML
+from schema_automator.importers.jsonschema_import_engine import JsonSchemaImportEngine
+from schema_automator.utils.schemautils import write_schema
 
 from cas.file_utils import get_cas_schema, get_cas_schema_names
-
-from linkml_runtime.linkml_model import SchemaDefinition
-from linkml_runtime.utils.schema_as_dict import schema_as_dict
-from linkml_runtime.loaders import yaml_loader
-from linkml_runtime.dumpers import json_dumper
-
-from schema_automator.utils.schemautils import write_schema
-from schema_automator.importers.jsonschema_import_engine import JsonSchemaImportEngine
-
-from oaklib.utilities.subsets.value_set_expander import (
-    ValueSetExpander,
-    ValueSetConfiguration,
-)
-
 
 CAS_ROOT_CLASS = "GeneralCellAnnotationOpenStandard"
 
@@ -54,7 +50,9 @@ def convert_cas_schema_to_linkml(
         schema = ie.loads(
             cas_schema, name="cell-annotation-schema", root_class_name=None
         )
-    elif isinstance(cas_schema, str) and (cas_schema.startswith("http://") or cas_schema.startswith("https://")):
+    elif isinstance(cas_schema, str) and (
+        cas_schema.startswith("http://") or cas_schema.startswith("https://")
+    ):
         resp = requests.get(cas_schema)
         if resp.status_code == 200:
             schema = ie.loads(
@@ -63,8 +61,10 @@ def convert_cas_schema_to_linkml(
                 root_class_name=None,
             )
         else:
-            raise ValueError(f"Failed to fetch schema from the given URL: {cas_schema}"
-                             f" with status code: {resp.status_code}")
+            raise ValueError(
+                f"Failed to fetch schema from the given URL: {cas_schema}"
+                f" with status code: {resp.status_code}"
+            )
     else:
         schema = ie.load(
             cas_schema,

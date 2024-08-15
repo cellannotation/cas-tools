@@ -1,13 +1,13 @@
+from typing import List, Optional, Union
+
 import rdflib
 
-from typing import Union, Optional, List
-
+from cas.linkml_ops.data import dump_to_rdf, populate_ids
 from cas.linkml_ops.schema import (
     convert_cas_schema_to_linkml,
     decorate_linkml_schema,
     expand_schema,
 )
-from cas.linkml_ops.data import dump_to_rdf, populate_ids
 
 
 def export_to_rdf(
@@ -18,7 +18,7 @@ def export_to_rdf(
     labelsets: Optional[List[str]] = None,
     output_path: str = None,
     validate: bool = True,
-    include_cells: bool = True
+    include_cells: bool = True,
 ) -> rdflib.Graph:
     """
     Generates and returns an RDF graph from the provided data and CAS schema, with an option to write the RDF graph to a file.
@@ -52,7 +52,9 @@ def export_to_rdf(
         labelsets=labelsets,
     )
 
-    expanded_schema = expand_schema(config=None, yaml_obj=decorated_schema, value_set_names=["CellTypeEnum"])
+    expanded_schema = expand_schema(
+        config=None, yaml_obj=decorated_schema, value_set_names=["CellTypeEnum"]
+    )
 
     # Prepare the data
     instance = populate_ids(

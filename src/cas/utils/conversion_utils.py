@@ -1,14 +1,13 @@
 import itertools
-from datetime import date, datetime
 import json
-import requests
+from datetime import date, datetime
 from typing import Any, Dict, List, Tuple
 
 import anndata as ad
 import pandas as pd
+import requests
 
 from cas.accession.hash_accession_manager import HashAccessionManager
-
 
 CROSSREF_API_URL = "https://api.crossref.org/works/"
 
@@ -244,7 +243,9 @@ def add_parent_hierarchy_to_annotations(
     """
     annotation_list = cas.get("annotations", [])
     for annotation in annotation_list:
-        parent_info = parent_cell_look_up.get(f'{annotation.get("labelset")}:{annotation.get("cell_label")}', {})
+        parent_info = parent_cell_look_up.get(
+            f'{annotation.get("labelset")}:{annotation.get("cell_label")}', {}
+        )
         parent = parent_info.get("parent")
         p_accession = parent_info.get("p_accession")
         if parent and p_accession:
@@ -319,8 +320,11 @@ def get_authors_from_doi(doi):
         return "Author information not available."
 
 
-def reformat_json(input_json: Dict[str, Any], input_key: str = 'annotations', exclude_key: str = 'cell_ids') -> (
-        str):
+def reformat_json(
+    input_json: Dict[str, Any],
+    input_key: str = "annotations",
+    exclude_key: str = "cell_ids",
+) -> str:
     """
     Reformat the input JSON to create a new JSON structure, copying all fields and modifying the 'input_key' field.
     This function serializes the modified JSON to a string.

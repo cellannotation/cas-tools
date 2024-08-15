@@ -69,7 +69,10 @@ class CellTypeAnnotationTests(unittest.TestCase):
         self.assertEqual(6, len(test_annotation["author_annotation_fields"]))
 
     def test_data_formatting_nhp_v2(self):
-        result = ingest_user_data(RAW_DATAv2, TEST_CONFIGv2,)
+        result = ingest_user_data(
+            RAW_DATAv2,
+            TEST_CONFIGv2,
+        )
 
         self.assertTrue(result)
         self.assertTrue(result.author_name)
@@ -86,21 +89,31 @@ class CellTypeAnnotationTests(unittest.TestCase):
         # print(test_annotation.get("parent_cell_set_accession"))
         self.assertIsNone(test_annotation.parent_cell_set_accession)
         self.assertEqual("WDR49-ADAM12", test_annotation.parent_cell_set_name)
-        parent_annotation = [x for x in result.annotations if x.cell_label == test_annotation.parent_cell_set_name][0]
+        parent_annotation = [
+            x
+            for x in result.annotations
+            if x.cell_label == test_annotation.parent_cell_set_name
+        ][0]
         self.assertEqual("WDR49-ADAM12", parent_annotation.cell_label)
         self.assertEqual("supertype", parent_annotation.labelset)
 
         # 10_NN is a child of a subclass (not supertype as usual)
         test_annotation = [x for x in result.annotations if x.cell_label == "10_NN"][0]
         print(test_annotation.parent_cell_set_name)
-        parent_annotation = [x for x in result.annotations if x.cell_label == test_annotation.parent_cell_set_name][0]
+        parent_annotation = [
+            x
+            for x in result.annotations
+            if x.cell_label == test_annotation.parent_cell_set_name
+        ][0]
         self.assertEqual("Astrocytes", parent_annotation.cell_label)
         self.assertEqual("subclass", parent_annotation.labelset)
 
         # 164_IN is a child of a class (not supertype as usual)
-        test_annotation = [x for x in result.annotations if x.cell_label =="164_IN"][0]
-        parent_annotation = [x for x in result.annotations if x.cell_label == test_annotation.parent_cell_set_name][0]
+        test_annotation = [x for x in result.annotations if x.cell_label == "164_IN"][0]
+        parent_annotation = [
+            x
+            for x in result.annotations
+            if x.cell_label == test_annotation.parent_cell_set_name
+        ][0]
         self.assertEqual("CN MGE GABA", parent_annotation.cell_label)
         self.assertEqual("class", parent_annotation.labelset)
-
-
