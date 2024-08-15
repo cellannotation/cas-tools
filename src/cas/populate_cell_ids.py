@@ -36,25 +36,39 @@ def add_cell_ids(cas: dict, ad: Optional[anndata.AnnData], labelsets: list = Non
         labelsets: List of labelsets to update with IDs from AnnData. If value is null, rank '0' labelset is used. The
         labelsets should be provided in order, starting from rank 0 (leaf nodes) and ascending to higher ranks.
     """
-    rank_zero_labelset = [lbl_set["name"] for lbl_set in cas["labelsets"]
-                          if isinstance(cas["labelsets"][0].get("rank"), int) and lbl_set.get("rank") == 0
-                          or lbl_set.get("rank") == "0"][0]
+    rank_zero_labelset = [
+        lbl_set["name"]
+        for lbl_set in cas["labelsets"]
+        if isinstance(cas["labelsets"][0].get("rank"), int)
+        and lbl_set.get("rank") == 0
+        or lbl_set.get("rank") == "0"
+    ][0]
     if not labelsets:
         labelsets = rank_zero_labelset
 
-    cluster_identifier_column = get_obs_cluster_identifier_column(ad, labelsets, rank_zero_labelset)
+    cluster_identifier_column = get_obs_cluster_identifier_column(
+        ad, labelsets, rank_zero_labelset
+    )
 
     if cluster_identifier_column:
         cid_lookup = {}
         for anno in cas["annotations"]:
             if anno["labelset"] == rank_zero_labelset and anno["labelset"] in labelsets:
                 cell_ids = []
-                if cluster_identifier_column.endswith("_id") or cluster_identifier_column.lower().endswith(" id"):
+                if cluster_identifier_column.endswith(
+                    "_id"
+                ) or cluster_identifier_column.lower().endswith(" id"):
                     # cluster column value is integer cluster id
-                    cluster_id = anno.get("author_annotation_fields", {}).get(cluster_identifier_column)
+                    cluster_id = anno.get("author_annotation_fields", {}).get(
+                        cluster_identifier_column
+                    )
                     if not cluster_id:
-                        raise ValueError("AnnData cluster identifier column ({}) couldn't be find found in"
-                                         "CAS author_annotation_fields.".format(cluster_identifier_column))
+                        raise ValueError(
+                            "AnnData cluster identifier column ({}) couldn't be find found in"
+                            "CAS author_annotation_fields.".format(
+                                cluster_identifier_column
+                            )
+                        )
                     cell_ids = list(
                         ad.obs.loc[
                             ad.obs[cluster_identifier_column] == int(cluster_id),
@@ -67,7 +81,7 @@ def add_cell_ids(cas: dict, ad: Optional[anndata.AnnData], labelsets: list = Non
                     cell_ids = list(
                         ad.obs.loc[
                             ad.obs[cluster_identifier_column] == cluster_label
-                            ].index
+                        ].index
                     )
                 anno["cell_ids"] = cell_ids
                 if "parent_cell_set_name" in anno:
@@ -91,7 +105,9 @@ def add_cell_ids(cas: dict, ad: Optional[anndata.AnnData], labelsets: list = Non
     return None
 
 
-def get_obs_cluster_identifier_column(ad, labelsets: list = None, rank_zero_labelset: str = None):
+def get_obs_cluster_identifier_column(
+    ad, labelsets: list = None, rank_zero_labelset: str = None
+):
     """
     Anndata files may use different column names to uniquely identify Clusters. Get the cluster identifier column name for the current file.
     Args:
