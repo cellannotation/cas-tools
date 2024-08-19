@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cas.utils package &mdash; cas-tools 1.0.7 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=46dfa7f5"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="cas.matrix_file package" href="cas.matrix_file.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            cas-tools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">CAS Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">CLI Operations</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">cas-tools’s documentation!</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cas.html">cas package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cas.accession.html">cas.accession package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cas.linkml_ops.html">cas.linkml_ops package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cas.matrix_file.html">cas.matrix_file package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">cas.utils package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-cas.utils.conversion_utils">cas.utils.conversion_utils module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#cas.utils.conversion_utils.calculate_labelset_rank"><code class="docutils literal notranslate"><span class="pre">calculate_labelset_rank()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cas.utils.conversion_utils.calculate_labelset"><code class="docutils literal notranslate"><span class="pre">calculate_labelset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cas.utils.conversion_utils.add_labelsets_to_cas"><code class="docutils literal notranslate"><span class="pre">add_labelsets_to_cas()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cas.utils.conversion_utils.get_cell_ids"><code class="docutils literal notranslate"><span class="pre">get_cell_ids()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cas.utils.conversion_utils.get_cl_annotations_from_anndata"><code class="docutils literal notranslate"><span class="pre">get_cl_annotations_from_anndata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cas.utils.conversion_utils.generate_parent_cell_lookup"><code class="docutils literal notranslate"><span class="pre">generate_parent_cell_lookup()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cas.utils.conversion_utils.update_parent_info"><code class="docutils literal notranslate"><span class="pre">update_parent_info()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cas.utils.conversion_utils.add_parent_cell_hierarchy"><code class="docutils literal notranslate"><span class="pre">add_parent_cell_hierarchy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cas.utils.conversion_utils.add_parent_hierarchy_to_annotations"><code class="docutils literal notranslate"><span class="pre">add_parent_hierarchy_to_annotations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cas.utils.conversion_utils.json_serializer"><code class="docutils literal notranslate"><span class="pre">json_serializer()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cas.utils.conversion_utils.get_authors_from_doi"><code class="docutils literal notranslate"><span class="pre">get_authors_from_doi()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cas.utils.conversion_utils.reformat_json"><code class="docutils literal notranslate"><span class="pre">reformat_json()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-cas.utils.validation_utils">cas.utils.validation_utils module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#cas.utils.validation_utils.validate_markers"><code class="docutils literal notranslate"><span class="pre">validate_markers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cas.utils.validation_utils.validate_labelset_markers"><code class="docutils literal notranslate"><span class="pre">validate_labelset_markers()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-cas.utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cas-tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">cas-tools’s documentation!</a></li>
+          <li class="breadcrumb-item"><a href="cas.html">cas package</a></li>
+      <li class="breadcrumb-item active">cas.utils package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/source/cas.utils.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cas-utils-package">
+<h1>cas.utils package<a class="headerlink" href="#cas-utils-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-cas.utils.conversion_utils">
+<span id="cas-utils-conversion-utils-module"></span><h2>cas.utils.conversion_utils module<a class="headerlink" href="#module-cas.utils.conversion_utils" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="cas.utils.conversion_utils.calculate_labelset_rank">
+<span class="sig-prename descclassname"><span class="pre">cas.utils.conversion_utils.</span></span><span class="sig-name descname"><span class="pre">calculate_labelset_rank</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/utils/conversion_utils.html#calculate_labelset_rank"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.utils.conversion_utils.calculate_labelset_rank" title="Link to this definition"></a></dt>
+<dd><p>Assign ranks to items in a list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_list</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – The list of items.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary where keys are items from the input list and
+values are their corresponding ranks (0-based).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[str, int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cas.utils.conversion_utils.calculate_labelset">
+<span class="sig-prename descclassname"><span class="pre">cas.utils.conversion_utils.</span></span><span class="sig-name descname"><span class="pre">calculate_labelset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelsets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/utils/conversion_utils.html#calculate_labelset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.utils.conversion_utils.calculate_labelset" title="Link to this definition"></a></dt>
+<dd><p>Calculates labelset dictionary based on the provided observations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obs</strong> (<em>pd.DataFrame</em>) – DataFrame containing observations.</p></li>
+<li><p><strong>labelsets</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – List of labelsets.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A dictionary where keys are labelsets and values are dictionaries containing:</dt><dd><ul class="simple">
+<li><p>”members”: set of members for the labelset.</p></li>
+<li><p>”rank”: rank of the labelset.</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[str, Dict[str, Any]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cas.utils.conversion_utils.add_labelsets_to_cas">
+<span class="sig-prename descclassname"><span class="pre">cas.utils.conversion_utils.</span></span><span class="sig-name descname"><span class="pre">add_labelsets_to_cas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelset_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/utils/conversion_utils.html#add_labelsets_to_cas"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.utils.conversion_utils.add_labelsets_to_cas" title="Link to this definition"></a></dt>
+<dd><p>Updates a CAS dictionary with labelsets derived from a labelset information dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cas</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</span>) – The CAS dictionary to update.</p></li>
+<li><p><strong>labelset_dict</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]</span>) – Contains labelset names as keys and dicts with ‘rank’ (and potentially other info) as values.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cas.utils.conversion_utils.get_cell_ids">
+<span class="sig-prename descclassname"><span class="pre">cas.utils.conversion_utils.</span></span><span class="sig-name descname"><span class="pre">get_cell_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anndata_obs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/utils/conversion_utils.html#get_cell_ids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.utils.conversion_utils.get_cell_ids" title="Link to this definition"></a></dt>
+<dd><p>Get cell IDs from an AnnData dataset based on a specified labelset and cell label.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>anndata_obs</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – The observations DataFrame (<cite>obs</cite>) of an AnnData object containing the dataset. This DataFrame
+should include columns for cell type ontology term IDs and cell types.</p></li>
+<li><p><strong>labelset</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Labelset to filter.</p></li>
+<li><p><strong>cell_label</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – The value of the cell label used to filter rows in <cite>anndata_obs</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of cell IDs.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cas.utils.conversion_utils.get_cl_annotations_from_anndata">
+<span class="sig-prename descclassname"><span class="pre">cas.utils.conversion_utils.</span></span><span class="sig-name descname"><span class="pre">get_cl_annotations_from_anndata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anndata_obs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/utils/conversion_utils.html#get_cl_annotations_from_anndata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.utils.conversion_utils.get_cl_annotations_from_anndata" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>Retrieves cell ontology term ID and cell ontology term for a given cell label from the observation DataFrame</dt><dd><p>of an AnnData object.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>anndata_obs</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – The observations DataFrame (<cite>obs</cite>) of an AnnData object containing the dataset. This DataFrame
+should include columns for cell type ontology term IDs and cell types.</p></li>
+<li><p><strong>columns_name</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – The name of the column in <cite>anndata_obs</cite> used for filtering based on the cell label.</p></li>
+<li><p><strong>cell_label</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – The value of the cell label used to filter rows in <cite>anndata_obs</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A tuple containing two elements:</dt><dd><ul class="simple">
+<li><p>The first element is the cell type ontology term ID associated with the given cell label.</p></li>
+<li><p>The second element is the cell type (ontology term) associated with the given cell label.</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cas.utils.conversion_utils.generate_parent_cell_lookup">
+<span class="sig-prename descclassname"><span class="pre">cas.utils.conversion_utils.</span></span><span class="sig-name descname"><span class="pre">generate_parent_cell_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anndata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelset_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/utils/conversion_utils.html#generate_parent_cell_lookup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.utils.conversion_utils.generate_parent_cell_lookup" title="Link to this definition"></a></dt>
+<dd><p>Generates a lookup dictionary mapping cell labels to various metadata, including cell IDs, rank,
+and cell ontology terms. This function is designed to precompute the lookup information needed for
+CAS annotation generation, especially useful when hierarchy inclusion is desired.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>anndata</strong> (<em>ad.AnnData</em>) – The AnnData object containing the single-cell dataset,
+including metadata in anndata.obs.</p></li>
+<li><p><strong>labelset_dict</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – A dictionary where keys are labelset names and values
+are dictionaries containing members and their ranks.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A dictionary where each key is a cell label and each value is another</dt><dd><p>dictionary containing keys for ‘cell_ids’ (a set of cell IDs associated
+with the label), ‘rank’, ‘cell_ontology_term_id’, and ‘cell_ontology_term’.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[str, Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cas.utils.conversion_utils.update_parent_info">
+<span class="sig-prename descclassname"><span class="pre">cas.utils.conversion_utils.</span></span><span class="sig-name descname"><span class="pre">update_parent_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/utils/conversion_utils.html#update_parent_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.utils.conversion_utils.update_parent_info" title="Link to this definition"></a></dt>
+<dd><p>Updates parent information in a child item’s dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – The child item’s dictionary to be updated.</p></li>
+<li><p><strong>parent_key</strong> (<em>str</em>) – The key of the parent item.</p></li>
+<li><p><strong>parent_value</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – The parent item’s dictionary.</p></li>
+</ul>
+</dd>
+</dl>
+<p>This function modifies <cite>value</cite> to include <cite>parent</cite> (using <cite>parent_key</cite>),
+<cite>p_accession</cite>, and <cite>parent_rank</cite> based on <cite>parent_value</cite>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cas.utils.conversion_utils.add_parent_cell_hierarchy">
+<span class="sig-prename descclassname"><span class="pre">cas.utils.conversion_utils.</span></span><span class="sig-name descname"><span class="pre">add_parent_cell_hierarchy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent_cell_look_up</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/utils/conversion_utils.html#add_parent_cell_hierarchy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.utils.conversion_utils.add_parent_cell_hierarchy" title="Link to this definition"></a></dt>
+<dd><p>Processes parent cell hierarchy information and updates CAS dictionary annotations accordingly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>parent_cell_look_up</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – Dictionary containing parent cell information.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cas.utils.conversion_utils.add_parent_hierarchy_to_annotations">
+<span class="sig-prename descclassname"><span class="pre">cas.utils.conversion_utils.</span></span><span class="sig-name descname"><span class="pre">add_parent_hierarchy_to_annotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_cell_look_up</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/utils/conversion_utils.html#add_parent_hierarchy_to_annotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.utils.conversion_utils.add_parent_hierarchy_to_annotations" title="Link to this definition"></a></dt>
+<dd><p>Adds parent hierarchy information to annotations in the CAS dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cas</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – The CAS dictionary containing annotations.</p></li>
+<li><p><strong>parent_cell_look_up</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – Dictionary containing parent cell information.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cas.utils.conversion_utils.json_serializer">
+<span class="sig-prename descclassname"><span class="pre">cas.utils.conversion_utils.</span></span><span class="sig-name descname"><span class="pre">json_serializer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/utils/conversion_utils.html#json_serializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.utils.conversion_utils.json_serializer" title="Link to this definition"></a></dt>
+<dd><p>JSON serializer for objects not serializable by default json code.
+Usage: json.dumps(my_dict, default=json_serializer)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>obj</strong> – object to serialize</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Serialized object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cas.utils.conversion_utils.get_authors_from_doi">
+<span class="sig-prename descclassname"><span class="pre">cas.utils.conversion_utils.</span></span><span class="sig-name descname"><span class="pre">get_authors_from_doi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doi</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/utils/conversion_utils.html#get_authors_from_doi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.utils.conversion_utils.get_authors_from_doi" title="Link to this definition"></a></dt>
+<dd><p>Fetches and returns a list of authors from a given DOI (Digital Object Identifier) using the CrossRef API.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>doi</strong> (<em>str</em>) – The DOI of the publication for which to retrieve author information.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A list of dictionaries where each dictionary contains details of one author, including</dt><dd><p>their name (‘author_name’), ORCID ID (‘orcid’), GitHub username (‘github_username’), and email (‘email’).
+Each field is a string, and fields without data will be None.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of dict</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>KeyError</strong> – If the author data is not found in the response, indicating a potential issue with the DOI or the data format.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cas.utils.conversion_utils.reformat_json">
+<span class="sig-prename descclassname"><span class="pre">cas.utils.conversion_utils.</span></span><span class="sig-name descname"><span class="pre">reformat_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_json</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'annotations'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cell_ids'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/utils/conversion_utils.html#reformat_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.utils.conversion_utils.reformat_json" title="Link to this definition"></a></dt>
+<dd><p>Reformat the input JSON to create a new JSON structure, copying all fields and modifying the ‘input_key’ field.
+This function serializes the modified JSON to a string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_json</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</span>) – The original JSON object as a Python dictionary.</p></li>
+<li><p><strong>input_key</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – The key in the original JSON where annotations are stored.</p></li>
+<li><p><strong>exclude_key</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – The key within annotations to exclude from the copied data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A JSON string of the reformatted JSON object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-cas.utils.validation_utils">
+<span id="cas-utils-validation-utils-module"></span><h2>cas.utils.validation_utils module<a class="headerlink" href="#module-cas.utils.validation_utils" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="cas.utils.validation_utils.validate_markers">
+<span class="sig-prename descclassname"><span class="pre">cas.utils.validation_utils.</span></span><span class="sig-name descname"><span class="pre">validate_markers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">marker_column</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/utils/validation_utils.html#validate_markers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.utils.validation_utils.validate_markers" title="Link to this definition"></a></dt>
+<dd><p>Validates if the specified marker column in the anndata DataFrame contains all markers mentioned in the
+‘annotations’ in CAS dictionary. Raises an exception if the marker column does not exist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cas</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</span>) – A dictionary containing various configurations and annotations, including marker gene evidence.</p></li>
+<li><p><strong>adata</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – An anndata DataFrame.</p></li>
+<li><p><strong>marker_column</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – The name of the column in <cite>adata.var</cite> which contains the list of marker genes to be validated.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Returns True if all markers are validated without any issue, False or an exception otherwise.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>KeyError</strong> – If the specified <cite>marker_column</cite> is not found in <cite>adata.var</cite>.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function uses the <cite>validate_labelset_markers</cite> to perform the actual validation per annotation entry in
+<cite>cas</cite>.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cas.utils.validation_utils.validate_labelset_markers">
+<span class="sig-prename descclassname"><span class="pre">cas.utils.validation_utils.</span></span><span class="sig-name descname"><span class="pre">validate_labelset_markers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">annotation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">marker_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/utils/validation_utils.html#validate_labelset_markers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.utils.validation_utils.validate_labelset_markers" title="Link to this definition"></a></dt>
+<dd><p>Validates if the markers from a specific annotation are present in the provided marker list. Logs a warning if
+any markers are missing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>annotation</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</span>) – A single annotation entry from CAS.</p></li>
+<li><p><strong>marker_list</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – A list of marker genes to be checked against the markers in the annotation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>This function does not return a value but will log a warning if validation fails.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is intended to be used within <cite>validate_markers</cite> to handle individual annotation validation.</p>
+</div>
+</dd></dl>
+
+</section>
+<section id="module-cas.utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cas.utils" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cas.matrix_file.html" class="btn btn-neutral float-left" title="cas.matrix_file package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Huseyin Kir, Ugur Bayindir.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

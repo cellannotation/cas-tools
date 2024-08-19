@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cas.spreadsheet_to_cas &mdash; cas-tools 1.0.7 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=46dfa7f5"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            cas-tools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">CAS Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli.html">CLI Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/index.html">cas-tools’s documentation!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">cas-tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">cas.spreadsheet_to_cas</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for cas.spreadsheet_to_cas</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">resources</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">cas_schema</span> <span class="kn">import</span> <span class="n">schemas</span>
+
+<span class="kn">from</span> <span class="nn">cas.anndata_to_cas</span> <span class="kn">import</span> <span class="n">calculate_labelset</span>
+<span class="kn">from</span> <span class="nn">cas.cxg_utils</span> <span class="kn">import</span> <span class="n">download_dataset_with_id</span>
+<span class="kn">from</span> <span class="nn">cas.file_utils</span> <span class="kn">import</span> <span class="n">get_cas_schema_names</span><span class="p">,</span> <span class="n">read_anndata_file</span>
+<span class="kn">from</span> <span class="nn">cas.utils.conversion_utils</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">add_labelsets_to_cas</span><span class="p">,</span>
+    <span class="n">add_parent_cell_hierarchy</span><span class="p">,</span>
+    <span class="n">add_parent_hierarchy_to_annotations</span><span class="p">,</span>
+    <span class="n">generate_parent_cell_lookup</span><span class="p">,</span>
+    <span class="n">get_cell_ids</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+
+<span class="n">LABELSET_COLUMN</span> <span class="o">=</span> <span class="s2">&quot;CELL LABELSET NAME&quot;</span>
+<span class="n">CELL_LABEL_COLUMN</span> <span class="o">=</span> <span class="s2">&quot;CELL TYPE TERM&quot;</span>
+<span class="n">CL_TERM_COLUMN</span> <span class="o">=</span> <span class="s2">&quot;CL TERM&quot;</span>
+<span class="n">EVIDENCE_COLUMN</span> <span class="o">=</span> <span class="s2">&quot;EVIDENCE&quot;</span>
+<span class="n">MARKER_GENES_COLUMN</span> <span class="o">=</span> <span class="s2">&quot;MARKER GENES&quot;</span>
+<span class="n">SYNONYM_COLUMN</span> <span class="o">=</span> <span class="s2">&quot;SYNONYMS&quot;</span>
+<span class="n">CATEGORIES_COLUMN</span> <span class="o">=</span> <span class="s2">&quot;CATEGORIES&quot;</span>
+
+
+<div class="viewcode-block" id="resolve_ref">
+<a class="viewcode-back" href="../../source/cas.html#cas.spreadsheet_to_cas.resolve_ref">[docs]</a>
+<span class="k">def</span> <span class="nf">resolve_ref</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">ref</span><span class="p">):</span>
+    <span class="n">parts</span> <span class="o">=</span> <span class="n">ref</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+    <span class="n">definition</span> <span class="o">=</span> <span class="n">schema</span>
+    <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="n">definition</span> <span class="o">=</span> <span class="n">definition</span><span class="p">[</span><span class="n">part</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">definition</span></div>
+
+
+
+<div class="viewcode-block" id="read_spreadsheet">
+<a class="viewcode-back" href="../../source/cas.html#cas.spreadsheet_to_cas.read_spreadsheet">[docs]</a>
+<span class="k">def</span> <span class="nf">read_spreadsheet</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sheet_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">schema</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Read the specific sheet from the Excel file into a pandas DataFrame.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        file_path (str): Path to the Excel file.</span>
+<span class="sd">        sheet_name (str, optional): Target sheet name. If not provided, reads the first sheet.</span>
+<span class="sd">        schema: Cell annotation schema</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple: Tuple containing metadata (dict), column names (list), and raw data (pd.DataFrame).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">sheet_name</span><span class="p">:</span>
+        <span class="n">spreadsheet_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="n">sheet_name</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">spreadsheet_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">meta_data</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">header_row_index</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">metadata_properties</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">k</span><span class="p">:</span> <span class="n">v</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">schema</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;labelsets&quot;</span><span class="p">,</span> <span class="s2">&quot;annotations&quot;</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">spreadsheet_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+        <span class="n">first_cell</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">first_cell</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">):</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="n">first_cell</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">notnull</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">metadata_properties</span><span class="p">:</span>
+                <span class="n">meta_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                <span class="k">if</span> <span class="n">metadata_properties</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;array&quot;</span><span class="p">:</span>
+                    <span class="n">meta_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;[,|]&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">header_row_index</span> <span class="o">=</span> <span class="n">index</span>
+            <span class="k">break</span>
+
+    <span class="k">if</span> <span class="n">header_row_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">column_names</span> <span class="o">=</span> <span class="n">spreadsheet_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">header_row_index</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">raw_data</span> <span class="o">=</span> <span class="n">spreadsheet_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">header_row_index</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:,</span> <span class="p">:]</span>
+        <span class="n">raw_data</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">column_names</span>
+        <span class="c1"># Iterate through each column and filter out rows with &#39;cell_type&#39; in any column</span>
+        <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">raw_data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">raw_data</span> <span class="o">=</span> <span class="n">raw_data</span><span class="p">[</span><span class="n">raw_data</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;cell_type&quot;</span><span class="p">]</span>
+        <span class="n">raw_data</span> <span class="o">=</span> <span class="n">raw_data</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">notnull</span><span class="p">(</span><span class="n">raw_data</span><span class="p">),</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Header row not found in the spreadsheet.&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">meta_data</span><span class="p">,</span> <span class="n">column_names</span><span class="p">,</span> <span class="n">raw_data</span></div>
+
+
+
+<div class="viewcode-block" id="retrieve_schema">
+<a class="viewcode-back" href="../../source/cas.html#cas.spreadsheet_to_cas.retrieve_schema">[docs]</a>
+<span class="k">def</span> <span class="nf">retrieve_schema</span><span class="p">(</span><span class="n">schema_name</span><span class="p">):</span>
+    <span class="n">schema_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">schema_name</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">schema_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">get_cas_schema_names</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Schema name should be one of &#39;base&#39;, &#39;bican&#39; or &#39;cap&#39;&quot;</span><span class="p">)</span>
+    <span class="n">schema_file</span> <span class="o">=</span> <span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="n">schemas</span><span class="p">)</span> <span class="o">/</span> <span class="n">get_cas_schema_names</span><span class="p">()[</span><span class="n">schema_name</span><span class="p">]</span>
+    <span class="k">with</span> <span class="n">schema_file</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;rt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">schema</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">schema</span></div>
+
+
+
+<div class="viewcode-block" id="custom_lowercase_transform">
+<a class="viewcode-back" href="../../source/cas.html#cas.spreadsheet_to_cas.custom_lowercase_transform">[docs]</a>
+<span class="k">def</span> <span class="nf">custom_lowercase_transform</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transforms the given string to lowercase except for words that are acronyms or specific cell type names</span>
+<span class="sd">    which are three characters or fewer.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        s (str): The input string.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: The transformed string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Define a function to decide whether a word should stay uppercase</span>
+    <span class="k">def</span> <span class="nf">transform_word</span><span class="p">(</span><span class="n">match</span><span class="p">):</span>
+        <span class="n">word</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">()</span>
+        <span class="c1"># If a word is three characters or fewer, it stays uppercase</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">word</span>
+        <span class="c1"># Otherwise, convert the word to lowercase</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+    <span class="c1"># Use regex to find words and apply the transformation logic</span>
+    <span class="n">transformed_string</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\b[A-Za-z]+\b&quot;</span><span class="p">,</span> <span class="n">transform_word</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">transformed_string</span></div>
+
+
+
+<div class="viewcode-block" id="spreadsheet2cas">
+<a class="viewcode-back" href="../../source/cas.html#cas.spreadsheet_to_cas.spreadsheet2cas">[docs]</a>
+<span class="k">def</span> <span class="nf">spreadsheet2cas</span><span class="p">(</span>
+    <span class="n">spreadsheet_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">sheet_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">anndata_file_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">labelset_list</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+    <span class="n">schema_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">output_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a spreadsheet to Cell Annotation Schema (CAS) JSON.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        spreadsheet_file_path (str): Path to the spreadsheet file.</span>
+<span class="sd">        sheet_name (Optional[str]): Target sheet name in the spreadsheet. Can be a string or None.</span>
+<span class="sd">        anndata_file_path: The path to the AnnData file.</span>
+<span class="sd">        labelset_list (Optional[List[str]]): List of names of observation (obs) fields used to record author cell</span>
+<span class="sd">        type names, which determine the rank of labelsets in a spreadsheet.</span>
+<span class="sd">        schema_name (Optional[str]): Name of the CAS schema, can be one of &#39;base&#39;, &#39;bican&#39; or &#39;cap&#39;.</span>
+<span class="sd">        output_file_path (str): Output CAS file name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cell_annotation_schema</span> <span class="o">=</span> <span class="n">retrieve_schema</span><span class="p">(</span><span class="n">schema_name</span> <span class="k">if</span> <span class="n">schema_name</span> <span class="k">else</span> <span class="s2">&quot;cap&quot;</span><span class="p">)</span>
+    <span class="n">meta_data_result</span><span class="p">,</span> <span class="n">column_names_result</span><span class="p">,</span> <span class="n">raw_data_result</span> <span class="o">=</span> <span class="n">read_spreadsheet</span><span class="p">(</span>
+        <span class="n">spreadsheet_file_path</span><span class="p">,</span> <span class="n">sheet_name</span><span class="p">,</span> <span class="n">cell_annotation_schema</span>
+    <span class="p">)</span>
+
+    <span class="n">anndata</span><span class="p">,</span> <span class="n">matrix_file_id</span> <span class="o">=</span> <span class="n">load_or_fetch_anndata</span><span class="p">(</span><span class="n">anndata_file_path</span><span class="p">,</span> <span class="n">meta_data_result</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">labelset_list</span><span class="p">:</span>
+        <span class="n">labelset_list</span> <span class="o">=</span> <span class="n">raw_data_result</span><span class="p">[</span><span class="s2">&quot;labelset&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+    <span class="n">labelset_dict</span> <span class="o">=</span> <span class="n">calculate_labelset</span><span class="p">(</span><span class="n">anndata</span><span class="o">.</span><span class="n">obs</span><span class="p">,</span> <span class="n">labelset_list</span><span class="p">)</span>
+
+    <span class="n">cas</span> <span class="o">=</span> <span class="n">initialize_cas_structure</span><span class="p">(</span><span class="n">matrix_file_id</span><span class="p">,</span> <span class="n">meta_data_result</span><span class="p">)</span>
+
+    <span class="n">add_labelsets_to_cas</span><span class="p">(</span><span class="n">cas</span><span class="p">,</span> <span class="n">labelset_dict</span><span class="p">)</span>
+
+    <span class="n">parent_cell_look_up</span> <span class="o">=</span> <span class="n">generate_parent_cell_lookup</span><span class="p">(</span><span class="n">anndata</span><span class="p">,</span> <span class="n">labelset_dict</span><span class="p">)</span>
+
+    <span class="n">add_annotations_to_cas</span><span class="p">(</span>
+        <span class="n">cas</span><span class="p">,</span>
+        <span class="n">raw_data_result</span><span class="p">,</span>
+        <span class="n">column_names_result</span><span class="p">,</span>
+        <span class="n">cell_annotation_schema</span><span class="p">,</span>
+        <span class="n">parent_cell_look_up</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">add_parent_cell_hierarchy</span><span class="p">(</span><span class="n">parent_cell_look_up</span><span class="p">)</span>
+    <span class="n">add_parent_hierarchy_to_annotations</span><span class="p">(</span><span class="n">cas</span><span class="p">,</span> <span class="n">parent_cell_look_up</span><span class="p">)</span>
+
+    <span class="c1"># Write the JSON data to the file</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">cas</span><span class="p">,</span> <span class="n">json_file</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="add_annotations_to_cas">
+<a class="viewcode-back" href="../../source/cas.html#cas.spreadsheet_to_cas.add_annotations_to_cas">[docs]</a>
+<span class="k">def</span> <span class="nf">add_annotations_to_cas</span><span class="p">(</span><span class="n">cas</span><span class="p">,</span> <span class="n">raw_data_result</span><span class="p">,</span> <span class="n">columns</span><span class="p">,</span> <span class="n">schema</span><span class="p">,</span> <span class="n">parent_cell_look_up</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds processed annotations from raw data to the CAS structure and tracks labelsets.</span>
+<span class="sd">    Assumes certain external definitions for column names and transformation functions.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cas (dict): The CAS structure to update with annotations.</span>
+<span class="sd">        raw_data_result (DataFrame): Raw annotation data.</span>
+<span class="sd">        columns (list): Column names of raw data to process.</span>
+<span class="sd">        schema (dict): Cell annotation schema.</span>
+<span class="sd">        parent_cell_look_up (Dict[str, Any]): A precomputed dictionary containing hierarchical metadata about cell</span>
+<span class="sd">            labels.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        OrderedDict: Tracks labelsets encountered, initialized to None.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        Requires `custom_lowercase_transform`, `get_cell_ids`, and column constants to be defined.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">stripped_data_result</span> <span class="o">=</span> <span class="n">raw_data_result</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">x</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">stripped_data_result</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+        <span class="n">anno</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">user_annotations</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;cell_label&quot;</span><span class="p">]</span>
+        <span class="n">annotation_properties</span> <span class="o">=</span> <span class="n">schema</span><span class="p">[</span><span class="s2">&quot;definitions&quot;</span><span class="p">][</span><span class="s2">&quot;Annotation&quot;</span><span class="p">][</span><span class="s2">&quot;properties&quot;</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">column_name</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">column_name</span> <span class="ow">in</span> <span class="n">annotation_properties</span><span class="p">:</span>
+                <span class="n">anno</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">column_name</span> <span class="o">==</span> <span class="s2">&quot;labelset&quot;</span><span class="p">:</span>
+                    <span class="n">labelset</span> <span class="o">=</span> <span class="n">anno</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">annotation_properties</span><span class="p">[</span><span class="n">column_name</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;array&quot;</span><span class="p">:</span>
+                    <span class="n">anno</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;[,|]&quot;</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="n">column_name</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">row</span><span class="p">[</span><span class="n">column_name</span><span class="p">]:</span>
+                <span class="n">user_annotations</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span>
+
+        <span class="n">anno</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;cell_ids&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span>
+                    <span class="n">parent_cell_look_up</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">labelset</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">][</span><span class="s2">&quot;cell_ids&quot;</span><span class="p">]</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;cell_set_accession&quot;</span><span class="p">:</span> <span class="n">parent_cell_look_up</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">labelset</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">][</span>
+                    <span class="s2">&quot;accession&quot;</span>
+                <span class="p">],</span>
+                <span class="s2">&quot;cell_ontology_term_id&quot;</span><span class="p">:</span> <span class="n">parent_cell_look_up</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">labelset</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">][</span>
+                    <span class="s2">&quot;cell_ontology_term_id&quot;</span>
+                <span class="p">],</span>
+                <span class="s2">&quot;cell_ontology_term&quot;</span><span class="p">:</span> <span class="n">parent_cell_look_up</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">labelset</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">][</span>
+                    <span class="s2">&quot;cell_ontology_term&quot;</span>
+                <span class="p">],</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">user_annotations</span><span class="p">:</span>
+            <span class="n">anno</span><span class="p">[</span><span class="s2">&quot;author_annotation_fields&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_annotations</span>
+        <span class="n">cas</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;annotations&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">anno</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="initialize_cas_structure">
+<a class="viewcode-back" href="../../source/cas.html#cas.spreadsheet_to_cas.initialize_cas_structure">[docs]</a>
+<span class="k">def</span> <span class="nf">initialize_cas_structure</span><span class="p">(</span><span class="n">matrix_file_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">meta_data_result</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initializes the Cell Annotation Schema (CAS) structure with basic information and placeholders</span>
+<span class="sd">    for annotations and labelsets. Fields initialized with None values are omitted in the final output.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        matrix_file_id (str): The ID of the matrix file, used within the CAS for identification.</span>
+<span class="sd">        meta_data_result (dict): Metadata containing at least the &#39;matrix_file_id&#39; for the CAS URL.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: The initial CAS structure with the matrix file ID, annotation URL, and placeholders</span>
+<span class="sd">              for future data. Excludes fields that remain None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cas_init</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">meta_data_result</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+    <span class="n">cas_init</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;matrix_file_id&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;cxg_dataset:</span><span class="si">{</span><span class="n">matrix_file_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;cellannotation_url&quot;</span><span class="p">:</span> <span class="n">meta_data_result</span><span class="p">[</span><span class="s2">&quot;matrix_file_id&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;annotations&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;labelsets&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+    <span class="n">cas</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">cas_init</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">cas</span></div>
+
+
+
+<div class="viewcode-block" id="load_or_fetch_anndata">
+<a class="viewcode-back" href="../../source/cas.html#cas.spreadsheet_to_cas.load_or_fetch_anndata">[docs]</a>
+<span class="k">def</span> <span class="nf">load_or_fetch_anndata</span><span class="p">(</span><span class="n">anndata_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">meta_data_result</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loads or fetches an AnnData file, based on a local path or a matrix file ID from metadata.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        anndata_file_path (str): Path to an AnnData file, or None to fetch using metadata.</span>
+<span class="sd">        meta_data_result (dict): Metadata with &#39;matrix_file_id&#39; for fetching the dataset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple: (AnnData object, matrix file ID), ready for use.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If &#39;matrix_file_id&#39; is missing from metadata.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">matrix_file_id</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">meta_data_result</span><span class="p">[</span><span class="s2">&quot;matrix_file_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">anndata_file_path</span><span class="p">:</span>
+        <span class="n">anndata_file_path</span> <span class="o">=</span> <span class="n">download_dataset_with_id</span><span class="p">(</span><span class="n">matrix_file_id</span><span class="p">)</span>
+    <span class="n">dataset_anndata</span> <span class="o">=</span> <span class="n">read_anndata_file</span><span class="p">(</span><span class="n">anndata_file_path</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dataset_anndata</span><span class="p">,</span> <span class="n">matrix_file_id</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Huseyin Kir, Ugur Bayindir.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

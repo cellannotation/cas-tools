@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cas &mdash; cas-tools 1.0.7 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=46dfa7f5"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            cas-tools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">CAS Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">CLI Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">cas-tools’s documentation!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cas-tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">cas</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/source/modules.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cas">
+<h1>cas<a class="headerlink" href="#cas" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cas.html">cas package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cas.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cas.accession.html">cas.accession package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cas.accession.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.accession.html#module-cas.accession.base_accession_manager">cas.accession.base_accession_manager module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.accession.html#module-cas.accession.hash_accession_manager">cas.accession.hash_accession_manager module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.accession.html#module-cas.accession.incremental_accession_manager">cas.accession.incremental_accession_manager module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.accession.html#module-cas.accession">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cas.ingest.html">cas.ingest package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cas.ingest.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.ingest.html#module-cas.ingest.config_validator">cas.ingest.config_validator module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.ingest.html#module-cas.ingest.ingest_user_table">cas.ingest.ingest_user_table module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.ingest.html#module-cas.ingest">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cas.linkml_ops.html">cas.linkml_ops package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cas.linkml_ops.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.linkml_ops.html#module-cas.linkml_ops.data">cas.linkml_ops.data module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.linkml_ops.html#module-cas.linkml_ops.schema">cas.linkml_ops.schema module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.linkml_ops.html#module-cas.linkml_ops">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cas.matrix_file.html">cas.matrix_file package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cas.matrix_file.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.matrix_file.html#module-cas.matrix_file.base_resolver">cas.matrix_file.base_resolver module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.matrix_file.html#module-cas.matrix_file.cxg_resolver">cas.matrix_file.cxg_resolver module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.matrix_file.html#module-cas.matrix_file.resolver">cas.matrix_file.resolver module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.matrix_file.html#module-cas.matrix_file">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cas.utils.html">cas.utils package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cas.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.utils.html#module-cas.utils.conversion_utils">cas.utils.conversion_utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.utils.html#module-cas.utils.validation_utils">cas.utils.validation_utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.utils.html#module-cas.utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cas.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cas.html#module-cas.abc_cas_converter">cas.abc_cas_converter module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.abc_cas_converter.validate_dataframe_columns"><code class="docutils literal notranslate"><span class="pre">validate_dataframe_columns()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.abc_cas_converter.generate_catset_dataframe"><code class="docutils literal notranslate"><span class="pre">generate_catset_dataframe()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.abc_cas_converter.generate_cat_dataframe"><code class="docutils literal notranslate"><span class="pre">generate_cat_dataframe()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.abc_cas_converter.calculate_order_mapping"><code class="docutils literal notranslate"><span class="pre">calculate_order_mapping()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.abc_cas_converter.abc2cas"><code class="docutils literal notranslate"><span class="pre">abc2cas()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.abc_cas_converter.add_annotations"><code class="docutils literal notranslate"><span class="pre">add_annotations()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.abc_cas_converter.add_labelsets"><code class="docutils literal notranslate"><span class="pre">add_labelsets()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.abc_cas_converter.init_metadata"><code class="docutils literal notranslate"><span class="pre">init_metadata()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.abc_cas_converter.cas2abc"><code class="docutils literal notranslate"><span class="pre">cas2abc()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cas.html#module-cas.add_author_annotations">cas.add_author_annotations module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.add_author_annotations.add_author_annotations"><code class="docutils literal notranslate"><span class="pre">add_author_annotations()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.add_author_annotations.add_author_annotations_from_file"><code class="docutils literal notranslate"><span class="pre">add_author_annotations_from_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.add_author_annotations.validate_columns"><code class="docutils literal notranslate"><span class="pre">validate_columns()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.add_author_annotations.validate_values"><code class="docutils literal notranslate"><span class="pre">validate_values()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.add_author_annotations.dataframe_to_dict"><code class="docutils literal notranslate"><span class="pre">dataframe_to_dict()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cas.html#module-cas.anndata_conversion">cas.anndata_conversion module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.anndata_conversion.merge"><code class="docutils literal notranslate"><span class="pre">merge()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.anndata_conversion.merge_cas_object"><code class="docutils literal notranslate"><span class="pre">merge_cas_object()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.anndata_conversion.test_compatibility"><code class="docutils literal notranslate"><span class="pre">test_compatibility()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.anndata_conversion.check_labelsets"><code class="docutils literal notranslate"><span class="pre">check_labelsets()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.anndata_conversion.get_cas_annotations"><code class="docutils literal notranslate"><span class="pre">get_cas_annotations()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.anndata_conversion.get_matching_obs_keys"><code class="docutils literal notranslate"><span class="pre">get_matching_obs_keys()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.anndata_conversion.handle_matching_labelset"><code class="docutils literal notranslate"><span class="pre">handle_matching_labelset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.anndata_conversion.handle_non_matching_labelset"><code class="docutils literal notranslate"><span class="pre">handle_non_matching_labelset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.anndata_conversion.save_cas_to_uns"><code class="docutils literal notranslate"><span class="pre">save_cas_to_uns()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.anndata_conversion.validate_cell_ids"><code class="docutils literal notranslate"><span class="pre">validate_cell_ids()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.anndata_conversion.write_anndata"><code class="docutils literal notranslate"><span class="pre">write_anndata()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.anndata_conversion.get_derived_cell_ids"><code class="docutils literal notranslate"><span class="pre">get_derived_cell_ids()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cas.html#module-cas.anndata_splitter">cas.anndata_splitter module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.anndata_splitter.split_anndata_to_file"><code class="docutils literal notranslate"><span class="pre">split_anndata_to_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.anndata_splitter.split_anndata"><code class="docutils literal notranslate"><span class="pre">split_anndata()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cas.html#module-cas.anndata_to_cas">cas.anndata_to_cas module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.anndata_to_cas.anndata2cas"><code class="docutils literal notranslate"><span class="pre">anndata2cas()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.anndata_to_cas.generate_cas_metadata"><code class="docutils literal notranslate"><span class="pre">generate_cas_metadata()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.anndata_to_cas.add_annotations_to_cas"><code class="docutils literal notranslate"><span class="pre">add_annotations_to_cas()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cas.html#module-cas.cas_splitter">cas.cas_splitter module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.cas_splitter.split_cas_to_file"><code class="docutils literal notranslate"><span class="pre">split_cas_to_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.cas_splitter.split_cas"><code class="docutils literal notranslate"><span class="pre">split_cas()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.cas_splitter.filter_and_copy_cas_entries"><code class="docutils literal notranslate"><span class="pre">filter_and_copy_cas_entries()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.cas_splitter.get_split_terms"><code class="docutils literal notranslate"><span class="pre">get_split_terms()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cas.html#module-cas.cas_to_rdf">cas.cas_to_rdf module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.cas_to_rdf.export_to_rdf"><code class="docutils literal notranslate"><span class="pre">export_to_rdf()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cas.html#module-cas.cxg_utils">cas.cxg_utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.cxg_utils.download_dataset_with_id"><code class="docutils literal notranslate"><span class="pre">download_dataset_with_id()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cas.html#module-cas.file_utils">cas.file_utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.file_utils.read_json_file"><code class="docutils literal notranslate"><span class="pre">read_json_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.file_utils.read_cas_json_file"><code class="docutils literal notranslate"><span class="pre">read_cas_json_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.file_utils.read_cas_from_anndata"><code class="docutils literal notranslate"><span class="pre">read_cas_from_anndata()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.file_utils.write_json_file"><code class="docutils literal notranslate"><span class="pre">write_json_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.file_utils.write_dict_to_json_file"><code class="docutils literal notranslate"><span class="pre">write_dict_to_json_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.file_utils.read_anndata_file"><code class="docutils literal notranslate"><span class="pre">read_anndata_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.file_utils.read_table_to_dict"><code class="docutils literal notranslate"><span class="pre">read_table_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.file_utils.read_tsv_to_dict"><code class="docutils literal notranslate"><span class="pre">read_tsv_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.file_utils.read_csv_to_dict"><code class="docutils literal notranslate"><span class="pre">read_csv_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.file_utils.read_json_config"><code class="docutils literal notranslate"><span class="pre">read_json_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.file_utils.read_yaml_config"><code class="docutils literal notranslate"><span class="pre">read_yaml_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.file_utils.read_config"><code class="docutils literal notranslate"><span class="pre">read_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.file_utils.update_obs"><code class="docutils literal notranslate"><span class="pre">update_obs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.file_utils.update_uns"><code class="docutils literal notranslate"><span class="pre">update_uns()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.file_utils.get_cas_schema_names"><code class="docutils literal notranslate"><span class="pre">get_cas_schema_names()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.file_utils.get_cas_schema"><code class="docutils literal notranslate"><span class="pre">get_cas_schema()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cas.html#module-cas.flatten_data_to_anndata">cas.flatten_data_to_anndata module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.flatten_data_to_anndata.is_list_of_strings"><code class="docutils literal notranslate"><span class="pre">is_list_of_strings()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.flatten_data_to_anndata.flatten"><code class="docutils literal notranslate"><span class="pre">flatten()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.flatten_data_to_anndata.flatten_cas_object"><code class="docutils literal notranslate"><span class="pre">flatten_cas_object()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.flatten_data_to_anndata.process_annotations"><code class="docutils literal notranslate"><span class="pre">process_annotations()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.flatten_data_to_anndata.generate_uns_json"><code class="docutils literal notranslate"><span class="pre">generate_uns_json()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.flatten_data_to_anndata.collect_parent_cell_ids"><code class="docutils literal notranslate"><span class="pre">collect_parent_cell_ids()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.flatten_data_to_anndata.unflatten"><code class="docutils literal notranslate"><span class="pre">unflatten()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.flatten_data_to_anndata.unflatten_obs"><code class="docutils literal notranslate"><span class="pre">unflatten_obs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.flatten_data_to_anndata.create_cell_label_lookup"><code class="docutils literal notranslate"><span class="pre">create_cell_label_lookup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.flatten_data_to_anndata.update_cas_json"><code class="docutils literal notranslate"><span class="pre">update_cas_json()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cas.html#module-cas.flatten_data_to_tables">cas.flatten_data_to_tables module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.flatten_data_to_tables.serialize_to_tables"><code class="docutils literal notranslate"><span class="pre">serialize_to_tables()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.flatten_data_to_tables.generate_annotation_transfer_table"><code class="docutils literal notranslate"><span class="pre">generate_annotation_transfer_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.flatten_data_to_tables.generate_metadata_table"><code class="docutils literal notranslate"><span class="pre">generate_metadata_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.flatten_data_to_tables.generate_labelset_table"><code class="docutils literal notranslate"><span class="pre">generate_labelset_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.flatten_data_to_tables.generate_annotation_table"><code class="docutils literal notranslate"><span class="pre">generate_annotation_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.flatten_data_to_tables.generate_reviews_table"><code class="docutils literal notranslate"><span class="pre">generate_reviews_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.flatten_data_to_tables.list_to_string"><code class="docutils literal notranslate"><span class="pre">list_to_string()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.flatten_data_to_tables.assign_parent_accession_ids"><code class="docutils literal notranslate"><span class="pre">assign_parent_accession_ids()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.flatten_data_to_tables.assign_parent_cell_set_names"><code class="docutils literal notranslate"><span class="pre">assign_parent_cell_set_names()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.flatten_data_to_tables.normalize_column_name"><code class="docutils literal notranslate"><span class="pre">normalize_column_name()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cas.html#module-cas.model">cas.model module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.model.EncoderMixin"><code class="docutils literal notranslate"><span class="pre">EncoderMixin</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.EncoderMixin.dataclass_json_config"><code class="docutils literal notranslate"><span class="pre">EncoderMixin.dataclass_json_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.model.AutomatedAnnotation"><code class="docutils literal notranslate"><span class="pre">AutomatedAnnotation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.AutomatedAnnotation.algorithm_name"><code class="docutils literal notranslate"><span class="pre">AutomatedAnnotation.algorithm_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.AutomatedAnnotation.algorithm_version"><code class="docutils literal notranslate"><span class="pre">AutomatedAnnotation.algorithm_version</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.AutomatedAnnotation.algorithm_repo_url"><code class="docutils literal notranslate"><span class="pre">AutomatedAnnotation.algorithm_repo_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.AutomatedAnnotation.reference_location"><code class="docutils literal notranslate"><span class="pre">AutomatedAnnotation.reference_location</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.model.Labelset"><code class="docutils literal notranslate"><span class="pre">Labelset</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.Labelset.name"><code class="docutils literal notranslate"><span class="pre">Labelset.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.Labelset.description"><code class="docutils literal notranslate"><span class="pre">Labelset.description</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.Labelset.annotation_method"><code class="docutils literal notranslate"><span class="pre">Labelset.annotation_method</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.Labelset.automated_annotation"><code class="docutils literal notranslate"><span class="pre">Labelset.automated_annotation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.Labelset.rank"><code class="docutils literal notranslate"><span class="pre">Labelset.rank</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.model.AnnotationTransfer"><code class="docutils literal notranslate"><span class="pre">AnnotationTransfer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.AnnotationTransfer.transferred_cell_label"><code class="docutils literal notranslate"><span class="pre">AnnotationTransfer.transferred_cell_label</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.AnnotationTransfer.source_taxonomy"><code class="docutils literal notranslate"><span class="pre">AnnotationTransfer.source_taxonomy</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.AnnotationTransfer.source_node_accession"><code class="docutils literal notranslate"><span class="pre">AnnotationTransfer.source_node_accession</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.AnnotationTransfer.algorithm_name"><code class="docutils literal notranslate"><span class="pre">AnnotationTransfer.algorithm_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.AnnotationTransfer.comment"><code class="docutils literal notranslate"><span class="pre">AnnotationTransfer.comment</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.model.Review"><code class="docutils literal notranslate"><span class="pre">Review</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.Review.datestamp"><code class="docutils literal notranslate"><span class="pre">Review.datestamp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.Review.reviewer"><code class="docutils literal notranslate"><span class="pre">Review.reviewer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.Review.review"><code class="docutils literal notranslate"><span class="pre">Review.review</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.Review.explanation"><code class="docutils literal notranslate"><span class="pre">Review.explanation</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.model.Annotation"><code class="docutils literal notranslate"><span class="pre">Annotation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.Annotation.labelset"><code class="docutils literal notranslate"><span class="pre">Annotation.labelset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.Annotation.cell_label"><code class="docutils literal notranslate"><span class="pre">Annotation.cell_label</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.Annotation.cell_set_accession"><code class="docutils literal notranslate"><span class="pre">Annotation.cell_set_accession</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.Annotation.cell_fullname"><code class="docutils literal notranslate"><span class="pre">Annotation.cell_fullname</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.Annotation.cell_ontology_term_id"><code class="docutils literal notranslate"><span class="pre">Annotation.cell_ontology_term_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.Annotation.cell_ontology_term"><code class="docutils literal notranslate"><span class="pre">Annotation.cell_ontology_term</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.Annotation.cell_ids"><code class="docutils literal notranslate"><span class="pre">Annotation.cell_ids</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.Annotation.rationale"><code class="docutils literal notranslate"><span class="pre">Annotation.rationale</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.Annotation.rationale_dois"><code class="docutils literal notranslate"><span class="pre">Annotation.rationale_dois</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.Annotation.marker_gene_evidence"><code class="docutils literal notranslate"><span class="pre">Annotation.marker_gene_evidence</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.Annotation.synonyms"><code class="docutils literal notranslate"><span class="pre">Annotation.synonyms</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.Annotation.parent_cell_set_name"><code class="docutils literal notranslate"><span class="pre">Annotation.parent_cell_set_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.Annotation.parent_cell_set_accession"><code class="docutils literal notranslate"><span class="pre">Annotation.parent_cell_set_accession</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.Annotation.author_annotation_fields"><code class="docutils literal notranslate"><span class="pre">Annotation.author_annotation_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.Annotation.transferred_annotations"><code class="docutils literal notranslate"><span class="pre">Annotation.transferred_annotations</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.Annotation.reviews"><code class="docutils literal notranslate"><span class="pre">Annotation.reviews</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.Annotation.add_user_annotation"><code class="docutils literal notranslate"><span class="pre">Annotation.add_user_annotation()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.model.CellTypeAnnotation"><code class="docutils literal notranslate"><span class="pre">CellTypeAnnotation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.CellTypeAnnotation.author_name"><code class="docutils literal notranslate"><span class="pre">CellTypeAnnotation.author_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.CellTypeAnnotation.annotations"><code class="docutils literal notranslate"><span class="pre">CellTypeAnnotation.annotations</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.CellTypeAnnotation.title"><code class="docutils literal notranslate"><span class="pre">CellTypeAnnotation.title</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.CellTypeAnnotation.description"><code class="docutils literal notranslate"><span class="pre">CellTypeAnnotation.description</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.CellTypeAnnotation.matrix_file_id"><code class="docutils literal notranslate"><span class="pre">CellTypeAnnotation.matrix_file_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.CellTypeAnnotation.labelsets"><code class="docutils literal notranslate"><span class="pre">CellTypeAnnotation.labelsets</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.CellTypeAnnotation.author_contact"><code class="docutils literal notranslate"><span class="pre">CellTypeAnnotation.author_contact</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.CellTypeAnnotation.orcid"><code class="docutils literal notranslate"><span class="pre">CellTypeAnnotation.orcid</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.CellTypeAnnotation.cellannotation_schema_version"><code class="docutils literal notranslate"><span class="pre">CellTypeAnnotation.cellannotation_schema_version</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.CellTypeAnnotation.cellannotation_timestamp"><code class="docutils literal notranslate"><span class="pre">CellTypeAnnotation.cellannotation_timestamp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.CellTypeAnnotation.cellannotation_version"><code class="docutils literal notranslate"><span class="pre">CellTypeAnnotation.cellannotation_version</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.CellTypeAnnotation.cellannotation_url"><code class="docutils literal notranslate"><span class="pre">CellTypeAnnotation.cellannotation_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.CellTypeAnnotation.author_list"><code class="docutils literal notranslate"><span class="pre">CellTypeAnnotation.author_list</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.CellTypeAnnotation.add_annotation_object"><code class="docutils literal notranslate"><span class="pre">CellTypeAnnotation.add_annotation_object()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.CellTypeAnnotation.set_exclude_none_values"><code class="docutils literal notranslate"><span class="pre">CellTypeAnnotation.set_exclude_none_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cas.html#cas.model.CellTypeAnnotation.get_all_annotations"><code class="docutils literal notranslate"><span class="pre">CellTypeAnnotation.get_all_annotations()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cas.html#module-cas.populate_cell_ids">cas.populate_cell_ids module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.populate_cell_ids.populate_cell_ids"><code class="docutils literal notranslate"><span class="pre">populate_cell_ids()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.populate_cell_ids.add_cell_ids"><code class="docutils literal notranslate"><span class="pre">add_cell_ids()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.populate_cell_ids.get_obs_cluster_identifier_column"><code class="docutils literal notranslate"><span class="pre">get_obs_cluster_identifier_column()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cas.html#module-cas.reports">cas.reports module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.reports.get_all_annotations"><code class="docutils literal notranslate"><span class="pre">get_all_annotations()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.reports.filter_by_label"><code class="docutils literal notranslate"><span class="pre">filter_by_label()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cas.html#module-cas.spreadsheet_to_cas">cas.spreadsheet_to_cas module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.spreadsheet_to_cas.resolve_ref"><code class="docutils literal notranslate"><span class="pre">resolve_ref()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.spreadsheet_to_cas.read_spreadsheet"><code class="docutils literal notranslate"><span class="pre">read_spreadsheet()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.spreadsheet_to_cas.retrieve_schema"><code class="docutils literal notranslate"><span class="pre">retrieve_schema()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.spreadsheet_to_cas.custom_lowercase_transform"><code class="docutils literal notranslate"><span class="pre">custom_lowercase_transform()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.spreadsheet_to_cas.spreadsheet2cas"><code class="docutils literal notranslate"><span class="pre">spreadsheet2cas()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.spreadsheet_to_cas.add_annotations_to_cas"><code class="docutils literal notranslate"><span class="pre">add_annotations_to_cas()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.spreadsheet_to_cas.initialize_cas_structure"><code class="docutils literal notranslate"><span class="pre">initialize_cas_structure()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.spreadsheet_to_cas.load_or_fetch_anndata"><code class="docutils literal notranslate"><span class="pre">load_or_fetch_anndata()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cas.html#module-cas.validate">cas.validate module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cas.html#cas.validate.validate"><code class="docutils literal notranslate"><span class="pre">validate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cas.html#module-cas">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Huseyin Kir, Ugur Bayindir.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

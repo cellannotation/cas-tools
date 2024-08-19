@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cas.flatten_data_to_tables &mdash; cas-tools 1.0.7 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=46dfa7f5"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            cas-tools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">CAS Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli.html">CLI Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/index.html">cas-tools’s documentation!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">cas-tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">cas.flatten_data_to_tables</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for cas.flatten_data_to_tables</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">asdict</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">cas.accession.hash_accession_manager</span> <span class="kn">import</span> <span class="n">HashAccessionManager</span><span class="p">,</span> <span class="n">is_hash_accession</span>
+<span class="kn">from</span> <span class="nn">cas.accession.incremental_accession_manager</span> <span class="kn">import</span> <span class="n">IncrementalAccessionManager</span>
+
+<span class="n">accession_manager</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<div class="viewcode-block" id="serialize_to_tables">
+<a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_tables.serialize_to_tables">[docs]</a>
+<span class="k">def</span> <span class="nf">serialize_to_tables</span><span class="p">(</span><span class="n">cta</span><span class="p">,</span> <span class="n">file_name_prefix</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">,</span> <span class="n">project_config</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Writes cell type annotation object to a series of tsv files.</span>
+<span class="sd">    Tables to generate:</span>
+<span class="sd">        - Annotation table (main)</span>
+<span class="sd">        - Labelset table</span>
+<span class="sd">        - Metadata</span>
+<span class="sd">        - Annotation transfer</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        cta: cell type annotation object to serialize.</span>
+<span class="sd">        file_name_prefix: Name prefix for table names</span>
+<span class="sd">        out_folder: output folder path.</span>
+<span class="sd">        project_config: project configuration with extra metadata</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">accession_prefix</span> <span class="o">=</span> <span class="n">project_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;accession_id_prefix&quot;</span><span class="p">)</span>
+    <span class="n">annotation_table_path</span> <span class="o">=</span> <span class="n">generate_annotation_table</span><span class="p">(</span><span class="n">accession_prefix</span><span class="p">,</span> <span class="n">cta</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">)</span>
+    <span class="n">labelset_table_path</span> <span class="o">=</span> <span class="n">generate_labelset_table</span><span class="p">(</span><span class="n">cta</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">)</span>
+    <span class="n">metadata_table_path</span> <span class="o">=</span> <span class="n">generate_metadata_table</span><span class="p">(</span><span class="n">cta</span><span class="p">,</span> <span class="n">project_config</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">)</span>
+    <span class="n">annotation_transfer_table_path</span> <span class="o">=</span> <span class="n">generate_annotation_transfer_table</span><span class="p">(</span><span class="n">cta</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">)</span>
+    <span class="n">reviews_table_path</span> <span class="o">=</span> <span class="n">generate_reviews_table</span><span class="p">(</span><span class="n">cta</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">annotation_table_path</span><span class="p">,</span>
+        <span class="n">labelset_table_path</span><span class="p">,</span>
+        <span class="n">metadata_table_path</span><span class="p">,</span>
+        <span class="n">annotation_transfer_table_path</span><span class="p">,</span>
+        <span class="n">reviews_table_path</span><span class="p">,</span>
+    <span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="generate_annotation_transfer_table">
+<a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_tables.generate_annotation_transfer_table">[docs]</a>
+<span class="k">def</span> <span class="nf">generate_annotation_transfer_table</span><span class="p">(</span><span class="n">cta</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates annotation transfer table.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        cta: cell type annotation object to serialize.</span>
+<span class="sd">        out_folder: output folder path.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">table_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="s2">&quot;annotation_transfer.tsv&quot;</span><span class="p">)</span>
+
+    <span class="n">cta</span> <span class="o">=</span> <span class="n">asdict</span><span class="p">(</span><span class="n">cta</span><span class="p">)</span>
+    <span class="n">records</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">annotation_object</span> <span class="ow">in</span> <span class="n">cta</span><span class="p">[</span><span class="s2">&quot;annotations&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="s2">&quot;cell_set_accession&quot;</span> <span class="ow">in</span> <span class="n">annotation_object</span>
+            <span class="ow">and</span> <span class="n">annotation_object</span><span class="p">[</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">]</span>
+            <span class="ow">and</span> <span class="s2">&quot;transferred_annotations&quot;</span> <span class="ow">in</span> <span class="n">annotation_object</span>
+            <span class="ow">and</span> <span class="n">annotation_object</span><span class="p">[</span><span class="s2">&quot;transferred_annotations&quot;</span><span class="p">]</span>
+        <span class="p">):</span>
+            <span class="k">for</span> <span class="n">ta</span> <span class="ow">in</span> <span class="n">annotation_object</span><span class="p">[</span><span class="s2">&quot;transferred_annotations&quot;</span><span class="p">]:</span>
+                <span class="n">record</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+                <span class="n">record</span><span class="p">[</span><span class="s2">&quot;target_node_accession&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">annotation_object</span><span class="p">[</span>
+                    <span class="s2">&quot;cell_set_accession&quot;</span>
+                <span class="p">]</span>
+                <span class="n">record</span><span class="p">[</span><span class="s2">&quot;transferred_cell_label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;transferred_cell_label&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="n">record</span><span class="p">[</span><span class="s2">&quot;source_taxonomy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;source_taxonomy&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="n">record</span><span class="p">[</span><span class="s2">&quot;source_node_accession&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;source_node_accession&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="n">record</span><span class="p">[</span><span class="s2">&quot;algorithm_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;algorithm_name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="n">record</span><span class="p">[</span><span class="s2">&quot;comment&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;comment&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="n">records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">records</span><span class="p">:</span>
+        <span class="n">record</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">record</span><span class="p">[</span><span class="s2">&quot;target_node_accession&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">record</span><span class="p">[</span><span class="s2">&quot;transferred_cell_label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">record</span><span class="p">[</span><span class="s2">&quot;source_taxonomy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">record</span><span class="p">[</span><span class="s2">&quot;source_node_accession&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">record</span><span class="p">[</span><span class="s2">&quot;algorithm_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">record</span><span class="p">[</span><span class="s2">&quot;comment&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+
+    <span class="n">records_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_records</span><span class="p">(</span><span class="n">records</span><span class="p">)</span>
+    <span class="n">records_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">table_path</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">table_path</span></div>
+
+
+
+<div class="viewcode-block" id="generate_metadata_table">
+<a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_tables.generate_metadata_table">[docs]</a>
+<span class="k">def</span> <span class="nf">generate_metadata_table</span><span class="p">(</span><span class="n">cta</span><span class="p">,</span> <span class="n">project_config</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates the metadata table.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        cta: cell type annotation object to serialize.</span>
+<span class="sd">        project_config: metadata coming from project config</span>
+<span class="sd">        out_folder: output folder path.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">table_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="s2">&quot;metadata.tsv&quot;</span><span class="p">)</span>
+
+    <span class="n">cta</span> <span class="o">=</span> <span class="n">asdict</span><span class="p">(</span><span class="n">cta</span><span class="p">)</span>
+    <span class="n">records</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+    <span class="n">record</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">record</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span>
+    <span class="n">record</span><span class="p">[</span><span class="s2">&quot;author_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;author_name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">record</span><span class="p">[</span><span class="s2">&quot;author_contact&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;author_contact&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">record</span><span class="p">[</span><span class="s2">&quot;orcid&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">project_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;author&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">record</span><span class="p">[</span><span class="s2">&quot;author_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;author_list&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">record</span><span class="p">[</span><span class="s2">&quot;matrix_file_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">project_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;matrix_file_id&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">record</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">record</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">project_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">record</span><span class="p">[</span><span class="s2">&quot;cellannotation_schema_version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+        <span class="s2">&quot;cellannotation_schema_version&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">)</span>
+    <span class="n">record</span><span class="p">[</span><span class="s2">&quot;cellannotation_timestamp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cellannotation_timestamp&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">record</span><span class="p">[</span><span class="s2">&quot;cellannotation_version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cellannotation_version&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">record</span><span class="p">[</span><span class="s2">&quot;cellannotation_url&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cellannotation_url&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+
+    <span class="n">records_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_records</span><span class="p">(</span><span class="n">records</span><span class="p">)</span>
+    <span class="n">records_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">table_path</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">table_path</span></div>
+
+
+
+<div class="viewcode-block" id="generate_labelset_table">
+<a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_tables.generate_labelset_table">[docs]</a>
+<span class="k">def</span> <span class="nf">generate_labelset_table</span><span class="p">(</span><span class="n">cta</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates labelset table.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        cta: cell type annotation object to serialize.</span>
+<span class="sd">        out_folder: output folder path.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">table_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span> <span class="o">+</span> <span class="s2">&quot;labelset.tsv&quot;</span><span class="p">)</span>
+
+    <span class="n">cta</span> <span class="o">=</span> <span class="n">asdict</span><span class="p">(</span><span class="n">cta</span><span class="p">)</span>
+    <span class="n">records</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">labelset</span> <span class="ow">in</span> <span class="n">cta</span><span class="p">[</span><span class="s2">&quot;labelsets&quot;</span><span class="p">]:</span>
+        <span class="n">record</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">record</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">labelset</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">record</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">labelset</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">record</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">labelset</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rank&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+        <span class="n">record</span><span class="p">[</span><span class="s2">&quot;annotation_method&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">labelset</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;annotation_method&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;automated_annotation&quot;</span> <span class="ow">in</span> <span class="n">labelset</span> <span class="ow">and</span> <span class="n">labelset</span><span class="p">[</span><span class="s2">&quot;automated_annotation&quot;</span><span class="p">]:</span>
+            <span class="n">aut_annot</span> <span class="o">=</span> <span class="n">labelset</span><span class="p">[</span><span class="s2">&quot;automated_annotation&quot;</span><span class="p">]</span>
+            <span class="n">name_prefix</span> <span class="o">=</span> <span class="s2">&quot;automated_annotation_&quot;</span>
+            <span class="n">record</span><span class="p">[</span><span class="n">name_prefix</span> <span class="o">+</span> <span class="s2">&quot;algorithm_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aut_annot</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;algorithm_name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">record</span><span class="p">[</span><span class="n">name_prefix</span> <span class="o">+</span> <span class="s2">&quot;algorithm_version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aut_annot</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s2">&quot;algorithm_version&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span>
+            <span class="p">)</span>
+            <span class="n">record</span><span class="p">[</span><span class="n">name_prefix</span> <span class="o">+</span> <span class="s2">&quot;algorithm_repo_url&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aut_annot</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s2">&quot;algorithm_repo_url&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span>
+            <span class="p">)</span>
+            <span class="n">record</span><span class="p">[</span><span class="n">name_prefix</span> <span class="o">+</span> <span class="s2">&quot;reference_location&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aut_annot</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s2">&quot;reference_location&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">name_prefix</span> <span class="o">=</span> <span class="s2">&quot;automated_annotation_&quot;</span>
+            <span class="n">record</span><span class="p">[</span><span class="n">name_prefix</span> <span class="o">+</span> <span class="s2">&quot;algorithm_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">record</span><span class="p">[</span><span class="n">name_prefix</span> <span class="o">+</span> <span class="s2">&quot;algorithm_version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">record</span><span class="p">[</span><span class="n">name_prefix</span> <span class="o">+</span> <span class="s2">&quot;algorithm_repo_url&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">record</span><span class="p">[</span><span class="n">name_prefix</span> <span class="o">+</span> <span class="s2">&quot;reference_location&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+
+    <span class="n">records_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_records</span><span class="p">(</span><span class="n">records</span><span class="p">)</span>
+    <span class="n">records_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">table_path</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">table_path</span></div>
+
+
+
+<div class="viewcode-block" id="generate_annotation_table">
+<a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_tables.generate_annotation_table">[docs]</a>
+<span class="k">def</span> <span class="nf">generate_annotation_table</span><span class="p">(</span><span class="n">accession_prefix</span><span class="p">,</span> <span class="n">cta</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates annotation table.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        cta: cell type annotation object to serialize.</span>
+<span class="sd">        out_folder: output folder path.</span>
+<span class="sd">        accession_prefix: accession id prefix</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">accession_manager</span>
+    <span class="n">std_data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="s2">&quot;annotation.tsv&quot;</span><span class="p">)</span>
+
+    <span class="n">cta</span> <span class="o">=</span> <span class="n">asdict</span><span class="p">(</span><span class="n">cta</span><span class="p">)</span>
+    <span class="n">std_records</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">std_parent_records</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">std_parent_records_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+    <span class="n">first_accession</span> <span class="o">=</span> <span class="n">cta</span><span class="p">[</span><span class="s2">&quot;annotations&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">is_hash_accession</span><span class="p">(</span><span class="n">first_accession</span><span class="p">):</span>
+        <span class="n">accession_manager</span> <span class="o">=</span> <span class="n">HashAccessionManager</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">accession_manager</span> <span class="o">=</span> <span class="n">IncrementalAccessionManager</span><span class="p">(</span><span class="n">accession_prefix</span><span class="p">)</span>
+        <span class="c1"># sort annotations by accession ids incrementing (if there is)</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">first_accession</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+            <span class="n">cta</span><span class="p">[</span><span class="s2">&quot;annotations&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span>
+                <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="s2">&quot;cell_set_accession&quot;</span> <span class="ow">in</span> <span class="n">x</span>
+                    <span class="ow">and</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">]</span>
+                    <span class="ow">and</span> <span class="s2">&quot;_&quot;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">]</span>
+                    <span class="k">else</span> <span class="mi">0</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+    <span class="n">id_index</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">annotation_object</span> <span class="ow">in</span> <span class="n">cta</span><span class="p">[</span><span class="s2">&quot;annotations&quot;</span><span class="p">]:</span>
+        <span class="n">record</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="s2">&quot;cell_set_accession&quot;</span> <span class="ow">in</span> <span class="n">annotation_object</span>
+            <span class="ow">and</span> <span class="n">annotation_object</span><span class="p">[</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">]</span>
+        <span class="p">):</span>
+            <span class="n">labelset</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">annotation_object</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;labelset&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">record</span><span class="p">[</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">accession_manager</span><span class="o">.</span><span class="n">generate_accession_id</span><span class="p">(</span>
+                <span class="n">id_recommendation</span><span class="o">=</span><span class="n">annotation_object</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+                <span class="n">labelset</span><span class="o">=</span><span class="n">labelset</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">annotation_object</span><span class="p">[</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">record</span><span class="p">[</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">]</span>
+            <span class="n">record</span><span class="p">[</span><span class="s2">&quot;cell_label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">annotation_object</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cell_label&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">record</span><span class="p">[</span><span class="s2">&quot;cell_fullname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">annotation_object</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cell_fullname&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">record</span><span class="p">[</span><span class="s2">&quot;parent_cell_set_accession&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">record</span><span class="p">[</span><span class="s2">&quot;parent_cell_set_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">record</span><span class="p">[</span><span class="s2">&quot;labelset&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">labelset</span>
+            <span class="n">record</span><span class="p">[</span><span class="s2">&quot;cell_ontology_term_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">annotation_object</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s2">&quot;cell_ontology_term_id&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span>
+            <span class="p">)</span>
+            <span class="n">record</span><span class="p">[</span><span class="s2">&quot;cell_ontology_term&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">annotation_object</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s2">&quot;cell_ontology_term&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span>
+            <span class="p">)</span>
+            <span class="n">record</span><span class="p">[</span><span class="s2">&quot;rationale&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">annotation_object</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rationale&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">record</span><span class="p">[</span><span class="s2">&quot;rationale_dois&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">list_to_string</span><span class="p">(</span>
+                <span class="n">annotation_object</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rationale_dois&quot;</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="p">)</span>
+            <span class="n">record</span><span class="p">[</span><span class="s2">&quot;marker_gene_evidence&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">list_to_string</span><span class="p">(</span>
+                <span class="n">annotation_object</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;marker_gene_evidence&quot;</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="p">)</span>
+            <span class="n">record</span><span class="p">[</span><span class="s2">&quot;synonyms&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">list_to_string</span><span class="p">(</span><span class="n">annotation_object</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;synonyms&quot;</span><span class="p">,</span> <span class="p">[]))</span>
+            <span class="k">if</span> <span class="n">annotation_object</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;author_annotation_fields&quot;</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">annotation_object</span><span class="p">[</span><span class="s2">&quot;author_annotation_fields&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">record</span><span class="p">[</span><span class="n">normalize_column_name</span><span class="p">(</span><span class="n">key</span><span class="p">)]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="c1"># record[&quot;cell_ids&quot;] = annotation_object.get(&quot;cell_ids&quot;, &quot;&quot;)</span>
+            <span class="n">std_records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+            <span class="n">id_index</span><span class="p">[</span><span class="n">record</span><span class="p">[</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">record</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># parent nodes</span>
+            <span class="n">parent_label</span> <span class="o">=</span> <span class="n">annotation_object</span><span class="p">[</span><span class="s2">&quot;cell_label&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">parent_label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span>
+                <span class="n">parent</span><span class="p">[</span><span class="s2">&quot;cell_label&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="n">std_parent_records</span>
+            <span class="p">]:</span>
+                <span class="n">record</span><span class="p">[</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="n">record</span><span class="p">[</span><span class="s2">&quot;cell_label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">parent_label</span>
+                <span class="n">record</span><span class="p">[</span><span class="s2">&quot;cell_fullname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="n">record</span><span class="p">[</span><span class="s2">&quot;parent_cell_set_accession&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="n">record</span><span class="p">[</span><span class="s2">&quot;parent_cell_set_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="n">record</span><span class="p">[</span><span class="s2">&quot;labelset&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">annotation_object</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;labelset&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+                    <span class="s2">&quot;_name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span>
+                <span class="p">)</span>
+                <span class="n">std_parent_records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;parent_cell_set_name&quot;</span> <span class="ow">in</span> <span class="n">annotation_object</span><span class="p">:</span>
+            <span class="n">record</span><span class="p">[</span><span class="s2">&quot;parent_cell_set_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">annotation_object</span><span class="p">[</span><span class="s2">&quot;parent_cell_set_name&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">annotation_object</span><span class="p">[</span><span class="s2">&quot;parent_cell_set_name&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">std_parent_records_dict</span><span class="p">:</span>
+                <span class="n">std_parent_records_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                    <span class="n">annotation_object</span><span class="p">[</span><span class="s2">&quot;parent_cell_set_name&quot;</span><span class="p">]</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">children</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+                <span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+                <span class="n">std_parent_records_dict</span><span class="p">[</span>
+                    <span class="n">annotation_object</span><span class="p">[</span><span class="s2">&quot;parent_cell_set_name&quot;</span><span class="p">]</span>
+                <span class="p">]</span> <span class="o">=</span> <span class="n">children</span>
+        <span class="k">if</span> <span class="s2">&quot;parent_cell_set_accession&quot;</span> <span class="ow">in</span> <span class="n">annotation_object</span><span class="p">:</span>
+            <span class="n">record</span><span class="p">[</span><span class="s2">&quot;parent_cell_set_accession&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">annotation_object</span><span class="p">[</span>
+                <span class="s2">&quot;parent_cell_set_accession&quot;</span>
+            <span class="p">]</span>
+    <span class="n">assign_parent_accession_ids</span><span class="p">(</span>
+        <span class="n">accession_manager</span><span class="p">,</span> <span class="n">std_parent_records</span><span class="p">,</span> <span class="n">std_parent_records_dict</span><span class="p">,</span> <span class="n">cta</span><span class="p">[</span><span class="s2">&quot;labelsets&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">assign_parent_cell_set_names</span><span class="p">(</span><span class="n">id_index</span><span class="p">)</span>
+    <span class="n">std_records</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">std_parent_records</span><span class="p">)</span>
+    <span class="n">std_records_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_records</span><span class="p">(</span><span class="n">std_records</span><span class="p">)</span>
+    <span class="n">std_records_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">std_data_path</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">std_data_path</span></div>
+
+
+
+<div class="viewcode-block" id="generate_reviews_table">
+<a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_tables.generate_reviews_table">[docs]</a>
+<span class="k">def</span> <span class="nf">generate_reviews_table</span><span class="p">(</span><span class="n">cta</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates annotation reviews table.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        cta: cell type annotation object to serialize.</span>
+<span class="sd">        out_folder: output folder path.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">std_data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="s2">&quot;review.tsv&quot;</span><span class="p">)</span>
+
+    <span class="n">cta</span> <span class="o">=</span> <span class="n">asdict</span><span class="p">(</span><span class="n">cta</span><span class="p">)</span>
+    <span class="n">records</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">annotation_object</span> <span class="ow">in</span> <span class="n">cta</span><span class="p">[</span><span class="s2">&quot;annotations&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="s2">&quot;cell_set_accession&quot;</span> <span class="ow">in</span> <span class="n">annotation_object</span>
+            <span class="ow">and</span> <span class="n">annotation_object</span><span class="p">[</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">]</span>
+            <span class="ow">and</span> <span class="s2">&quot;reviews&quot;</span> <span class="ow">in</span> <span class="n">annotation_object</span>
+            <span class="ow">and</span> <span class="n">annotation_object</span><span class="p">[</span><span class="s2">&quot;reviews&quot;</span><span class="p">]</span>
+        <span class="p">):</span>
+            <span class="n">labelset</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">annotation_object</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;labelset&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">accession_manager</span><span class="p">:</span>
+                <span class="n">accession</span> <span class="o">=</span> <span class="n">accession_manager</span><span class="o">.</span><span class="n">generate_accession_id</span><span class="p">(</span>
+                    <span class="n">id_recommendation</span><span class="o">=</span><span class="n">annotation_object</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+                    <span class="n">labelset</span><span class="o">=</span><span class="n">labelset</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">accession</span> <span class="o">=</span> <span class="n">annotation_object</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">review</span> <span class="ow">in</span> <span class="n">annotation_object</span><span class="p">[</span><span class="s2">&quot;reviews&quot;</span><span class="p">]:</span>
+                <span class="n">record</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+                <span class="n">record</span><span class="p">[</span><span class="s2">&quot;target_node_accession&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">accession</span>
+                <span class="n">record</span><span class="p">[</span><span class="s2">&quot;datestamp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">review</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;datestamp&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">record</span><span class="p">[</span><span class="s2">&quot;datestamp&quot;</span><span class="p">]:</span>
+                    <span class="c1"># convert time to ISO 8601 format</span>
+                    <span class="n">record</span><span class="p">[</span><span class="s2">&quot;datestamp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">record</span><span class="p">[</span><span class="s2">&quot;datestamp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;Z&quot;</span>
+                    <span class="p">)</span>
+                <span class="n">record</span><span class="p">[</span><span class="s2">&quot;reviewer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">review</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reviewer&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="n">record</span><span class="p">[</span><span class="s2">&quot;review&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">review</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;review&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="n">record</span><span class="p">[</span><span class="s2">&quot;explanation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">review</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;explanation&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="n">records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">records</span><span class="p">:</span>
+        <span class="n">std_records_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_records</span><span class="p">(</span><span class="n">records</span><span class="p">)</span>
+        <span class="n">std_records_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">std_data_path</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;target_node_accession&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;datestamp&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;reviewer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;review&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;explanation&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">std_data_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_output</span><span class="p">:</span>
+            <span class="n">tsv_output</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f_output</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">tsv_output</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">std_data_path</span></div>
+
+
+
+<div class="viewcode-block" id="list_to_string">
+<a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_tables.list_to_string">[docs]</a>
+<span class="k">def</span> <span class="nf">list_to_string</span><span class="p">(</span><span class="n">my_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts a list to its string representation. Nanobot has problem with single quotations so removes them as well.</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">        my_list: list to serialize</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        string representation of the list</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">my_list</span><span class="p">:</span>
+        <span class="n">str_value</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">str_value</span> <span class="o">=</span> <span class="s2">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">my_list</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">str_value</span></div>
+
+
+
+<div class="viewcode-block" id="assign_parent_accession_ids">
+<a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_tables.assign_parent_accession_ids">[docs]</a>
+<span class="k">def</span> <span class="nf">assign_parent_accession_ids</span><span class="p">(</span>
+    <span class="n">accession_manager</span><span class="p">,</span> <span class="n">std_parent_records</span><span class="p">,</span> <span class="n">std_parent_records_dict</span><span class="p">,</span> <span class="n">labelsets</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Assigns accession ids to parent clusters and updates their references from the child clusters.</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">        accession_manager: accession ID generator</span>
+<span class="sd">        std_parent_records: list of all parents to assign accession ids</span>
+<span class="sd">        std_parent_records_dict: parent cluster - child clusters dictionary</span>
+<span class="sd">        labelsets: labelsets list</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">label_set_ranks</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="p">(</span><span class="n">label_set</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="n">label_set</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">label_set</span> <span class="ow">in</span> <span class="n">labelsets</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="n">std_parent_records</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">label_set_ranks</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;labelset&quot;</span><span class="p">]]))</span>
+    <span class="k">for</span> <span class="n">std_parent_record</span> <span class="ow">in</span> <span class="n">std_parent_records</span><span class="p">:</span>
+        <span class="n">accession_id</span> <span class="o">=</span> <span class="n">accession_manager</span><span class="o">.</span><span class="n">generate_accession_id</span><span class="p">()</span>
+        <span class="n">std_parent_record</span><span class="p">[</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">accession_id</span>
+
+        <span class="n">children</span> <span class="o">=</span> <span class="n">std_parent_records_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">std_parent_record</span><span class="p">[</span><span class="s2">&quot;cell_label&quot;</span><span class="p">],</span> <span class="nb">list</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">children</span><span class="p">:</span>
+            <span class="n">child</span><span class="p">[</span><span class="s2">&quot;parent_cell_set_accession&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">accession_id</span></div>
+
+
+
+<div class="viewcode-block" id="assign_parent_cell_set_names">
+<a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_tables.assign_parent_cell_set_names">[docs]</a>
+<span class="k">def</span> <span class="nf">assign_parent_cell_set_names</span><span class="p">(</span><span class="n">id_index</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Assigns parent cell set names to the child cell sets.</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">        id_index: dictionary of cell set accessions and their corresponding records</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">id_index</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">value</span><span class="p">[</span><span class="s2">&quot;parent_cell_set_accession&quot;</span><span class="p">]:</span>
+            <span class="n">parent_record</span> <span class="o">=</span> <span class="n">id_index</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="s2">&quot;parent_cell_set_accession&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">parent_record</span><span class="p">:</span>
+                <span class="n">value</span><span class="p">[</span><span class="s2">&quot;parent_cell_set_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">parent_record</span><span class="p">[</span><span class="s2">&quot;cell_label&quot;</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="normalize_column_name">
+<a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_tables.normalize_column_name">[docs]</a>
+<span class="k">def</span> <span class="nf">normalize_column_name</span><span class="p">(</span><span class="n">column_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Normalizes column name for url compatibility.</span>
+<span class="sd">    URL compatible column name requirement: All names must match: ^[\w_ ]+$&#39; for to_url()</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        column_name: current column name</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        normalized column_name</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">column_name</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;)&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Huseyin Kir, Ugur Bayindir.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

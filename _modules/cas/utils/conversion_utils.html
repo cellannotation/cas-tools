@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cas.utils.conversion_utils &mdash; cas-tools 1.0.7 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=46dfa7f5"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            cas-tools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">CAS Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cli.html">CLI Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/index.html">cas-tools’s documentation!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">cas-tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">cas.utils.conversion_utils</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for cas.utils.conversion_utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">anndata</span> <span class="k">as</span> <span class="nn">ad</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="kn">from</span> <span class="nn">cas.accession.hash_accession_manager</span> <span class="kn">import</span> <span class="n">HashAccessionManager</span>
+
+<span class="n">CROSSREF_API_URL</span> <span class="o">=</span> <span class="s2">&quot;https://api.crossref.org/works/&quot;</span>
+
+
+<div class="viewcode-block" id="calculate_labelset_rank">
+<a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.conversion_utils.calculate_labelset_rank">[docs]</a>
+<span class="k">def</span> <span class="nf">calculate_labelset_rank</span><span class="p">(</span><span class="n">input_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Assign ranks to items in a list.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        input_list (List[str]): The list of items.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Dict[str, int]: A dictionary where keys are items from the input list and</span>
+<span class="sd">        values are their corresponding ranks (0-based).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">item</span><span class="p">:</span> <span class="n">rank</span> <span class="k">for</span> <span class="n">rank</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">input_list</span><span class="p">)}</span></div>
+
+
+
+<div class="viewcode-block" id="calculate_labelset">
+<a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.conversion_utils.calculate_labelset">[docs]</a>
+<span class="k">def</span> <span class="nf">calculate_labelset</span><span class="p">(</span>
+    <span class="n">obs</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">labelsets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates labelset dictionary based on the provided observations.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        obs (pd.DataFrame): DataFrame containing observations.</span>
+<span class="sd">        labelsets (List[str]): List of labelsets.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Dict[str, Dict[str, Any]]: A dictionary where keys are labelsets and values are dictionaries containing:</span>
+<span class="sd">            - &quot;members&quot;: set of members for the labelset.</span>
+<span class="sd">            - &quot;rank&quot;: rank of the labelset.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">labelset_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">labelset_rank_dict</span> <span class="o">=</span> <span class="n">calculate_labelset_rank</span><span class="p">(</span><span class="n">labelsets</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">labelsets</span><span class="p">:</span>
+        <span class="n">labelset_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="n">item</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;members&quot;</span><span class="p">:</span> <span class="nb">set</span><span class="p">(</span><span class="n">obs</span><span class="p">[</span><span class="n">item</span><span class="p">]),</span>
+                    <span class="s2">&quot;rank&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">labelset_rank_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">item</span><span class="p">)),</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">labelset_dict</span></div>
+
+
+
+<div class="viewcode-block" id="add_labelsets_to_cas">
+<a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.conversion_utils.add_labelsets_to_cas">[docs]</a>
+<span class="k">def</span> <span class="nf">add_labelsets_to_cas</span><span class="p">(</span><span class="n">cas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">labelset_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Updates a CAS dictionary with labelsets derived from a labelset information dictionary.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cas: The CAS dictionary to update.</span>
+<span class="sd">        labelset_dict: Contains labelset names as keys and dicts with &#39;rank&#39; (and potentially other info) as values.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">labelset</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">labelset_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">cas</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;labelsets&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">labelset</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;rank&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rank&quot;</span><span class="p">))}</span>
+        <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_cell_ids">
+<a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.conversion_utils.get_cell_ids">[docs]</a>
+<span class="k">def</span> <span class="nf">get_cell_ids</span><span class="p">(</span>
+    <span class="n">anndata_obs</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">labelset</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cell_label</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get cell IDs from an AnnData dataset based on a specified labelset and cell label.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        anndata_obs: The observations DataFrame (`obs`) of an AnnData object containing the dataset. This DataFrame</span>
+<span class="sd">            should include columns for cell type ontology term IDs and cell types.</span>
+<span class="sd">        labelset: Labelset to filter.</span>
+<span class="sd">        cell_label: The value of the cell label used to filter rows in `anndata_obs`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List[str]: List of cell IDs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cell_label_lower</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">cell_label</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">anndata_obs</span><span class="o">.</span><span class="n">index</span><span class="p">[</span>
+        <span class="n">anndata_obs</span><span class="p">[</span><span class="n">labelset</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">cell_label_lower</span>
+    <span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="get_cl_annotations_from_anndata">
+<a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.conversion_utils.get_cl_annotations_from_anndata">[docs]</a>
+<span class="k">def</span> <span class="nf">get_cl_annotations_from_anndata</span><span class="p">(</span>
+    <span class="n">anndata_obs</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">columns_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cell_label</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Retrieves cell ontology term ID and cell ontology term for a given cell label from the observation DataFrame</span>
+<span class="sd">        of an AnnData object.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        anndata_obs: The observations DataFrame (`obs`) of an AnnData object containing the dataset. This DataFrame</span>
+<span class="sd">            should include columns for cell type ontology term IDs and cell types.</span>
+<span class="sd">        columns_name: The name of the column in `anndata_obs` used for filtering based on the cell label.</span>
+<span class="sd">        cell_label: The value of the cell label used to filter rows in `anndata_obs`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple: A tuple containing two elements:</span>
+<span class="sd">            - The first element is the cell type ontology term ID associated with the given cell label.</span>
+<span class="sd">            - The second element is the cell type (ontology term) associated with the given cell label.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">filtered_df</span> <span class="o">=</span> <span class="n">anndata_obs</span><span class="p">[</span><span class="n">anndata_obs</span><span class="p">[</span><span class="n">columns_name</span><span class="p">]</span> <span class="o">==</span> <span class="n">cell_label</span><span class="p">]</span>
+
+    <span class="n">ontology_term_ids</span> <span class="o">=</span> <span class="n">filtered_df</span><span class="p">[</span><span class="s2">&quot;cell_type_ontology_term_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">ontology_terms</span> <span class="o">=</span> <span class="n">filtered_df</span><span class="p">[</span><span class="s2">&quot;cell_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+    <span class="n">cell_ontology_term_id</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">filtered_df</span><span class="p">[</span><span class="s2">&quot;cell_type_ontology_term_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ontology_term_ids</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="k">else</span> <span class="kc">None</span>
+    <span class="p">)</span>
+    <span class="n">cell_ontology_term</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">filtered_df</span><span class="p">[</span><span class="s2">&quot;cell_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ontology_terms</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">cell_ontology_term_id</span><span class="p">,</span> <span class="n">cell_ontology_term</span></div>
+
+
+
+<div class="viewcode-block" id="generate_parent_cell_lookup">
+<a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.conversion_utils.generate_parent_cell_lookup">[docs]</a>
+<span class="k">def</span> <span class="nf">generate_parent_cell_lookup</span><span class="p">(</span><span class="n">anndata</span><span class="p">,</span> <span class="n">labelset_dict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates a lookup dictionary mapping cell labels to various metadata, including cell IDs, rank,</span>
+<span class="sd">    and cell ontology terms. This function is designed to precompute the lookup information needed for</span>
+<span class="sd">    CAS annotation generation, especially useful when hierarchy inclusion is desired.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        anndata (ad.AnnData): The AnnData object containing the single-cell dataset,</span>
+<span class="sd">                              including metadata in anndata.obs.</span>
+<span class="sd">        labelset_dict (Dict[str, Any]): A dictionary where keys are labelset names and values</span>
+<span class="sd">                                        are dictionaries containing members and their ranks.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Dict[str, Any]: A dictionary where each key is a cell label and each value is another</span>
+<span class="sd">                        dictionary containing keys for &#39;cell_ids&#39; (a set of cell IDs associated</span>
+<span class="sd">                        with the label), &#39;rank&#39;, &#39;cell_ontology_term_id&#39;, and &#39;cell_ontology_term&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">accession_manager</span> <span class="o">=</span> <span class="n">HashAccessionManager</span><span class="p">()</span>
+    <span class="n">parent_cell_look_up</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">labelset_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">v</span><span class="p">[</span><span class="s2">&quot;members&quot;</span><span class="p">]:</span>
+            <span class="n">cell_ontology_term_id</span><span class="p">,</span> <span class="n">cell_ontology_term</span> <span class="o">=</span> <span class="n">get_cl_annotations_from_anndata</span><span class="p">(</span>
+                <span class="n">anndata</span><span class="o">.</span><span class="n">obs</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">label</span>
+            <span class="p">)</span>
+            <span class="n">cell_ids</span> <span class="o">=</span> <span class="n">get_cell_ids</span><span class="p">(</span><span class="n">anndata</span><span class="o">.</span><span class="n">obs</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+            <span class="n">cell_set_accession</span> <span class="o">=</span> <span class="n">accession_manager</span><span class="o">.</span><span class="n">generate_accession_id</span><span class="p">(</span>
+                <span class="n">cell_ids</span><span class="o">=</span><span class="n">cell_ids</span><span class="p">,</span> <span class="n">labelset</span><span class="o">=</span><span class="n">k</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">parent_cell_look_up</span><span class="p">:</span>
+                <span class="n">parent_cell_look_up</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">][</span><span class="s2">&quot;cell_ids&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cell_ids</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">parent_cell_look_up</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;cell_ids&quot;</span><span class="p">:</span> <span class="nb">set</span><span class="p">(</span><span class="n">cell_ids</span><span class="p">),</span>
+                    <span class="s2">&quot;accession&quot;</span><span class="p">:</span> <span class="n">cell_set_accession</span><span class="p">,</span>
+                    <span class="s2">&quot;rank&quot;</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rank&quot;</span><span class="p">),</span>
+                    <span class="s2">&quot;cell_ontology_term_id&quot;</span><span class="p">:</span> <span class="n">cell_ontology_term_id</span><span class="p">,</span>
+                    <span class="s2">&quot;cell_ontology_term&quot;</span><span class="p">:</span> <span class="n">cell_ontology_term</span><span class="p">,</span>
+                <span class="p">}</span>
+    <span class="k">return</span> <span class="n">parent_cell_look_up</span></div>
+
+
+
+<div class="viewcode-block" id="update_parent_info">
+<a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.conversion_utils.update_parent_info">[docs]</a>
+<span class="k">def</span> <span class="nf">update_parent_info</span><span class="p">(</span>
+    <span class="n">value</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">parent_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parent_value</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Updates parent information in a child item&#39;s dictionary.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        value (Dict[str, Any]): The child item&#39;s dictionary to be updated.</span>
+<span class="sd">        parent_key (str): The key of the parent item.</span>
+<span class="sd">        parent_value (Dict[str, Any]): The parent item&#39;s dictionary.</span>
+
+<span class="sd">    This function modifies `value` to include `parent` (using `parent_key`),</span>
+<span class="sd">    `p_accession`, and `parent_rank` based on `parent_value`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">value</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;parent&quot;</span><span class="p">:</span> <span class="n">parent_key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="s2">&quot;p_accession&quot;</span><span class="p">:</span> <span class="n">parent_value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;accession&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;parent_rank&quot;</span><span class="p">:</span> <span class="n">parent_value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rank&quot;</span><span class="p">),</span>
+        <span class="p">}</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="add_parent_cell_hierarchy">
+<a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.conversion_utils.add_parent_cell_hierarchy">[docs]</a>
+<span class="k">def</span> <span class="nf">add_parent_cell_hierarchy</span><span class="p">(</span><span class="n">parent_cell_look_up</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Processes parent cell hierarchy information and updates CAS dictionary annotations accordingly.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        parent_cell_look_up (Dict[str, Any]): Dictionary containing parent cell information.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Establish parent-child relationships</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">),</span> <span class="p">(</span><span class="n">inner_key</span><span class="p">,</span> <span class="n">inner_value</span><span class="p">)</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span>
+        <span class="n">parent_cell_look_up</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">repeat</span><span class="o">=</span><span class="mi">2</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">key</span> <span class="o">==</span> <span class="n">inner_key</span>
+            <span class="ow">or</span> <span class="n">value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;parent&quot;</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="n">value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;parent_rank&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">inner_value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rank&quot;</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="k">continue</span>
+
+        <span class="k">if</span> <span class="n">value</span><span class="p">[</span><span class="s2">&quot;cell_ids&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">inner_value</span><span class="p">[</span><span class="s2">&quot;cell_ids&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">value</span><span class="p">[</span><span class="s2">&quot;cell_ids&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span>
+            <span class="n">inner_value</span><span class="p">[</span><span class="s2">&quot;cell_ids&quot;</span><span class="p">]</span>
+        <span class="p">):</span>
+            <span class="n">update_parent_info</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">inner_key</span><span class="p">,</span> <span class="n">inner_value</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">value</span><span class="p">[</span><span class="s2">&quot;cell_ids&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">inner_value</span><span class="p">[</span><span class="s2">&quot;cell_ids&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">inner_value</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">])</span> <span class="o">&lt;</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">]):</span>
+                <span class="n">update_parent_info</span><span class="p">(</span><span class="n">inner_value</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">])</span> <span class="o">&lt;</span> <span class="nb">int</span><span class="p">(</span><span class="n">inner_value</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">]):</span>
+                <span class="n">update_parent_info</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">inner_key</span><span class="p">,</span> <span class="n">inner_value</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">inner_key</span><span class="si">}</span><span class="s2"> cell labels have the same cell_ids. Cell_ids can&#39;t be &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;identical at the same rank.&quot;</span>
+                <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="add_parent_hierarchy_to_annotations">
+<a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.conversion_utils.add_parent_hierarchy_to_annotations">[docs]</a>
+<span class="k">def</span> <span class="nf">add_parent_hierarchy_to_annotations</span><span class="p">(</span>
+    <span class="n">cas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">parent_cell_look_up</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds parent hierarchy information to annotations in the CAS dictionary.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cas (Dict[str, Any]): The CAS dictionary containing annotations.</span>
+<span class="sd">        parent_cell_look_up (Dict[str, Any]): Dictionary containing parent cell information.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">annotation_list</span> <span class="o">=</span> <span class="n">cas</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;annotations&quot;</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">annotation_list</span><span class="p">:</span>
+        <span class="n">parent_info</span> <span class="o">=</span> <span class="n">parent_cell_look_up</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">annotation</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;labelset&quot;</span><span class="p">)</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="n">annotation</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cell_label&quot;</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="p">{}</span>
+        <span class="p">)</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">parent_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;parent&quot;</span><span class="p">)</span>
+        <span class="n">p_accession</span> <span class="o">=</span> <span class="n">parent_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;p_accession&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">parent</span> <span class="ow">and</span> <span class="n">p_accession</span><span class="p">:</span>
+            <span class="c1"># Add parent data to the annotation</span>
+            <span class="n">annotation</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;parent_cell_set_name&quot;</span><span class="p">:</span> <span class="n">parent</span><span class="p">,</span>
+                    <span class="s2">&quot;parent_cell_set_accession&quot;</span><span class="p">:</span> <span class="n">p_accession</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+            <span class="c1"># Remove redundant CL annotations</span>
+            <span class="n">parent_dict</span> <span class="o">=</span> <span class="n">parent_cell_look_up</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="k">if</span> <span class="n">parent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cell_ontology_term_id&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">annotation</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s2">&quot;cell_ontology_term_id&quot;</span>
+            <span class="p">)</span> <span class="ow">and</span> <span class="n">parent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cell_ontology_term&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">annotation</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s2">&quot;cell_ontology_term&quot;</span>
+            <span class="p">):</span>
+                <span class="n">annotation</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;cell_ontology_term_id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="n">annotation</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;cell_ontology_term&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="json_serializer">
+<a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.conversion_utils.json_serializer">[docs]</a>
+<span class="k">def</span> <span class="nf">json_serializer</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    JSON serializer for objects not serializable by default json code.</span>
+<span class="sd">    Usage: json.dumps(my_dict, default=json_serializer)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        obj: object to serialize</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Serialized object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="p">(</span><span class="n">datetime</span><span class="p">,</span> <span class="n">date</span><span class="p">)):</span>
+        <span class="c1"># return obj.isoformat()</span>
+        <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;Z&quot;</span>
+    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Type </span><span class="si">%s</span><span class="s2"> not serializable&quot;</span> <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="get_authors_from_doi">
+<a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.conversion_utils.get_authors_from_doi">[docs]</a>
+<span class="k">def</span> <span class="nf">get_authors_from_doi</span><span class="p">(</span><span class="n">doi</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fetches and returns a list of authors from a given DOI (Digital Object Identifier) using the CrossRef API.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        doi (str): The DOI of the publication for which to retrieve author information.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list of dict: A list of dictionaries where each dictionary contains details of one author, including</span>
+<span class="sd">                      their name (&#39;author_name&#39;), ORCID ID (&#39;orcid&#39;), GitHub username (&#39;github_username&#39;), and email (&#39;email&#39;).</span>
+<span class="sd">                      Each field is a string, and fields without data will be None.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        KeyError: If the author data is not found in the response, indicating a potential issue with the DOI or the data format.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">CROSSREF_API_URL</span><span class="si">}{</span><span class="n">doi</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">authors</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">][</span><span class="s2">&quot;author&quot;</span><span class="p">]</span>
+        <span class="n">author_dict</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;author_name&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">author</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;given&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">author</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;family&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span>
+                <span class="s2">&quot;orcid&quot;</span><span class="p">:</span> <span class="n">author</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ORCID&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;github_username&quot;</span><span class="p">:</span> <span class="n">author</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;github_username&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="n">author</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">),</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="n">author</span> <span class="ow">in</span> <span class="n">authors</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="n">author_dict</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;Author information not available.&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="reformat_json">
+<a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.conversion_utils.reformat_json">[docs]</a>
+<span class="k">def</span> <span class="nf">reformat_json</span><span class="p">(</span>
+    <span class="n">input_json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">input_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;annotations&quot;</span><span class="p">,</span>
+    <span class="n">exclude_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cell_ids&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reformat the input JSON to create a new JSON structure, copying all fields and modifying the &#39;input_key&#39; field.</span>
+<span class="sd">    This function serializes the modified JSON to a string.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        input_json: The original JSON object as a Python dictionary.</span>
+<span class="sd">        input_key: The key in the original JSON where annotations are stored.</span>
+<span class="sd">        exclude_key: The key within annotations to exclude from the copied data.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A JSON string of the reformatted JSON object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">output_json</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">input_json</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="n">input_key</span><span class="p">}</span>
+
+    <span class="c1"># Process the annotations field if it exists in the input JSON</span>
+    <span class="k">if</span> <span class="n">input_key</span> <span class="ow">in</span> <span class="n">input_json</span><span class="p">:</span>
+        <span class="c1"># Filter out the specified key (e.g., &#39;cell_ids&#39;) from each annotation dictionary</span>
+        <span class="n">filtered_annotations</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">annotation</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="n">exclude_key</span><span class="p">}</span>
+            <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">input_json</span><span class="p">[</span><span class="n">input_key</span><span class="p">]</span>
+        <span class="p">]</span>
+
+        <span class="n">output_json</span><span class="p">[</span><span class="n">input_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">filtered_annotations</span>
+
+    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">output_json</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Huseyin Kir, Ugur Bayindir.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

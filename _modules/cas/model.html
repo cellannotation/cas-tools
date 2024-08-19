@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cas.model &mdash; cas-tools 1.0.7 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=46dfa7f5"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            cas-tools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">CAS Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli.html">CLI Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/index.html">cas-tools’s documentation!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">cas-tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">cas.model</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for cas.model</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">asdict</span><span class="p">,</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">dataclasses_json</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">dataclasses_json</span> <span class="kn">import</span> <span class="n">DataClassJsonMixin</span><span class="p">,</span> <span class="n">config</span>
+<span class="kn">from</span> <span class="nn">dateutil.parser</span> <span class="kn">import</span> <span class="n">isoparse</span>
+<span class="kn">from</span> <span class="nn">marshmallow</span> <span class="kn">import</span> <span class="n">fields</span>
+
+<span class="kn">from</span> <span class="nn">cas.reports</span> <span class="kn">import</span> <span class="n">get_all_annotations</span>
+
+<span class="n">exclude_none_values</span> <span class="o">=</span> <span class="kc">True</span>
+
+
+<div class="viewcode-block" id="EncoderMixin">
+<a class="viewcode-back" href="../../source/cas.html#cas.model.EncoderMixin">[docs]</a>
+<span class="k">class</span> <span class="nc">EncoderMixin</span><span class="p">(</span><span class="n">DataClassJsonMixin</span><span class="p">):</span>
+    <span class="n">dataclass_json_config</span> <span class="o">=</span> <span class="n">dataclasses_json</span><span class="o">.</span><span class="n">config</span><span class="p">(</span>
+        <span class="c1"># letter_case=dataclasses_json.LetterCase.CAMEL,</span>
+        <span class="n">undefined</span><span class="o">=</span><span class="n">dataclasses_json</span><span class="o">.</span><span class="n">Undefined</span><span class="o">.</span><span class="n">EXCLUDE</span><span class="p">,</span>
+        <span class="n">exclude</span><span class="o">=</span><span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">exclude_none_values</span> <span class="ow">and</span> <span class="n">f</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)[</span><span class="s2">&quot;dataclasses_json&quot;</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="AutomatedAnnotation">
+<a class="viewcode-back" href="../../source/cas.html#cas.model.AutomatedAnnotation">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">AutomatedAnnotation</span><span class="p">(</span><span class="n">EncoderMixin</span><span class="p">):</span>
+    <span class="n">algorithm_name</span><span class="p">:</span> <span class="nb">str</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The name of the algorithm used. It MUST be a string of the algorithm&#39;s name.&quot;&quot;&quot;</span>
+
+    <span class="n">algorithm_version</span><span class="p">:</span> <span class="nb">str</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The version of the algorithm used (if applicable). It MUST be a string of the algorithm&#39;s version, which is </span>
+<span class="sd">    typically in the format &#39;[MAJOR].[MINOR]&#39;, but other versioning systems are permitted (based on the algorithm&#39;s </span>
+<span class="sd">    versioning).&quot;&quot;&quot;</span>
+
+    <span class="n">algorithm_repo_url</span><span class="p">:</span> <span class="nb">str</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This field denotes the URL of the version control repository associated with the algorithm used (if applicable). </span>
+<span class="sd">    It MUST be a string of a valid URL.&quot;&quot;&quot;</span>
+
+    <span class="n">reference_location</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This field denotes a valid URL of the annotated dataset that was the source of annotated reference data. </span>
+<span class="sd">    This MUST be a string of a valid URL. The concept of a &#39;reference&#39; specifically refers to &#39;annotation transfer&#39; </span>
+<span class="sd">    algorithms, whereby a &#39;reference&#39; dataset is used to transfer cell annotations to the &#39;query&#39; dataset.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="Labelset">
+<a class="viewcode-back" href="../../source/cas.html#cas.model.Labelset">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Labelset</span><span class="p">(</span><span class="n">EncoderMixin</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;name of annotation key&quot;&quot;&quot;</span>
+
+    <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Some text describing what types of cell annotation this annotation key is used to record&quot;&quot;&quot;</span>
+
+    <span class="n">annotation_method</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The method used for creating the cell annotations. This MUST be one of the following strings: `&#39;algorithmic&#39;`, </span>
+<span class="sd">    `&#39;manual&#39;`, or `&#39;both&#39;` &quot;&quot;&quot;</span>
+
+    <span class="n">automated_annotation</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">AutomatedAnnotation</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A set of fields for recording the details of the automated annotation algorithm used. (Common &#39;automated </span>
+<span class="sd">    annotation methods&#39; would include PopV, Azimuth, CellTypist, scArches, etc.)&quot;&quot;&quot;</span>
+
+    <span class="n">rank</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A number indicating relative granularity with 0 being the most specific.  Use this where a single dataset has </span>
+<span class="sd">    multiple keys that are used consistently to record annotations and different levels of granularity.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="AnnotationTransfer">
+<a class="viewcode-back" href="../../source/cas.html#cas.model.AnnotationTransfer">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">AnnotationTransfer</span><span class="p">(</span><span class="n">EncoderMixin</span><span class="p">):</span>
+    <span class="n">transferred_cell_label</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transferred cell label&quot;&quot;&quot;</span>
+
+    <span class="n">source_taxonomy</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;PURL of source taxonomy.&quot;&quot;&quot;</span>
+
+    <span class="n">source_node_accession</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;accession of node that label was transferred from&quot;&quot;&quot;</span>
+
+    <span class="n">algorithm_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The name of the algorithm used.&quot;&quot;&quot;</span>
+
+    <span class="n">comment</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Free text comment on annotation transfer&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="Review">
+<a class="viewcode-back" href="../../source/cas.html#cas.model.Review">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Review</span><span class="p">(</span><span class="n">EncoderMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Annotation review.&quot;&quot;&quot;</span>
+
+    <span class="n">datestamp</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="n">config</span><span class="p">(</span>
+            <span class="n">encoder</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span>
+                <span class="n">x</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;Z&quot;</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="p">),</span>
+            <span class="n">decoder</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">isoparse</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">mm_field</span><span class="o">=</span><span class="n">fields</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;iso&quot;</span><span class="p">),</span>
+        <span class="p">),</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time and date review was last edited.&quot;&quot;&quot;</span>
+
+    <span class="n">reviewer</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Review Author.&quot;&quot;&quot;</span>
+
+    <span class="n">review</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reviewer&#39;s verdict on the annotation.  Must be &#39;Agree&#39; or &#39;Disagree&#39;.&quot;&quot;&quot;</span>
+
+    <span class="n">explanation</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Free-text review of annotation. This is required if the verdict is disagree and should include reasons for disagreement.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="Annotation">
+<a class="viewcode-back" href="../../source/cas.html#cas.model.Annotation">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Annotation</span><span class="p">(</span><span class="n">EncoderMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A collection of fields recording a cell type/class/state annotation on some set os cells, supporting evidence and</span>
+<span class="sd">    provenance. As this is intended as a general schema, compulsory fields are kept to a minimum. However, tools using</span>
+<span class="sd">    this schema are encouarged to specify a larger set of compulsory fields for publication.</span>
+<span class="sd">    Note: This schema deliberately allows for additional fields in order to support ad hoc user fields, new formal</span>
+<span class="sd">    schema extensions and project/tool specific metadata.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">labelset</span><span class="p">:</span> <span class="nb">str</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The unique name of the set of cell annotations. </span>
+<span class="sd">    Each cell within the AnnData/Seurat file MUST be associated with a &#39;cell_label&#39; value in order for this to be a </span>
+<span class="sd">    valid &#39;cellannotation_setname&#39;.&quot;&quot;&quot;</span>
+
+    <span class="n">cell_label</span><span class="p">:</span> <span class="nb">str</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This denotes any free-text term which the author uses to label cells.&quot;&quot;&quot;</span>
+
+    <span class="n">cell_set_accession</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;An identifier that can be used to consistently refer to the set of cells being annotated, even if the </span>
+<span class="sd">    cell_label changes.&quot;&quot;&quot;</span>
+
+    <span class="n">cell_fullname</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This MUST be the full-length name for the biological entity listed in `cell_label` by the author. (If the value </span>
+<span class="sd">    in `cell_label` is the full-length term, this field will contain the same value.) \nNOTE: any reserved word used in </span>
+<span class="sd">    the field &#39;cell_label&#39; MUST match the value of this field.&quot;&quot;&quot;</span>
+
+    <span class="n">cell_ontology_term_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This MUST be a term from either the Cell Ontology or from some ontology that extends it by classifying cell </span>
+<span class="sd">    types under terms from the Cell Ontology e.g. the Provisional Cell Ontology.&quot;&quot;&quot;</span>
+
+    <span class="n">cell_ontology_term</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This MUST be the human-readable name assigned to the value of &#39;cell_ontology_term_id&quot;&quot;&quot;</span>
+
+    <span class="n">cell_ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;List of cell barcode sequences/UUIDs used to uniquely identify the cells&quot;&quot;&quot;</span>
+
+    <span class="n">rationale</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The free-text rationale which users provide as justification/evidence for their cell annotations. </span>
+<span class="sd">    Researchers are encouraged to use this field to cite relevant publications in-line using standard academic </span>
+<span class="sd">    citations of the form `(Zheng et al., 2020)` This human-readable free-text MUST be encoded as a single string. </span>
+<span class="sd">    All references cited SHOULD be listed using DOIs under rationale_dois. There MUST be a 2000-character limit.&quot;&quot;&quot;</span>
+
+    <span class="n">rationale_dois</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A list of valid publication DOIs cited by the author to support or provide justification/evidence/context for </span>
+<span class="sd">    &#39;cell_label&#39;.&quot;&quot;&quot;</span>
+
+    <span class="n">marker_gene_evidence</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;List of gene names explicitly used as evidence for this cell annotation.&quot;&quot;&quot;</span>
+
+    <span class="n">synonyms</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This field denotes any free-text term of a biological entity which the author associates as synonymous with the </span>
+<span class="sd">    biological entity listed in the field &#39;cell_label&#39;.&quot;&quot;&quot;</span>
+
+    <span class="c1"># TODO modified: added (exclude from json serialisation)</span>
+    <span class="n">parent_cell_set_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">config</span><span class="p">(</span><span class="n">exclude</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">parent_cell_set_accession</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A list of accessions of cell sets that subsume this cell set. This can be used to compose hierarchies of </span>
+<span class="sd">    annotated cell sets, built from a fixed set of clusters.&quot;&quot;&quot;</span>
+
+    <span class="n">author_annotation_fields</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;&quot;A dictionary of author defined key value pairs annotating the cell set. The names and aims of these fields MUST </span>
+<span class="sd">    not clash with official annotation fields.&quot;&quot;&quot;</span>
+
+    <span class="n">transferred_annotations</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">AnnotationTransfer</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">reviews</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Review</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="Annotation.add_user_annotation">
+<a class="viewcode-back" href="../../source/cas.html#cas.model.Annotation.add_user_annotation">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_user_annotation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_annotation_set</span><span class="p">,</span> <span class="n">user_annotation_label</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds a user defined annotation which is not supported by the standard schema.</span>
+<span class="sd">        :param user_annotation_set: name of the user annotation set</span>
+<span class="sd">        :param user_annotation_label: label of the user annotation set</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">author_annotation_fields</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">author_annotation_fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">author_annotation_fields</span><span class="p">[</span><span class="n">user_annotation_set</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_annotation_label</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CellTypeAnnotation">
+<a class="viewcode-back" href="../../source/cas.html#cas.model.CellTypeAnnotation">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">CellTypeAnnotation</span><span class="p">(</span><span class="n">EncoderMixin</span><span class="p">):</span>
+    <span class="n">author_name</span><span class="p">:</span> <span class="nb">str</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This MUST be a string in the format `[FIRST NAME] [LAST NAME]`&quot;&quot;&quot;</span>
+
+    <span class="n">annotations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Annotation</span><span class="p">]</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A collection of fields recording a cell type/class/state annotation on some set os cells, supporting evidence </span>
+<span class="sd">    and provenance. As this is intended as a general schema, compulsory fields are kept to a minimum. However, tools </span>
+<span class="sd">    using this schema are encouarged to specify a larger set of compulsory fields for publication.&quot;&quot;&quot;</span>
+
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The title of the dataset. This MUST be less than or equal to 200 characters. e.g. &#39;Human retina cell atlas - </span>
+<span class="sd">    retinal ganglion cells&#39;.&quot;&quot;&quot;</span>
+
+    <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The description of the dataset. e.g. &#39;A total of 15 retinal ganglion cell clusters were identified from over 99K </span>
+<span class="sd">    retinal ganglion cell nuclei in the current atlas. Utilizing previous characterized markers from macaque, 5 clusters</span>
+<span class="sd">     can be annotated.&#39;&quot;&quot;&quot;</span>
+
+    <span class="n">matrix_file_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A resolvable ID for a cell by gene matrix file in the form namespace:accession, e.g. </span>
+<span class="sd">    CellXGene_dataset:8e10f1c4-8e98-41e5-b65f-8cd89a887122. Please see https://github.com/cellannotation/cell-annotation</span>
+<span class="sd">    -schema/registry/registry.json for supported namespaces.&quot;&quot;&quot;</span>
+
+    <span class="n">labelsets</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Labelset</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A list of labelsets that are used in the annotations.&quot;&quot;&quot;</span>
+
+    <span class="n">author_contact</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This MUST be a valid email address of the author&quot;&quot;&quot;</span>
+
+    <span class="n">orcid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This MUST be a valid ORCID for the author&quot;&quot;&quot;</span>
+
+    <span class="n">cellannotation_schema_version</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The schema version, the cell annotation open standard. Current version MUST follow 0.1.0</span>
+<span class="sd">    This versioning MUST follow the format `&#39;[MAJOR].[MINOR].[PATCH]&#39;` as defined by Semantic Versioning 2.0.0, </span>
+<span class="sd">    https://semver.org/&quot;&quot;&quot;</span>
+
+    <span class="n">cellannotation_timestamp</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The timestamp of all cell annotations published (per dataset). This MUST be a string in the format </span>
+<span class="sd">    &#39;%yyyy-%mm-%dd %hh:%mm:%ss&#39;.&quot;&quot;&quot;</span>
+
+    <span class="n">cellannotation_version</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The version for all cell annotations published (per dataset). This MUST be a string. The recommended versioning </span>
+<span class="sd">    format is `&#39;[MAJOR].[MINOR].[PATCH]&#39;` as defined by Semantic Versioning 2.0.0, https://semver.org/&quot;&quot;&quot;</span>
+
+    <span class="n">cellannotation_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A persistent URL of all cell annotations published (per dataset).&quot;&quot;&quot;</span>
+
+    <span class="n">author_list</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This field stores a list of users who are included in the project as collaborators, regardless of their specific </span>
+<span class="sd">    role. An example list; John Smith|Cody Miller|Sarah Jones.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CellTypeAnnotation.add_annotation_object">
+<a class="viewcode-back" href="../../source/cas.html#cas.model.CellTypeAnnotation.add_annotation_object">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_annotation_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds given object to annotation objects list</span>
+<span class="sd">        :param obj: Annotation object to add</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annotations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CellTypeAnnotation.set_exclude_none_values">
+<a class="viewcode-back" href="../../source/cas.html#cas.model.CellTypeAnnotation.set_exclude_none_values">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_exclude_none_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">global</span> <span class="n">exclude_none_values</span>
+        <span class="n">exclude_none_values</span> <span class="o">=</span> <span class="n">value</span></div>
+
+
+<div class="viewcode-block" id="CellTypeAnnotation.get_all_annotations">
+<a class="viewcode-back" href="../../source/cas.html#cas.model.CellTypeAnnotation.get_all_annotations">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_all_annotations</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">show_cell_ids</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">labels</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Lists all annotations.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            show_cell_ids: identifies if result have &#39;cell_ids&#39; column. Default value is false</span>
+<span class="sd">            labels: list of key(labelset), value(cell_label) pairs to filter annotations</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Annotations data frame</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">get_all_annotations</span><span class="p">(</span>
+            <span class="n">asdict</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="n">show_cell_ids</span><span class="o">=</span><span class="n">show_cell_ids</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span>
+        <span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Huseyin Kir, Ugur Bayindir.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

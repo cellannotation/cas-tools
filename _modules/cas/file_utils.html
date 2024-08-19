@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cas.file_utils &mdash; cas-tools 1.0.7 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=46dfa7f5"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            cas-tools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">CAS Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli.html">CLI Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/index.html">cas-tools’s documentation!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">cas-tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">cas.file_utils</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for cas.file_utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">resources</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">anndata</span>
+<span class="kn">from</span> <span class="nn">cap_anndata</span> <span class="kn">import</span> <span class="n">CapAnnDataDF</span>
+<span class="kn">from</span> <span class="nn">cas_schema</span> <span class="kn">import</span> <span class="n">schemas</span>
+<span class="kn">from</span> <span class="nn">ruamel.yaml</span> <span class="kn">import</span> <span class="n">YAML</span>
+
+<span class="kn">from</span> <span class="nn">cas.model</span> <span class="kn">import</span> <span class="n">CellTypeAnnotation</span>
+
+
+<div class="viewcode-block" id="read_json_file">
+<a class="viewcode-back" href="../../source/cas.html#cas.file_utils.read_json_file">[docs]</a>
+<span class="k">def</span> <span class="nf">read_json_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reads and parses a JSON file into a Python dictionary.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        file_path (str): The path to the JSON file.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: The JSON data as a Python dictionary.</span>
+
+<span class="sd">    Returns None if the file does not exist or if there is an issue</span>
+<span class="sd">    parsing the JSON content.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        json_data = read_json_file(&#39;path/to/your/file.json&#39;)</span>
+<span class="sd">        if json_data is not None:</span>
+<span class="sd">            # Use the parsed JSON data as a dictionary</span>
+<span class="sd">            print(json_data)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">data</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error reading JSON file: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="read_cas_json_file">
+<a class="viewcode-back" href="../../source/cas.html#cas.file_utils.read_cas_json_file">[docs]</a>
+<span class="k">def</span> <span class="nf">read_cas_json_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CellTypeAnnotation</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reads and parses a JSON file into a CAS object.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        file_path (str): The path to the JSON file.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: The JSON data as a CAS object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">CellTypeAnnotation</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">read_json_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="read_cas_from_anndata">
+<a class="viewcode-back" href="../../source/cas.html#cas.file_utils.read_cas_from_anndata">[docs]</a>
+<span class="k">def</span> <span class="nf">read_cas_from_anndata</span><span class="p">(</span><span class="n">anndata_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CellTypeAnnotation</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reads the CAS json from the anndata uns and parses into a CAS object.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        anndata_path: The path to the Anndata file.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        CellTypeAnnotation object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">input_anndata</span> <span class="o">=</span> <span class="n">read_anndata_file</span><span class="p">(</span><span class="n">anndata_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">input_anndata</span> <span class="ow">and</span> <span class="s2">&quot;cas&quot;</span> <span class="ow">in</span> <span class="n">input_anndata</span><span class="o">.</span><span class="n">uns</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">CellTypeAnnotation</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">input_anndata</span><span class="o">.</span><span class="n">uns</span><span class="p">[</span><span class="s2">&quot;cas&quot;</span><span class="p">]))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Given Anndata file doesn&#39;t have a &#39;cas&#39; object in it&#39;s uns.&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="write_json_file">
+<a class="viewcode-back" href="../../source/cas.html#cas.file_utils.write_json_file">[docs]</a>
+<span class="k">def</span> <span class="nf">write_json_file</span><span class="p">(</span>
+    <span class="n">cas</span><span class="p">:</span> <span class="n">CellTypeAnnotation</span><span class="p">,</span> <span class="n">out_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">print_undefined</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Writes cell type annotation object to a json file.</span>
+<span class="sd">    :param cas: cell type annotation object to serialize.</span>
+<span class="sd">    :param out_file: output file path.</span>
+<span class="sd">    :param print_undefined: prints null values to the output json if true. Omits undefined values from the json output if</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cas</span><span class="o">.</span><span class="n">set_exclude_none_values</span><span class="p">(</span><span class="ow">not</span> <span class="n">print_undefined</span><span class="p">)</span>
+
+    <span class="n">output_data</span> <span class="o">=</span> <span class="n">cas</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">out_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">out_file</span><span class="p">:</span>
+        <span class="n">out_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">output_data</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="write_dict_to_json_file">
+<a class="viewcode-back" href="../../source/cas.html#cas.file_utils.write_dict_to_json_file">[docs]</a>
+<span class="k">def</span> <span class="nf">write_dict_to_json_file</span><span class="p">(</span><span class="n">output_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dictionary</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">dictionary</span><span class="p">,</span> <span class="n">json_file</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="read_anndata_file">
+<a class="viewcode-back" href="../../source/cas.html#cas.file_utils.read_anndata_file">[docs]</a>
+<span class="k">def</span> <span class="nf">read_anndata_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">anndata</span><span class="o">.</span><span class="n">AnnData</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load anndata object from a file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        file_path: The path to the file containing the anndata object.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The loaded anndata object if successful, else None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">anndata_obj</span> <span class="o">=</span> <span class="n">anndata</span><span class="o">.</span><span class="n">read_h5ad</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">backed</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">anndata_obj</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;An error occurred while loading the file: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="read_table_to_dict">
+<a class="viewcode-back" href="../../source/cas.html#cas.file_utils.read_table_to_dict">[docs]</a>
+<span class="k">def</span> <span class="nf">read_table_to_dict</span><span class="p">(</span><span class="n">table_path</span><span class="p">,</span> <span class="n">id_column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">generated_ids</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reads table file content into a dict. Key is the first column value and the value is dict representation of the</span>
+<span class="sd">    Args:</span>
+<span class="sd">        table_path: Path of the table file</span>
+<span class="sd">        id_column:  Id column becomes the key of the dict. This column should be unique. Default value is first column.</span>
+<span class="sd">        generated_ids: If &#39;True&#39;, uses row number as the key of the dict. Initial key is 0.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        Function provides two return values: first; headers of the table and second; the TSV content dict. Key of the</span>
+<span class="sd">        content is the first column value and the values are dict of row values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">table_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.tsv&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">read_tsv_to_dict</span><span class="p">(</span>
+            <span class="n">table_path</span><span class="p">,</span> <span class="n">id_column</span><span class="o">=</span><span class="n">id_column</span><span class="p">,</span> <span class="n">generated_ids</span><span class="o">=</span><span class="n">generated_ids</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">table_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.csv&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">read_csv_to_dict</span><span class="p">(</span>
+            <span class="n">table_path</span><span class="p">,</span> <span class="n">id_column</span><span class="o">=</span><span class="n">id_column</span><span class="p">,</span> <span class="n">generated_ids</span><span class="o">=</span><span class="n">generated_ids</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Table file should be either tsv or csv file.&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="read_tsv_to_dict">
+<a class="viewcode-back" href="../../source/cas.html#cas.file_utils.read_tsv_to_dict">[docs]</a>
+<span class="k">def</span> <span class="nf">read_tsv_to_dict</span><span class="p">(</span><span class="n">tsv_path</span><span class="p">,</span> <span class="n">id_column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">generated_ids</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reads tsv file content into a dict. Key is the first column value and the value is dict representation of the</span>
+<span class="sd">    row values (each header is a key and column value is the value).</span>
+<span class="sd">    Args:</span>
+<span class="sd">        tsv_path: Path of the TSV file</span>
+<span class="sd">        id_column: Id column becomes the key of the dict. This column should be unique. Default value is first column.</span>
+<span class="sd">        generated_ids: If &#39;True&#39;, uses row number as the key of the dict. Initial key is 0.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        Function provides two return values: first; headers of the table and second; the TSV content dict. Key of the</span>
+<span class="sd">        content is the first column value and the values are dict of row values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">read_csv_to_dict</span><span class="p">(</span>
+        <span class="n">tsv_path</span><span class="p">,</span> <span class="n">id_column</span><span class="o">=</span><span class="n">id_column</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">generated_ids</span><span class="o">=</span><span class="n">generated_ids</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="read_csv_to_dict">
+<a class="viewcode-back" href="../../source/cas.html#cas.file_utils.read_csv_to_dict">[docs]</a>
+<span class="k">def</span> <span class="nf">read_csv_to_dict</span><span class="p">(</span>
+    <span class="n">csv_path</span><span class="p">,</span>
+    <span class="n">id_column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">id_column_name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">,</span>
+    <span class="n">id_to_lower</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">generated_ids</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reads tsv file content into a dict. Key is the first column value and the value is dict representation of the</span>
+<span class="sd">    row values (each header is a key and column value is the value).</span>
+<span class="sd">    Args:</span>
+<span class="sd">        csv_path: Path of the CSV file</span>
+<span class="sd">        id_column: Id column becomes the keys of the dict. This column should be unique. Default is the first column.</span>
+<span class="sd">        id_column_name: Alternative to the numeric id_column, id_column_name specifies id_column by its header string.</span>
+<span class="sd">        delimiter: Value delimiter. Default is comma.</span>
+<span class="sd">        id_to_lower: applies string lowercase operation to the key</span>
+<span class="sd">        generated_ids: If &#39;True&#39;, uses row number as the key of the dict. Initial key is 1.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Function provides two return values: first; headers of the table and second; the CSV content dict. Key of the</span>
+<span class="sd">        content is the first column value and the values are dict of row values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">records</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">csv_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+        <span class="n">rd</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="n">delimiter</span><span class="p">,</span> <span class="n">quotechar</span><span class="o">=</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span>
+        <span class="n">row_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rd</span><span class="p">:</span>
+            <span class="n">_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">id_column</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">id_to_lower</span><span class="p">:</span>
+                <span class="n">_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">_id</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">generated_ids</span><span class="p">:</span>
+                <span class="n">_id</span> <span class="o">=</span> <span class="n">row_count</span>
+
+            <span class="k">if</span> <span class="n">row_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">headers</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">header</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">header</span> <span class="ow">in</span> <span class="n">row</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">id_column_name</span> <span class="ow">and</span> <span class="n">id_column_name</span> <span class="ow">in</span> <span class="n">headers</span><span class="p">:</span>
+                    <span class="n">id_column</span> <span class="o">=</span> <span class="n">headers</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">id_column_name</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">row_object</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">column_num</span><span class="p">,</span> <span class="n">column_value</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+                    <span class="n">row_object</span><span class="p">[</span><span class="n">headers</span><span class="p">[</span><span class="n">column_num</span><span class="p">]]</span> <span class="o">=</span> <span class="n">column_value</span>
+                <span class="n">records</span><span class="p">[</span><span class="n">_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">row_object</span>
+
+            <span class="n">row_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">headers</span><span class="p">,</span> <span class="n">records</span></div>
+
+
+
+<div class="viewcode-block" id="read_json_config">
+<a class="viewcode-back" href="../../source/cas.html#cas.file_utils.read_json_config">[docs]</a>
+<span class="k">def</span> <span class="nf">read_json_config</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reads the configuration object from the given path.</span>
+<span class="sd">    :param file_path: path to the json file</span>
+<span class="sd">    :return: configuration object (List of data column config items)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fs</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;JSON read failed:&quot;</span> <span class="o">+</span> <span class="n">file_path</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="read_yaml_config">
+<a class="viewcode-back" href="../../source/cas.html#cas.file_utils.read_yaml_config">[docs]</a>
+<span class="k">def</span> <span class="nf">read_yaml_config</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reads the configuration object from the given path.</span>
+<span class="sd">    :param file_path: path to the yaml file</span>
+<span class="sd">    :return: configuration object (List of data column config items)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fs</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ryaml</span> <span class="o">=</span> <span class="n">YAML</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s2">&quot;safe&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ryaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Yaml read failed:&quot;</span> <span class="o">+</span> <span class="n">file_path</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="read_config">
+<a class="viewcode-back" href="../../source/cas.html#cas.file_utils.read_config">[docs]</a>
+<span class="k">def</span> <span class="nf">read_config</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reads the configuration object from the given path.</span>
+<span class="sd">    :param file_path: path to the configuration file</span>
+<span class="sd">    :return: configuration object (List of data column config items)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">file_extension</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span>
+    <span class="k">if</span> <span class="n">file_extension</span> <span class="o">==</span> <span class="s2">&quot;.json&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">read_json_config</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">file_extension</span> <span class="o">==</span> <span class="s2">&quot;.yaml&quot;</span> <span class="ow">or</span> <span class="n">file_extension</span> <span class="o">==</span> <span class="s2">&quot;.yml&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">read_yaml_config</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+            <span class="s2">&quot;Given configuration file extension is not supported. &quot;</span>
+            <span class="s2">&quot;Try a json or yaml file instead of :&quot;</span> <span class="o">+</span> <span class="n">file_path</span>
+        <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="update_obs">
+<a class="viewcode-back" href="../../source/cas.html#cas.file_utils.update_obs">[docs]</a>
+<span class="k">def</span> <span class="nf">update_obs</span><span class="p">(</span><span class="n">obs</span><span class="p">:</span> <span class="n">CapAnnDataDF</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Updates the obs with data dict.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        obs: Dataset representing the obs field in the AnnData file.</span>
+<span class="sd">        data: Dictionary containing flattened data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">obs</span><span class="p">:</span>
+            <span class="n">obs</span><span class="o">.</span><span class="n">remove_column</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+        <span class="n">obs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">values</span></div>
+
+
+
+<div class="viewcode-block" id="update_uns">
+<a class="viewcode-back" href="../../source/cas.html#cas.file_utils.update_uns">[docs]</a>
+<span class="k">def</span> <span class="nf">update_uns</span><span class="p">(</span><span class="n">uns</span><span class="p">:</span> <span class="n">CapAnnDataDF</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Updates the uns with data dict.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        uns: The HDF5 group to write data to.</span>
+<span class="sd">        data: Dictionary containing the data to be written.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">value</span><span class="p">):</span>
+            <span class="n">uns</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">uns</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></div>
+
+
+
+<div class="viewcode-block" id="get_cas_schema_names">
+<a class="viewcode-back" href="../../source/cas.html#cas.file_utils.get_cas_schema_names">[docs]</a>
+<span class="k">def</span> <span class="nf">get_cas_schema_names</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the list of available CAS schema names.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: The available CAS schema names.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;base&quot;</span><span class="p">:</span> <span class="s2">&quot;general_schema.json&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cap&quot;</span><span class="p">:</span> <span class="s2">&quot;CAP_schema.json&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;bican&quot;</span><span class="p">:</span> <span class="s2">&quot;BICAN_schema.json&quot;</span><span class="p">,</span>
+    <span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="get_cas_schema">
+<a class="viewcode-back" href="../../source/cas.html#cas.file_utils.get_cas_schema">[docs]</a>
+<span class="k">def</span> <span class="nf">get_cas_schema</span><span class="p">(</span><span class="n">schema_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;base&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reads the schema file from the CAS module and returns as a dictionary.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        schema_name: The name of the schema to be returned. Default is &#39;base&#39;.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: The schema as a dictionary.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">schema_name</span><span class="p">:</span>
+        <span class="n">schema_name</span> <span class="o">=</span> <span class="s2">&quot;base&quot;</span>
+
+    <span class="n">schema_name</span> <span class="o">=</span> <span class="n">schema_name</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">schema_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">get_cas_schema_names</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Schema name should be one of: &quot;</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">get_cas_schema_names</span><span class="p">()</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="p">)</span>
+
+    <span class="n">schema_file</span> <span class="o">=</span> <span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="n">schemas</span><span class="p">)</span> <span class="o">/</span> <span class="n">get_cas_schema_names</span><span class="p">()[</span><span class="n">schema_name</span><span class="p">]</span>
+    <span class="k">with</span> <span class="n">schema_file</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;rt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">schema</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">schema</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Huseyin Kir, Ugur Bayindir.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

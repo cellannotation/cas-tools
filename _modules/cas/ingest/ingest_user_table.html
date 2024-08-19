@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cas.ingest.ingest_user_table &mdash; cas-tools 1.0.7 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=46dfa7f5"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            cas-tools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">CAS Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cli.html">CLI Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/index.html">cas-tools’s documentation!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">cas-tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">cas.ingest.ingest_user_table</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for cas.ingest.ingest_user_table</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">importlib.metadata</span> <span class="kn">import</span> <span class="n">version</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">get_type_hints</span>
+
+<span class="kn">from</span> <span class="nn">cas.file_utils</span> <span class="kn">import</span> <span class="n">read_config</span><span class="p">,</span> <span class="n">read_table_to_dict</span><span class="p">,</span> <span class="n">write_json_file</span>
+<span class="kn">from</span> <span class="nn">cas.flatten_data_to_tables</span> <span class="kn">import</span> <span class="n">serialize_to_tables</span>
+<span class="kn">from</span> <span class="nn">cas.ingest.config_validator</span> <span class="kn">import</span> <span class="n">validate</span>
+<span class="kn">from</span> <span class="nn">cas.model</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Annotation</span><span class="p">,</span>
+    <span class="n">AnnotationTransfer</span><span class="p">,</span>
+    <span class="n">AutomatedAnnotation</span><span class="p">,</span>
+    <span class="n">CellTypeAnnotation</span><span class="p">,</span>
+    <span class="n">Labelset</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="ingest_data">
+<a class="viewcode-back" href="../../../source/cas.ingest.html#cas.ingest.ingest_user_table.ingest_data">[docs]</a>
+<span class="k">def</span> <span class="nf">ingest_data</span><span class="p">(</span>
+    <span class="n">data_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">config_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">out_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="nb">format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;json&quot;</span><span class="p">,</span>
+    <span class="n">print_undefined</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Ingests given data into standard cell annotation schema data structure using the given configuration.</span>
+
+<span class="sd">    :param data_file: Unformatted user data in tsv/csv format.</span>
+<span class="sd">    :param config_file: configuration file path.</span>
+<span class="sd">    :param out_file: output file path.</span>
+<span class="sd">    :param format: Data export format. Supported formats are &#39;json&#39; and &#39;tsv&#39;</span>
+<span class="sd">    :param print_undefined: prints null values to the output json if true. Omits undefined values from the json output if</span>
+<span class="sd">    false. False by default. Only effective in json serialization.</span>
+<span class="sd">    :return: output data as dict</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cas</span> <span class="o">=</span> <span class="n">ingest_user_data</span><span class="p">(</span><span class="n">data_file</span><span class="p">,</span> <span class="n">config_file</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">format</span> <span class="o">==</span> <span class="s2">&quot;json&quot;</span><span class="p">:</span>
+        <span class="n">write_json_file</span><span class="p">(</span><span class="n">cas</span><span class="p">,</span> <span class="n">out_file</span><span class="p">,</span> <span class="n">print_undefined</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">format</span> <span class="o">==</span> <span class="s2">&quot;tsv&quot;</span><span class="p">:</span>
+        <span class="n">table_name_prefix</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">data_file</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">out_file</span><span class="p">):</span>
+            <span class="n">out_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">out_file</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out_folder</span> <span class="o">=</span> <span class="n">out_file</span>
+        <span class="n">serialize_to_tables</span><span class="p">(</span><span class="n">cas</span><span class="p">,</span> <span class="n">table_name_prefix</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">cas</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="ingest_user_data">
+<a class="viewcode-back" href="../../../source/cas.ingest.html#cas.ingest.ingest_user_table.ingest_user_data">[docs]</a>
+<span class="k">def</span> <span class="nf">ingest_user_data</span><span class="p">(</span><span class="n">data_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">config_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Ingest given user data into standard cell annotation schema data structure using the given configuration.</span>
+<span class="sd">    :param data_file: Unformatted user data in tsv/csv format.</span>
+<span class="sd">    :param config_file: configuration file path.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">config</span> <span class="o">=</span> <span class="n">read_config</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
+    <span class="n">is_config_valid</span> <span class="o">=</span> <span class="n">validate</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_config_valid</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Configuration file is not valid!&quot;</span><span class="p">)</span>
+    <span class="n">cas</span> <span class="o">=</span> <span class="n">CellTypeAnnotation</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;author_name&quot;</span><span class="p">],</span> <span class="nb">list</span><span class="p">(),</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">])</span>
+    <span class="n">cas</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">cas</span><span class="o">.</span><span class="n">cellannotation_schema_version</span> <span class="o">=</span> <span class="n">version</span><span class="p">(</span><span class="s2">&quot;cell-annotation-schema&quot;</span><span class="p">)</span>
+    <span class="n">headers</span><span class="p">,</span> <span class="n">records</span> <span class="o">=</span> <span class="n">read_table_to_dict</span><span class="p">(</span><span class="n">data_file</span><span class="p">,</span> <span class="n">generated_ids</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">config_fields</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;fields&quot;</span><span class="p">]</span>
+    <span class="n">labelset_ranks</span> <span class="o">=</span> <span class="n">populate_labelsets</span><span class="p">(</span><span class="n">cas</span><span class="p">,</span> <span class="n">config_fields</span><span class="p">)</span>
+    <span class="n">ao_names</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">utilized_columns</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">record_index</span> <span class="ow">in</span> <span class="n">records</span><span class="p">:</span>
+        <span class="n">record</span> <span class="o">=</span> <span class="n">records</span><span class="p">[</span><span class="n">record_index</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">value</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">record</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>  <span class="c1"># skip empty rows</span>
+            <span class="n">ao</span> <span class="o">=</span> <span class="n">Annotation</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">parents</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="mi">10</span>
+            <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">config_fields</span><span class="p">:</span>
+                <span class="c1"># handle hierarchical columns</span>
+                <span class="k">if</span> <span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;cluster_name&quot;</span><span class="p">:</span>
+                    <span class="n">ao</span><span class="o">.</span><span class="n">labelset</span> <span class="o">=</span> <span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">]</span>
+                    <span class="n">ao</span><span class="o">.</span><span class="n">cell_label</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">]])</span>
+                    <span class="n">utilized_columns</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;cluster_id&quot;</span><span class="p">:</span>
+                    <span class="n">ao</span><span class="o">.</span><span class="n">cell_set_accession</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">]])</span>
+                    <span class="n">ao</span><span class="o">.</span><span class="n">rank</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                    <span class="n">utilized_columns</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;cell_set&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">]]:</span>
+                        <span class="n">parent_ao</span> <span class="o">=</span> <span class="n">get_annotation</span><span class="p">(</span><span class="n">ao_names</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">record</span><span class="p">)</span>
+                        <span class="n">register_parent</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">labelset_ranks</span><span class="p">,</span> <span class="n">parent_ao</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>
+                    <span class="n">utilized_columns</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># handle annotation columns</span>
+                    <span class="k">if</span> <span class="s2">&quot;typing.List[str]&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span>
+                        <span class="n">get_type_hints</span><span class="p">(</span><span class="n">ao</span><span class="p">)[</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_type&quot;</span><span class="p">]]</span>
+                    <span class="p">):</span>
+                        <span class="n">list_value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">]])</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+                        <span class="n">stripped</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">strip</span><span class="p">,</span> <span class="n">list_value</span><span class="p">))</span>
+                        <span class="nb">setattr</span><span class="p">(</span><span class="n">ao</span><span class="p">,</span> <span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_type&quot;</span><span class="p">],</span> <span class="n">stripped</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="nb">setattr</span><span class="p">(</span><span class="n">ao</span><span class="p">,</span> <span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_type&quot;</span><span class="p">],</span> <span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">]])</span>
+                    <span class="n">utilized_columns</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">])</span>
+
+        <span class="n">add_user_annotations</span><span class="p">(</span><span class="n">ao</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">utilized_columns</span><span class="p">)</span>
+        <span class="n">add_parent_node_names</span><span class="p">(</span><span class="n">ao</span><span class="p">,</span> <span class="n">ao_names</span><span class="p">,</span> <span class="n">cas</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>
+
+        <span class="n">ao_names</span><span class="p">[</span><span class="n">ao</span><span class="o">.</span><span class="n">cell_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">ao</span>
+        <span class="n">cas</span><span class="o">.</span><span class="n">add_annotation_object</span><span class="p">(</span><span class="n">ao</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cas</span></div>
+
+
+
+<div class="viewcode-block" id="register_parent">
+<a class="viewcode-back" href="../../../source/cas.ingest.html#cas.ingest.ingest_user_table.register_parent">[docs]</a>
+<span class="k">def</span> <span class="nf">register_parent</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">labelset_ranks</span><span class="p">,</span> <span class="n">parent_ao</span><span class="p">,</span> <span class="n">parents</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Registers the parent annotation object to the parents list.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        field: config field</span>
+<span class="sd">        labelset_ranks: labelset ranks dictionary</span>
+<span class="sd">        parent_ao: parent to add</span>
+<span class="sd">        parents: sparse parents list</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">parent_ao</span><span class="o">.</span><span class="n">labelset</span> <span class="ow">and</span> <span class="n">parent_ao</span><span class="o">.</span><span class="n">labelset</span> <span class="o">!=</span> <span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">]:</span>
+        <span class="c1"># handle annotations existing in the multiple ranks, only keep the highest rank</span>
+        <span class="k">if</span> <span class="n">labelset_ranks</span><span class="p">[</span><span class="n">parent_ao</span><span class="o">.</span><span class="n">labelset</span><span class="p">]</span> <span class="o">&lt;</span> <span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">()):</span>
+            <span class="n">parents</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">labelset_ranks</span><span class="p">[</span><span class="n">parent_ao</span><span class="o">.</span><span class="n">labelset</span><span class="p">],</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">parents</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">()),</span> <span class="n">parent_ao</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">parents</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">()),</span> <span class="n">parent_ao</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_annotation">
+<a class="viewcode-back" href="../../../source/cas.ingest.html#cas.ingest.ingest_user_table.get_annotation">[docs]</a>
+<span class="k">def</span> <span class="nf">get_annotation</span><span class="p">(</span><span class="n">ao_names</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a annotation object if it does not exist in the ao_names dictionary.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        ao_names: list of existing annotation objects</span>
+<span class="sd">        field: config field</span>
+<span class="sd">        record: data record</span>
+
+<span class="sd">    Returns: annotation object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">]]</span> <span class="ow">in</span> <span class="n">ao_names</span><span class="p">:</span>
+        <span class="n">ao</span> <span class="o">=</span> <span class="n">ao_names</span><span class="p">[</span><span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">]]]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ao</span> <span class="o">=</span> <span class="n">Annotation</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">],</span> <span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">]])</span>
+    <span class="n">ao</span><span class="o">.</span><span class="n">labelset</span> <span class="o">=</span> <span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">ao</span></div>
+
+
+
+<div class="viewcode-block" id="add_user_annotations">
+<a class="viewcode-back" href="../../../source/cas.ingest.html#cas.ingest.ingest_user_table.add_user_annotations">[docs]</a>
+<span class="k">def</span> <span class="nf">add_user_annotations</span><span class="p">(</span><span class="n">ao</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">utilized_columns</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds user annotations that are not supported by the standard schema.</span>
+<span class="sd">    :param ao: current annotation object</span>
+<span class="sd">    :param headers: all column names of the user data</span>
+<span class="sd">    :param record: a record in the user data</span>
+<span class="sd">    :param utilized_columns: list of processed columns</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">not_utilized_columns</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">column_name</span> <span class="k">for</span> <span class="n">column_name</span> <span class="ow">in</span> <span class="n">headers</span> <span class="k">if</span> <span class="n">column_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">utilized_columns</span>
+    <span class="p">]</span>
+    <span class="k">for</span> <span class="n">not_utilized_column</span> <span class="ow">in</span> <span class="n">not_utilized_columns</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">record</span><span class="p">[</span><span class="n">not_utilized_column</span><span class="p">]:</span>
+            <span class="n">ao</span><span class="o">.</span><span class="n">add_user_annotation</span><span class="p">(</span><span class="n">not_utilized_column</span><span class="p">,</span> <span class="n">record</span><span class="p">[</span><span class="n">not_utilized_column</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="add_parent_node_names">
+<a class="viewcode-back" href="../../../source/cas.ingest.html#cas.ingest.ingest_user_table.add_parent_node_names">[docs]</a>
+<span class="k">def</span> <span class="nf">add_parent_node_names</span><span class="p">(</span><span class="n">ao</span><span class="p">,</span> <span class="n">ao_names</span><span class="p">,</span> <span class="n">cas</span><span class="p">,</span> <span class="n">parents</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates parent nodes if necessary and creates a cluster hierarchy through assigning parent_node_names.</span>
+<span class="sd">    :param ao: current annotation object</span>
+<span class="sd">    :param ao_names: list of all created annotation objects</span>
+<span class="sd">    :param cas: main object</span>
+<span class="sd">    :param parents: list of current annotation object&#39;s parents</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">parents</span><span class="p">:</span>
+        <span class="c1"># get first non-null parent</span>
+        <span class="n">direct_parent</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">parents</span> <span class="k">if</span> <span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ao</span><span class="o">.</span><span class="n">parent_cell_set_name</span> <span class="o">=</span> <span class="n">direct_parent</span><span class="o">.</span><span class="n">cell_label</span>
+        <span class="n">prev</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">parents</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">parent</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">prev</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="n">parent</span><span class="o">.</span><span class="n">parent_cell_set_name</span>
+                        <span class="ow">and</span> <span class="n">parent</span><span class="o">.</span><span class="n">parent_cell_set_name</span> <span class="o">!=</span> <span class="n">prev</span><span class="o">.</span><span class="n">cell_label</span>
+                        <span class="ow">and</span> <span class="n">parent</span><span class="o">.</span><span class="n">cell_label</span> <span class="o">!=</span> <span class="n">prev</span><span class="o">.</span><span class="n">cell_label</span>
+                    <span class="p">):</span>
+                        <span class="nb">print</span><span class="p">(</span>
+                            <span class="s2">&quot;Annotation </span><span class="si">{}</span><span class="s2"> has multiple parents: </span><span class="si">{}</span><span class="s2"> and </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                <span class="n">parent</span><span class="o">.</span><span class="n">cell_label</span><span class="p">,</span>
+                                <span class="n">parent</span><span class="o">.</span><span class="n">parent_cell_set_name</span><span class="p">,</span>
+                                <span class="n">prev</span><span class="o">.</span><span class="n">cell_label</span><span class="p">,</span>
+                            <span class="p">)</span>
+                        <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">parent</span><span class="o">.</span><span class="n">cell_label</span> <span class="o">!=</span> <span class="n">prev</span><span class="o">.</span><span class="n">cell_label</span><span class="p">:</span>  <span class="c1"># avoid self-references</span>
+                        <span class="n">parent</span><span class="o">.</span><span class="n">parent_cell_set_name</span> <span class="o">=</span> <span class="n">prev</span><span class="o">.</span><span class="n">cell_label</span>
+                <span class="n">prev</span> <span class="o">=</span> <span class="n">parent</span>
+                <span class="k">if</span> <span class="n">parent</span><span class="o">.</span><span class="n">cell_label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ao_names</span><span class="p">:</span>
+                    <span class="n">cas</span><span class="o">.</span><span class="n">add_annotation_object</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+                    <span class="n">ao_names</span><span class="p">[</span><span class="n">parent</span><span class="o">.</span><span class="n">cell_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">parent</span></div>
+
+
+
+<div class="viewcode-block" id="populate_labelsets">
+<a class="viewcode-back" href="../../../source/cas.ingest.html#cas.ingest.ingest_user_table.populate_labelsets">[docs]</a>
+<span class="k">def</span> <span class="nf">populate_labelsets</span><span class="p">(</span><span class="n">cas</span><span class="p">,</span> <span class="n">config_fields</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Populates labelsets list based on the fields of the config.</span>
+<span class="sd">    :param cas: main object</span>
+<span class="sd">    :param config_fields: config file fields</span>
+<span class="sd">    :return: ranks of the labelsets</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">labelsets</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">ranks</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">config_fields</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;cell_set&quot;</span> <span class="ow">or</span> <span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;cluster_name&quot;</span><span class="p">:</span>
+            <span class="n">label_set</span> <span class="o">=</span> <span class="n">Labelset</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="s2">&quot;rank&quot;</span> <span class="ow">in</span> <span class="n">field</span><span class="p">:</span>
+                <span class="n">label_set</span><span class="o">.</span><span class="n">rank</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">])</span>
+                <span class="n">ranks</span><span class="p">[</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">])</span>
+            <span class="n">labelsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label_set</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">labelsets</span><span class="p">:</span>
+        <span class="n">cas</span><span class="o">.</span><span class="n">labelsets</span> <span class="o">=</span> <span class="n">labelsets</span>
+    <span class="k">return</span> <span class="n">ranks</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Huseyin Kir, Ugur Bayindir.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

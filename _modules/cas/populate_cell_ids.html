@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cas.populate_cell_ids &mdash; cas-tools 1.0.7 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=46dfa7f5"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            cas-tools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">CAS Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli.html">CLI Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/index.html">cas-tools’s documentation!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">cas-tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">cas.populate_cell_ids</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for cas.populate_cell_ids</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">anndata</span>
+
+<span class="kn">from</span> <span class="nn">cas.file_utils</span> <span class="kn">import</span> <span class="n">read_anndata_file</span><span class="p">,</span> <span class="n">read_json_file</span>
+
+
+<div class="viewcode-block" id="populate_cell_ids">
+<a class="viewcode-back" href="../../source/cas.html#cas.populate_cell_ids.populate_cell_ids">[docs]</a>
+<span class="k">def</span> <span class="nf">populate_cell_ids</span><span class="p">(</span><span class="n">cas_json_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">anndata_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">labelsets</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Add/update CellIDs to CAS from matching AnnData file.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        cas_json_path: path to CAS JSON file</span>
+<span class="sd">        anndata_path: path to anndata file</span>
+<span class="sd">        labelsets: List of labelsets to update with IDs from AnnData. If value is null, rank &#39;0&#39; labelset is used.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ad</span> <span class="o">=</span> <span class="n">read_anndata_file</span><span class="p">(</span><span class="n">anndata_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ad</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">cas</span> <span class="o">=</span> <span class="n">read_json_file</span><span class="p">(</span><span class="n">cas_json_path</span><span class="p">)</span>
+        <span class="n">cas</span> <span class="o">=</span> <span class="n">add_cell_ids</span><span class="p">(</span><span class="n">cas</span><span class="p">,</span> <span class="n">ad</span><span class="p">,</span> <span class="n">labelsets</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cas</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cas_json_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+                <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">cas</span><span class="p">,</span> <span class="n">json_file</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Anndata read operation failed: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">anndata_path</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="add_cell_ids">
+<a class="viewcode-back" href="../../source/cas.html#cas.populate_cell_ids.add_cell_ids">[docs]</a>
+<span class="k">def</span> <span class="nf">add_cell_ids</span><span class="p">(</span><span class="n">cas</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">ad</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">anndata</span><span class="o">.</span><span class="n">AnnData</span><span class="p">],</span> <span class="n">labelsets</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Add/update CellIDs to CAS from matching AnnData file.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        cas: CAS JSON object</span>
+<span class="sd">        ad: anndata object</span>
+<span class="sd">        labelsets: List of labelsets to update with IDs from AnnData. If value is null, rank &#39;0&#39; labelset is used. The</span>
+<span class="sd">        labelsets should be provided in order, starting from rank 0 (leaf nodes) and ascending to higher ranks.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rank_zero_labelset</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">lbl_set</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">lbl_set</span> <span class="ow">in</span> <span class="n">cas</span><span class="p">[</span><span class="s2">&quot;labelsets&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cas</span><span class="p">[</span><span class="s2">&quot;labelsets&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rank&quot;</span><span class="p">),</span> <span class="nb">int</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="n">lbl_set</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rank&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="ow">or</span> <span class="n">lbl_set</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rank&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;0&quot;</span>
+    <span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">labelsets</span><span class="p">:</span>
+        <span class="n">labelsets</span> <span class="o">=</span> <span class="n">rank_zero_labelset</span>
+
+    <span class="n">cluster_identifier_column</span> <span class="o">=</span> <span class="n">get_obs_cluster_identifier_column</span><span class="p">(</span>
+        <span class="n">ad</span><span class="p">,</span> <span class="n">labelsets</span><span class="p">,</span> <span class="n">rank_zero_labelset</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">cluster_identifier_column</span><span class="p">:</span>
+        <span class="n">cid_lookup</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">anno</span> <span class="ow">in</span> <span class="n">cas</span><span class="p">[</span><span class="s2">&quot;annotations&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">anno</span><span class="p">[</span><span class="s2">&quot;labelset&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">rank_zero_labelset</span> <span class="ow">and</span> <span class="n">anno</span><span class="p">[</span><span class="s2">&quot;labelset&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">labelsets</span><span class="p">:</span>
+                <span class="n">cell_ids</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">if</span> <span class="n">cluster_identifier_column</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span>
+                    <span class="s2">&quot;_id&quot;</span>
+                <span class="p">)</span> <span class="ow">or</span> <span class="n">cluster_identifier_column</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot; id&quot;</span><span class="p">):</span>
+                    <span class="c1"># cluster column value is integer cluster id</span>
+                    <span class="n">cluster_id</span> <span class="o">=</span> <span class="n">anno</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;author_annotation_fields&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                        <span class="n">cluster_identifier_column</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">cluster_id</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                            <span class="s2">&quot;AnnData cluster identifier column (</span><span class="si">{}</span><span class="s2">) couldn&#39;t be find found in&quot;</span>
+                            <span class="s2">&quot;CAS author_annotation_fields.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                <span class="n">cluster_identifier_column</span>
+                            <span class="p">)</span>
+                        <span class="p">)</span>
+                    <span class="n">cell_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+                        <span class="n">ad</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+                            <span class="n">ad</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="n">cluster_identifier_column</span><span class="p">]</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">cluster_id</span><span class="p">),</span>
+                            <span class="n">cluster_identifier_column</span><span class="p">,</span>
+                        <span class="p">]</span><span class="o">.</span><span class="n">index</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># cluster column value is cell label</span>
+                    <span class="n">cluster_label</span> <span class="o">=</span> <span class="n">anno</span><span class="p">[</span><span class="s2">&quot;cell_label&quot;</span><span class="p">]</span>
+                    <span class="n">cell_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+                        <span class="n">ad</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+                            <span class="n">ad</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="n">cluster_identifier_column</span><span class="p">]</span> <span class="o">==</span> <span class="n">cluster_label</span>
+                        <span class="p">]</span><span class="o">.</span><span class="n">index</span>
+                    <span class="p">)</span>
+                <span class="n">anno</span><span class="p">[</span><span class="s2">&quot;cell_ids&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cell_ids</span>
+                <span class="k">if</span> <span class="s2">&quot;parent_cell_set_name&quot;</span> <span class="ow">in</span> <span class="n">anno</span><span class="p">:</span>
+                    <span class="n">lookup_key</span> <span class="o">=</span> <span class="n">anno</span><span class="p">[</span><span class="s2">&quot;parent_cell_set_name&quot;</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">lookup_key</span> <span class="ow">in</span> <span class="n">cid_lookup</span><span class="p">:</span>
+                        <span class="n">cid_lookup</span><span class="p">[</span><span class="n">lookup_key</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cell_ids</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">cid_lookup</span><span class="p">[</span><span class="n">lookup_key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">cell_ids</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">anno</span> <span class="ow">in</span> <span class="n">cas</span><span class="p">[</span><span class="s2">&quot;annotations&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">anno</span><span class="p">[</span><span class="s2">&quot;labelset&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">labelsets</span> <span class="ow">and</span> <span class="n">anno</span><span class="p">[</span><span class="s2">&quot;cell_label&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">cid_lookup</span><span class="p">:</span>
+                <span class="n">cell_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cid_lookup</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">anno</span><span class="p">[</span><span class="s2">&quot;cell_label&quot;</span><span class="p">],</span> <span class="p">[]))</span>
+                <span class="n">anno</span><span class="p">[</span><span class="s2">&quot;cell_ids&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cell_ids</span>
+
+        <span class="k">return</span> <span class="n">cas</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;WARN: Cluster identifier column couldn&#39;t be identified in OBS. Populate cell ids operation is aborted.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="get_obs_cluster_identifier_column">
+<a class="viewcode-back" href="../../source/cas.html#cas.populate_cell_ids.get_obs_cluster_identifier_column">[docs]</a>
+<span class="k">def</span> <span class="nf">get_obs_cluster_identifier_column</span><span class="p">(</span>
+    <span class="n">ad</span><span class="p">,</span> <span class="n">labelsets</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">rank_zero_labelset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Anndata files may use different column names to uniquely identify Clusters. Get the cluster identifier column name for the current file.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        ad: anndata object</span>
+<span class="sd">        labelsets: List of labelsets to update with IDs from AnnData. The labelsets should be provided in order,</span>
+<span class="sd">        starting from rank 0 (leaf nodes) and ascending to higher ranks.</span>
+<span class="sd">        rank_zero_labelset: rank 0 labelset name</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        cluster identifier column name</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">obs_keys</span> <span class="o">=</span> <span class="n">ad</span><span class="o">.</span><span class="n">obs_keys</span><span class="p">()</span>
+    <span class="n">cluster_identifier_column</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">labelsets</span> <span class="ow">and</span> <span class="n">labelsets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">obs_keys</span><span class="p">:</span>
+        <span class="n">cluster_identifier_column</span> <span class="o">=</span> <span class="n">labelsets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># check id variants</span>
+        <span class="k">if</span> <span class="n">rank_zero_labelset</span><span class="o">.</span><span class="n">title</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;_id&quot;</span> <span class="ow">in</span> <span class="n">obs_keys</span><span class="p">:</span>
+            <span class="n">cluster_identifier_column</span> <span class="o">=</span> <span class="n">rank_zero_labelset</span><span class="o">.</span><span class="n">title</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;_id&quot;</span>
+        <span class="k">elif</span> <span class="n">rank_zero_labelset</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;_id&quot;</span> <span class="ow">in</span> <span class="n">obs_keys</span><span class="p">:</span>
+            <span class="n">cluster_identifier_column</span> <span class="o">=</span> <span class="n">rank_zero_labelset</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;_id&quot;</span>
+        <span class="k">elif</span> <span class="n">rank_zero_labelset</span><span class="o">.</span><span class="n">title</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot; id&quot;</span> <span class="ow">in</span> <span class="n">obs_keys</span><span class="p">:</span>
+            <span class="n">cluster_identifier_column</span> <span class="o">=</span> <span class="n">rank_zero_labelset</span><span class="o">.</span><span class="n">title</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot; id&quot;</span>
+        <span class="k">elif</span> <span class="n">rank_zero_labelset</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot; id&quot;</span> <span class="ow">in</span> <span class="n">obs_keys</span><span class="p">:</span>
+            <span class="n">cluster_identifier_column</span> <span class="o">=</span> <span class="n">rank_zero_labelset</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot; id&quot;</span>
+    <span class="k">return</span> <span class="n">cluster_identifier_column</span></div>
+
+
+
+<span class="c1"># def populate_cell_ids(cas_json_path: str, anndata_path: str, labelsets: list = None):</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     Add/update CellIDs to CAS from matching AnnData file.</span>
+<span class="c1">#</span>
+<span class="c1">#     Parameters:</span>
+<span class="c1">#         cas_json_path: path to CAS JSON file</span>
+<span class="c1">#         anndata_path: path to anndata file</span>
+<span class="c1">#         labelsets: List of labelsets to update with IDs from AnnData. If value is null, rank &#39;0&#39; labelset is used.</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     ad = read_anndata_file(anndata_path)</span>
+<span class="c1">#     cas = read_json_file(cas_json_path)</span>
+<span class="c1">#</span>
+<span class="c1">#     if not labelsets:</span>
+<span class="c1">#         labelsets = [lbl_set[&quot;name&quot;] for lbl_set in cas[&quot;labelsets&quot;] if lbl_set[&quot;rank&quot;] == &quot;0&quot;]</span>
+<span class="c1">#</span>
+<span class="c1">#     print(labelsets)</span>
+<span class="c1">#     out = {}</span>
+<span class="c1">#     for k, v in ad.obs.iterrows():</span>
+<span class="c1">#         for r in labelsets:</span>
+<span class="c1">#             val = v[r]</span>
+<span class="c1">#             if val:</span>
+<span class="c1">#                 if not r in out.keys(): out[r] = {}</span>
+<span class="c1">#                 if not val in out[r].keys(): out[r][val] = []</span>
+<span class="c1">#                 out[r][v[r]].append(k)</span>
+<span class="c1">#</span>
+<span class="c1">#     for a in cas[&#39;annotations&#39;]:</span>
+<span class="c1">#         if not (a[&#39;labelset&#39;] in out.keys()):</span>
+<span class="c1">#             print(&quot;Unknown labelset %s&quot;, (a[&#39;labelset&#39;]))</span>
+<span class="c1">#         elif not (a[&#39;cell_label&#39;]) in out[a[&#39;labelset&#39;]].keys():</span>
+<span class="c1">#             print(&quot;Unknown value %s in labelset %s&quot;, (a[&#39;cell_label&#39;], a[&#39;labelset&#39;]))</span>
+<span class="c1">#         else:</span>
+<span class="c1">#             a[&#39;cell_ids&#39;] = out[a[&#39;labelset&#39;]][a[&#39;cell_label&#39;]]</span>
+<span class="c1">#</span>
+<span class="c1">#     with open(cas_json_path, &#39;w&#39;) as f:</span>
+<span class="c1">#         f.write(json.dumps(cas))</span>
+<span class="c1">#</span>
+<span class="c1">#     ad.file.close()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Huseyin Kir, Ugur Bayindir.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

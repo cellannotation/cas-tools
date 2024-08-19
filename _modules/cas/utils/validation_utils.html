@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cas.utils.validation_utils &mdash; cas-tools 1.0.7 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=46dfa7f5"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            cas-tools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">CAS Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cli.html">CLI Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/index.html">cas-tools’s documentation!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">cas-tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">cas.utils.validation_utils</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for cas.utils.validation_utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># Configure logging</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="validate_markers">
+<a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.validation_utils.validate_markers">[docs]</a>
+<span class="k">def</span> <span class="nf">validate_markers</span><span class="p">(</span>
+    <span class="n">cas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">adata</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">marker_column</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Validates if the specified marker column in the anndata DataFrame contains all markers mentioned in the</span>
+<span class="sd">    &#39;annotations&#39; in CAS dictionary. Raises an exception if the marker column does not exist.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cas : A dictionary containing various configurations and annotations, including marker gene evidence.</span>
+<span class="sd">        adata : An anndata DataFrame.</span>
+<span class="sd">        marker_column : The name of the column in `adata.var` which contains the list of marker genes to be validated.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Returns True if all markers are validated without any issue, False or an exception otherwise.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        KeyError: If the specified `marker_column` is not found in `adata.var`.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        This function uses the `validate_labelset_markers` to perform the actual validation per annotation entry in</span>
+<span class="sd">        `cas`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">marker_column</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">adata</span><span class="o">.</span><span class="n">var</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">marker_column</span><span class="si">}</span><span class="s2"> key does not exist in anndata.var!&quot;</span><span class="p">)</span>
+
+    <span class="n">marker_list</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">var</span><span class="p">[</span><span class="n">marker_column</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">annotations</span> <span class="o">=</span> <span class="n">cas</span><span class="p">[</span><span class="s2">&quot;annotations&quot;</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">annotations</span><span class="p">:</span>
+        <span class="n">validate_labelset_markers</span><span class="p">(</span><span class="n">annotation</span><span class="p">,</span> <span class="n">marker_list</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+
+<div class="viewcode-block" id="validate_labelset_markers">
+<a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.validation_utils.validate_labelset_markers">[docs]</a>
+<span class="k">def</span> <span class="nf">validate_labelset_markers</span><span class="p">(</span><span class="n">annotation</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">marker_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Validates if the markers from a specific annotation are present in the provided marker list. Logs a warning if</span>
+<span class="sd">    any markers are missing.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        annotation : A single annotation entry from CAS.</span>
+<span class="sd">        marker_list : A list of marker genes to be checked against the markers in the annotation.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        This function does not return a value but will log a warning if validation fails.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        This function is intended to be used within `validate_markers` to handle individual annotation validation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">marker_gene_evidence_list</span> <span class="o">=</span> <span class="n">annotation</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;marker_gene_evidence&quot;</span><span class="p">,</span> <span class="p">[])</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">marker_gene_evidence_list</span> <span class="ow">or</span> <span class="n">marker_gene_evidence_list</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">marker_gene_evidence_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">marker_gene_evidence_list</span><span class="p">)</span>
+    <span class="n">marker_list_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">marker_list</span><span class="p">)</span>
+
+    <span class="c1"># Determine the missing marker genes</span>
+    <span class="n">missing_markers</span> <span class="o">=</span> <span class="n">marker_gene_evidence_set</span> <span class="o">-</span> <span class="n">marker_list_set</span>
+
+    <span class="k">if</span> <span class="n">missing_markers</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Not all marker genes from </span><span class="si">{</span><span class="n">annotation</span><span class="p">[</span><span class="s1">&#39;labelset&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">annotation</span><span class="p">[</span><span class="s1">&#39;cell_label&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> pair exist in anndata&#39;s var section. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Missing markers: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing_markers</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Huseyin Kir, Ugur Bayindir.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

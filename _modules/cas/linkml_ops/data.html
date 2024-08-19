@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cas.linkml_ops.data &mdash; cas-tools 1.0.7 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=46dfa7f5"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            cas-tools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">CAS Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cli.html">CLI Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/index.html">cas-tools’s documentation!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">cas-tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">cas.linkml_ops.data</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for cas.linkml_ops.data</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">rdflib</span>
+<span class="kn">from</span> <span class="nn">linkml</span> <span class="kn">import</span> <span class="n">generators</span>
+<span class="kn">from</span> <span class="nn">linkml.validator</span> <span class="kn">import</span> <span class="n">Validator</span>
+<span class="kn">from</span> <span class="nn">linkml_runtime</span> <span class="kn">import</span> <span class="n">SchemaView</span>
+<span class="kn">from</span> <span class="nn">linkml_runtime.dumpers</span> <span class="kn">import</span> <span class="n">rdflib_dumper</span>
+<span class="kn">from</span> <span class="nn">linkml_runtime.linkml_model</span> <span class="kn">import</span> <span class="n">SchemaDefinition</span>
+<span class="kn">from</span> <span class="nn">linkml_runtime.loaders</span> <span class="kn">import</span> <span class="n">yaml_loader</span>
+<span class="kn">from</span> <span class="nn">linkml_runtime.utils.compile_python</span> <span class="kn">import</span> <span class="n">compile_python</span>
+
+<span class="kn">from</span> <span class="nn">cas.file_utils</span> <span class="kn">import</span> <span class="n">read_json_file</span>
+<span class="kn">from</span> <span class="nn">cas.linkml_ops.schema</span> <span class="kn">import</span> <span class="n">CAS_NAMESPACE</span><span class="p">,</span> <span class="n">CAS_ROOT_CLASS</span><span class="p">,</span> <span class="n">DEFAULT_PREFIXES</span>
+
+<span class="n">CELL_RELATION</span> <span class="o">=</span> <span class="s2">&quot;has_cellid&quot;</span>
+
+
+<div class="viewcode-block" id="dump_to_rdf">
+<a class="viewcode-back" href="../../../source/cas.linkml_ops.html#cas.linkml_ops.data.dump_to_rdf">[docs]</a>
+<span class="k">def</span> <span class="nf">dump_to_rdf</span><span class="p">(</span>
+    <span class="n">schema</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span>
+    <span class="n">instance</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span>
+    <span class="n">ontology_namespace</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">ontology_iri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">labelsets</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">output_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">include_cells</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">rdflib</span><span class="o">.</span><span class="n">Graph</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Dumps the given data to an RDF file based on the provided schema.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        schema (Union[str, Path, dict]): The schema path, dictionary, or file to be used for RDF generation.</span>
+<span class="sd">        instance (Union[str, dict]): The data JSON file path or JSON object dictionary.</span>
+<span class="sd">        ontology_namespace (str): Namespace of the ontology (e.g., `MTG`).</span>
+<span class="sd">        ontology_iri (str): IRI of the ontology (e.g., `https://purl.brain-bican.org/ontology/AIT_MTG/`).</span>
+<span class="sd">        labelsets (Optional[List[str]]): Labelsets used in the taxonomy, such as `[&quot;Cluster&quot;, &quot;Subclass&quot;, &quot;Class&quot;]`.</span>
+<span class="sd">        output_path (Optional[str]):  Path to the output RDF file, if specified.</span>
+<span class="sd">        validate (bool): Determines if data-schema validation checks will be performed. True by default.</span>
+<span class="sd">        include_cells (bool): Determines if cell data will be included in the RDF output. True by default.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        An RDFlib graph object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">schema_def</span><span class="p">:</span> <span class="n">SchemaDefinition</span> <span class="o">=</span> <span class="n">yaml_loader</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+        <span class="n">schema</span><span class="p">,</span> <span class="n">target_class</span><span class="o">=</span><span class="n">SchemaDefinition</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="n">read_json_file</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
+    <span class="n">instance</span> <span class="o">=</span> <span class="n">remove_empty_strings</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">validate</span><span class="p">:</span>
+        <span class="n">validate_data</span><span class="p">(</span><span class="n">schema_def</span><span class="p">,</span> <span class="n">instance</span><span class="p">)</span>
+    <span class="n">instance</span> <span class="o">=</span> <span class="n">serialise_author_annotation</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
+
+    <span class="n">gen</span> <span class="o">=</span> <span class="n">generators</span><span class="o">.</span><span class="n">PythonGenerator</span><span class="p">(</span><span class="n">schema_def</span><span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">serialize</span><span class="p">()</span>
+    <span class="n">python_module</span> <span class="o">=</span> <span class="n">compile_python</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+    <span class="n">py_target_class</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">python_module</span><span class="p">,</span> <span class="n">CAS_ROOT_CLASS</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">py_inst</span> <span class="o">=</span> <span class="n">py_target_class</span><span class="p">(</span><span class="o">**</span><span class="n">instance</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not instantiate </span><span class="si">{</span><span class="n">py_target_class</span><span class="si">}</span><span class="s2"> from the data; exception: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">prefixes</span> <span class="o">=</span> <span class="n">DEFAULT_PREFIXES</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">prefixes</span><span class="p">[</span><span class="s2">&quot;_base&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ontology_iri</span>
+    <span class="n">prefixes</span><span class="p">[</span><span class="n">ontology_namespace</span><span class="p">]</span> <span class="o">=</span> <span class="n">ontology_iri</span>
+    <span class="n">labelsets</span> <span class="o">=</span> <span class="n">get_labelsets</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">labelsets</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">labelset</span> <span class="ow">in</span> <span class="n">labelsets</span><span class="p">:</span>
+        <span class="n">prefixes</span><span class="p">[</span><span class="n">labelset</span><span class="p">]</span> <span class="o">=</span> <span class="n">ontology_iri</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">labelset</span><span class="si">}</span><span class="s2">#&quot;</span>
+
+    <span class="n">g</span> <span class="o">=</span> <span class="n">rdflib_dumper</span><span class="o">.</span><span class="n">as_rdf_graph</span><span class="p">(</span>
+        <span class="n">py_inst</span><span class="p">,</span>
+        <span class="n">schemaview</span><span class="o">=</span><span class="n">SchemaView</span><span class="p">(</span><span class="n">schema_def</span><span class="p">),</span>
+        <span class="n">prefix_map</span><span class="o">=</span><span class="n">prefixes</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">add_cl_existential_restrictions</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">include_cells</span><span class="p">:</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="kc">None</span><span class="p">,</span> <span class="n">rdflib</span><span class="o">.</span><span class="n">URIRef</span><span class="p">(</span><span class="n">CAS_NAMESPACE</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">CELL_RELATION</span><span class="p">),</span> <span class="kc">None</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">output_path</span><span class="p">:</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;xml&quot;</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="n">output_path</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">g</span></div>
+
+
+
+<div class="viewcode-block" id="get_labelsets">
+<a class="viewcode-back" href="../../../source/cas.linkml_ops.html#cas.linkml_ops.data.get_labelsets">[docs]</a>
+<span class="k">def</span> <span class="nf">get_labelsets</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">labelsets</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gets the labelsets from the instance data if not provided as parameter.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        instance: The instance data.</span>
+<span class="sd">        labelsets: The labelsets to be used.</span>
+<span class="sd">    Returns: The labelsets to be used.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">labelsets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ranked_lblsets</span> <span class="o">=</span> <span class="p">(</span><span class="n">ls</span> <span class="k">for</span> <span class="n">ls</span> <span class="ow">in</span> <span class="n">instance</span><span class="p">[</span><span class="s2">&quot;labelsets&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;rank&quot;</span> <span class="ow">in</span> <span class="n">ls</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ranked_lblsets</span><span class="p">:</span>
+            <span class="n">labelset_objects</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">ranked_lblsets</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">labelset_objects</span> <span class="o">=</span> <span class="n">instance</span><span class="p">[</span><span class="s2">&quot;labelsets&quot;</span><span class="p">]</span>
+        <span class="n">labelsets</span> <span class="o">=</span> <span class="p">[</span><span class="n">ls</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">ls</span> <span class="ow">in</span> <span class="n">labelset_objects</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">labelsets</span></div>
+
+
+
+<div class="viewcode-block" id="add_cl_existential_restrictions">
+<a class="viewcode-back" href="../../../source/cas.linkml_ops.html#cas.linkml_ops.data.add_cl_existential_restrictions">[docs]</a>
+<span class="k">def</span> <span class="nf">add_cl_existential_restrictions</span><span class="p">(</span><span class="n">g</span><span class="p">:</span> <span class="n">rdflib</span><span class="o">.</span><span class="n">Graph</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds existential restrictions to the CL class in the given RDF graph.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        g: The RDF graph to be updated.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sparql_query</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;</span>
+<span class="s2">        PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;</span>
+<span class="s2">        PREFIX owl: &lt;http://www.w3.org/2002/07/owl#&gt;</span>
+<span class="s2">        PREFIX PCL: &lt;http://purl.obolibrary.org/obo/PCL_&gt;</span>
+<span class="s2">        PREFIX RO: &lt;http://purl.obolibrary.org/obo/RO_&gt;</span>
+<span class="s2">        </span>
+<span class="s2">        </span>
+<span class="s2">        DELETE {</span>
+<span class="s2">            ?annotation RO:0002473 ?cl_term .</span>
+<span class="s2">        }</span>
+<span class="s2">        INSERT { </span>
+<span class="s2">            ?annotation rdf:type [</span>
+<span class="s2">                a  owl:Restriction ;</span>
+<span class="s2">               owl:onProperty  RO:0002473 ;</span>
+<span class="s2">               owl:someValuesFrom ?cl_term</span>
+<span class="s2">            ] .</span>
+<span class="s2">        }</span>
+<span class="s2">        WHERE {</span>
+<span class="s2">          ?annotation a PCL:0010001.</span>
+<span class="s2">          ?annotation RO:0002473 ?cl_term .</span>
+<span class="s2">        }</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+    <span class="n">g</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">sparql_query</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="validate_data">
+<a class="viewcode-back" href="../../../source/cas.linkml_ops.html#cas.linkml_ops.data.validate_data">[docs]</a>
+<span class="k">def</span> <span class="nf">validate_data</span><span class="p">(</span><span class="n">schema</span><span class="p">:</span> <span class="n">SchemaDefinition</span><span class="p">,</span> <span class="n">instance</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Validates the given data instance against the specified schema.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        schema (SchemaDefinition): The schema to be used for the validation.</span>
+<span class="sd">        instance (dict): The data instance to be validated.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: Returns `True` if the data is valid; otherwise, logs the validation errors and raises an exception.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">validator</span> <span class="o">=</span> <span class="n">Validator</span><span class="p">(</span><span class="n">schema</span><span class="p">)</span>
+    <span class="n">report</span> <span class="o">=</span> <span class="n">validator</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">report</span><span class="o">.</span><span class="n">results</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Validation errors (</span><span class="si">{}</span><span class="s2">):&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">results</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">report</span><span class="o">.</span><span class="n">results</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Data file is not valid against the schema. </span><span class="si">{}</span><span class="s2"> validation errors found.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">results</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Data file is valid against the schema.&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+
+<div class="viewcode-block" id="populate_ids">
+<a class="viewcode-back" href="../../../source/cas.linkml_ops.html#cas.linkml_ops.data.populate_ids">[docs]</a>
+<span class="k">def</span> <span class="nf">populate_ids</span><span class="p">(</span>
+    <span class="n">instance</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span> <span class="n">ontology_namespace</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ontology_id</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Populates ID fields in the data instance required for RDF conversion. Updates the instance in-place if it is a</span>
+<span class="sd">    dictionary.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        instance (Union[str, Path, dict]): The data JSON file path or JSON object dictionary.</span>
+<span class="sd">        ontology_namespace (str): The namespace of the ontology, such as &#39;MTG&#39;.</span>
+<span class="sd">        ontology_id (str): The ontology ID to be used for the instance, such as &#39;AIT_MTG&#39;.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: A JSON object with populated ID properties.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">Path</span><span class="p">):</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">read_json_file</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No such file: &quot;</span> <span class="o">+</span> <span class="n">instance</span><span class="p">)</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="n">data</span>
+
+    <span class="k">if</span> <span class="s2">&quot;id&quot;</span> <span class="ow">in</span> <span class="n">instance</span> <span class="ow">and</span> <span class="n">instance</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">instance</span>
+
+    <span class="k">if</span> <span class="s2">&quot;id&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">instance</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;CAS:&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ontology_id</span><span class="p">:</span>
+            <span class="n">ontology_id</span> <span class="o">=</span> <span class="s2">&quot;CAS:&quot;</span> <span class="o">+</span> <span class="n">ontology_id</span>
+        <span class="n">instance</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ontology_id</span>
+
+    <span class="k">for</span> <span class="n">labelset</span> <span class="ow">in</span> <span class="n">instance</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;labelsets&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+        <span class="k">if</span> <span class="s2">&quot;id&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">labelset</span><span class="p">:</span>
+            <span class="n">labelset</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ontology_namespace</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">labelset</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="c1"># TODO add id to other properties as well</span>
+
+    <span class="k">return</span> <span class="n">instance</span></div>
+
+
+
+<div class="viewcode-block" id="remove_empty_strings">
+<a class="viewcode-back" href="../../../source/cas.linkml_ops.html#cas.linkml_ops.data.remove_empty_strings">[docs]</a>
+<span class="k">def</span> <span class="nf">remove_empty_strings</span><span class="p">(</span><span class="n">json_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Recursively removes empty strings from the given JSON data.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        json_data (dict): The JSON data to be cleaned.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: JSON data with all empty strings removed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">json_data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="n">key</span><span class="p">:</span> <span class="n">remove_empty_strings</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">json_data</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span>
+        <span class="p">}</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">json_data</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">remove_empty_strings</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">json_data</span> <span class="k">if</span> <span class="n">item</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">json_data</span></div>
+
+
+
+<div class="viewcode-block" id="serialise_author_annotation">
+<a class="viewcode-back" href="../../../source/cas.linkml_ops.html#cas.linkml_ops.data.serialise_author_annotation">[docs]</a>
+<span class="k">def</span> <span class="nf">serialise_author_annotation</span><span class="p">(</span><span class="n">instance</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Author annotations field value is a dict and needs to be serialised to a json string for better representation in RDF.</span>
+<span class="sd">    Serialises the author annotation data in the instance to a json string.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        instance: The instance to be updated.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        The updated instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">instance</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;annotations&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="s2">&quot;author_annotation_fields&quot;</span> <span class="ow">in</span> <span class="n">annotation</span>
+            <span class="ow">and</span> <span class="n">annotation</span><span class="p">[</span><span class="s2">&quot;author_annotation_fields&quot;</span><span class="p">]</span>
+        <span class="p">):</span>
+            <span class="n">annotation</span><span class="p">[</span><span class="s2">&quot;author_annotation_fields&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
+                <span class="n">annotation</span><span class="p">[</span><span class="s2">&quot;author_annotation_fields&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+    <span class="k">return</span> <span class="n">instance</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Huseyin Kir, Ugur Bayindir.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
