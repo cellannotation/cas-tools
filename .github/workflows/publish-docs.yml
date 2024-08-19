@@ -29,8 +29,6 @@ jobs:
           poetry install -E docs
           cd docs
           poetry run make html
-          pwd
-          ls -l build
         env:
           POETRY_VIRTUALENVS_IN_PROJECT: true
 
@@ -40,4 +38,4 @@ jobs:
         with:
           branch: gh-pages
           force: true
-          folder: docs/_build/html
+          folder: docs/build/html
