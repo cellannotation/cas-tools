@@ -1,8 +1,7 @@
 import os
-
+from importlib.metadata import version
 from pathlib import Path
 from typing import get_type_hints
-from importlib.metadata import version
 
 from cas.file_utils import read_config, read_table_to_dict, write_json_file
 from cas.flatten_data_to_tables import serialize_to_tables
@@ -12,7 +11,7 @@ from cas.model import (
     AnnotationTransfer,
     AutomatedAnnotation,
     CellTypeAnnotation,
-    Labelset
+    Labelset,
 )
 
 
@@ -70,7 +69,7 @@ def ingest_user_data(data_file: str, config_file: str):
     utilized_columns = set()
     for record_index in records:
         record = records[record_index]
-        if not all(value == '' for value in record.values()):  # skip empty rows
+        if not all(value == "" for value in record.values()):  # skip empty rows
             ao = Annotation("", "")
             parents = [None] * 10
             for field in config_fields:
@@ -90,7 +89,9 @@ def ingest_user_data(data_file: str, config_file: str):
                     utilized_columns.add(field["column_name"])
                 else:
                     # handle annotation columns
-                    if "typing.List[str]" in str(get_type_hints(ao)[field["column_type"]]):
+                    if "typing.List[str]" in str(
+                        get_type_hints(ao)[field["column_type"]]
+                    ):
                         list_value = str(record[field["column_name"]]).split(",")
                         stripped = list(map(str.strip, list_value))
                         setattr(ao, field["column_type"], stripped)
@@ -176,7 +177,11 @@ def add_parent_node_names(ao, ao_names, cas, parents):
                 if prev:
                     if parent.parent_cell_set_name and parent.parent_cell_set_name != prev.cell_label and parent.cell_label != prev.cell_label:
                         print(
-                            "Annotation {} has multiple parents: {} and {}".format(parent.cell_label, parent.parent_cell_set_name, prev.cell_label)
+                            "Annotation {} has multiple parents: {} and {}".format(
+                                parent.cell_label,
+                                parent.parent_cell_set_name,
+                                prev.cell_label,
+                            )
                         )
                     if parent.cell_label != prev.cell_label:  # avoid self-references
                         parent.parent_cell_set_name = prev.cell_label

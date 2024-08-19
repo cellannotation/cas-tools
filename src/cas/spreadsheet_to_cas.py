@@ -10,7 +10,7 @@ from cas_schema import schemas
 
 from cas.anndata_to_cas import calculate_labelset
 from cas.cxg_utils import download_dataset_with_id
-from cas.file_utils import read_anndata_file
+from cas.file_utils import get_cas_schema_names, read_anndata_file
 from cas.utils.conversion_utils import (
     add_labelsets_to_cas,
     add_parent_cell_hierarchy,
@@ -18,7 +18,6 @@ from cas.utils.conversion_utils import (
     generate_parent_cell_lookup,
     get_cell_ids,
 )
-from cas.file_utils import get_cas_schema_names
 
 logging.basicConfig(level=logging.INFO)
 
@@ -223,12 +222,18 @@ def add_annotations_to_cas(cas, raw_data_result, columns, schema, parent_cell_lo
 
         anno.update(
             {
-                "cell_ids": list(parent_cell_look_up[f"{labelset}:{label}"]["cell_ids"]),
-                "cell_set_accession": parent_cell_look_up[f"{labelset}:{label}"]["accession"],
+                "cell_ids": list(
+                    parent_cell_look_up[f"{labelset}:{label}"]["cell_ids"]
+                ),
+                "cell_set_accession": parent_cell_look_up[f"{labelset}:{label}"][
+                    "accession"
+                ],
                 "cell_ontology_term_id": parent_cell_look_up[f"{labelset}:{label}"][
                     "cell_ontology_term_id"
                 ],
-                "cell_ontology_term": parent_cell_look_up[f"{labelset}:{label}"]["cell_ontology_term"],
+                "cell_ontology_term": parent_cell_look_up[f"{labelset}:{label}"][
+                    "cell_ontology_term"
+                ],
             }
         )
         if user_annotations:

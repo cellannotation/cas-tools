@@ -1,0 +1,41 @@
+name: Publish Documentation
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python -
+          export PATH="$HOME/.poetry/bin:$PATH"
+          poetry --version
+
+      - name: Install Dependencies and Build Documentation
+        run: |
+          poetry install -E docs
+          cd docs
+          poetry run make html
+        env:
+          POETRY_VIRTUALENVS_IN_PROJECT: true
+
+      - name: Deploy documentation.
+        if: ${{ github.event_name == 'push' }}
+        uses: JamesIves/github-pages-deploy-action@v4.3.0
+        with:
+          branch: gh-pages
+          force: true
+          folder: docs/_build/html

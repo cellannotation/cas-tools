@@ -66,7 +66,12 @@ def split_cas(
         parent_cell_dict[parent_cell].append(child_cell)
     if isinstance(split_terms, str):
         split_terms = [split_terms]
-    keys_and_values = list(parent_cell_dict.keys()) + [item for sublist in parent_cell_dict.values() if isinstance(sublist, list) for item in sublist]
+    keys_and_values = list(parent_cell_dict.keys()) + [
+        item
+        for sublist in parent_cell_dict.values()
+        if isinstance(sublist, list)
+        for item in sublist
+    ]
     missing_terms = [term for term in split_terms if term not in keys_and_values]
     if missing_terms:
         raise ValueError(

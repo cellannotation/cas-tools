@@ -7,7 +7,6 @@ import pandas as pd
 from cas.accession.hash_accession_manager import HashAccessionManager, is_hash_accession
 from cas.accession.incremental_accession_manager import IncrementalAccessionManager
 
-
 accession_manager = None
 
 
@@ -265,9 +264,9 @@ def generate_annotation_table(accession_prefix, cta, out_folder):
             else:
                 children = list()
                 children.append(record)
-                std_parent_records_dict[annotation_object["parent_cell_set_name"]] = (
-                    children
-                )
+                std_parent_records_dict[
+                    annotation_object["parent_cell_set_name"]
+                ] = children
         if "parent_cell_set_accession" in annotation_object:
             record["parent_cell_set_accession"] = annotation_object[
                 "parent_cell_set_accession"
@@ -328,7 +327,13 @@ def generate_reviews_table(cta, out_folder):
         std_records_df = pd.DataFrame.from_records(records)
         std_records_df.to_csv(std_data_path, sep="\t", index=False)
     else:
-        row = ["target_node_accession", "datestamp", "reviewer", "review", "explanation"]
+        row = [
+            "target_node_accession",
+            "datestamp",
+            "reviewer",
+            "review",
+            "explanation",
+        ]
         with open(std_data_path, "w") as f_output:
             tsv_output = csv.writer(f_output, delimiter="\t")
             tsv_output.writerow(row)

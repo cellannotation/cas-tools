@@ -3,7 +3,6 @@ from typing import Any, Dict, List
 
 import pandas as pd
 
-
 # Configure logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.WARNING)
@@ -57,9 +56,7 @@ def validate_labelset_markers(annotation: Dict[str, Any], marker_list: List[str]
     Note:
         This function is intended to be used within `validate_markers` to handle individual annotation validation.
     """
-    marker_gene_evidence_list = (
-        annotation.get("marker_gene_evidence", [])
-    )
+    marker_gene_evidence_list = annotation.get("marker_gene_evidence", [])
 
     if not marker_gene_evidence_list or marker_gene_evidence_list == [""]:
         return None

@@ -7,7 +7,7 @@ import pandas as pd
 
 from cas.file_utils import read_json_file
 
-CAT_SET_REQUIRED_COLUMNS = ["label", "name","description", "order"]
+CAT_SET_REQUIRED_COLUMNS = ["label", "name", "description", "order"]
 CAT_REQUIRED_COLUMNS = [
     "cluster_annotation_term_set_label",
     "name",
@@ -179,7 +179,9 @@ def add_annotations(cas: Dict[str, Any], cat: pd.DataFrame):
             "cell_set_accession": cell_set_accession,
             "parent_cell_set_accession": parent_cell_set_accession,
         }
-        cas.get("annotations").append({k: v for k, v in anno.items() if v is not None and not pd.isna(v)})
+        cas.get("annotations").append(
+            {k: v for k, v in anno.items() if v is not None and not pd.isna(v)}
+        )
 
 
 def add_labelsets(cas: Dict[str, Any], cat_set: pd.DataFrame):

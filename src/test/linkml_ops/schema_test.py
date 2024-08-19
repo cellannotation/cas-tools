@@ -7,7 +7,6 @@ from cas.linkml_ops.schema import (
     expand_schema,
 )
 
-
 TESTDATA = os.path.join(
     os.path.dirname(os.path.realpath(__file__)), "../test_data/linkml/"
 )
@@ -16,7 +15,6 @@ RAW_LINKML_SCHEMA = os.path.join(TESTDATA, "BICAN-schema-raw.yaml")
 
 
 class LinkMLSchemaCase(unittest.TestCase):
-
     @classmethod
     def tearDownClass(cls):
         if os.path.isfile(RAW_LINKML_SCHEMA):

@@ -7,8 +7,8 @@ from cas.utils.conversion_utils import (
     add_parent_cell_hierarchy,
     add_parent_hierarchy_to_annotations,
     calculate_labelset,
-    get_authors_from_doi,
     generate_parent_cell_lookup,
+    get_authors_from_doi,
 )
 
 
@@ -129,12 +129,18 @@ def add_annotations_to_cas(
                 "labelset": labelset,
                 "cell_label": label,
                 "cell_fullname": label,
-                "cell_set_accession": parent_cell_look_up[f"{labelset}:{label}"]["accession"],
+                "cell_set_accession": parent_cell_look_up[f"{labelset}:{label}"][
+                    "accession"
+                ],
                 "cell_ontology_term_id": parent_cell_look_up[f"{labelset}:{label}"][
                     "cell_ontology_term_id"
                 ],
-                "cell_ontology_term": parent_cell_look_up[f"{labelset}:{label}"]["cell_ontology_term"],
-                "cell_ids": list(parent_cell_look_up[f"{labelset}:{label}"]["cell_ids"]),
+                "cell_ontology_term": parent_cell_look_up[f"{labelset}:{label}"][
+                    "cell_ontology_term"
+                ],
+                "cell_ids": list(
+                    parent_cell_look_up[f"{labelset}:{label}"]["cell_ids"]
+                ),
                 "rationale": rationale,
                 "rationale_dois": rationale_dois,
                 "marker_gene_evidence": marker_gene_evidence,
