@@ -16,13 +16,41 @@ class TestCASSplitter(unittest.TestCase):
                 {"cell_set_accession": "X", "labelset": "Alpha"},
                 {"cell_set_accession": "Y", "labelset": "Alpha"},
                 {"cell_set_accession": "Z", "labelset": "Alpha"},
-                {"cell_set_accession": "A", "parent_cell_set_accession": "X", "labelset": "Beta"},
-                {"cell_set_accession": "B", "parent_cell_set_accession": "Y", "labelset": "Beta"},
-                {"cell_set_accession": "BB", "parent_cell_set_accession": "Y", "labelset": "Beta"},
-                {"cell_set_accession": "C", "parent_cell_set_accession": "Z", "labelset": "Beta"},
-                {"cell_set_accession": "A1", "parent_cell_set_accession": "A", "labelset": "Gamma"},
-                {"cell_set_accession": "B1", "parent_cell_set_accession": "B", "labelset": "Gamma"},
-                {"cell_set_accession": "B2", "parent_cell_set_accession": "BB", "labelset": "Gamma"},
+                {
+                    "cell_set_accession": "A",
+                    "parent_cell_set_accession": "X",
+                    "labelset": "Beta",
+                },
+                {
+                    "cell_set_accession": "B",
+                    "parent_cell_set_accession": "Y",
+                    "labelset": "Beta",
+                },
+                {
+                    "cell_set_accession": "BB",
+                    "parent_cell_set_accession": "Y",
+                    "labelset": "Beta",
+                },
+                {
+                    "cell_set_accession": "C",
+                    "parent_cell_set_accession": "Z",
+                    "labelset": "Beta",
+                },
+                {
+                    "cell_set_accession": "A1",
+                    "parent_cell_set_accession": "A",
+                    "labelset": "Gamma",
+                },
+                {
+                    "cell_set_accession": "B1",
+                    "parent_cell_set_accession": "B",
+                    "labelset": "Gamma",
+                },
+                {
+                    "cell_set_accession": "B2",
+                    "parent_cell_set_accession": "BB",
+                    "labelset": "Gamma",
+                },
             ],
             "labelsets": [{"name": "Alpha"}, {"name": "Beta"}, {"name": "Gamma"}],
         }

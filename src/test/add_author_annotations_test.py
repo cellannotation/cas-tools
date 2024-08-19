@@ -138,4 +138,6 @@ class TestAuthorAnnotations(unittest.TestCase):
         updated_cas = add_author_annotations(
             self.cas, df, "cell_set_accession", ["extra_data"]
         )
-        self.assertIsNone(updated_cas["annotations"][1]["author_annotation_fields"]["extra_data"])
+        self.assertIsNone(
+            updated_cas["annotations"][1]["author_annotation_fields"]["extra_data"]
+        )

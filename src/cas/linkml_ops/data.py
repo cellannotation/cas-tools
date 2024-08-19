@@ -1,19 +1,18 @@
-import rdflib
 import json
-
 from pathlib import Path
-from typing import Union, Optional, List
+from typing import List, Optional, Union
 
-from cas.linkml_ops.schema import CAS_ROOT_CLASS, DEFAULT_PREFIXES, CAS_NAMESPACE
-from cas.file_utils import read_json_file
-
-from linkml_runtime.utils.compile_python import compile_python
-from linkml_runtime.linkml_model import SchemaDefinition
-from linkml_runtime import SchemaView
-from linkml_runtime.loaders import yaml_loader
-from linkml_runtime.dumpers import rdflib_dumper
-from linkml.validator import Validator
+import rdflib
 from linkml import generators
+from linkml.validator import Validator
+from linkml_runtime import SchemaView
+from linkml_runtime.dumpers import rdflib_dumper
+from linkml_runtime.linkml_model import SchemaDefinition
+from linkml_runtime.loaders import yaml_loader
+from linkml_runtime.utils.compile_python import compile_python
+
+from cas.file_utils import read_json_file
+from cas.linkml_ops.schema import CAS_NAMESPACE, CAS_ROOT_CLASS, DEFAULT_PREFIXES
 
 CELL_RELATION = "has_cellid"
 
@@ -232,6 +231,11 @@ def serialise_author_annotation(instance: dict) -> dict:
         The updated instance.
     """
     for annotation in instance.get("annotations", []):
-        if "author_annotation_fields" in annotation and annotation["author_annotation_fields"]:
-            annotation["author_annotation_fields"] = json.dumps(annotation["author_annotation_fields"])
+        if (
+            "author_annotation_fields" in annotation
+            and annotation["author_annotation_fields"]
+        ):
+            annotation["author_annotation_fields"] = json.dumps(
+                annotation["author_annotation_fields"]
+            )
     return instance

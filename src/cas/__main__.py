@@ -8,12 +8,12 @@ from cas.add_author_annotations import add_author_annotations_from_file
 from cas.anndata_conversion import merge
 from cas.anndata_splitter import split_anndata_to_file
 from cas.anndata_to_cas import anndata2cas
+from cas.cas_splitter import split_cas_to_file
+from cas.cas_to_rdf import export_to_rdf
 from cas.flatten_data_to_anndata import flatten, unflatten
 from cas.populate_cell_ids import populate_cell_ids
 from cas.spreadsheet_to_cas import spreadsheet2cas
 from cas.validate import validate as schema_validate
-from cas.cas_to_rdf import export_to_rdf
-from cas.cas_splitter import split_cas_to_file
 
 warnings.filterwarnings("always")
 
@@ -68,15 +68,19 @@ def main():
         output_anndata_path = args.output_anndata
         output_json_path = args.output_json
 
-        if output_anndata_path and os.path.abspath(anndata_file_path) == os.path.abspath(
-            output_anndata_path
-        ):
+        if output_anndata_path and os.path.abspath(
+            anndata_file_path
+        ) == os.path.abspath(output_anndata_path):
             raise ValueError("--anndata and --output_anndata cannot be the same")
-        if json_file_path and output_json_path and os.path.abspath(json_file_path) == os.path.abspath(
-            output_json_path
+        if (
+            json_file_path
+            and output_json_path
+            and os.path.abspath(json_file_path) == os.path.abspath(output_json_path)
         ):
             raise ValueError("--json and --output_json cannot be the same")
-        unflatten(json_file_path, anndata_file_path, output_anndata_path, output_json_path)
+        unflatten(
+            json_file_path, anndata_file_path, output_anndata_path, output_json_path
+        )
     elif args.action == "spreadsheet2cas":
         args = parser.parse_args()
         spreadsheet_file_path = args.spreadsheet
@@ -147,13 +151,15 @@ def main():
         if args.join_on:
             join_column = args.join_on
         elif args.join_on_cellset_ids:
-            join_column = 'cell_set_accession'
+            join_column = "cell_set_accession"
         elif args.join_on_labelset_label:
-            join_column = ['labelset', 'cell_label']
+            join_column = ["labelset", "cell_label"]
         else:
             raise ValueError("No valid join column specified.")
 
-        add_author_annotations_from_file(args.cas_json, args.csv, join_column, args.columns, args.output)
+        add_author_annotations_from_file(
+            args.cas_json, args.csv, join_column, args.columns, args.output
+        )
     elif args.action == "split_cas":
         cas_json_path = args.cas_json
         split_terms = args.split_on
@@ -225,7 +231,7 @@ def create_flatten_operation_parser(subparsers):
     parser_flatten = subparsers.add_parser(
         "flatten",
         description="Flattens all content of CAS annotations to an AnnData file.",
-        help="Flattens all content of CAS annotations to obs key:value pairs."
+        help="Flattens all content of CAS annotations to obs key:value pairs.",
     )
 
     parser_flatten.add_argument("--json", required=True, help="Input JSON file path")
@@ -259,30 +265,30 @@ def create_unflatten_operation_parser(subparsers):
     parser_unflatten = subparsers.add_parser(
         "unflatten",
         description="Unflattens all content of a flattened AnnData file to a CAS JSON file. Also creates an "
-                    "unflattened AnnData file.",
-        help="Converts flattened AnnData content back to unflattened version and creates CAS JSON files."
+        "unflattened AnnData file.",
+        help="Converts flattened AnnData content back to unflattened version and creates CAS JSON files.",
     )
 
     parser_unflatten.add_argument(
         "--anndata",
         required=True,
-        help="Path to the input AnnData file that contains flattened data."
+        help="Path to the input AnnData file that contains flattened data.",
     )
     parser_unflatten.add_argument(
         "--json",
         required=False,
-        help="Optional path to the CAS JSON file. If not provided, annotations in 'uns' of the AnnData will be used."
+        help="Optional path to the CAS JSON file. If not provided, annotations in 'uns' of the AnnData will be used.",
     )
     parser_unflatten.add_argument(
         "--output_anndata",
         required=False,
-        help="Optional output AnnData file name. If not provided, 'unflattened.h5ad' will be used as default name."
+        help="Optional output AnnData file name. If not provided, 'unflattened.h5ad' will be used as default name.",
     )
     parser_unflatten.add_argument(
         "--output_json",
         required=False,
-        default='cas.json',
-        help="Optional output CAS JSON file name. If not provided, 'cas.json' will be used as the default file name."
+        default="cas.json",
+        help="Optional output CAS JSON file name. If not provided, 'cas.json' will be used as the default file name.",
     )
 
 
@@ -555,7 +561,6 @@ def create_cas2rdf_operation_parser(subparsers):
         description="CAS to RDF convertor.",
         help="Converts given CAS data into RDF format.",
         usage="cas cas2rdf --schema bican --data path/to/file.json --ontology_ns MTG --ontology_iri https://purl.brain-bican.org/ontology/AIT_MTG/ --labelsets Cluster Subclass Class --out path/to/output.rdf --exclude_cells",
-
     )
 
     parser_cas2rdf.add_argument(
@@ -638,7 +643,7 @@ def create_add_author_annotations_parser(subparsers):
     parser_add_annotations = subparsers.add_parser(
         "add_author_annotations",
         description="Add author annotation fields to a CAS JSON file from specified CSV columns. If no columns are specified, all columns are used.",
-        help="Adds annotation fields from CSV to a specified CAS JSON file, using all columns if none are specified."
+        help="Adds annotation fields from CSV to a specified CAS JSON file, using all columns if none are specified.",
     )
     parser_add_annotations.add_argument(
         "--cas_json", required=True, help="Path to the CAS JSON file to be annotated."
@@ -647,19 +652,24 @@ def create_add_author_annotations_parser(subparsers):
         "--csv", required=True, help="Path to the CSV file containing annotation data."
     )
     parser_add_annotations.add_argument(
-        "--join_on", help="Specifies the single column name in the CSV used for matching records. Each row must have a unique value in this column."
+        "--join_on",
+        help="Specifies the single column name in the CSV used for matching records. Each row must have a unique value in this column.",
     )
     parser_add_annotations.add_argument(
-        "--join_on_cellset_ids", action='store_true', help="Use 'cell_ids' as the column for matching CAS records."
+        "--join_on_cellset_ids",
+        action="store_true",
+        help="Use 'cell_ids' as the column for matching CAS records.",
     )
     parser_add_annotations.add_argument(
-        "--join_on_labelset_label", action='store_true', help="Use a pair of 'labelset', 'cell_label' columns for matching CAS records."
+        "--join_on_labelset_label",
+        action="store_true",
+        help="Use a pair of 'labelset', 'cell_label' columns for matching CAS records.",
     )
     parser_add_annotations.add_argument(
         "--columns",
         nargs="+",
         help="Optional space-separated list of column names in the CSV to be added as annotations. All columns are "
-             "used if none are specified. Column names containing spaces must be enclosed in quotes (e.g., 'Columns Name')."
+        "used if none are specified. Column names containing spaces must be enclosed in quotes (e.g., 'Columns Name').",
     )
     parser_add_annotations.add_argument(
         "--output",
@@ -686,20 +696,18 @@ def create_split_cas_parser(subparsers):
     parser_split_cas = subparsers.add_parser(
         "split_cas",
         description="Split CAS JSON file based on specified cell label/s.",
-        help="Split a CAS JSON file into multiple files based on one or more cell accession_id(s)."
+        help="Split a CAS JSON file into multiple files based on one or more cell accession_id(s).",
     )
     parser_split_cas.add_argument(
         "--cas_json", required=True, help="Path to the CAS JSON file that will be split"
     )
     parser_split_cas.add_argument(
-        "--split_on",
-        nargs="+",
-        help="Cell accession_id(s) to split the CAS file."
+        "--split_on", nargs="+", help="Cell accession_id(s) to split the CAS file."
     )
     parser_split_cas.add_argument(
         "--multiple_outputs",
         action="store_true",
-        help="If set, create multiple output files for each split_on term; if not set, create a single output file."
+        help="If set, create multiple output files for each split_on term; if not set, create a single output file.",
     )
 
 
@@ -721,19 +729,21 @@ def create_split_anndata_parser(subparsers):
     parser_split_anndata = subparsers.add_parser(
         "split_anndata",
         description="Splits an AnnData file based on specified CAS JSON files.",
-        help="Splits an AnnData file into multiple files based on one or more CAS JSON files."
+        help="Splits an AnnData file into multiple files based on one or more CAS JSON files.",
     )
     parser_split_anndata.add_argument(
         "--anndata", required=True, help="Path to the AnnData file."
     )
     parser_split_anndata.add_argument(
-        "--cas_json", required=True,
-        nargs="+", help="List of CAS JSON file paths that will be used to split the AnnData file."
+        "--cas_json",
+        required=True,
+        nargs="+",
+        help="List of CAS JSON file paths that will be used to split the AnnData file.",
     )
     parser_split_anndata.add_argument(
         "--multiple_outputs",
         action="store_true",
-        help="If set, creates multiple output files for each CAS JSON file; if not set, creates a single output file."
+        help="If set, creates multiple output files for each CAS JSON file; if not set, creates a single output file.",
     )
 
 

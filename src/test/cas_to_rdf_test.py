@@ -1,10 +1,9 @@
 import os
 import unittest
 
-from rdflib import URIRef, Graph
+from rdflib import Graph, URIRef
 
 from cas.cas_to_rdf import export_to_rdf
-
 
 CAS_NS = "https://cellular-semantics.sanger.ac.uk/ontology/CAS/"
 dataset_type = URIRef(CAS_NS + "GeneralCellAnnotationOpenStandard")
@@ -20,7 +19,6 @@ TEST_OUTPUT2 = os.path.join(TESTDATA, "CS202210140_non_neuronal.rdf")
 
 
 class CAStoRDFTestCase(unittest.TestCase):
-
     @classmethod
     def tearDownClass(cls):
         if os.path.isfile(TEST_OUTPUT):
@@ -44,7 +42,7 @@ class CAStoRDFTestCase(unittest.TestCase):
             labelsets=labelsets,
             output_path=TEST_OUTPUT,
             validate=True,
-            include_cells=False
+            include_cells=False,
         )
         self.assertTrue(os.path.isfile(TEST_OUTPUT))
 
@@ -65,11 +63,15 @@ class CAStoRDFTestCase(unittest.TestCase):
             elif str(triple[1]) == "http://www.w3.org/2000/01/rdf-schema#label":
                 self.assertEqual("L5 IT_2", str(triple[2]))
             elif str(triple[1]) == "http://purl.obolibrary.org/obo/RO_0015003":
-                self.assertEqual(ontology_iri + "CrossArea_subclass#c6694cb883", str(triple[2]))
+                self.assertEqual(
+                    ontology_iri + "CrossArea_subclass#c6694cb883", str(triple[2])
+                )
             elif str(triple[1]) == "http://www.w3.org/2004/02/skos/core#preflabel":
                 self.assertEqual("L5 IT_2", str(triple[2]))
             elif triple[1] == rdftype:
-                self.assertEqual("http://purl.obolibrary.org/obo/PCL_0010001", str(triple[2]))
+                self.assertEqual(
+                    "http://purl.obolibrary.org/obo/PCL_0010001", str(triple[2])
+                )
             else:
                 self.fail("Unexpected triple: " + str(triple))
 
@@ -87,7 +89,7 @@ class CAStoRDFTestCase(unittest.TestCase):
             labelsets=None,
             output_path=TEST_OUTPUT2,
             validate=True,
-            include_cells=False
+            include_cells=False,
         )
 
         self.assertTrue(os.path.isfile(TEST_OUTPUT2))
@@ -110,9 +112,11 @@ class CAStoRDFTestCase(unittest.TestCase):
             elif str(triple[1]) == "http://purl.obolibrary.org/obo/RO_0015003":
                 self.assertEqual(ontology_iri + "CS202210140_471", str(triple[2]))
             elif str(triple[1]) == CAS_NS + "author_annotation_fields":
-                self.assertEqual("{\"Cluster ID\": \"69\"}", str(triple[2]))
+                self.assertEqual('{"Cluster ID": "69"}', str(triple[2]))
             elif triple[1] == rdftype:
-                self.assertEqual("http://purl.obolibrary.org/obo/PCL_0010001", str(triple[2]))
+                self.assertEqual(
+                    "http://purl.obolibrary.org/obo/PCL_0010001", str(triple[2])
+                )
             else:
                 self.fail("Unexpected triple: " + str(triple))
 

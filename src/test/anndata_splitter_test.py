@@ -19,16 +19,12 @@ class TestSplitAnndata(unittest.TestCase):
 
         # Sample AnnData with aligned values
         obs_data = {
-            "cell_type": [
-                f"type_{i % 3}" for i in range(100)
-            ],
+            "cell_type": [f"type_{i % 3}" for i in range(100)],
         }
         obs = pd.DataFrame(data=obs_data, index=[f"cell{i}" for i in range(100)])
 
         var_data = {
-            "gene_name": [
-                f"gene_{i}" for i in range(1000)
-            ],
+            "gene_name": [f"gene_{i}" for i in range(1000)],
         }
         var = pd.DataFrame(data=var_data, index=[f"gene{i}" for i in range(1000)])
 

@@ -161,7 +161,9 @@ class Annotation(EncoderMixin):
     biological entity listed in the field 'cell_label'."""
 
     # TODO modified: added (exclude from json serialisation)
-    parent_cell_set_name: Optional[str] = field(default=None, metadata=config(exclude=lambda x: True))
+    parent_cell_set_name: Optional[str] = field(
+        default=None, metadata=config(exclude=lambda x: True)
+    )
 
     parent_cell_set_accession: Optional[str] = None
     """A list of accessions of cell sets that subsume this cell set. This can be used to compose hierarchies of 
@@ -188,7 +190,6 @@ class Annotation(EncoderMixin):
 
 @dataclass
 class CellTypeAnnotation(EncoderMixin):
-
     author_name: str
     """This MUST be a string in the format `[FIRST NAME] [LAST NAME]`"""
 

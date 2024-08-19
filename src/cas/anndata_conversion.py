@@ -1,34 +1,3 @@
-"""
-Script Description:
--------------------
-This script integrates cell annotations from a CAS (Cell Annotation Schema) JSON file into an AnnData object.
-It performs validation checks to ensure data consistency between the CAS file and the AnnData file.
-The AnnData file location should ideally be specified as a resolvable path in the CAS file.
-
-Validation Checks:
-------------------
-1. Check if all barcodes (cell IDs) in the CAS file exist in the AnnData file.
-   - If not, a warning is issued with an option to terminate.
-
-2. Check if all barcodes (cell IDs) in the AnnData file exist in the CAS file.
-   - If not, a warning is issued with an option to terminate.
-
-3. Check if any obs keys in the AnnData file match labelset names in the CAS.
-   - If matches are found:
-     - Verify if the cell sets (sets of cell IDs) associated with each annotation for the labelsets in CAS match the AnnData.
-     - If they do, check if the cell_labels are identical.
-       - If yes, no action is taken.
-       - If no, a warning is issued with options to update values to cell_labels in CAS or terminate.
-     - If no matches are found:
-       - Option to flush and replace obs labelsets with those defined in CAS (labelset:cell_label pairs) or terminate.
-         - For example, if a labelset in the AnnData file annotates different sets of cells than those in CAS,
-           users have the option to delete the labelset in AnnData and add back the labelset from CAS.
-
-Additional Notes:
------------------
-- JSON data is stored in AnnData.uns (excluding barcodes).
-"""
-
 import json
 import sys
 from typing import Optional
@@ -67,7 +36,12 @@ def merge(cas_path: str, anndata_path: str, validate: bool, output_file_name: st
     merge_cas_object(input_json, input_anndata, validate, output_file_name)
 
 
-def merge_cas_object(input_json: dict, input_anndata: Optional[anndata.AnnData], validate: bool, output_file_name: str):
+def merge_cas_object(
+    input_json: dict,
+    input_anndata: Optional[anndata.AnnData],
+    validate: bool,
+    output_file_name: str,
+):
     """
     Tests if CAS json and AnnData are compatible and merges CAS into AnnData if possible.
 
@@ -117,7 +91,9 @@ def check_labelsets(cas_json, input_anndata, matching_obs_keys, validate):
                 ):
                     handle_matching_labelset(ann, cell_label, input_anndata, validate)
                 elif cell_label == ann[CELL_LABEL]:
-                    handle_non_matching_labelset(ann, input_anndata, validate, derived_cell_ids)
+                    handle_non_matching_labelset(
+                        ann, input_anndata, validate, derived_cell_ids
+                    )
 
 
 def get_cas_annotations(input_json):

@@ -1,13 +1,12 @@
 import csv
 import json
 import pathlib
-from typing import Optional
 from importlib import resources
-
-from cas_schema import schemas
+from typing import Optional
 
 import anndata
 from cap_anndata import CapAnnDataDF
+from cas_schema import schemas
 from ruamel.yaml import YAML
 
 from cas.model import CellTypeAnnotation
@@ -120,9 +119,13 @@ def read_table_to_dict(table_path, id_column=0, generated_ids=False):
         content is the first column value and the values are dict of row values.
     """
     if table_path.endswith(".tsv"):
-        return read_tsv_to_dict(table_path, id_column=id_column, generated_ids=generated_ids)
+        return read_tsv_to_dict(
+            table_path, id_column=id_column, generated_ids=generated_ids
+        )
     elif table_path.endswith(".csv"):
-        return read_csv_to_dict(table_path, id_column=id_column, generated_ids=generated_ids)
+        return read_csv_to_dict(
+            table_path, id_column=id_column, generated_ids=generated_ids
+        )
     else:
         raise Exception("Table file should be either tsv or csv file.")
 

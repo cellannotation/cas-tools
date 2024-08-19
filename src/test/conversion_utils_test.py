@@ -3,6 +3,7 @@ import warnings
 from test.spreadsheet_to_cas_test import generate_mock_dataset
 
 import pandas as pd
+
 from cas.utils.conversion_utils import (
     add_labelsets_to_cas,
     add_parent_cell_hierarchy,
@@ -160,7 +161,9 @@ class TestConversionUtils(unittest.TestCase):
         self.assertIn("parent", self.parent_cell_look_up["labelset1:A"])
         self.assertIn("p_accession", self.parent_cell_look_up["labelset1:A"])
         self.assertEqual(self.parent_cell_look_up["labelset1:A"]["parent"], "P")
-        self.assertEqual(self.parent_cell_look_up["labelset1:A"]["p_accession"], "P_123")
+        self.assertEqual(
+            self.parent_cell_look_up["labelset1:A"]["p_accession"], "P_123"
+        )
 
     def test_add_parent_hierarchy(self):
         cas = {

@@ -18,7 +18,9 @@ class IncrementalAccessionManager(BaseAccessionManager):
         self.last_accession_id = last_accession_id
         self.accession_ids = list()
 
-    def generate_accession_id(self, id_recommendation: str = None, labelset: str = None) -> str:
+    def generate_accession_id(
+        self, id_recommendation: str = None, labelset: str = None
+    ) -> str:
         """
         Generates an auto-increment based accession id. If the recommended accession_id is available, uses it.
         Params:
