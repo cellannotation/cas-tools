@@ -29,6 +29,8 @@ jobs:
           poetry install -E docs
           cd docs
           poetry run make html
+          pwd
+          ls -l
         env:
           POETRY_VIRTUALENVS_IN_PROJECT: true
 
