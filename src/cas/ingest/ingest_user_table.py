@@ -178,6 +178,7 @@ def add_parent_node_names(ao, ao_names, cas, parents):
                     if (
                         parent.parent_cell_set_name
                         and parent.parent_cell_set_name != prev.cell_label
+                        and parent.cell_label != prev.cell_label
                     ):
                         print(
                             "Annotation {} has multiple parents: {} and {}".format(
