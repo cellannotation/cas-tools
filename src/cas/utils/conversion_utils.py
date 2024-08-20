@@ -1,5 +1,6 @@
 import itertools
 import json
+import shutil
 from datetime import date, datetime
 from typing import Any, Dict, List, Tuple
 
@@ -350,3 +351,10 @@ def reformat_json(
         output_json[input_key] = filtered_annotations
 
     return json.dumps(output_json)
+
+
+def copy_and_update_file_path(anndata_file_path, output_file_path):
+    if output_file_path:
+        shutil.copy(anndata_file_path, output_file_path)
+        anndata_file_path = output_file_path
+    return anndata_file_path

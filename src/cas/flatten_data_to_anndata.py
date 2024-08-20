@@ -15,7 +15,7 @@ from cas.file_utils import (
     update_uns,
     write_dict_to_json_file,
 )
-from cas.utils.conversion_utils import reformat_json
+from cas.utils.conversion_utils import copy_and_update_file_path, reformat_json
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -79,9 +79,7 @@ def flatten_cas_object(input_json, anndata_file_path, output_file_path):
         anndata_file_path: The path to the AnnData file.
         output_file_path: Output AnnData file name.
     """
-    if output_file_path:
-        shutil.copy(anndata_file_path, output_file_path)
-        anndata_file_path = output_file_path
+    anndata_file_path = copy_and_update_file_path(anndata_file_path, output_file_path)
 
     annotations = input_json[ANNOTATIONS]
     parent_cell_ids = collect_parent_cell_ids(input_json)
@@ -249,7 +247,7 @@ def collect_parent_cell_ids(cas):
 def unflatten(
     json_file_path: Union[None, str],
     anndata_file_path: str,
-    output_anndata_path: str,
+    output_file_path: str,
     output_json_path: str,
 ):
     """
@@ -258,12 +256,11 @@ def unflatten(
     Args:
         json_file_path: The path to the CAS json file.
         anndata_file_path: The path to the AnnData file.
-        output_anndata_path: Output AnnData file name.
+        output_file_path: Output AnnData file name.
         output_json_path: Output CAS JSON file name.
     """
-    if output_anndata_path:
-        shutil.copy(anndata_file_path, output_anndata_path)
-        anndata_file_path = output_anndata_path
+    # TODO review the `cas = None` and `cap_adata.read_uns()` logic!!!
+    anndata_file_path = copy_and_update_file_path(anndata_file_path, output_file_path)
     cas = None
     if json_file_path:
         with open(json_file_path, "r") as file:
