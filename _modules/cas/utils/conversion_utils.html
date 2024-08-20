@@ -74,6 +74,7 @@
   <h1>Source code for cas.utils.conversion_utils</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">datetime</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
@@ -459,6 +460,16 @@
         <span class="n">output_json</span><span class="p">[</span><span class="n">input_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">filtered_annotations</span>
 
     <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">output_json</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="copy_and_update_file_path">
+<a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.conversion_utils.copy_and_update_file_path">[docs]</a>
+<span class="k">def</span> <span class="nf">copy_and_update_file_path</span><span class="p">(</span><span class="n">anndata_file_path</span><span class="p">,</span> <span class="n">output_file_path</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">output_file_path</span><span class="p">:</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">anndata_file_path</span><span class="p">,</span> <span class="n">output_file_path</span><span class="p">)</span>
+        <span class="n">anndata_file_path</span> <span class="o">=</span> <span class="n">output_file_path</span>
+    <span class="k">return</span> <span class="n">anndata_file_path</span></div>
 
 </pre></div>
 

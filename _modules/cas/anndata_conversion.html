@@ -72,13 +72,13 @@
            <div itemprop="articleBody">
              
   <h1>Source code for cas.anndata_conversion</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
 
-<span class="kn">import</span> <span class="nn">anndata</span>
+<span class="kn">from</span> <span class="nn">cap_anndata</span> <span class="kn">import</span> <span class="n">read_h5ad</span>
 
-<span class="kn">from</span> <span class="nn">cas.file_utils</span> <span class="kn">import</span> <span class="n">read_anndata_file</span><span class="p">,</span> <span class="n">read_json_file</span>
+<span class="kn">from</span> <span class="nn">cas.file_utils</span> <span class="kn">import</span> <span class="n">read_json_file</span>
+<span class="kn">from</span> <span class="nn">cas.utils.conversion_utils</span> <span class="kn">import</span> <span class="n">copy_and_update_file_path</span><span class="p">,</span> <span class="n">reformat_json</span>
 
 <span class="n">LABELSET_NAME</span> <span class="o">=</span> <span class="s2">&quot;name&quot;</span>
 
@@ -91,6 +91,9 @@
 <span class="n">CELL_IDS</span> <span class="o">=</span> <span class="s2">&quot;cell_ids&quot;</span>
 
 <span class="n">CELL_LABEL</span> <span class="o">=</span> <span class="s2">&quot;cell_label&quot;</span>
+
+<span class="c1"># Set up logging</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="merge">
@@ -107,9 +110,8 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">input_json</span> <span class="o">=</span> <span class="n">read_json_file</span><span class="p">(</span><span class="n">cas_path</span><span class="p">)</span>
-    <span class="n">input_anndata</span> <span class="o">=</span> <span class="n">read_anndata_file</span><span class="p">(</span><span class="n">anndata_path</span><span class="p">)</span>
 
-    <span class="n">merge_cas_object</span><span class="p">(</span><span class="n">input_json</span><span class="p">,</span> <span class="n">input_anndata</span><span class="p">,</span> <span class="n">validate</span><span class="p">,</span> <span class="n">output_file_name</span><span class="p">)</span></div>
+    <span class="n">merge_cas_object</span><span class="p">(</span><span class="n">input_json</span><span class="p">,</span> <span class="n">anndata_path</span><span class="p">,</span> <span class="n">validate</span><span class="p">,</span> <span class="n">output_file_name</span><span class="p">)</span></div>
 
 
 
@@ -117,56 +119,65 @@
 <a class="viewcode-back" href="../../source/cas.html#cas.anndata_conversion.merge_cas_object">[docs]</a>
 <span class="k">def</span> <span class="nf">merge_cas_object</span><span class="p">(</span>
     <span class="n">input_json</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
-    <span class="n">input_anndata</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">anndata</span><span class="o">.</span><span class="n">AnnData</span><span class="p">],</span>
+    <span class="n">anndata_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
-    <span class="n">output_file_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">output_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Tests if CAS json and AnnData are compatible and merges CAS into AnnData if possible.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        input_json: The CAS json object.</span>
-<span class="sd">        input_anndata: The AnnData object.</span>
+<span class="sd">        anndata_file_path: The path to the AnnData file.</span>
 <span class="sd">        validate: Boolean to determine if validation checks will be performed before writing to the output AnnData file.</span>
-<span class="sd">        output_file_name: Output AnnData file name.</span>
+<span class="sd">        output_file_path: Output AnnData file name.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">test_compatibility</span><span class="p">(</span><span class="n">input_anndata</span><span class="p">,</span> <span class="n">input_json</span><span class="p">,</span> <span class="n">validate</span><span class="p">)</span>
+    <span class="n">anndata_file_path</span> <span class="o">=</span> <span class="n">copy_and_update_file_path</span><span class="p">(</span><span class="n">anndata_file_path</span><span class="p">,</span> <span class="n">output_file_path</span><span class="p">)</span>
 
-    <span class="n">save_cas_to_uns</span><span class="p">(</span><span class="n">input_anndata</span><span class="p">,</span> <span class="n">input_json</span><span class="p">)</span>
-    <span class="n">write_anndata</span><span class="p">(</span><span class="n">input_anndata</span><span class="p">,</span> <span class="n">output_file_name</span><span class="p">)</span></div>
+    <span class="k">with</span> <span class="n">read_h5ad</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="n">anndata_file_path</span><span class="p">,</span> <span class="n">edit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">cap_adata</span><span class="p">:</span>
+        <span class="n">cap_adata</span><span class="o">.</span><span class="n">read_obs</span><span class="p">()</span>
+        <span class="n">obs</span> <span class="o">=</span> <span class="n">cap_adata</span><span class="o">.</span><span class="n">obs</span>
+        <span class="n">test_compatibility</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">input_json</span><span class="p">,</span> <span class="n">validate</span><span class="p">)</span>
+
+        <span class="n">cap_adata</span><span class="o">.</span><span class="n">read_uns</span><span class="p">()</span>
+        <span class="n">cap_adata</span><span class="o">.</span><span class="n">uns</span><span class="p">[</span><span class="s2">&quot;cas&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">reformat_json</span><span class="p">(</span><span class="n">input_json</span><span class="p">)</span>
+
+        <span class="n">cap_adata</span><span class="o">.</span><span class="n">overwrite</span><span class="p">()</span></div>
 
 
 
 <div class="viewcode-block" id="test_compatibility">
 <a class="viewcode-back" href="../../source/cas.html#cas.anndata_conversion.test_compatibility">[docs]</a>
-<span class="k">def</span> <span class="nf">test_compatibility</span><span class="p">(</span><span class="n">input_anndata</span><span class="p">,</span> <span class="n">input_json</span><span class="p">,</span> <span class="n">validate</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">test_compatibility</span><span class="p">(</span><span class="n">anndata_obs</span><span class="p">,</span> <span class="n">input_json</span><span class="p">,</span> <span class="n">validate</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Tests if CAS and AnnData can be merged.</span>
 
 <span class="sd">     Args:</span>
-<span class="sd">        input_anndata: The AnnData object.</span>
+<span class="sd">        anndata_obs: The AnnData obs object.</span>
 <span class="sd">        input_json: The CAS data json object.</span>
 <span class="sd">        validate: Boolean to determine if validation checks will be performed before writing to the output AnnData file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">annotations</span> <span class="o">=</span> <span class="n">get_cas_annotations</span><span class="p">(</span><span class="n">input_json</span><span class="p">)</span>
-    <span class="n">validate_cell_ids</span><span class="p">(</span><span class="n">input_anndata</span><span class="p">,</span> <span class="n">annotations</span><span class="p">,</span> <span class="n">validate</span><span class="p">)</span>
+    <span class="n">annotations</span> <span class="o">=</span> <span class="n">input_json</span><span class="p">[</span><span class="n">ANNOTATIONS</span><span class="p">]</span>
+    <span class="n">obs_index</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">anndata_obs</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+    <span class="n">validate_cell_ids</span><span class="p">(</span><span class="n">obs_index</span><span class="p">,</span> <span class="n">annotations</span><span class="p">,</span> <span class="n">validate</span><span class="p">)</span>
 
-    <span class="n">matching_obs_keys</span> <span class="o">=</span> <span class="n">get_matching_obs_keys</span><span class="p">(</span><span class="n">input_anndata</span><span class="p">,</span> <span class="n">input_json</span><span class="p">)</span>
-    <span class="n">check_labelsets</span><span class="p">(</span><span class="n">input_json</span><span class="p">,</span> <span class="n">input_anndata</span><span class="p">,</span> <span class="n">matching_obs_keys</span><span class="p">,</span> <span class="n">validate</span><span class="p">)</span></div>
+    <span class="n">labelsets</span> <span class="o">=</span> <span class="n">input_json</span><span class="p">[</span><span class="n">LABELSETS</span><span class="p">]</span>
+    <span class="n">matching_obs_keys</span> <span class="o">=</span> <span class="n">get_matching_obs_keys</span><span class="p">(</span><span class="n">anndata_obs</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">labelsets</span><span class="p">)</span>
+    <span class="n">check_labelsets</span><span class="p">(</span><span class="n">input_json</span><span class="p">,</span> <span class="n">anndata_obs</span><span class="p">,</span> <span class="n">matching_obs_keys</span><span class="p">,</span> <span class="n">validate</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="check_labelsets">
 <a class="viewcode-back" href="../../source/cas.html#cas.anndata_conversion.check_labelsets">[docs]</a>
-<span class="k">def</span> <span class="nf">check_labelsets</span><span class="p">(</span><span class="n">cas_json</span><span class="p">,</span> <span class="n">input_anndata</span><span class="p">,</span> <span class="n">matching_obs_keys</span><span class="p">,</span> <span class="n">validate</span><span class="p">):</span>
-    <span class="n">annotations</span> <span class="o">=</span> <span class="n">get_cas_annotations</span><span class="p">(</span><span class="n">cas_json</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">check_labelsets</span><span class="p">(</span><span class="n">cas_json</span><span class="p">,</span> <span class="n">input_obs</span><span class="p">,</span> <span class="n">matching_obs_keys</span><span class="p">,</span> <span class="n">validate</span><span class="p">):</span>
+    <span class="n">annotations</span> <span class="o">=</span> <span class="n">cas_json</span><span class="p">[</span><span class="n">ANNOTATIONS</span><span class="p">]</span>
     <span class="n">derived_cell_ids</span> <span class="o">=</span> <span class="n">get_derived_cell_ids</span><span class="p">(</span><span class="n">cas_json</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">ann</span> <span class="ow">in</span> <span class="n">annotations</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">ann</span><span class="p">[</span><span class="n">LABELSET</span><span class="p">]</span> <span class="ow">in</span> <span class="n">matching_obs_keys</span><span class="p">:</span>
             <span class="n">anndata_labelset_cell_ids</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">input_anndata</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">ann</span><span class="p">[</span><span class="n">LABELSET</span><span class="p">],</span> <span class="n">observed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">input_obs</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">ann</span><span class="p">[</span><span class="n">LABELSET</span><span class="p">],</span> <span class="n">observed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
                 <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">group</span><span class="p">:</span> <span class="nb">set</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">index</span><span class="p">),</span> <span class="n">include_groups</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
                 <span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
             <span class="p">)</span>
@@ -174,48 +185,41 @@
                 <span class="k">if</span> <span class="n">cell_list</span> <span class="o">==</span> <span class="n">derived_cell_ids</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
                     <span class="nb">str</span><span class="p">(</span><span class="n">ann</span><span class="p">[</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">]),</span> <span class="nb">set</span><span class="p">()</span>
                 <span class="p">):</span>
-                    <span class="n">handle_matching_labelset</span><span class="p">(</span><span class="n">ann</span><span class="p">,</span> <span class="n">cell_label</span><span class="p">,</span> <span class="n">input_anndata</span><span class="p">,</span> <span class="n">validate</span><span class="p">)</span>
+                    <span class="n">handle_matching_labelset</span><span class="p">(</span><span class="n">ann</span><span class="p">,</span> <span class="n">cell_label</span><span class="p">,</span> <span class="n">input_obs</span><span class="p">,</span> <span class="n">validate</span><span class="p">)</span>
                 <span class="k">elif</span> <span class="n">cell_label</span> <span class="o">==</span> <span class="n">ann</span><span class="p">[</span><span class="n">CELL_LABEL</span><span class="p">]:</span>
                     <span class="n">handle_non_matching_labelset</span><span class="p">(</span>
-                        <span class="n">ann</span><span class="p">,</span> <span class="n">input_anndata</span><span class="p">,</span> <span class="n">validate</span><span class="p">,</span> <span class="n">derived_cell_ids</span>
+                        <span class="n">ann</span><span class="p">,</span> <span class="n">input_obs</span><span class="p">,</span> <span class="n">validate</span><span class="p">,</span> <span class="n">derived_cell_ids</span>
                     <span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="get_cas_annotations">
-<a class="viewcode-back" href="../../source/cas.html#cas.anndata_conversion.get_cas_annotations">[docs]</a>
-<span class="k">def</span> <span class="nf">get_cas_annotations</span><span class="p">(</span><span class="n">input_json</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">input_json</span><span class="p">[</span><span class="n">ANNOTATIONS</span><span class="p">]</span></div>
 
 
 
 <div class="viewcode-block" id="get_matching_obs_keys">
 <a class="viewcode-back" href="../../source/cas.html#cas.anndata_conversion.get_matching_obs_keys">[docs]</a>
-<span class="k">def</span> <span class="nf">get_matching_obs_keys</span><span class="p">(</span><span class="n">input_anndata</span><span class="p">,</span> <span class="n">input_json</span><span class="p">):</span>
-    <span class="n">cas_labelset_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="n">LABELSET_NAME</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">input_json</span><span class="p">[</span><span class="n">LABELSETS</span><span class="p">]]</span>
-    <span class="n">obs_keys</span> <span class="o">=</span> <span class="n">input_anndata</span><span class="o">.</span><span class="n">obs_keys</span><span class="p">()</span>
-    <span class="n">matching_obs_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">obs_keys</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">cas_labelset_names</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">matching_obs_keys</span></div>
+<span class="k">def</span> <span class="nf">get_matching_obs_keys</span><span class="p">(</span><span class="n">obs_keys</span><span class="p">,</span> <span class="n">cas_labelsets</span><span class="p">):</span>
+    <span class="n">cas_labelset_names</span> <span class="o">=</span> <span class="p">{</span><span class="n">item</span><span class="p">[</span><span class="n">LABELSET_NAME</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">cas_labelsets</span><span class="p">}</span>
+    <span class="n">matching_obs_keys</span> <span class="o">=</span> <span class="n">cas_labelset_names</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">obs_keys</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">matching_obs_keys</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="handle_matching_labelset">
 <a class="viewcode-back" href="../../source/cas.html#cas.anndata_conversion.handle_matching_labelset">[docs]</a>
-<span class="k">def</span> <span class="nf">handle_matching_labelset</span><span class="p">(</span><span class="n">ann</span><span class="p">,</span> <span class="n">cell_label</span><span class="p">,</span> <span class="n">input_anndata</span><span class="p">,</span> <span class="n">validate</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">handle_matching_labelset</span><span class="p">(</span><span class="n">ann</span><span class="p">,</span> <span class="n">cell_label</span><span class="p">,</span> <span class="n">input_obs</span><span class="p">,</span> <span class="n">validate</span><span class="p">):</span>
     <span class="c1"># Used for label changes</span>
     <span class="k">if</span> <span class="n">cell_label</span> <span class="o">!=</span> <span class="n">ann</span><span class="p">[</span><span class="n">CELL_LABEL</span><span class="p">]:</span>
-        <span class="nb">print</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ann</span><span class="p">[</span><span class="n">CELL_LABEL</span><span class="p">]</span><span class="si">}</span><span class="s2"> cell ids from CAS match with the cell ids in </span><span class="si">{</span><span class="n">cell_label</span><span class="si">}</span><span class="s2"> from anndata. &quot;</span>
-            <span class="s2">&quot;But they have different cell label.&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ann</span><span class="p">[</span><span class="n">CELL_LABEL</span><span class="p">]</span><span class="si">}</span><span class="s2"> cell ids from CAS match with the cell ids in </span><span class="si">{</span><span class="n">cell_label</span><span class="si">}</span><span class="s2"> from anndata, &quot;</span>
+            <span class="s2">&quot;but they have different cell labels.&quot;</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">validate</span><span class="p">:</span>
-            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Validation failed. Exiting.&quot;</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="c1"># add new category to labelset column</span>
-        <span class="n">input_anndata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="n">ann</span><span class="p">[</span><span class="n">LABELSET</span><span class="p">]]</span> <span class="o">=</span> <span class="n">input_anndata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span>
-            <span class="n">ann</span><span class="p">[</span><span class="n">LABELSET</span><span class="p">]</span>
-        <span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">add_categories</span><span class="p">(</span><span class="n">ann</span><span class="p">[</span><span class="n">CELL_LABEL</span><span class="p">])</span>
+        <span class="n">input_obs</span><span class="p">[</span><span class="n">ann</span><span class="p">[</span><span class="n">LABELSET</span><span class="p">]]</span> <span class="o">=</span> <span class="n">input_obs</span><span class="p">[</span><span class="n">ann</span><span class="p">[</span><span class="n">LABELSET</span><span class="p">]]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">add_categories</span><span class="p">(</span>
+            <span class="n">ann</span><span class="p">[</span><span class="n">CELL_LABEL</span><span class="p">]</span>
+        <span class="p">)</span>
         <span class="c1"># Overwrite the labelset value with CAS labelset</span>
-        <span class="n">input_anndata</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">ann</span><span class="p">[</span><span class="n">CELL_IDS</span><span class="p">],</span> <span class="n">ann</span><span class="p">[</span><span class="n">LABELSET</span><span class="p">]]</span> <span class="o">=</span> <span class="n">input_anndata</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+        <span class="n">input_obs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">ann</span><span class="p">[</span><span class="n">CELL_IDS</span><span class="p">],</span> <span class="n">ann</span><span class="p">[</span><span class="n">LABELSET</span><span class="p">]]</span> <span class="o">=</span> <span class="n">input_obs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
             <span class="n">ann</span><span class="p">[</span><span class="n">CELL_IDS</span><span class="p">],</span> <span class="n">ann</span><span class="p">[</span><span class="n">LABELSET</span><span class="p">]</span>
         <span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">({</span><span class="n">cell_label</span><span class="p">:</span> <span class="n">ann</span><span class="p">[</span><span class="n">CELL_LABEL</span><span class="p">]})</span></div>
 
@@ -223,66 +227,43 @@
 
 <div class="viewcode-block" id="handle_non_matching_labelset">
 <a class="viewcode-back" href="../../source/cas.html#cas.anndata_conversion.handle_non_matching_labelset">[docs]</a>
-<span class="k">def</span> <span class="nf">handle_non_matching_labelset</span><span class="p">(</span><span class="n">ann</span><span class="p">,</span> <span class="n">input_anndata</span><span class="p">,</span> <span class="n">validate</span><span class="p">,</span> <span class="n">derived_cell_ids</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">handle_non_matching_labelset</span><span class="p">(</span><span class="n">ann</span><span class="p">,</span> <span class="n">input_obs</span><span class="p">,</span> <span class="n">validate</span><span class="p">,</span> <span class="n">derived_cell_ids</span><span class="p">):</span>
     <span class="c1"># Used for hierarchy changes</span>
-    <span class="nb">print</span><span class="p">(</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ann</span><span class="p">[</span><span class="n">CELL_LABEL</span><span class="p">]</span><span class="si">}</span><span class="s2"> cell ids from CAS do not match with the cell ids from anndata. &quot;</span>
         <span class="s2">&quot;Please update your CAS json.&quot;</span>
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">validate</span><span class="p">:</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Validation failed. Exiting.&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
     <span class="c1"># Flush the labelset from anndata</span>
     <span class="c1"># input_anndata.obs.loc[list(cell_list), cell_label] = &quot;&quot;</span>
     <span class="c1"># Add labelset from CAS to anndata</span>
     <span class="n">cell_ids</span> <span class="o">=</span> <span class="n">derived_cell_ids</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ann</span><span class="p">[</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">]),</span> <span class="nb">set</span><span class="p">())</span>
-    <span class="n">input_anndata</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">cell_ids</span><span class="p">),</span> <span class="n">ann</span><span class="p">[</span><span class="n">LABELSET</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">ann</span><span class="p">[</span><span class="n">CELL_LABEL</span><span class="p">])</span></div>
-
-
-
-<div class="viewcode-block" id="save_cas_to_uns">
-<a class="viewcode-back" href="../../source/cas.html#cas.anndata_conversion.save_cas_to_uns">[docs]</a>
-<span class="k">def</span> <span class="nf">save_cas_to_uns</span><span class="p">(</span><span class="n">input_anndata</span><span class="p">,</span> <span class="n">input_json</span><span class="p">):</span>
-    <span class="c1"># drop cell_ids</span>
-    <span class="n">json_without_cell_ids</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;author_name&quot;</span><span class="p">:</span> <span class="n">input_json</span><span class="p">[</span><span class="s2">&quot;author_name&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;labelset&quot;</span><span class="p">:</span> <span class="n">input_json</span><span class="p">[</span><span class="n">LABELSETS</span><span class="p">],</span>
-        <span class="s2">&quot;annotations&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">annotation</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s2">&quot;cell_ids&quot;</span><span class="p">}</span>
-            <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">input_json</span><span class="p">[</span><span class="s2">&quot;annotations&quot;</span><span class="p">]</span>
-        <span class="p">],</span>
-    <span class="p">}</span>
-    <span class="n">input_anndata</span><span class="o">.</span><span class="n">uns</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;cas&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_without_cell_ids</span><span class="p">)})</span></div>
+    <span class="n">input_obs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">cell_ids</span><span class="p">),</span> <span class="n">ann</span><span class="p">[</span><span class="n">LABELSET</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">ann</span><span class="p">[</span><span class="n">CELL_LABEL</span><span class="p">])</span></div>
 
 
 
 <div class="viewcode-block" id="validate_cell_ids">
 <a class="viewcode-back" href="../../source/cas.html#cas.anndata_conversion.validate_cell_ids">[docs]</a>
-<span class="k">def</span> <span class="nf">validate_cell_ids</span><span class="p">(</span><span class="n">input_anndata</span><span class="p">,</span> <span class="n">annotations</span><span class="p">,</span> <span class="n">validate</span><span class="p">):</span>
-    <span class="c1"># check cell ids</span>
-    <span class="n">cas_cell_ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">ann</span> <span class="ow">in</span> <span class="n">annotations</span><span class="p">:</span>
-        <span class="n">cas_cell_ids</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">ann</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">CELL_IDS</span><span class="p">,</span> <span class="p">[]))</span>
-    <span class="n">anndata_cell_ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">input_anndata</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-    <span class="c1"># cas -&gt; anndata</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">cas_cell_ids</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">anndata_cell_ids</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Not all members of cell ids from cas exist in anndata.&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">validate_cell_ids</span><span class="p">(</span><span class="n">anndata_cell_ids</span><span class="p">,</span> <span class="n">annotations</span><span class="p">,</span> <span class="n">validate</span><span class="p">):</span>
+    <span class="c1"># Collect cell ids from annotations</span>
+    <span class="n">cas_cell_ids</span> <span class="o">=</span> <span class="p">{</span><span class="n">cell_id</span> <span class="k">for</span> <span class="n">ann</span> <span class="ow">in</span> <span class="n">annotations</span> <span class="k">for</span> <span class="n">cell_id</span> <span class="ow">in</span> <span class="n">ann</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">CELL_IDS</span><span class="p">,</span> <span class="p">[])}</span>
+
+    <span class="c1"># Validate cas -&gt; anndata</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">cas_cell_ids</span> <span class="o">&lt;=</span> <span class="n">anndata_cell_ids</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Not all members of cell ids from cas exist in anndata.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">validate</span><span class="p">:</span>
-            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
-    <span class="c1"># anndata -&gt; cas</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">anndata_cell_ids</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">cas_cell_ids</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Not all members of cell ids from anndata exist in cas.&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Validation failed. Exiting.&quot;</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Validate anndata -&gt; cas</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">anndata_cell_ids</span> <span class="o">&lt;=</span> <span class="n">cas_cell_ids</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Not all members of cell ids from anndata exist in cas.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">validate</span><span class="p">:</span>
-            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">annotations</span></div>
-
-
-
-<div class="viewcode-block" id="write_anndata">
-<a class="viewcode-back" href="../../source/cas.html#cas.anndata_conversion.write_anndata">[docs]</a>
-<span class="k">def</span> <span class="nf">write_anndata</span><span class="p">(</span><span class="n">input_anndata</span><span class="p">,</span> <span class="n">output_file_path</span><span class="p">):</span>
-    <span class="c1"># Close the AnnData file to prevent blocking</span>
-    <span class="n">input_anndata</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="n">input_anndata</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">output_file_path</span><span class="p">)</span></div>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Validation failed. Exiting.&quot;</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
 
 
 
