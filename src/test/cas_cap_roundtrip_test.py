@@ -26,7 +26,7 @@ class TestRoundtrip(unittest.TestCase):
         unflatten(
             json_file_path=None,
             anndata_file_path=flattened_anndata_file_path,
-            output_anndata_path=unflattened_anndata_file_path,
+            output_file_path=unflattened_anndata_file_path,
             output_json_path="cas.json",
         )
 
@@ -61,7 +61,7 @@ class TestRoundtrip(unittest.TestCase):
         unflatten(
             json_file_path=None,
             anndata_file_path=flattened_anndata_file_path,
-            output_anndata_path=unflattened_anndata_file_path,
+            output_file_path=unflattened_anndata_file_path,
             output_json_path="cas.json",
         )
 
