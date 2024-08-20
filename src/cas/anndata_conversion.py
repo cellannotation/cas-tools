@@ -1,10 +1,10 @@
-import json
+import logging
 import sys
-from typing import Optional
 
-import anndata
+from cap_anndata import read_h5ad
 
-from cas.file_utils import read_anndata_file, read_json_file
+from cas.file_utils import read_json_file
+from cas.utils.conversion_utils import copy_and_update_file_path, reformat_json
 
 LABELSET_NAME = "name"
 
@@ -17,6 +17,9 @@ ANNOTATIONS = "annotations"
 CELL_IDS = "cell_ids"
 
 CELL_LABEL = "cell_label"
+
+# Set up logging
+logger = logging.getLogger(__name__)
 
 
 def merge(cas_path: str, anndata_path: str, validate: bool, output_file_name: str):
@@ -31,57 +34,65 @@ def merge(cas_path: str, anndata_path: str, validate: bool, output_file_name: st
 
     """
     input_json = read_json_file(cas_path)
-    input_anndata = read_anndata_file(anndata_path)
 
-    merge_cas_object(input_json, input_anndata, validate, output_file_name)
+    merge_cas_object(input_json, anndata_path, validate, output_file_name)
 
 
 def merge_cas_object(
     input_json: dict,
-    input_anndata: Optional[anndata.AnnData],
+    anndata_file_path: str,
     validate: bool,
-    output_file_name: str,
+    output_file_path: str,
 ):
     """
     Tests if CAS json and AnnData are compatible and merges CAS into AnnData if possible.
 
     Args:
         input_json: The CAS json object.
-        input_anndata: The AnnData object.
+        anndata_file_path: The path to the AnnData file.
         validate: Boolean to determine if validation checks will be performed before writing to the output AnnData file.
-        output_file_name: Output AnnData file name.
+        output_file_path: Output AnnData file name.
 
     """
-    test_compatibility(input_anndata, input_json, validate)
+    anndata_file_path = copy_and_update_file_path(anndata_file_path, output_file_path)
 
-    save_cas_to_uns(input_anndata, input_json)
-    write_anndata(input_anndata, output_file_name)
+    with read_h5ad(file_path=anndata_file_path, edit=True) as cap_adata:
+        cap_adata.read_obs()
+        obs = cap_adata.obs
+        test_compatibility(obs, input_json, validate)
+
+        cap_adata.read_uns()
+        cap_adata.uns["cas"] = reformat_json(input_json)
+
+        cap_adata.overwrite()
 
 
-def test_compatibility(input_anndata, input_json, validate):
+def test_compatibility(anndata_obs, input_json, validate):
     """
     Tests if CAS and AnnData can be merged.
 
      Args:
-        input_anndata: The AnnData object.
+        anndata_obs: The AnnData obs object.
         input_json: The CAS data json object.
         validate: Boolean to determine if validation checks will be performed before writing to the output AnnData file.
     """
-    annotations = get_cas_annotations(input_json)
-    validate_cell_ids(input_anndata, annotations, validate)
+    annotations = input_json[ANNOTATIONS]
+    obs_index = set(anndata_obs.axes[0].tolist())
+    validate_cell_ids(obs_index, annotations, validate)
 
-    matching_obs_keys = get_matching_obs_keys(input_anndata, input_json)
-    check_labelsets(input_json, input_anndata, matching_obs_keys, validate)
+    labelsets = input_json[LABELSETS]
+    matching_obs_keys = get_matching_obs_keys(anndata_obs.columns, labelsets)
+    check_labelsets(input_json, anndata_obs, matching_obs_keys, validate)
 
 
-def check_labelsets(cas_json, input_anndata, matching_obs_keys, validate):
-    annotations = get_cas_annotations(cas_json)
+def check_labelsets(cas_json, input_obs, matching_obs_keys, validate):
+    annotations = cas_json[ANNOTATIONS]
     derived_cell_ids = get_derived_cell_ids(cas_json)
 
     for ann in annotations:
         if ann[LABELSET] in matching_obs_keys:
             anndata_labelset_cell_ids = (
-                input_anndata.obs.groupby(ann[LABELSET], observed=False)
+                input_obs.groupby(ann[LABELSET], observed=False)
                 .apply(lambda group: set(group.index), include_groups=False)
                 .to_dict()
             )
@@ -89,88 +100,73 @@ def check_labelsets(cas_json, input_anndata, matching_obs_keys, validate):
                 if cell_list == derived_cell_ids.get(
                     str(ann["cell_set_accession"]), set()
                 ):
-                    handle_matching_labelset(ann, cell_label, input_anndata, validate)
+                    handle_matching_labelset(ann, cell_label, input_obs, validate)
                 elif cell_label == ann[CELL_LABEL]:
                     handle_non_matching_labelset(
-                        ann, input_anndata, validate, derived_cell_ids
+                        ann, input_obs, validate, derived_cell_ids
                     )
 
 
-def get_cas_annotations(input_json):
-    return input_json[ANNOTATIONS]
+def get_matching_obs_keys(obs_keys, cas_labelsets):
+    cas_labelset_names = {item[LABELSET_NAME] for item in cas_labelsets}
+    matching_obs_keys = cas_labelset_names.intersection(obs_keys)
+    return list(matching_obs_keys)
 
 
-def get_matching_obs_keys(input_anndata, input_json):
-    cas_labelset_names = [item[LABELSET_NAME] for item in input_json[LABELSETS]]
-    obs_keys = input_anndata.obs_keys()
-    matching_obs_keys = list(set(obs_keys).intersection(cas_labelset_names))
-    return matching_obs_keys
-
-
-def handle_matching_labelset(ann, cell_label, input_anndata, validate):
+def handle_matching_labelset(ann, cell_label, input_obs, validate):
     # Used for label changes
     if cell_label != ann[CELL_LABEL]:
-        print(
-            f"{ann[CELL_LABEL]} cell ids from CAS match with the cell ids in {cell_label} from anndata. "
-            "But they have different cell label."
+        logger.warning(
+            f"{ann[CELL_LABEL]} cell ids from CAS match with the cell ids in {cell_label} from anndata, "
+            "but they have different cell labels."
         )
         if validate:
-            sys.exit()
+            logger.error("Validation failed. Exiting.")
+            sys.exit(1)
         # add new category to labelset column
-        input_anndata.obs[ann[LABELSET]] = input_anndata.obs[
-            ann[LABELSET]
-        ].cat.add_categories(ann[CELL_LABEL])
+        input_obs[ann[LABELSET]] = input_obs[ann[LABELSET]].cat.add_categories(
+            ann[CELL_LABEL]
+        )
         # Overwrite the labelset value with CAS labelset
-        input_anndata.obs.loc[ann[CELL_IDS], ann[LABELSET]] = input_anndata.obs.loc[
+        input_obs.loc[ann[CELL_IDS], ann[LABELSET]] = input_obs.loc[
             ann[CELL_IDS], ann[LABELSET]
         ].map({cell_label: ann[CELL_LABEL]})
 
 
-def handle_non_matching_labelset(ann, input_anndata, validate, derived_cell_ids):
+def handle_non_matching_labelset(ann, input_obs, validate, derived_cell_ids):
     # Used for hierarchy changes
-    print(
+    logger.warning(
         f"{ann[CELL_LABEL]} cell ids from CAS do not match with the cell ids from anndata. "
         "Please update your CAS json."
     )
     if validate:
-        sys.exit()
+        logger.error("Validation failed. Exiting.")
+        sys.exit(1)
+
     # Flush the labelset from anndata
     # input_anndata.obs.loc[list(cell_list), cell_label] = ""
     # Add labelset from CAS to anndata
     cell_ids = derived_cell_ids.get(str(ann["cell_set_accession"]), set())
-    input_anndata.obs.loc[list(cell_ids), ann[LABELSET]] = str(ann[CELL_LABEL])
+    input_obs.loc[list(cell_ids), ann[LABELSET]] = str(ann[CELL_LABEL])
 
 
-def save_cas_to_uns(input_anndata, input_json):
-    # drop cell_ids
-    json_without_cell_ids = {
-        "author_name": input_json["author_name"],
-        "labelset": input_json[LABELSETS],
-        "annotations": [
-            {key: value for key, value in annotation.items() if key != "cell_ids"}
-            for annotation in input_json["annotations"]
-        ],
-    }
-    input_anndata.uns.update({"cas": json.dumps(json_without_cell_ids)})
+def validate_cell_ids(anndata_cell_ids, annotations, validate):
+    # Collect cell ids from annotations
+    cas_cell_ids = {cell_id for ann in annotations for cell_id in ann.get(CELL_IDS, [])}
 
-
-def validate_cell_ids(input_anndata, annotations, validate):
-    # check cell ids
-    cas_cell_ids = set()
-    for ann in annotations:
-        cas_cell_ids.update(ann.get(CELL_IDS, []))
-    anndata_cell_ids = set(input_anndata.obs.index)
-    # cas -> anndata
-    if not cas_cell_ids.issubset(anndata_cell_ids):
-        print("Not all members of cell ids from cas exist in anndata.")
+    # Validate cas -> anndata
+    if not cas_cell_ids <= anndata_cell_ids:
+        logger.warning("Not all members of cell ids from cas exist in anndata.")
         if validate:
-            sys.exit()
-    # anndata -> cas
-    if not anndata_cell_ids.issubset(cas_cell_ids):
-        print("Not all members of cell ids from anndata exist in cas.")
+            logger.error("Validation failed. Exiting.")
+            sys.exit(1)
+
+    # Validate anndata -> cas
+    if not anndata_cell_ids <= cas_cell_ids:
+        logger.warning("Not all members of cell ids from anndata exist in cas.")
         if validate:
-            sys.exit()
-    return annotations
+            logger.error("Validation failed. Exiting.")
+            sys.exit(1)
 
 
 def write_anndata(input_anndata, output_file_path):
