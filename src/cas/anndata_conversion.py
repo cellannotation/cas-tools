@@ -169,12 +169,6 @@ def validate_cell_ids(anndata_cell_ids, annotations, validate):
             sys.exit(1)
 
 
-def write_anndata(input_anndata, output_file_path):
-    # Close the AnnData file to prevent blocking
-    input_anndata.file.close()
-    input_anndata.write(output_file_path)
-
-
 def get_derived_cell_ids(cas):
     """
     Using the cluster hierarchy derives cell ids for all nodes.
