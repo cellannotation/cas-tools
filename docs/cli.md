@@ -35,6 +35,9 @@ cas flatten --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --
 - `--anndata`   : Path to the AnnData file. Ideally, the location will be specified by a resolvable path in the CAS file.
 - `--output`    : Optional output AnnData file name. If provided a new flatten anndata file will be created,
     otherwise the inputted anndata file will be updated with the flatten data.
+- `--fill-na`   : Optional boolean flag indicating whether to fill missing values in the 'obs' field with pd.NA. If 
+                    provided, missing values will be replaced with pd.NA; if not provided, they will remain as empty 
+  strings.
 
 Please check the [related notebook](../notebooks/test_flatten.ipynb) to evaluate the output data format.
 

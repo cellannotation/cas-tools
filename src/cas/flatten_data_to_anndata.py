@@ -53,7 +53,7 @@ def is_list_of_strings(var):
     return isinstance(var, list) and all(isinstance(item, str) for item in var)
 
 
-def flatten(json_file_path, anndata_file_path, output_file_path):
+def flatten(json_file_path, anndata_file_path, output_file_path, fill_na):
     """
      Processes and integrates information from a JSON file and an AnnData (Annotated Data) file, creating a new AnnData
      object that incorporates the metadata. The resulting AnnData object is then saved to a new file.
@@ -62,14 +62,16 @@ def flatten(json_file_path, anndata_file_path, output_file_path):
         json_file_path: The path to the CAS json file.
         anndata_file_path: The path to the AnnData file.
         output_file_path: Output AnnData file name.
+        fill_na: Boolean flag indicating whether to fill missing values in the 'obs' field with pd.NA. If True, missing
+                 values will be replaced with pd.NA; if False, they will remain as empty strings.
     """
     input_json = read_json_file(json_file_path)
 
-    flatten_cas_object(input_json, anndata_file_path, output_file_path)
+    flatten_cas_object(input_json, anndata_file_path, output_file_path, fill_na)
 
 
 # @profile
-def flatten_cas_object(input_json, anndata_file_path, output_file_path):
+def flatten_cas_object(input_json, anndata_file_path, output_file_path, fill_na):
     """
      Processes and integrates information from a JSON file and an AnnData (Annotated Data) file, creating a new AnnData
      object that incorporates the metadata. The resulting AnnData object is then saved to a new file.
@@ -78,6 +80,8 @@ def flatten_cas_object(input_json, anndata_file_path, output_file_path):
         input_json: CAS json file.
         anndata_file_path: The path to the AnnData file.
         output_file_path: Output AnnData file name.
+        fill_na: Boolean flag indicating whether to fill missing values in the 'obs' field with pd.NA. If True, missing
+                 values will be replaced with pd.NA; if False, they will remain as empty strings.
     """
     anndata_file_path = copy_and_update_file_path(anndata_file_path, output_file_path)
 
@@ -90,7 +94,7 @@ def flatten_cas_object(input_json, anndata_file_path, output_file_path):
         obs_index = np.array(cap_adata.obs.axes[0].tolist())
 
         # obs
-        flatten_data = process_annotations(annotations, obs_index, parent_cell_ids)
+        flatten_data = process_annotations(annotations, obs_index, parent_cell_ids, fill_na)
         update_obs(obs, flatten_data)
 
         # uns
@@ -102,7 +106,7 @@ def flatten_cas_object(input_json, anndata_file_path, output_file_path):
         cap_adata.overwrite()
 
 
-def process_annotations(annotations, obs_index, parent_cell_ids):
+def process_annotations(annotations, obs_index, parent_cell_ids, fill_na):
     """
     Processes annotations and generates flattened data for obs dataset.
 
@@ -110,6 +114,7 @@ def process_annotations(annotations, obs_index, parent_cell_ids):
         annotations (list): List of annotations.
         obs_index (np.ndarray): Array representing the index of the obs dataset.
         parent_cell_ids (dict): Dictionary containing parent cell ids.
+        fill_na (bool):
 
     Returns:
         dict: Dictionary containing flattened data.
@@ -151,13 +156,17 @@ def process_annotations(annotations, obs_index, parent_cell_ids):
             if key not in flatten_data:
                 flatten_data[key] = pd.Series("", index=obs_index)
             flatten_data[key].loc[mask] = value
+            if fill_na:
+                flatten_data[key].loc[~mask] = pd.NA
 
     # Convert relevant columns to categorical after the loop
     for key in flatten_data:
         # Get unique values and convert the Series to categorical
         unique_values = pd.unique(flatten_data[key])
+        unique_values = unique_values[~pd.isna(unique_values)]
         flatten_data[key] = pd.Series(
-            pd.Categorical(flatten_data[key], categories=unique_values), index=obs_index
+            pd.Categorical(flatten_data[key], categories=unique_values),
+            index=obs_index
         )
     return flatten_data
 
