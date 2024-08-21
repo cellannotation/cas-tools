@@ -22,7 +22,7 @@ cas_file_path = "src/test/test_data/cas_cap_roundtrip/test_cas.json"
 class TestRoundtrip(unittest.TestCase):
     def test_roundtrip_without_edit(self):
         # Perform flattening and unflattening
-        flatten(cas_file_path, anndata_file_path, flattened_anndata_file_path)
+        flatten(cas_file_path, anndata_file_path, flattened_anndata_file_path, False)
         unflatten(
             json_file_path=None,
             anndata_file_path=flattened_anndata_file_path,
@@ -43,7 +43,7 @@ class TestRoundtrip(unittest.TestCase):
 
     def test_roundtrip_with_edit(self):
         # Perform flattening, update on flattened data and unflattening
-        flatten(cas_file_path, anndata_file_path, flattened_anndata_file_path)
+        flatten(cas_file_path, anndata_file_path, flattened_anndata_file_path, False)
         # Read the flattened Anndata object
         flattened_anndata = ad.read_h5ad(flattened_anndata_file_path, backed="r+")
         # rename a labelset cell label
