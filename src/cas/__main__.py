@@ -252,7 +252,6 @@ def create_flatten_operation_parser(subparsers):
         action="store_true",
         help="Boolean flag indicating whether to fill missing values in the 'obs' field with pd.NA. If provided, "
              "missing values will be replaced with pd.NA; if not provided, they will remain as empty strings.")
-    parser_flatten.set_defaults(validate=False)
 
 
 def create_unflatten_operation_parser(subparsers):
