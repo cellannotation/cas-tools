@@ -139,6 +139,9 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">--anndata</span></code>   : Path to the AnnData file. Ideally, the location will be specified by a resolvable path in the CAS file.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--output</span></code>    : Optional output AnnData file name. If provided a new flatten anndata file will be created,
 otherwise the inputted anndata file will be updated with the flatten data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--fill-na</span></code>   : Optional boolean flag indicating whether to fill missing values in the ‘obs’ field with pd.NA. If
+provided, missing values will be replaced with pd.NA; if not provided, they will remain as empty
+strings.</p></li>
 </ul>
 <p>Please check the <a class="reference download internal" download="" href="_downloads/9a7802a317dc249a85b975d1951e636e/test_flatten.ipynb"><span class="xref download myst">related notebook</span></a> to evaluate the output data format.</p>
 </section>

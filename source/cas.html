@@ -1144,7 +1144,7 @@ content is the first column value and the values are dict of row values.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="cas.flatten_data_to_anndata.flatten">
-<span class="sig-prename descclassname"><span class="pre">cas.flatten_data_to_anndata.</span></span><span class="sig-name descname"><span class="pre">flatten</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anndata_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/flatten_data_to_anndata.html#flatten"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.flatten_data_to_anndata.flatten" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">cas.flatten_data_to_anndata.</span></span><span class="sig-name descname"><span class="pre">flatten</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anndata_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_na</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/flatten_data_to_anndata.html#flatten"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.flatten_data_to_anndata.flatten" title="Link to this definition"></a></dt>
 <dd><blockquote>
 <div><p>Processes and integrates information from a JSON file and an AnnData (Annotated Data) file, creating a new AnnData
 object that incorporates the metadata. The resulting AnnData object is then saved to a new file.</p>
@@ -1155,6 +1155,8 @@ object that incorporates the metadata. The resulting AnnData object is then save
 <li><p><strong>json_file_path</strong> – The path to the CAS json file.</p></li>
 <li><p><strong>anndata_file_path</strong> – The path to the AnnData file.</p></li>
 <li><p><strong>output_file_path</strong> – Output AnnData file name.</p></li>
+<li><p><strong>fill_na</strong> – Boolean flag indicating whether to fill missing values in the ‘obs’ field with pd.NA. If True, missing
+values will be replaced with pd.NA; if False, they will remain as empty strings.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1162,7 +1164,7 @@ object that incorporates the metadata. The resulting AnnData object is then save
 
 <dl class="py function">
 <dt class="sig sig-object py" id="cas.flatten_data_to_anndata.flatten_cas_object">
-<span class="sig-prename descclassname"><span class="pre">cas.flatten_data_to_anndata.</span></span><span class="sig-name descname"><span class="pre">flatten_cas_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_json</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anndata_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/flatten_data_to_anndata.html#flatten_cas_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.flatten_data_to_anndata.flatten_cas_object" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">cas.flatten_data_to_anndata.</span></span><span class="sig-name descname"><span class="pre">flatten_cas_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_json</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anndata_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_na</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/flatten_data_to_anndata.html#flatten_cas_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.flatten_data_to_anndata.flatten_cas_object" title="Link to this definition"></a></dt>
 <dd><blockquote>
 <div><p>Processes and integrates information from a JSON file and an AnnData (Annotated Data) file, creating a new AnnData
 object that incorporates the metadata. The resulting AnnData object is then saved to a new file.</p>
@@ -1173,6 +1175,8 @@ object that incorporates the metadata. The resulting AnnData object is then save
 <li><p><strong>input_json</strong> – CAS json file.</p></li>
 <li><p><strong>anndata_file_path</strong> – The path to the AnnData file.</p></li>
 <li><p><strong>output_file_path</strong> – Output AnnData file name.</p></li>
+<li><p><strong>fill_na</strong> – Boolean flag indicating whether to fill missing values in the ‘obs’ field with pd.NA. If True, missing
+values will be replaced with pd.NA; if False, they will remain as empty strings.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1180,7 +1184,7 @@ object that incorporates the metadata. The resulting AnnData object is then save
 
 <dl class="py function">
 <dt class="sig sig-object py" id="cas.flatten_data_to_anndata.process_annotations">
-<span class="sig-prename descclassname"><span class="pre">cas.flatten_data_to_anndata.</span></span><span class="sig-name descname"><span class="pre">process_annotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">annotations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obs_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_cell_ids</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/flatten_data_to_anndata.html#process_annotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.flatten_data_to_anndata.process_annotations" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">cas.flatten_data_to_anndata.</span></span><span class="sig-name descname"><span class="pre">process_annotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">annotations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obs_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_cell_ids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_na</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/flatten_data_to_anndata.html#process_annotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.flatten_data_to_anndata.process_annotations" title="Link to this definition"></a></dt>
 <dd><p>Processes annotations and generates flattened data for obs dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1188,6 +1192,7 @@ object that incorporates the metadata. The resulting AnnData object is then save
 <li><p><strong>annotations</strong> (<em>list</em>) – List of annotations.</p></li>
 <li><p><strong>obs_index</strong> (<em>np.ndarray</em>) – Array representing the index of the obs dataset.</p></li>
 <li><p><strong>parent_cell_ids</strong> (<em>dict</em>) – Dictionary containing parent cell ids.</p></li>
+<li><p><strong>fill_na</strong> (<em>bool</em>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
