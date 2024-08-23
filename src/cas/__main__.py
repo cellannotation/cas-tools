@@ -55,12 +55,13 @@ def main():
         json_file_path = args.json
         anndata_file_path = args.anndata
         output_file_path = args.output
+        fill_na = args.fill_na
 
         if output_file_path and os.path.abspath(anndata_file_path) == os.path.abspath(
             output_file_path
         ):
             raise ValueError("--anndata and --output cannot be the same")
-        flatten(json_file_path, anndata_file_path, output_file_path)
+        flatten(json_file_path, anndata_file_path, output_file_path, fill_na)
     elif args.action == "unflatten":
         args = parser.parse_args()
         json_file_path = args.json
@@ -221,7 +222,9 @@ def create_flatten_operation_parser(subparsers):
     --json      : Path to the CAS JSON schema file.
     --anndata   : Path to the AnnData file. Ideally, the location will be specified by a resolvable path in the CAS file.
     --output    : Optional output AnnData file name. If provided a new flatten anndata file will be created,
-    otherwise the inputted anndata file will be updated with the flatten data.
+                    otherwise the inputted anndata file will be updated with the flatten data.
+    --fill-na   : Optional boolean flag indicating whether to fill missing values in the 'obs' field with pd.NA. If
+                    provided, missing values will be replaced with pd.NA; if not provided, they will remain as empty strings.
 
     Usage Example:
     --------------
@@ -243,7 +246,12 @@ def create_flatten_operation_parser(subparsers):
         required=False,
         help="Output AnnData file name.",
     )
-    parser_flatten.set_defaults(validate=False)
+    parser_flatten.add_argument(
+        "--fill-na",
+        required=False,
+        action="store_true",
+        help="Boolean flag indicating whether to fill missing values in the 'obs' field with pd.NA. If provided, "
+             "missing values will be replaced with pd.NA; if not provided, they will remain as empty strings.")
 
 
 def create_unflatten_operation_parser(subparsers):
