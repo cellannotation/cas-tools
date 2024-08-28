@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Literal, Optional
 
 from anndata import AnnData
 
@@ -7,7 +7,10 @@ from cas.file_utils import read_anndata_file, read_json_file
 
 
 def split_anndata_to_file(
-    anndata_file_path: str, cas_json_paths: List[str], multiple_outputs: bool
+    anndata_file_path: str,
+    cas_json_paths: List[str],
+    multiple_outputs: bool,
+    compression_method: Optional[Literal["gzip", "lzf"]] = "gzip",
 ):
     """
     Splits an AnnData file into multiple files based on provided CAS JSON files and writes them to disk.
@@ -16,6 +19,7 @@ def split_anndata_to_file(
         anndata_file_path: Path to the AnnData file.
         cas_json_paths: List of CAS JSON file paths.
         multiple_outputs: If True, outputs multiple files, one for each CAS JSON file; otherwise, outputs a single file.
+        compression_method: Compression method utilized in anndata write function. Default is "gzip".
 
     """
     adata = read_anndata_file(anndata_file_path)
@@ -34,7 +38,7 @@ def split_anndata_to_file(
                     else "split_anndata.h5ad"
                 )
             ),
-            compression="gzip",
+            compression=compression_method,
         )
 
 
