@@ -171,8 +171,11 @@ def main():
         anndata_file_path = args.anndata
         cas_json_path_list = args.cas_json
         multiple_outputs = args.multiple_outputs
+        compression = args.compression
 
-        split_anndata_to_file(anndata_file_path, cas_json_path_list, multiple_outputs)
+        split_anndata_to_file(
+            anndata_file_path, cas_json_path_list, multiple_outputs, compression
+        )
 
 
 def create_merge_operation_parser(subparsers):
@@ -251,7 +254,8 @@ def create_flatten_operation_parser(subparsers):
         required=False,
         action="store_true",
         help="Boolean flag indicating whether to fill missing values in the 'obs' field with pd.NA. If provided, "
-             "missing values will be replaced with pd.NA; if not provided, they will remain as empty strings.")
+        "missing values will be replaced with pd.NA; if not provided, they will remain as empty strings.",
+    )
 
 
 def create_unflatten_operation_parser(subparsers):
@@ -727,12 +731,16 @@ def create_split_anndata_parser(subparsers):
     --cas_json_list     : List of CAS JSON file paths that will be used to split the AnnData file.
     --multiple_outputs  : If set, creates multiple output files for each term provided in split_on.
                           If not set, creates a single output file containing all cell_ids from the input CAS JSON files.
+    --compression       : Compression method utilized in anndata write function. It can be `gzip`, `lzf`,
+                            or `None`.Default is "gzip" if flag is provided without a value. If the flag is not provided,
+                            defaults to None.
     Usage Example:
     --------------
     cd src
     python -m cas split_anndata --anndata path/to/anndata.h5ad --cas_json path/to/cas.json
+    python -m cas split_anndata --anndata path/to/anndata.h5ad path/to/cas_1.json path/to/cas_2.json --compression lzf
     python -m cas split_anndata --anndata path/to/anndata.h5ad path/to/cas_1.json path/to/cas_2.json
-    python -m cas split_anndata --anndata path/to/anndata.h5ad path/to/cas_1.json path/to/cas_2.json --multiple_outputs
+    --multiple_outputs --compression
     """
     parser_split_anndata = subparsers.add_parser(
         "split_anndata",
@@ -753,6 +761,23 @@ def create_split_anndata_parser(subparsers):
         action="store_true",
         help="If set, creates multiple output files for each CAS JSON file; if not set, creates a single output file.",
     )
+    parser_split_anndata.add_argument(
+        "--compression",
+        nargs="?",
+        default=None,
+        choices=["gzip", "lzf", None],
+        action=CompressionAction,
+        help="Compression method utilized in anndata write function, can be `gzip`, `lzf`, or `None`.",
+    )
+
+
+class CompressionAction(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        # If --compression is specified without a value, use 'gzip'
+        if values is None:
+            setattr(namespace, self.dest, "gzip")
+        else:
+            setattr(namespace, self.dest, values)
 
 
 if __name__ == "__main__":
