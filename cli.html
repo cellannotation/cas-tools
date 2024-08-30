@@ -346,14 +346,16 @@ python -m cas split_cas --cas_json path/to/cas.json --split_on term1 term2 --mul
 <li><p><strong>–anndata</strong>: Path to the AnnData file. This parameter is required.</p></li>
 <li><p><strong>–cas_json</strong>: List of CAS JSON file paths that will be used to split the AnnData file. Multiple paths can be provided.</p></li>
 <li><p><strong>–multiple_outputs</strong>: If set, creates multiple output files for each CAS JSON file; if not set, creates a single output file containing all cells from the input CAS JSON files.</p></li>
+<li><p><strong>–compression</strong>: Compression method utilized in anndata write function. It can be <code class="docutils literal notranslate"><span class="pre">gzip</span></code>, <code class="docutils literal notranslate"><span class="pre">lzf</span></code>,  or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is “gzip” if flag is provided without a value. If the flag is not provided, defaults to None.</p></li>
 </ul>
 </section>
 <section id="id4">
 <h3>Usage Examples:<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
 <div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>cd src
 python -m cas split_anndata --anndata path/to/anndata.h5ad --cas_json path/to/cas.json
-python -m cas split_anndata --anndata path/to/anndata.h5ad --cas_json path/to/cas_1.json path/to/cas_2.json
-python -m cas split_anndata --anndata path/to/anndata.h5ad --cas_json path/to/cas_1.json path/to/cas_2.json --multiple_outputs
+python -m cas split_anndata --anndata path/to/anndata.h5ad --cas_json path/to/cas_1.json path/to/cas_2.json --compression lzf
+python -m cas split_anndata --anndata path/to/anndata.h5ad --cas_json path/to/cas_1.json path/to/cas_2.json 
+--multiple_outputs --compression
 </pre></div>
 </div>
 </section>

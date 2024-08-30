@@ -73,7 +73,7 @@
              
   <h1>Source code for cas.anndata_splitter</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">from</span> <span class="nn">anndata</span> <span class="kn">import</span> <span class="n">AnnData</span>
 
@@ -83,7 +83,10 @@
 <div class="viewcode-block" id="split_anndata_to_file">
 <a class="viewcode-back" href="../../source/cas.html#cas.anndata_splitter.split_anndata_to_file">[docs]</a>
 <span class="k">def</span> <span class="nf">split_anndata_to_file</span><span class="p">(</span>
-    <span class="n">anndata_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cas_json_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">multiple_outputs</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">anndata_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">cas_json_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">multiple_outputs</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">compression_method</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;gzip&quot;</span><span class="p">,</span> <span class="s2">&quot;lzf&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="s2">&quot;gzip&quot;</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Splits an AnnData file into multiple files based on provided CAS JSON files and writes them to disk.</span>
@@ -92,6 +95,7 @@
 <span class="sd">        anndata_file_path: Path to the AnnData file.</span>
 <span class="sd">        cas_json_paths: List of CAS JSON file paths.</span>
 <span class="sd">        multiple_outputs: If True, outputs multiple files, one for each CAS JSON file; otherwise, outputs a single file.</span>
+<span class="sd">        compression_method: Compression method utilized in anndata write function. Default is &quot;gzip&quot;.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">adata</span> <span class="o">=</span> <span class="n">read_anndata_file</span><span class="p">(</span><span class="n">anndata_file_path</span><span class="p">)</span>
@@ -110,7 +114,7 @@
                     <span class="k">else</span> <span class="s2">&quot;split_anndata.h5ad&quot;</span>
                 <span class="p">)</span>
             <span class="p">),</span>
-            <span class="n">compression</span><span class="o">=</span><span class="s2">&quot;gzip&quot;</span><span class="p">,</span>
+            <span class="n">compression</span><span class="o">=</span><span class="n">compression_method</span><span class="p">,</span>
         <span class="p">)</span></div>
 
 
