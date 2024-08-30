@@ -2,14 +2,14 @@ from collections import defaultdict
 from typing import Any, Dict, List, Union
 
 from cas.file_utils import read_json_file, write_dict_to_json_file
-
-ANNOTATIONS = "annotations"
-CELL_LABEL = "cell_label"
-CELL_SET_ACCESSION = "cell_set_accession"
-LABELSET = "labelset"
-LABELSETS = "labelsets"
-LABELSETS_NAME = "name"
-PARENT_CELL_SET_ACCESSION = "parent_cell_set_accession"
+from cas.utils.conversion_utils import (
+    ANNOTATIONS,
+    CELL_SET_ACCESSION,
+    LABELSET,
+    LABELSET_NAME,
+    LABELSETS,
+    PARENT_CELL_SET_ACCESSION,
+)
 
 
 def split_cas_to_file(
@@ -112,7 +112,7 @@ def filter_and_copy_cas_entries(
             output_dict[ANNOTATIONS].append(annotation)
             labelset_dict.add(annotation[LABELSET])
     for labelset in cas[LABELSETS]:
-        if labelset[LABELSETS_NAME] in labelset_dict:
+        if labelset[LABELSET_NAME] in labelset_dict:
             output_dict[LABELSETS].append(labelset)
     return output_dict
 
