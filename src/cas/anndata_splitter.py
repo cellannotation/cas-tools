@@ -5,6 +5,8 @@ from anndata import AnnData
 
 from cas.file_utils import read_anndata_file, read_json_file
 
+from cas.utils.conversion_utils import ANNOTATIONS, CELL_IDS
+
 
 def split_anndata_to_file(
     anndata_file_path: str,
@@ -50,7 +52,7 @@ def split_anndata(
 
     Args:
         adata: AnnData object.
-        cas: Dictionary representing the CAS data.
+        cas: Dictionary representing the CAS data with its file name as keys.
         multiple_outputs: Determines if the output should be multiple AnnData objects or a single one.
 
     Returns:
@@ -59,33 +61,32 @@ def split_anndata(
     Raises:
         ValueError: If any required terms do not exist in the CAS data under 'parent_cell_set_name'.
     """
+
+    def get_cell_ids(cas_data: Dict[str, Dict[str, Any]]) -> List[str]:
+        """Extract unique cell IDs from CAS data."""
+        return list(
+            set(
+                [
+                    cid
+                    for cas_obj in cas_data.values()
+                    for annotation in cas_obj[ANNOTATIONS]
+                    for cid in annotation.get(CELL_IDS, [])
+                ]
+            )
+        )
+
     if multiple_outputs:
         splitted_anndata_list = []
         for cas_file_name, cas_object in cas.items():
-            cell_ids = list(
-                set(
-                    [
-                        cid
-                        for annotation in cas_object["annotations"]
-                        for cid in annotation["cell_ids"]
-                    ]
-                )
-            )
+            cell_ids = get_cell_ids({cas_file_name: cas_object})
             mask = adata.obs.index.isin(cell_ids)
             adata_subset = adata[mask, :].to_memory()
             splitted_anndata_list.append(adata_subset)
         return splitted_anndata_list
     else:
-        cell_ids = list(
-            set(
-                [
-                    cid
-                    for cas_file_name, cas_object in cas.items()
-                    for annotation in cas_object["annotations"]
-                    for cid in annotation["cell_ids"]
-                ]
-            )
-        )
+        cell_ids = get_cell_ids(cas)
         mask = adata.obs.index.isin(cell_ids)
         adata_subset = adata[mask, :].to_memory()
         return [adata_subset]
+
+
