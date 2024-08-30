@@ -79,6 +79,8 @@
 
 <span class="kn">from</span> <span class="nn">cas.file_utils</span> <span class="kn">import</span> <span class="n">read_anndata_file</span><span class="p">,</span> <span class="n">read_json_file</span>
 
+<span class="kn">from</span> <span class="nn">cas.utils.conversion_utils</span> <span class="kn">import</span> <span class="n">ANNOTATIONS</span><span class="p">,</span> <span class="n">CELL_IDS</span>
+
 
 <div class="viewcode-block" id="split_anndata_to_file">
 <a class="viewcode-back" href="../../source/cas.html#cas.anndata_splitter.split_anndata_to_file">[docs]</a>
@@ -129,7 +131,7 @@
 
 <span class="sd">    Args:</span>
 <span class="sd">        adata: AnnData object.</span>
-<span class="sd">        cas: Dictionary representing the CAS data.</span>
+<span class="sd">        cas: Dictionary representing the CAS data with its file name as keys.</span>
 <span class="sd">        multiple_outputs: Determines if the output should be multiple AnnData objects or a single one.</span>
 
 <span class="sd">    Returns:</span>
@@ -138,36 +140,35 @@
 <span class="sd">    Raises:</span>
 <span class="sd">        ValueError: If any required terms do not exist in the CAS data under &#39;parent_cell_set_name&#39;.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">get_cell_ids</span><span class="p">(</span><span class="n">cas_data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract unique cell IDs from CAS data.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="nb">set</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">cid</span>
+                    <span class="k">for</span> <span class="n">cas_obj</span> <span class="ow">in</span> <span class="n">cas_data</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">cas_obj</span><span class="p">[</span><span class="n">ANNOTATIONS</span><span class="p">]</span>
+                    <span class="k">for</span> <span class="n">cid</span> <span class="ow">in</span> <span class="n">annotation</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">CELL_IDS</span><span class="p">,</span> <span class="p">[])</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
     <span class="k">if</span> <span class="n">multiple_outputs</span><span class="p">:</span>
         <span class="n">splitted_anndata_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">cas_file_name</span><span class="p">,</span> <span class="n">cas_object</span> <span class="ow">in</span> <span class="n">cas</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">cell_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
-                <span class="nb">set</span><span class="p">(</span>
-                    <span class="p">[</span>
-                        <span class="n">cid</span>
-                        <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">cas_object</span><span class="p">[</span><span class="s2">&quot;annotations&quot;</span><span class="p">]</span>
-                        <span class="k">for</span> <span class="n">cid</span> <span class="ow">in</span> <span class="n">annotation</span><span class="p">[</span><span class="s2">&quot;cell_ids&quot;</span><span class="p">]</span>
-                    <span class="p">]</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
+            <span class="n">cell_ids</span> <span class="o">=</span> <span class="n">get_cell_ids</span><span class="p">({</span><span class="n">cas_file_name</span><span class="p">:</span> <span class="n">cas_object</span><span class="p">})</span>
             <span class="n">mask</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">cell_ids</span><span class="p">)</span>
             <span class="n">adata_subset</span> <span class="o">=</span> <span class="n">adata</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">to_memory</span><span class="p">()</span>
             <span class="n">splitted_anndata_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">adata_subset</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">splitted_anndata_list</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">cell_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
-            <span class="nb">set</span><span class="p">(</span>
-                <span class="p">[</span>
-                    <span class="n">cid</span>
-                    <span class="k">for</span> <span class="n">cas_file_name</span><span class="p">,</span> <span class="n">cas_object</span> <span class="ow">in</span> <span class="n">cas</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-                    <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">cas_object</span><span class="p">[</span><span class="s2">&quot;annotations&quot;</span><span class="p">]</span>
-                    <span class="k">for</span> <span class="n">cid</span> <span class="ow">in</span> <span class="n">annotation</span><span class="p">[</span><span class="s2">&quot;cell_ids&quot;</span><span class="p">]</span>
-                <span class="p">]</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
+        <span class="n">cell_ids</span> <span class="o">=</span> <span class="n">get_cell_ids</span><span class="p">(</span><span class="n">cas</span><span class="p">)</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">cell_ids</span><span class="p">)</span>
         <span class="n">adata_subset</span> <span class="o">=</span> <span class="n">adata</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">to_memory</span><span class="p">()</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">adata_subset</span><span class="p">]</span></div>
+
+
 
 </pre></div>
 

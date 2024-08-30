@@ -78,19 +78,17 @@
 <span class="kn">from</span> <span class="nn">cap_anndata</span> <span class="kn">import</span> <span class="n">read_h5ad</span>
 
 <span class="kn">from</span> <span class="nn">cas.file_utils</span> <span class="kn">import</span> <span class="n">read_json_file</span>
-<span class="kn">from</span> <span class="nn">cas.utils.conversion_utils</span> <span class="kn">import</span> <span class="n">copy_and_update_file_path</span><span class="p">,</span> <span class="n">reformat_json</span>
-
-<span class="n">LABELSET_NAME</span> <span class="o">=</span> <span class="s2">&quot;name&quot;</span>
-
-<span class="n">LABELSET</span> <span class="o">=</span> <span class="s2">&quot;labelset&quot;</span>
-
-<span class="n">LABELSETS</span> <span class="o">=</span> <span class="s2">&quot;labelsets&quot;</span>
-
-<span class="n">ANNOTATIONS</span> <span class="o">=</span> <span class="s2">&quot;annotations&quot;</span>
-
-<span class="n">CELL_IDS</span> <span class="o">=</span> <span class="s2">&quot;cell_ids&quot;</span>
-
-<span class="n">CELL_LABEL</span> <span class="o">=</span> <span class="s2">&quot;cell_label&quot;</span>
+<span class="kn">from</span> <span class="nn">cas.utils.conversion_utils</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ANNOTATIONS</span><span class="p">,</span>
+    <span class="n">CELL_IDS</span><span class="p">,</span>
+    <span class="n">CELL_LABEL</span><span class="p">,</span>
+    <span class="n">LABELSET</span><span class="p">,</span>
+    <span class="n">LABELSET_NAME</span><span class="p">,</span>
+    <span class="n">LABELSETS</span><span class="p">,</span>
+    <span class="n">collect_parent_cell_ids</span><span class="p">,</span>
+    <span class="n">copy_and_update_file_path</span><span class="p">,</span>
+    <span class="n">reformat_json</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="c1"># Set up logging</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
@@ -172,7 +170,7 @@
 <a class="viewcode-back" href="../../source/cas.html#cas.anndata_conversion.check_labelsets">[docs]</a>
 <span class="k">def</span> <span class="nf">check_labelsets</span><span class="p">(</span><span class="n">cas_json</span><span class="p">,</span> <span class="n">input_obs</span><span class="p">,</span> <span class="n">matching_obs_keys</span><span class="p">,</span> <span class="n">validate</span><span class="p">):</span>
     <span class="n">annotations</span> <span class="o">=</span> <span class="n">cas_json</span><span class="p">[</span><span class="n">ANNOTATIONS</span><span class="p">]</span>
-    <span class="n">derived_cell_ids</span> <span class="o">=</span> <span class="n">get_derived_cell_ids</span><span class="p">(</span><span class="n">cas_json</span><span class="p">)</span>
+    <span class="n">derived_cell_ids</span> <span class="o">=</span> <span class="n">collect_parent_cell_ids</span><span class="p">(</span><span class="n">cas_json</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">ann</span> <span class="ow">in</span> <span class="n">annotations</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">ann</span><span class="p">[</span><span class="n">LABELSET</span><span class="p">]</span> <span class="ow">in</span> <span class="n">matching_obs_keys</span><span class="p">:</span>
@@ -264,46 +262,6 @@
         <span class="k">if</span> <span class="n">validate</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Validation failed. Exiting.&quot;</span><span class="p">)</span>
             <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="get_derived_cell_ids">
-<a class="viewcode-back" href="../../source/cas.html#cas.anndata_conversion.get_derived_cell_ids">[docs]</a>
-<span class="k">def</span> <span class="nf">get_derived_cell_ids</span><span class="p">(</span><span class="n">cas</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Using the cluster hierarchy derives cell ids for all nodes.</span>
-<span class="sd">    Args:</span>
-<span class="sd">        cas: cas json object</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        dictionary of cell_set_accession - set of derived cell ids</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">derived_cell_ids</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-
-    <span class="n">labelsets</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">cas</span><span class="p">[</span><span class="n">LABELSETS</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">]))</span>
-    <span class="k">for</span> <span class="n">labelset</span> <span class="ow">in</span> <span class="n">labelsets</span><span class="p">:</span>
-        <span class="n">ls_annotations</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">ann</span> <span class="k">for</span> <span class="n">ann</span> <span class="ow">in</span> <span class="n">cas</span><span class="p">[</span><span class="n">ANNOTATIONS</span><span class="p">]</span> <span class="k">if</span> <span class="n">ann</span><span class="p">[</span><span class="s2">&quot;labelset&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">labelset</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
-        <span class="p">]</span>
-
-        <span class="k">for</span> <span class="n">ann</span> <span class="ow">in</span> <span class="n">ls_annotations</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s2">&quot;parent_cell_set_accession&quot;</span> <span class="ow">in</span> <span class="n">ann</span><span class="p">:</span>
-                <span class="n">cell_ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
-                <span class="k">if</span> <span class="n">CELL_IDS</span> <span class="ow">in</span> <span class="n">ann</span> <span class="ow">and</span> <span class="n">ann</span><span class="p">[</span><span class="n">CELL_IDS</span><span class="p">]:</span>
-                    <span class="n">cell_ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">ann</span><span class="p">[</span><span class="n">CELL_IDS</span><span class="p">])</span>
-                    <span class="n">derived_cell_ids</span><span class="p">[</span><span class="n">ann</span><span class="p">[</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">cell_ids</span>
-                <span class="k">elif</span> <span class="p">(</span>
-                    <span class="s2">&quot;cell_set_accession&quot;</span> <span class="ow">in</span> <span class="n">ann</span>
-                    <span class="ow">and</span> <span class="n">ann</span><span class="p">[</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">derived_cell_ids</span>
-                <span class="p">):</span>
-                    <span class="n">cell_ids</span> <span class="o">=</span> <span class="n">derived_cell_ids</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">ann</span><span class="p">[</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">])]</span>
-
-                <span class="k">if</span> <span class="n">ann</span><span class="p">[</span><span class="s2">&quot;parent_cell_set_accession&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">derived_cell_ids</span><span class="p">:</span>
-                    <span class="n">derived_cell_ids</span><span class="p">[</span><span class="n">ann</span><span class="p">[</span><span class="s2">&quot;parent_cell_set_accession&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cell_ids</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">derived_cell_ids</span><span class="p">[</span><span class="n">ann</span><span class="p">[</span><span class="s2">&quot;parent_cell_set_accession&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">cell_ids</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">derived_cell_ids</span></div>
 
 </pre></div>
 

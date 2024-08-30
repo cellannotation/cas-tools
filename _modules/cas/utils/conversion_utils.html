@@ -75,8 +75,7 @@
 <span></span><span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">datetime</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">anndata</span> <span class="k">as</span> <span class="nn">ad</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -85,6 +84,26 @@
 <span class="kn">from</span> <span class="nn">cas.accession.hash_accession_manager</span> <span class="kn">import</span> <span class="n">HashAccessionManager</span>
 
 <span class="n">CROSSREF_API_URL</span> <span class="o">=</span> <span class="s2">&quot;https://api.crossref.org/works/&quot;</span>
+
+<span class="n">LABELSET_NAME</span> <span class="o">=</span> <span class="s2">&quot;name&quot;</span>
+
+<span class="n">LABELSET</span> <span class="o">=</span> <span class="s2">&quot;labelset&quot;</span>
+
+<span class="n">LABELSETS</span> <span class="o">=</span> <span class="s2">&quot;labelsets&quot;</span>
+
+<span class="n">ANNOTATIONS</span> <span class="o">=</span> <span class="s2">&quot;annotations&quot;</span>
+
+<span class="n">CELL_IDS</span> <span class="o">=</span> <span class="s2">&quot;cell_ids&quot;</span>
+
+<span class="n">CELL_LABEL</span> <span class="o">=</span> <span class="s2">&quot;cell_label&quot;</span>
+
+<span class="n">CELL_SET_ACCESSION</span> <span class="o">=</span> <span class="s2">&quot;cell_set_accession&quot;</span>
+
+<span class="n">PARENT_CELL_SET_ACCESSION</span> <span class="o">=</span> <span class="s2">&quot;parent_cell_set_accession&quot;</span>
+
+<span class="n">AUTHOR_ANNOTATION_FIELDS</span> <span class="o">=</span> <span class="s2">&quot;author_annotation_fields&quot;</span>
+
+<span class="n">CELLHASH</span> <span class="o">=</span> <span class="s2">&quot;cellhash&quot;</span>
 
 
 <div class="viewcode-block" id="calculate_labelset_rank">
@@ -214,6 +233,50 @@
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">cell_ontology_term_id</span><span class="p">,</span> <span class="n">cell_ontology_term</span></div>
+
+
+
+<div class="viewcode-block" id="collect_parent_cell_ids">
+<a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.conversion_utils.collect_parent_cell_ids">[docs]</a>
+<span class="k">def</span> <span class="nf">collect_parent_cell_ids</span><span class="p">(</span><span class="n">cas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Set</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Collects parent cell IDs from the given CAS (Cluster Annotation Service) data.</span>
+
+<span class="sd">    This function iterates through labelsets in the CAS data and collects parent cell IDs</span>
+<span class="sd">    associated with each labelset annotation. It populates and returns a dictionary</span>
+<span class="sd">    mapping parent cell set accessions to sets of corresponding cell IDs.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cas: The Cluster Annotation Service data containing labelsets and annotations.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A dictionary mapping parent cell set accessions to sets of corresponding cell IDs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parent_cell_ids</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+    <span class="n">labelsets</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">cas</span><span class="p">[</span><span class="n">LABELSETS</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">]))</span>
+    <span class="k">for</span> <span class="n">labelset</span> <span class="ow">in</span> <span class="n">labelsets</span><span class="p">:</span>
+        <span class="n">ls_annotations</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">ann</span> <span class="k">for</span> <span class="n">ann</span> <span class="ow">in</span> <span class="n">cas</span><span class="p">[</span><span class="n">ANNOTATIONS</span><span class="p">]</span> <span class="k">if</span> <span class="n">ann</span><span class="p">[</span><span class="n">LABELSET</span><span class="p">]</span> <span class="o">==</span> <span class="n">labelset</span><span class="p">[</span><span class="n">LABELSET_NAME</span><span class="p">]</span>
+        <span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">ann</span> <span class="ow">in</span> <span class="n">ls_annotations</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;parent_cell_set_accession&quot;</span> <span class="ow">in</span> <span class="n">ann</span><span class="p">:</span>
+                <span class="n">cell_ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">CELL_IDS</span> <span class="ow">in</span> <span class="n">ann</span> <span class="ow">and</span> <span class="n">ann</span><span class="p">[</span><span class="n">CELL_IDS</span><span class="p">]:</span>
+                    <span class="n">cell_ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">ann</span><span class="p">[</span><span class="n">CELL_IDS</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="p">(</span>
+                    <span class="s2">&quot;cell_set_accession&quot;</span> <span class="ow">in</span> <span class="n">ann</span>
+                    <span class="ow">and</span> <span class="n">ann</span><span class="p">[</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">parent_cell_ids</span>
+                <span class="p">):</span>
+                    <span class="n">cell_ids</span> <span class="o">=</span> <span class="n">parent_cell_ids</span><span class="p">[</span><span class="n">ann</span><span class="p">[</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">]]</span>
+
+                <span class="k">if</span> <span class="n">ann</span><span class="p">[</span><span class="s2">&quot;parent_cell_set_accession&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">parent_cell_ids</span><span class="p">:</span>
+                    <span class="n">parent_cell_ids</span><span class="p">[</span><span class="n">ann</span><span class="p">[</span><span class="s2">&quot;parent_cell_set_accession&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cell_ids</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">parent_cell_ids</span><span class="p">[</span><span class="n">ann</span><span class="p">[</span><span class="s2">&quot;parent_cell_set_accession&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">cell_ids</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">parent_cell_ids</span></div>
 
 
 
@@ -366,27 +429,6 @@
             <span class="p">):</span>
                 <span class="n">annotation</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;cell_ontology_term_id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
                 <span class="n">annotation</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;cell_ontology_term&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="json_serializer">
-<a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.conversion_utils.json_serializer">[docs]</a>
-<span class="k">def</span> <span class="nf">json_serializer</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    JSON serializer for objects not serializable by default json code.</span>
-<span class="sd">    Usage: json.dumps(my_dict, default=json_serializer)</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        obj: object to serialize</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Serialized object.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="p">(</span><span class="n">datetime</span><span class="p">,</span> <span class="n">date</span><span class="p">)):</span>
-        <span class="c1"># return obj.isoformat()</span>
-        <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;Z&quot;</span>
-    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Type </span><span class="si">%s</span><span class="s2"> not serializable&quot;</span> <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span></div>
 
 
 
