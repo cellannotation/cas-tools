@@ -1,6 +1,5 @@
 import json
 import logging
-import shutil
 from collections import defaultdict
 from typing import Any, Dict, List, Union
 
@@ -15,27 +14,23 @@ from cas.file_utils import (
     update_uns,
     write_dict_to_json_file,
 )
-from cas.utils.conversion_utils import copy_and_update_file_path, reformat_json
+from cas.utils.conversion_utils import (
+    ANNOTATIONS,
+    AUTHOR_ANNOTATION_FIELDS,
+    CELL_IDS,
+    CELL_LABEL,
+    CELLHASH,
+    LABELSET,
+    LABELSET_NAME,
+    LABELSETS,
+    collect_parent_cell_ids,
+    copy_and_update_file_path,
+    reformat_json,
+)
 
 # Configure logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.WARNING)
-
-LABELSET_NAME = "name"
-
-LABELSET = "labelset"
-
-LABELSETS = "labelsets"
-
-ANNOTATIONS = "annotations"
-
-CELL_IDS = "cell_ids"
-
-CELL_LABEL = "cell_label"
-
-AUTHOR_ANNOTATION_FIELDS = "author_annotation_fields"
-
-CELLHASH = "cellhash"
 
 
 def is_list_of_strings(var):
@@ -94,7 +89,9 @@ def flatten_cas_object(input_json, anndata_file_path, output_file_path, fill_na)
         obs_index = np.array(cap_adata.obs.axes[0].tolist())
 
         # obs
-        flatten_data = process_annotations(annotations, obs_index, parent_cell_ids, fill_na)
+        flatten_data = process_annotations(
+            annotations, obs_index, parent_cell_ids, fill_na
+        )
         update_obs(obs, flatten_data)
 
         # uns
@@ -165,8 +162,7 @@ def process_annotations(annotations, obs_index, parent_cell_ids, fill_na):
         unique_values = pd.unique(flatten_data[key])
         unique_values = unique_values[~pd.isna(unique_values)]
         flatten_data[key] = pd.Series(
-            pd.Categorical(flatten_data[key], categories=unique_values),
-            index=obs_index
+            pd.Categorical(flatten_data[key], categories=unique_values), index=obs_index
         )
     return flatten_data
 
@@ -210,47 +206,6 @@ def generate_uns_json(input_json):
     uns_json["cas"] = reformat_json(input_json)
 
     return uns_json
-
-
-def collect_parent_cell_ids(cas):
-    """
-    Collects parent cell IDs from the given CAS (Cluster Annotation Service) data.
-
-    This function iterates through labelsets in the CAS data and collects parent cell IDs
-    associated with each labelset annotation. It populates and returns a dictionary
-    mapping parent cell set accessions to sets of corresponding cell IDs.
-
-    Args:
-        cas (dict): The Cluster Annotation Service data containing labelsets and annotations.
-
-    Returns:
-        dict: A dictionary mapping parent cell set accessions to sets of corresponding cell IDs.
-    """
-    parent_cell_ids = dict()
-
-    labelsets = sorted(cas[LABELSETS], key=lambda x: int(x["rank"]))
-    for labelset in labelsets:
-        ls_annotations = [
-            ann for ann in cas[ANNOTATIONS] if ann[LABELSET] == labelset[LABELSET_NAME]
-        ]
-
-        for ann in ls_annotations:
-            if "parent_cell_set_accession" in ann:
-                cell_ids = set()
-                if CELL_IDS in ann and ann[CELL_IDS]:
-                    cell_ids = set(ann[CELL_IDS])
-                elif (
-                    "cell_set_accession" in ann
-                    and ann["cell_set_accession"] in parent_cell_ids
-                ):
-                    cell_ids = parent_cell_ids[ann["cell_set_accession"]]
-
-                if ann["parent_cell_set_accession"] in parent_cell_ids:
-                    parent_cell_ids[ann["parent_cell_set_accession"]].update(cell_ids)
-                else:
-                    parent_cell_ids[ann["parent_cell_set_accession"]] = set(cell_ids)
-
-    return parent_cell_ids
 
 
 def unflatten(

@@ -1,8 +1,7 @@
 import itertools
 import json
 import shutil
-from datetime import date, datetime
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Set, Tuple
 
 import anndata as ad
 import pandas as pd
@@ -11,6 +10,26 @@ import requests
 from cas.accession.hash_accession_manager import HashAccessionManager
 
 CROSSREF_API_URL = "https://api.crossref.org/works/"
+
+LABELSET_NAME = "name"
+
+LABELSET = "labelset"
+
+LABELSETS = "labelsets"
+
+ANNOTATIONS = "annotations"
+
+CELL_IDS = "cell_ids"
+
+CELL_LABEL = "cell_label"
+
+CELL_SET_ACCESSION = "cell_set_accession"
+
+PARENT_CELL_SET_ACCESSION = "parent_cell_set_accession"
+
+AUTHOR_ANNOTATION_FIELDS = "author_annotation_fields"
+
+CELLHASH = "cellhash"
 
 
 def calculate_labelset_rank(input_list: List[str]) -> Dict[str, int]:
@@ -126,6 +145,47 @@ def get_cl_annotations_from_anndata(
     )
 
     return cell_ontology_term_id, cell_ontology_term
+
+
+def collect_parent_cell_ids(cas: Dict[str, Any]) -> Dict[str, Set]:
+    """
+    Collects parent cell IDs from the given CAS (Cluster Annotation Service) data.
+
+    This function iterates through labelsets in the CAS data and collects parent cell IDs
+    associated with each labelset annotation. It populates and returns a dictionary
+    mapping parent cell set accessions to sets of corresponding cell IDs.
+
+    Args:
+        cas: The Cluster Annotation Service data containing labelsets and annotations.
+
+    Returns:
+        A dictionary mapping parent cell set accessions to sets of corresponding cell IDs.
+    """
+    parent_cell_ids = dict()
+
+    labelsets = sorted(cas[LABELSETS], key=lambda x: int(x["rank"]))
+    for labelset in labelsets:
+        ls_annotations = [
+            ann for ann in cas[ANNOTATIONS] if ann[LABELSET] == labelset[LABELSET_NAME]
+        ]
+
+        for ann in ls_annotations:
+            if "parent_cell_set_accession" in ann:
+                cell_ids = set()
+                if CELL_IDS in ann and ann[CELL_IDS]:
+                    cell_ids = set(ann[CELL_IDS])
+                elif (
+                    "cell_set_accession" in ann
+                    and ann["cell_set_accession"] in parent_cell_ids
+                ):
+                    cell_ids = parent_cell_ids[ann["cell_set_accession"]]
+
+                if ann["parent_cell_set_accession"] in parent_cell_ids:
+                    parent_cell_ids[ann["parent_cell_set_accession"]].update(cell_ids)
+                else:
+                    parent_cell_ids[ann["parent_cell_set_accession"]] = set(cell_ids)
+
+    return parent_cell_ids
 
 
 def generate_parent_cell_lookup(anndata, labelset_dict):
