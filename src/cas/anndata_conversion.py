@@ -4,19 +4,17 @@ import sys
 from cap_anndata import read_h5ad
 
 from cas.file_utils import read_json_file
-from cas.utils.conversion_utils import copy_and_update_file_path, reformat_json
-
-LABELSET_NAME = "name"
-
-LABELSET = "labelset"
-
-LABELSETS = "labelsets"
-
-ANNOTATIONS = "annotations"
-
-CELL_IDS = "cell_ids"
-
-CELL_LABEL = "cell_label"
+from cas.utils.conversion_utils import (
+    ANNOTATIONS,
+    CELL_IDS,
+    CELL_LABEL,
+    LABELSET,
+    LABELSET_NAME,
+    LABELSETS,
+    collect_parent_cell_ids,
+    copy_and_update_file_path,
+    reformat_json,
+)
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -87,7 +85,7 @@ def test_compatibility(anndata_obs, input_json, validate):
 
 def check_labelsets(cas_json, input_obs, matching_obs_keys, validate):
     annotations = cas_json[ANNOTATIONS]
-    derived_cell_ids = get_derived_cell_ids(cas_json)
+    derived_cell_ids = collect_parent_cell_ids(cas_json)
 
     for ann in annotations:
         if ann[LABELSET] in matching_obs_keys:
@@ -167,40 +165,3 @@ def validate_cell_ids(anndata_cell_ids, annotations, validate):
         if validate:
             logger.error("Validation failed. Exiting.")
             sys.exit(1)
-
-
-def get_derived_cell_ids(cas):
-    """
-    Using the cluster hierarchy derives cell ids for all nodes.
-    Args:
-        cas: cas json object
-
-    Returns:
-        dictionary of cell_set_accession - set of derived cell ids
-    """
-    derived_cell_ids = dict()
-
-    labelsets = sorted(cas[LABELSETS], key=lambda x: int(x["rank"]))
-    for labelset in labelsets:
-        ls_annotations = [
-            ann for ann in cas[ANNOTATIONS] if ann["labelset"] == labelset["name"]
-        ]
-
-        for ann in ls_annotations:
-            if "parent_cell_set_accession" in ann:
-                cell_ids = set()
-                if CELL_IDS in ann and ann[CELL_IDS]:
-                    cell_ids = set(ann[CELL_IDS])
-                    derived_cell_ids[ann["cell_set_accession"]] = cell_ids
-                elif (
-                    "cell_set_accession" in ann
-                    and ann["cell_set_accession"] in derived_cell_ids
-                ):
-                    cell_ids = derived_cell_ids[str(ann["cell_set_accession"])]
-
-                if ann["parent_cell_set_accession"] in derived_cell_ids:
-                    derived_cell_ids[ann["parent_cell_set_accession"]].update(cell_ids)
-                else:
-                    derived_cell_ids[ann["parent_cell_set_accession"]] = set(cell_ids)
-
-    return derived_cell_ids

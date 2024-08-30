@@ -9,16 +9,13 @@ from cas.flatten_data_to_anndata import (
     unflatten_obs,
     update_cas_json,
 )
-
-# Constants used in your module, assume these are defined somewhere in your code
-LABELSET_NAME = "name"
-LABELSETS = "labelsets"
-CELL_IDS = "cell_ids"
-AUTHOR_ANNOTATION_FIELDS = "author_annotation_fields"
-CELLHASH = "cellhash"
-CELL_LABEL = "cell_label"
-LABELSET = "labelset"
-ANNOTATIONS = "annotations"
+from cas.utils.conversion_utils import (
+    ANNOTATIONS,
+    AUTHOR_ANNOTATION_FIELDS,
+    CELL_IDS,
+    CELL_LABEL,
+    CELLHASH,
+)
 
 
 class TestAnnotationMethods(unittest.TestCase):
