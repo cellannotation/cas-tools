@@ -27,7 +27,9 @@ class CxGDownloader(DatasetRetriever):
 
         # Check if the file already exists
         if os.path.exists(anndata_file_path):
-            logging.info(f"File '{anndata_file_path}' already exists. Skipping download.")
+            logging.info(
+                f"File '{anndata_file_path}' already exists. Skipping download."
+            )
             return anndata_file_path
 
         # Ensure the directory exists

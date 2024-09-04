@@ -1,6 +1,7 @@
 import logging
-import requests
 from typing import Optional
+
+import requests
 from tqdm import tqdm
 
 from cas.dataset_retrieval.dataset_retriever import DatasetRetriever
@@ -16,17 +17,25 @@ class HTTPDownloader(DatasetRetriever):
         url = self.matrix_id
         raw_matrix_id = self.matrix_id.split("/")[-1].split(".")[0]
         default_file_name = f"{raw_matrix_id}.h5ad"
-        anndata_file_path = default_file_name if anndata_file_path is None else anndata_file_path
+        anndata_file_path = (
+            default_file_name if anndata_file_path is None else anndata_file_path
+        )
 
         response = requests.get(url, stream=True)
 
         # Get the total file size from the response headers (if available)
-        total_size = int(response.headers.get('content-length', 0))
+        total_size = int(response.headers.get("content-length", 0))
 
         logging.info(f"Downloading dataset with ID '{raw_matrix_id}'...")
         # Initialize the tqdm progress bar
-        with tqdm(total=total_size, unit='B', unit_scale=True, unit_divisor=1024, desc="Downloading") as progress_bar:
-            with open(anndata_file_path, 'wb') as file:
+        with tqdm(
+            total=total_size,
+            unit="B",
+            unit_scale=True,
+            unit_divisor=1024,
+            desc="Downloading",
+        ) as progress_bar:
+            with open(anndata_file_path, "wb") as file:
                 for chunk in response.iter_content(chunk_size=8192):
                     if chunk:  # filter out keep-alive new chunks
                         file.write(chunk)

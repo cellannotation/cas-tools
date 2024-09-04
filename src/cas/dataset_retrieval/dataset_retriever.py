@@ -23,12 +23,17 @@ class DatasetRetriever(ABC):
     def create(cls, matrix_id, **kwargs):
         if matrix_id.startswith("cxg_dataset:"):
             from cas.dataset_retrieval.cxg_downloader import CxGDownloader
+
             return CxGDownloader(matrix_id.split(":")[-1], **kwargs)
-        elif matrix_id.startswith("https://datasets.cellxgene.cziscience.com/") and matrix_id.endswith(".h5ad"):
+        elif matrix_id.startswith(
+            "https://datasets.cellxgene.cziscience.com/"
+        ) and matrix_id.endswith(".h5ad"):
             from cas.dataset_retrieval.http_downloader import HTTPDownloader
+
             return HTTPDownloader(matrix_id, **kwargs)
         elif matrix_id.startswith("s3"):
             from cas.dataset_retrieval.s3_downloader import S3Downloader
+
             return S3Downloader(matrix_id, **kwargs)
         else:
             raise ValueError(f"Unsupported matrix_id: {matrix_id}")
