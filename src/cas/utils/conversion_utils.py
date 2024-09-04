@@ -1,7 +1,7 @@
 import itertools
 import json
 import shutil
-from typing import Any, Dict, List, Set, Tuple, Optional
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 import anndata as ad
 import pandas as pd
