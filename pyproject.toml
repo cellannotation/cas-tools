@@ -14,7 +14,7 @@ repository = "https://github.com/cellannotation/cas-tools"
 [tool.poetry.dependencies]
 python = "^3.9"
 anndata = "0.10.5"
-cellxgene-census = { version = "1.10.2", python = ">=3.9,<3.12" }
+cellxgene-census = { version = "1.15.0", python = ">=3.9,<3.12" }
 urllib3 = "<2"
 openpyxl = "3.1.2"
 dataclasses-json = "0.6.4"
