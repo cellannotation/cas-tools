@@ -4,10 +4,9 @@ import unittest
 from cas.dataset_retrieval.cxg_downloader import CxGDownloader
 
 
-@unittest.skip("Test case will be completed in the future.")
 class TestCxGDownloader(unittest.TestCase):
     def test_download_data(self):
-        matrix_field_id = "cxg_dataset:24ec2dc5-3573-4d66-a9e1-25b7dcf43e27"
+        matrix_field_id = "0895c838-e550-48a3-a777-dbcd35d30272"
         file_path = "src/test/test_data/downloader_test.h5ad"
         cxg_downloader = CxGDownloader(matrix_field_id)
         cxg_downloader.download_data(file_name=file_path)
