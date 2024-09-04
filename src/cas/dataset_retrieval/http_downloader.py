@@ -13,12 +13,12 @@ logger.setLevel(logging.INFO)
 
 
 class HTTPDownloader(DatasetRetriever):
-    def download_data(self, anndata_file_path: Optional[str] = None) -> str:
+    def download_data(self, file_name: Optional[str] = None) -> str:
         url = self.matrix_id
         raw_matrix_id = self.matrix_id.split("/")[-1].split(".")[0]
         default_file_name = f"{raw_matrix_id}.h5ad"
         anndata_file_path = (
-            default_file_name if anndata_file_path is None else anndata_file_path
+            default_file_name if file_name is None else file_name
         )
 
         response = requests.get(url, stream=True)

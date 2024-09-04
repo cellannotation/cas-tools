@@ -8,12 +8,12 @@ from cas.dataset_retrieval.dataset_retriever import DatasetRetriever
 
 
 class CxGDownloader(DatasetRetriever):
-    def download_data(self, file_path: Optional[str] = None) -> str:
+    def download_data(self, file_name: Optional[str] = None) -> str:
         """
         Download an AnnData dataset with the specified ID.
 
         Args:
-            file_path (Optional[str], optional): The file path to save the downloaded AnnData. If not provided,
+            file_name (Optional[str], optional): The file path to save the downloaded AnnData. If not provided,
                 the dataset will be saved in the current working directory with the dataset_id as the file name.
                 Supports both absolute and relative paths.
 
@@ -21,7 +21,7 @@ class CxGDownloader(DatasetRetriever):
             str: The path to the downloaded AnnData dataset
         """
         default_file_name = f"{self.matrix_id}.h5ad"
-        anndata_file_path = default_file_name if file_path is None else file_path
+        anndata_file_path = default_file_name if file_name is None else file_name
 
         anndata_file_path = os.path.abspath(anndata_file_path)
 
