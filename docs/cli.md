@@ -32,7 +32,7 @@ cas flatten --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --
 
 **Command-line Arguments:**
 - `--json`      : Path to the CAS JSON schema file.
-- `--anndata`   : Path to the AnnData file. Ideally, the location will be specified by a resolvable path in the CAS file.
+- `--anndata`   : Path to the AnnData file. If not provided, AnnData will be downloaded using matrix file id from CAS JSON.
 - `--output`    : Optional output AnnData file name. If provided a new flatten anndata file will be created,
     otherwise the inputted anndata file will be updated with the flatten data.
 - `--fill-na`   : Optional boolean flag indicating whether to fill missing values in the 'obs' field with pd.NA. If 
@@ -155,7 +155,7 @@ cas merge --json path/to/CAS_schema.json --anndata path/to/input_anndata.h5ad --
 
 **Command-line Arguments:**
 - `--json`      : Path to the CAS JSON schema file.
-- `--anndata`   : Path to the AnnData file. Ideally, the location will be specified by a resolvable path in the CAS file.
+- `--anndata`   : Path to the AnnData file. Path to the AnnData file. If not provided, AnnData will be downloaded using matrix file id from CAS JSON.
 - `--validate`  : (Optional) Perform validation checks before writing to the output AnnData file.
 - `--output`    : Output AnnData file name (default: output.h5ad).
 
@@ -237,7 +237,7 @@ python -m cas split_cas --cas_json path/to/cas.json --split_on term1 term2 --mul
 This tool allows you to split an AnnData file based on specified CAS JSON files. It supports creating multiple output files, each corresponding to one of the specified CAS JSON files, or a single output file that contains all cells from the input CAS JSON files, depending on the user's choice.
 
 ### Command-line Arguments:
-- **--anndata**: Path to the AnnData file. This parameter is required.
+- **--anndata**: Path to the AnnData file. If not provided, AnnData will be downloaded using matrix file id from CAS JSON.
 - **--cas_json**: List of CAS JSON file paths that will be used to split the AnnData file. Multiple paths can be provided.
 - **--multiple_outputs**: If set, creates multiple output files for each CAS JSON file; if not set, creates a single output file containing all cells from the input CAS JSON files.
 - **--compression**: Compression method utilized in anndata write function. It can be `gzip`, `lzf`,  or `None`. Default is "gzip" if flag is provided without a value. If the flag is not provided, defaults to None.
@@ -245,6 +245,7 @@ This tool allows you to split an AnnData file based on specified CAS JSON files.
 ### Usage Examples:
 ```commandline
 cd src
+python -m cas split_anndata --anndata path/to/anndata.h5ad --cas_json path/to/cas.json
 python -m cas split_anndata --anndata path/to/anndata.h5ad --cas_json path/to/cas.json
 python -m cas split_anndata --anndata path/to/anndata.h5ad --cas_json path/to/cas_1.json path/to/cas_2.json --compression lzf
 python -m cas split_anndata --anndata path/to/anndata.h5ad --cas_json path/to/cas_1.json path/to/cas_2.json 
