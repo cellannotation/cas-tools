@@ -183,7 +183,7 @@ def create_merge_operation_parser(subparsers):
     Command-line Arguments:
     -----------------------
     --json      : Path to the CAS JSON schema file.
-    --anndata   : Path to the AnnData file. Ideally, the location will be specified by a resolvable path in the CAS file.
+    --anndata   : Path to the AnnData file. If not provided, AnnData will be downloaded using matrix file id from CAS JSON.
     --validate  : Perform validation checks before writing to the output AnnData file.
     --output    : Output AnnData file name (default: output.h5ad).
 
@@ -200,9 +200,7 @@ def create_merge_operation_parser(subparsers):
     parser_merge.add_argument(
         "--json", required=True, help="Path to the CAS JSON schema file."
     )
-    parser_merge.add_argument(
-        "--anndata", required=True, help="Path to the AnnData file."
-    )
+    parser_merge.add_argument("--anndata", help="Path to the AnnData file.")
     # TODO find a better argument name and Help message.
     parser_merge.add_argument(
         "-v",
@@ -223,7 +221,7 @@ def create_flatten_operation_parser(subparsers):
         Command-line Arguments:
     -----------------------
     --json      : Path to the CAS JSON schema file.
-    --anndata   : Path to the AnnData file. Ideally, the location will be specified by a resolvable path in the CAS file.
+    --anndata   : Path to the AnnData file. If not provided, AnnData will be downloaded using matrix file id from CAS JSON.
     --output    : Optional output AnnData file name. If provided a new flatten anndata file will be created,
                     otherwise the inputted anndata file will be updated with the flatten data.
     --fill-na   : Optional boolean flag indicating whether to fill missing values in the 'obs' field with pd.NA. If
@@ -241,9 +239,7 @@ def create_flatten_operation_parser(subparsers):
     )
 
     parser_flatten.add_argument("--json", required=True, help="Input JSON file path")
-    parser_flatten.add_argument(
-        "--anndata", required=True, help="Input AnnData file path"
-    )
+    parser_flatten.add_argument("--anndata", help="Input AnnData file path")
     parser_flatten.add_argument(
         "--output",
         required=False,
@@ -727,7 +723,7 @@ def create_split_anndata_parser(subparsers):
     """
     Command-line Arguments:
     -----------------------
-    --anndata           : Path to the AnnData file.
+    --anndata           : Path to the AnnData file. If not provided, AnnData will be downloaded using matrix file id from CAS JSON.
     --cas_json_list     : List of CAS JSON file paths that will be used to split the AnnData file.
     --multiple_outputs  : If set, creates multiple output files for each term provided in split_on.
                           If not set, creates a single output file containing all cell_ids from the input CAS JSON files.
@@ -737,6 +733,7 @@ def create_split_anndata_parser(subparsers):
     Usage Example:
     --------------
     cd src
+    python -m cas split_anndata --cas_json path/to/cas.json
     python -m cas split_anndata --anndata path/to/anndata.h5ad --cas_json path/to/cas.json
     python -m cas split_anndata --anndata path/to/anndata.h5ad path/to/cas_1.json path/to/cas_2.json --compression lzf
     python -m cas split_anndata --anndata path/to/anndata.h5ad path/to/cas_1.json path/to/cas_2.json
@@ -747,9 +744,7 @@ def create_split_anndata_parser(subparsers):
         description="Splits an AnnData file based on specified CAS JSON files.",
         help="Splits an AnnData file into multiple files based on one or more CAS JSON files.",
     )
-    parser_split_anndata.add_argument(
-        "--anndata", required=True, help="Path to the AnnData file."
-    )
+    parser_split_anndata.add_argument("--anndata", help="Path to the AnnData file.")
     parser_split_anndata.add_argument(
         "--cas_json",
         required=True,
