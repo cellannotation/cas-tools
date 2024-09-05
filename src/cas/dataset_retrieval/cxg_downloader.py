@@ -4,7 +4,11 @@ from typing import Optional
 
 import cellxgene_census
 
-from cas.dataset_retrieval.dataset_retriever import DatasetRetriever
+from cas.dataset_retrieval.dataset_retriever import (
+    DatasetRetriever,
+    check_file_exists,
+    create_directory_if_missing,
+)
 
 
 class CxGDownloader(DatasetRetriever):
@@ -23,19 +27,9 @@ class CxGDownloader(DatasetRetriever):
         default_file_name = f"{self.matrix_id}.h5ad"
         anndata_file_path = default_file_name if file_name is None else file_name
 
-        anndata_file_path = os.path.abspath(anndata_file_path)
+        anndata_file_path = check_file_exists(anndata_file_path)
 
-        # Check if the file already exists
-        if os.path.exists(anndata_file_path):
-            logging.info(
-                f"File '{anndata_file_path}' already exists. Skipping download."
-            )
-            return anndata_file_path
-
-        # Ensure the directory exists
-        directory = os.path.dirname(anndata_file_path)
-        if directory and not os.path.exists(directory):
-            os.makedirs(directory, exist_ok=True)
+        create_directory_if_missing(anndata_file_path)
 
         logging.info(f"Downloading dataset with ID '{self.matrix_id}'...")
         cellxgene_census.download_source_h5ad(self.matrix_id, to_path=anndata_file_path)

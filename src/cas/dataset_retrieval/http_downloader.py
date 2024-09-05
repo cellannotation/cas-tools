@@ -1,10 +1,15 @@
 import logging
+import os
 from typing import Optional
 
 import requests
 from tqdm import tqdm
 
-from cas.dataset_retrieval.dataset_retriever import DatasetRetriever
+from cas.dataset_retrieval.dataset_retriever import (
+    DatasetRetriever,
+    check_file_exists,
+    create_directory_if_missing,
+)
 
 logging.basicConfig(level=logging.WARNING)
 
@@ -17,9 +22,11 @@ class HTTPDownloader(DatasetRetriever):
         url = self.matrix_id
         raw_matrix_id = self.matrix_id.split("/")[-1].split(".")[0]
         default_file_name = f"{raw_matrix_id}.h5ad"
-        anndata_file_path = (
-            default_file_name if file_name is None else file_name
-        )
+        anndata_file_path = default_file_name if file_name is None else file_name
+
+        anndata_file_path = check_file_exists(anndata_file_path)
+
+        create_directory_if_missing(anndata_file_path)
 
         response = requests.get(url, stream=True)
 
