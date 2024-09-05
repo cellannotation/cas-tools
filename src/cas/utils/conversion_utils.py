@@ -1,13 +1,14 @@
 import itertools
 import json
 import shutil
-from typing import Any, Dict, List, Set, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 import anndata as ad
 import pandas as pd
 import requests
 
 from cas.accession.hash_accession_manager import HashAccessionManager
+from cas.dataset_retrieval.dataset_retriever import DatasetRetriever
 
 CROSSREF_API_URL = "https://api.crossref.org/works/"
 
@@ -399,4 +400,14 @@ def copy_and_update_file_path(anndata_file_path, output_file_path):
     if output_file_path:
         shutil.copy(anndata_file_path, output_file_path)
         anndata_file_path = output_file_path
+    return anndata_file_path
+
+
+def fetch_anndata(input_json):
+    matrix_file_id: Optional[str] = input_json.get("matrix_file_id", None)
+    if matrix_file_id:
+        dataset_retriever = DatasetRetriever.create(matrix_file_id)
+        anndata_file_path = dataset_retriever.download_data()
+    else:
+        raise KeyError("Matrix file id is missing from CAS json.")
     return anndata_file_path

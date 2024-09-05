@@ -4,12 +4,11 @@ from typing import Any, Dict, List, Literal, Optional
 from anndata import AnnData
 
 from cas.file_utils import read_anndata_file, read_json_file
-
-from cas.utils.conversion_utils import ANNOTATIONS, CELL_IDS
+from cas.utils.conversion_utils import ANNOTATIONS, CELL_IDS, fetch_anndata
 
 
 def split_anndata_to_file(
-    anndata_file_path: str,
+    anndata_file_path: Optional[str],
     cas_json_paths: List[str],
     multiple_outputs: bool,
     compression_method: Optional[Literal["gzip", "lzf"]] = "gzip",
@@ -24,6 +23,10 @@ def split_anndata_to_file(
         compression_method: Compression method utilized in anndata write function. Default is "gzip".
 
     """
+    if not anndata_file_path:
+        anndata_file_path = fetch_anndata(
+            cas_json_paths[0]
+        )  # Assuming all splits are coming from the same CAS JSON.
     adata = read_anndata_file(anndata_file_path)
     cas_list = {
         Path(cas_json).name: read_json_file(cas_json) for cas_json in cas_json_paths
@@ -88,5 +91,3 @@ def split_anndata(
         mask = adata.obs.index.isin(cell_ids)
         adata_subset = adata[mask, :].to_memory()
         return [adata_subset]
-
-

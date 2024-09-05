@@ -1,7 +1,7 @@
 import json
 import logging
 from collections import defaultdict
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Optional
 
 import numpy as np
 import pandas as pd
@@ -25,6 +25,7 @@ from cas.utils.conversion_utils import (
     LABELSETS,
     collect_parent_cell_ids,
     copy_and_update_file_path,
+    fetch_anndata,
     reformat_json,
 )
 
@@ -48,25 +49,34 @@ def is_list_of_strings(var):
     return isinstance(var, list) and all(isinstance(item, str) for item in var)
 
 
-def flatten(json_file_path, anndata_file_path, output_file_path, fill_na):
+def flatten(
+    cas_file_path: str,
+    anndata_file_path: Optional[str],
+    output_file_path: str,
+    fill_na: bool,
+):
     """
      Processes and integrates information from a JSON file and an AnnData (Annotated Data) file, creating a new AnnData
      object that incorporates the metadata. The resulting AnnData object is then saved to a new file.
 
     Args:
-        json_file_path: The path to the CAS json file.
+        cas_file_path: The path to the CAS json file.
         anndata_file_path: The path to the AnnData file.
         output_file_path: Output AnnData file name.
         fill_na: Boolean flag indicating whether to fill missing values in the 'obs' field with pd.NA. If True, missing
                  values will be replaced with pd.NA; if False, they will remain as empty strings.
     """
-    input_json = read_json_file(json_file_path)
+    input_json = read_json_file(cas_file_path)
 
     flatten_cas_object(input_json, anndata_file_path, output_file_path, fill_na)
 
 
-# @profile
-def flatten_cas_object(input_json, anndata_file_path, output_file_path, fill_na):
+def flatten_cas_object(
+    input_json: dict,
+    anndata_file_path: Optional[str],
+    output_file_path: str,
+    fill_na: bool,
+):
     """
      Processes and integrates information from a JSON file and an AnnData (Annotated Data) file, creating a new AnnData
      object that incorporates the metadata. The resulting AnnData object is then saved to a new file.
@@ -78,6 +88,8 @@ def flatten_cas_object(input_json, anndata_file_path, output_file_path, fill_na)
         fill_na: Boolean flag indicating whether to fill missing values in the 'obs' field with pd.NA. If True, missing
                  values will be replaced with pd.NA; if False, they will remain as empty strings.
     """
+    if not anndata_file_path:
+        anndata_file_path = fetch_anndata(input_json)
     anndata_file_path = copy_and_update_file_path(anndata_file_path, output_file_path)
 
     annotations = input_json[ANNOTATIONS]
@@ -209,7 +221,7 @@ def generate_uns_json(input_json):
 
 
 def unflatten(
-    json_file_path: Union[None, str],
+    json_file_path: Optional[str],
     anndata_file_path: str,
     output_file_path: str,
     output_json_path: str,

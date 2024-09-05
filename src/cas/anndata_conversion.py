@@ -1,5 +1,6 @@
 import logging
 import sys
+from typing import Optional
 
 from cap_anndata import read_h5ad
 
@@ -13,6 +14,7 @@ from cas.utils.conversion_utils import (
     LABELSETS,
     collect_parent_cell_ids,
     copy_and_update_file_path,
+    fetch_anndata,
     reformat_json,
 )
 
@@ -20,25 +22,30 @@ from cas.utils.conversion_utils import (
 logger = logging.getLogger(__name__)
 
 
-def merge(cas_path: str, anndata_path: str, validate: bool, output_file_name: str):
+def merge(
+    cas_file_path: str,
+    anndata_path: Optional[str],
+    validate: bool,
+    output_file_name: str,
+):
     """
     Tests if CAS json and AnnData are compatible and merges CAS into AnnData if possible.
 
     Args:
-        cas_path: The path to the CAS json file.
+        cas_file_path: The path to the CAS json file.
         anndata_path: The path to the AnnData file.
         validate: Boolean to determine if validation checks will be performed before writing to the output AnnData file.
         output_file_name: Output AnnData file name.
 
     """
-    input_json = read_json_file(cas_path)
+    input_json = read_json_file(cas_file_path)
 
     merge_cas_object(input_json, anndata_path, validate, output_file_name)
 
 
 def merge_cas_object(
     input_json: dict,
-    anndata_file_path: str,
+    anndata_file_path: Optional[str],
     validate: bool,
     output_file_path: str,
 ):
@@ -52,6 +59,8 @@ def merge_cas_object(
         output_file_path: Output AnnData file name.
 
     """
+    if not anndata_file_path:
+        anndata_file_path = fetch_anndata(input_json)
     anndata_file_path = copy_and_update_file_path(anndata_file_path, output_file_path)
 
     with read_h5ad(file_path=anndata_file_path, edit=True) as cap_adata:
