@@ -75,13 +75,14 @@
 <span></span><span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">anndata</span> <span class="k">as</span> <span class="nn">ad</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">requests</span>
 
 <span class="kn">from</span> <span class="nn">cas.accession.hash_accession_manager</span> <span class="kn">import</span> <span class="n">HashAccessionManager</span>
+<span class="kn">from</span> <span class="nn">cas.dataset_retrieval.dataset_retriever</span> <span class="kn">import</span> <span class="n">DatasetRetriever</span>
 
 <span class="n">CROSSREF_API_URL</span> <span class="o">=</span> <span class="s2">&quot;https://api.crossref.org/works/&quot;</span>
 
@@ -511,6 +512,19 @@
     <span class="k">if</span> <span class="n">output_file_path</span><span class="p">:</span>
         <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">anndata_file_path</span><span class="p">,</span> <span class="n">output_file_path</span><span class="p">)</span>
         <span class="n">anndata_file_path</span> <span class="o">=</span> <span class="n">output_file_path</span>
+    <span class="k">return</span> <span class="n">anndata_file_path</span></div>
+
+
+
+<div class="viewcode-block" id="fetch_anndata">
+<a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.conversion_utils.fetch_anndata">[docs]</a>
+<span class="k">def</span> <span class="nf">fetch_anndata</span><span class="p">(</span><span class="n">input_json</span><span class="p">):</span>
+    <span class="n">matrix_file_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;matrix_file_id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">matrix_file_id</span><span class="p">:</span>
+        <span class="n">dataset_retriever</span> <span class="o">=</span> <span class="n">DatasetRetriever</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">matrix_file_id</span><span class="p">)</span>
+        <span class="n">anndata_file_path</span> <span class="o">=</span> <span class="n">dataset_retriever</span><span class="o">.</span><span class="n">download_data</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Matrix file id is missing from CAS json.&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">anndata_file_path</span></div>
 
 </pre></div>

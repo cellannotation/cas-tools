@@ -193,6 +193,7 @@
 <li class="toctree-l3"><a class="reference internal" href="cas.utils.html#cas.utils.conversion_utils.get_authors_from_doi"><code class="docutils literal notranslate"><span class="pre">get_authors_from_doi()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cas.utils.html#cas.utils.conversion_utils.reformat_json"><code class="docutils literal notranslate"><span class="pre">reformat_json()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cas.utils.html#cas.utils.conversion_utils.copy_and_update_file_path"><code class="docutils literal notranslate"><span class="pre">copy_and_update_file_path()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.utils.html#cas.utils.conversion_utils.fetch_anndata"><code class="docutils literal notranslate"><span class="pre">fetch_anndata()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="cas.utils.html#module-cas.utils.validation_utils">cas.utils.validation_utils module</a><ul>
@@ -483,13 +484,13 @@ for rows matching the condition is converted.</p>
 <span id="cas-anndata-conversion-module"></span><h2>cas.anndata_conversion module<a class="headerlink" href="#module-cas.anndata_conversion" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="cas.anndata_conversion.merge">
-<span class="sig-prename descclassname"><span class="pre">cas.anndata_conversion.</span></span><span class="sig-name descname"><span class="pre">merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cas_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anndata_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/anndata_conversion.html#merge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.anndata_conversion.merge" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">cas.anndata_conversion.</span></span><span class="sig-name descname"><span class="pre">merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cas_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anndata_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/anndata_conversion.html#merge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.anndata_conversion.merge" title="Link to this definition"></a></dt>
 <dd><p>Tests if CAS json and AnnData are compatible and merges CAS into AnnData if possible.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>cas_path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – The path to the CAS json file.</p></li>
-<li><p><strong>anndata_path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – The path to the AnnData file.</p></li>
+<li><p><strong>cas_file_path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – The path to the CAS json file.</p></li>
+<li><p><strong>anndata_path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – The path to the AnnData file.</p></li>
 <li><p><strong>validate</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – Boolean to determine if validation checks will be performed before writing to the output AnnData file.</p></li>
 <li><p><strong>output_file_name</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Output AnnData file name.</p></li>
 </ul>
@@ -505,7 +506,7 @@ for rows matching the condition is converted.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>input_json</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></span>) – The CAS json object.</p></li>
-<li><p><strong>anndata_file_path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – The path to the AnnData file.</p></li>
+<li><p><strong>anndata_file_path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – The path to the AnnData file.</p></li>
 <li><p><strong>validate</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – Boolean to determine if validation checks will be performed before writing to the output AnnData file.</p></li>
 <li><p><strong>output_file_path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Output AnnData file name.</p></li>
 </ul>
@@ -562,7 +563,7 @@ validate: Boolean to determine if validation checks will be performed before wri
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>anndata_file_path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Path to the AnnData file.</p></li>
+<li><p><strong>anndata_file_path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – Path to the AnnData file.</p></li>
 <li><p><strong>cas_json_paths</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – List of CAS JSON file paths.</p></li>
 <li><p><strong>multiple_outputs</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – If True, outputs multiple files, one for each CAS JSON file; otherwise, outputs a single file.</p></li>
 <li><p><strong>compression_method</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code>[<code class="docutils literal notranslate"><span class="pre">'gzip'</span></code>, <code class="docutils literal notranslate"><span class="pre">'lzf'</span></code>]]</span>) – Compression method utilized in anndata write function. Default is “gzip”.</p></li>
@@ -1132,7 +1133,7 @@ content is the first column value and the values are dict of row values.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="cas.flatten_data_to_anndata.flatten">
-<span class="sig-prename descclassname"><span class="pre">cas.flatten_data_to_anndata.</span></span><span class="sig-name descname"><span class="pre">flatten</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anndata_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_na</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/flatten_data_to_anndata.html#flatten"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.flatten_data_to_anndata.flatten" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">cas.flatten_data_to_anndata.</span></span><span class="sig-name descname"><span class="pre">flatten</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cas_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anndata_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_na</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/flatten_data_to_anndata.html#flatten"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.flatten_data_to_anndata.flatten" title="Link to this definition"></a></dt>
 <dd><blockquote>
 <div><p>Processes and integrates information from a JSON file and an AnnData (Annotated Data) file, creating a new AnnData
 object that incorporates the metadata. The resulting AnnData object is then saved to a new file.</p>
@@ -1140,10 +1141,10 @@ object that incorporates the metadata. The resulting AnnData object is then save
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>json_file_path</strong> – The path to the CAS json file.</p></li>
-<li><p><strong>anndata_file_path</strong> – The path to the AnnData file.</p></li>
-<li><p><strong>output_file_path</strong> – Output AnnData file name.</p></li>
-<li><p><strong>fill_na</strong> – Boolean flag indicating whether to fill missing values in the ‘obs’ field with pd.NA. If True, missing
+<li><p><strong>cas_file_path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – The path to the CAS json file.</p></li>
+<li><p><strong>anndata_file_path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – The path to the AnnData file.</p></li>
+<li><p><strong>output_file_path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Output AnnData file name.</p></li>
+<li><p><strong>fill_na</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – Boolean flag indicating whether to fill missing values in the ‘obs’ field with pd.NA. If True, missing
 values will be replaced with pd.NA; if False, they will remain as empty strings.</p></li>
 </ul>
 </dd>
@@ -1160,10 +1161,10 @@ object that incorporates the metadata. The resulting AnnData object is then save
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_json</strong> – CAS json file.</p></li>
-<li><p><strong>anndata_file_path</strong> – The path to the AnnData file.</p></li>
-<li><p><strong>output_file_path</strong> – Output AnnData file name.</p></li>
-<li><p><strong>fill_na</strong> – Boolean flag indicating whether to fill missing values in the ‘obs’ field with pd.NA. If True, missing
+<li><p><strong>input_json</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></span>) – CAS json file.</p></li>
+<li><p><strong>anndata_file_path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – The path to the AnnData file.</p></li>
+<li><p><strong>output_file_path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Output AnnData file name.</p></li>
+<li><p><strong>fill_na</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – Boolean flag indicating whether to fill missing values in the ‘obs’ field with pd.NA. If True, missing
 values will be replaced with pd.NA; if False, they will remain as empty strings.</p></li>
 </ul>
 </dd>

@@ -136,7 +136,7 @@
 <p><strong>Command-line Arguments:</strong></p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">--json</span></code>      : Path to the CAS JSON schema file.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--anndata</span></code>   : Path to the AnnData file. Ideally, the location will be specified by a resolvable path in the CAS file.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--anndata</span></code>   : Path to the AnnData file. If not provided, AnnData will be downloaded using matrix file id from CAS JSON.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--output</span></code>    : Optional output AnnData file name. If provided a new flatten anndata file will be created,
 otherwise the inputted anndata file will be updated with the flatten data.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--fill-na</span></code>   : Optional boolean flag indicating whether to fill missing values in the ‘obs’ field with pd.NA. If
@@ -254,7 +254,7 @@ path/to/cluster_annotation_term.csv
 <p><strong>Command-line Arguments:</strong></p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">--json</span></code>      : Path to the CAS JSON schema file.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--anndata</span></code>   : Path to the AnnData file. Ideally, the location will be specified by a resolvable path in the CAS file.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--anndata</span></code>   : Path to the AnnData file. Path to the AnnData file. If not provided, AnnData will be downloaded using matrix file id from CAS JSON.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--validate</span></code>  : (Optional) Perform validation checks before writing to the output AnnData file.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--output</span></code>    : Output AnnData file name (default: output.h5ad).</p></li>
 </ul>
@@ -343,7 +343,7 @@ python -m cas split_cas --cas_json path/to/cas.json --split_on term1 term2 --mul
 <section id="id3">
 <h3>Command-line Arguments:<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
 <ul class="simple">
-<li><p><strong>–anndata</strong>: Path to the AnnData file. This parameter is required.</p></li>
+<li><p><strong>–anndata</strong>: Path to the AnnData file. If not provided, AnnData will be downloaded using matrix file id from CAS JSON.</p></li>
 <li><p><strong>–cas_json</strong>: List of CAS JSON file paths that will be used to split the AnnData file. Multiple paths can be provided.</p></li>
 <li><p><strong>–multiple_outputs</strong>: If set, creates multiple output files for each CAS JSON file; if not set, creates a single output file containing all cells from the input CAS JSON files.</p></li>
 <li><p><strong>–compression</strong>: Compression method utilized in anndata write function. It can be <code class="docutils literal notranslate"><span class="pre">gzip</span></code>, <code class="docutils literal notranslate"><span class="pre">lzf</span></code>,  or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is “gzip” if flag is provided without a value. If the flag is not provided, defaults to None.</p></li>
@@ -352,6 +352,7 @@ python -m cas split_cas --cas_json path/to/cas.json --split_on term1 term2 --mul
 <section id="id4">
 <h3>Usage Examples:<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
 <div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>cd src
+python -m cas split_anndata --anndata path/to/anndata.h5ad --cas_json path/to/cas.json
 python -m cas split_anndata --anndata path/to/anndata.h5ad --cas_json path/to/cas.json
 python -m cas split_anndata --anndata path/to/anndata.h5ad --cas_json path/to/cas_1.json path/to/cas_2.json --compression lzf
 python -m cas split_anndata --anndata path/to/anndata.h5ad --cas_json path/to/cas_1.json path/to/cas_2.json 
