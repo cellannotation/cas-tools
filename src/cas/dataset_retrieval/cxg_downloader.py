@@ -27,7 +27,7 @@ class CxGDownloader(DatasetRetriever):
         default_file_name = f"{self.matrix_id}.h5ad"
         anndata_file_path = default_file_name if file_name is None else file_name
 
-        anndata_file_path = check_file_exists(anndata_file_path)
+        check_file_exists(anndata_file_path)
 
         create_directory_if_missing(anndata_file_path)
 
