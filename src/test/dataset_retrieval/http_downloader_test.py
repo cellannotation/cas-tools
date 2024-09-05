@@ -20,5 +20,5 @@ class TestHTTPDownloader(unittest.TestCase):
             os.remove(file_path)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
