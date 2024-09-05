@@ -1,6 +1,7 @@
 import logging
 import os
 from abc import ABC, abstractmethod
+from typing import Optional
 
 
 class DatasetRetriever(ABC):
@@ -9,12 +10,15 @@ class DatasetRetriever(ABC):
         self.kwargs = kwargs
 
     @abstractmethod
-    def download_data(self, file_name=None) -> str:
+    def download_data(
+        self, file_name: Optional[str] = None, download_dir: Optional[str] = None
+    ) -> str:
         """
         Download data based on the matrix_id.
 
         Args:
-            file_name (str, optional): The name of the file where the dataset will be saved. Defaults to None.
+            file_name: The name of the file where the dataset will be saved. Defaults to None.
+            download_dir: The directory of the file where the dataset will be saved. Defaults to None
 
         Returns:
             str: The path to the downloaded dataset file.
@@ -81,3 +85,23 @@ def create_directory_if_missing(file_name: str):
     directory = os.path.dirname(file_name)
     if directory and not os.path.exists(directory):
         os.makedirs(directory, exist_ok=True)
+
+
+def construct_full_download_path(
+    file_name: Optional[str], download_dir: Optional[str], default_file_name: str
+) -> str:
+    """
+    Constructs the full file path for the AnnData file based on the provided file name and download directory.
+
+    Args:
+        file_name: The name of the file. If None, `default_file_name` will be used.
+        download_dir: The directory where the file should be saved. If None, the current directory will be used.
+        default_file_name: The default file name to use if `file_name` is not provided.
+
+    Returns:
+        str: The full file path combining the directory and file name.
+    """
+    anndata_file_path = default_file_name if file_name is None else file_name
+    full_download_path = os.path.join(download_dir or "", anndata_file_path)
+
+    return full_download_path
