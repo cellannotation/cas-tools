@@ -35,11 +35,12 @@ class CxGDownloader(DatasetRetriever):
             file_name, download_dir, default_file_name
         )
         create_directory_if_missing(full_download_path)
-        check_file_exists(full_download_path)
+        file_exists = check_file_exists(full_download_path)
 
-        logging.info(f"Downloading dataset with ID '{self.matrix_id}'...")
-        cellxgene_census.download_source_h5ad(
-            self.matrix_id, to_path=full_download_path
-        )
-        logging.info(f"Download complete. File saved at '{full_download_path}'.")
+        if not file_exists:
+            logging.info(f"Downloading dataset with ID '{self.matrix_id}'...")
+            cellxgene_census.download_source_h5ad(
+                self.matrix_id, to_path=full_download_path
+            )
+            logging.info(f"Download complete. File saved at '{full_download_path}'.")
         return full_download_path

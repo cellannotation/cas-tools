@@ -43,10 +43,17 @@ class HTTPDownloader(DatasetRetriever):
             file_name, download_dir, default_file_name
         )
         create_directory_if_missing(full_download_path)
-        check_file_exists(full_download_path)
+        file_exists = check_file_exists(full_download_path)
 
-        logging.info(f"Downloading dataset with ID '{raw_matrix_id}'...")
-        response = requests.get(url, stream=True)
+        if not file_exists:
+            logging.info(f"Downloading dataset with ID '{raw_matrix_id}'...")
+            response = requests.get(url, stream=True)
+            HTTPDownloader._download_file(response, full_download_path)
+            logging.info(f"Download complete. File saved at '{full_download_path}'.")
+        return full_download_path
+
+    @staticmethod
+    def _download_file(response, full_download_path):
         # Get the total file size from the response headers (if available)
         total_size = int(response.headers.get("content-length", 0))
         # Initialize the tqdm progress bar
@@ -56,13 +63,13 @@ class HTTPDownloader(DatasetRetriever):
             unit_scale=True,
             unit_divisor=1024,
             desc="Downloading",
-        ) as progress_bar:
-            with open(full_download_path, "wb") as file:
-                for chunk in response.iter_content(chunk_size=8192):
-                    if chunk:  # filter out keep-alive new chunks
-                        file.write(chunk)
-                        # Update the progress bar with the size of the chunk
-                        progress_bar.update(len(chunk))
+        ) as progress_bar, open(full_download_path, "wb") as file:
+            HTTPDownloader._write_chunks_to_file(response, file, progress_bar)
 
-        logging.info(f"Download complete. File saved at '{full_download_path}'.")
-        return full_download_path
+    @staticmethod
+    def _write_chunks_to_file(response, file, progress_bar, chunk_size=8192):
+        for chunk in response.iter_content(chunk_size=chunk_size):
+            if chunk:  # filter out keep-alive new chunks
+                file.write(chunk)
+                # Update the progress bar with the size of the chunk
+                progress_bar.update(len(chunk))

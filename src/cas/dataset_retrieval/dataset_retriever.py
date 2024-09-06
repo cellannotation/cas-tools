@@ -58,7 +58,7 @@ class DatasetRetriever(ABC):
             raise ValueError(f"Unsupported matrix_id: {matrix_id}")
 
 
-def check_file_exists(file_name: str) -> str:
+def check_file_exists(file_name: str) -> bool:
     """
     Check if a file exists at the specified path.
 
@@ -66,13 +66,15 @@ def check_file_exists(file_name: str) -> str:
         file_name: Path to the file.
 
     Returns:
-        The file path if the file exists, otherwise None.
+        True if the file exists, otherwise False.
     """
     anndata_file_path = os.path.abspath(file_name)
 
     if os.path.exists(anndata_file_path):
         logging.info(f"File '{anndata_file_path}' already exists. Skipping download.")
-        return file_name
+        return True
+
+    return False
 
 
 def create_directory_if_missing(file_name: str):
