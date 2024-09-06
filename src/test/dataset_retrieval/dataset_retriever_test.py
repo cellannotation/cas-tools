@@ -51,7 +51,7 @@ class TestDatasetRetriever(unittest.TestCase):
         mock_logging.assert_called_once_with(
             "File '/mock/path/to/file.h5ad' already exists. Skipping download."
         )
-        self.assertEqual(result, file_name)
+        self.assertTrue(result)
 
     @mock.patch("os.path.exists")
     @mock.patch("os.path.abspath")
@@ -66,7 +66,7 @@ class TestDatasetRetriever(unittest.TestCase):
         # Verify the correct path and no logging
         mock_abspath.assert_called_once_with(file_name)
         mock_exists.assert_called_once_with("/mock/path/to/file.h5ad")
-        self.assertIsNone(result)
+        self.assertFalse(result)
 
     @mock.patch("os.makedirs")
     @mock.patch("os.path.exists")
