@@ -508,7 +508,18 @@
 
 <div class="viewcode-block" id="copy_and_update_file_path">
 <a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.conversion_utils.copy_and_update_file_path">[docs]</a>
-<span class="k">def</span> <span class="nf">copy_and_update_file_path</span><span class="p">(</span><span class="n">anndata_file_path</span><span class="p">,</span> <span class="n">output_file_path</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">copy_and_update_file_path</span><span class="p">(</span><span class="n">anndata_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_file_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Copies the AnnData file to a new location if an output file path is provided, and updates the file path.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        anndata_file_path: The path to the original AnnData file.</span>
+<span class="sd">        output_file_path: The path to which the file should be copied. If not provided, no copying occurs.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: The updated file path. If `output_file_path` is provided, it will return the new path,</span>
+<span class="sd">        otherwise the original `anndata_file_path`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">output_file_path</span><span class="p">:</span>
         <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">anndata_file_path</span><span class="p">,</span> <span class="n">output_file_path</span><span class="p">)</span>
         <span class="n">anndata_file_path</span> <span class="o">=</span> <span class="n">output_file_path</span>
@@ -518,11 +529,25 @@
 
 <div class="viewcode-block" id="fetch_anndata">
 <a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.conversion_utils.fetch_anndata">[docs]</a>
-<span class="k">def</span> <span class="nf">fetch_anndata</span><span class="p">(</span><span class="n">input_json</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">fetch_anndata</span><span class="p">(</span><span class="n">input_json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">download_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fetches the AnnData file based on the provided CAS JSON input.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        input_json: A dictionary containing CAS JSON data. Must include a &quot;matrix_file_id&quot; key.</span>
+<span class="sd">        download_dir: The directory where the AnnData file should be downloaded.</span>
+<span class="sd">                      If not provided, the current working directory is used.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: The path to the downloaded AnnData file.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        KeyError: If the &quot;matrix_file_id&quot; key is missing from the `input_json`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">matrix_file_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;matrix_file_id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">matrix_file_id</span><span class="p">:</span>
         <span class="n">dataset_retriever</span> <span class="o">=</span> <span class="n">DatasetRetriever</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">matrix_file_id</span><span class="p">)</span>
-        <span class="n">anndata_file_path</span> <span class="o">=</span> <span class="n">dataset_retriever</span><span class="o">.</span><span class="n">download_data</span><span class="p">()</span>
+        <span class="n">anndata_file_path</span> <span class="o">=</span> <span class="n">dataset_retriever</span><span class="o">.</span><span class="n">download_data</span><span class="p">(</span><span class="n">download_dir</span><span class="o">=</span><span class="n">download_dir</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Matrix file id is missing from CAS json.&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">anndata_file_path</span></div>

@@ -375,12 +375,47 @@ This function serializes the modified JSON to a string.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="cas.utils.conversion_utils.copy_and_update_file_path">
 <span class="sig-prename descclassname"><span class="pre">cas.utils.conversion_utils.</span></span><span class="sig-name descname"><span class="pre">copy_and_update_file_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anndata_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/utils/conversion_utils.html#copy_and_update_file_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.utils.conversion_utils.copy_and_update_file_path" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Copies the AnnData file to a new location if an output file path is provided, and updates the file path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>anndata_file_path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – The path to the original AnnData file.</p></li>
+<li><p><strong>output_file_path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – The path to which the file should be copied. If not provided, no copying occurs.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The updated file path. If <cite>output_file_path</cite> is provided, it will return the new path,
+otherwise the original <cite>anndata_file_path</cite>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="cas.utils.conversion_utils.fetch_anndata">
-<span class="sig-prename descclassname"><span class="pre">cas.utils.conversion_utils.</span></span><span class="sig-name descname"><span class="pre">fetch_anndata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_json</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/utils/conversion_utils.html#fetch_anndata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.utils.conversion_utils.fetch_anndata" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">cas.utils.conversion_utils.</span></span><span class="sig-name descname"><span class="pre">fetch_anndata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_json</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/utils/conversion_utils.html#fetch_anndata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.utils.conversion_utils.fetch_anndata" title="Link to this definition"></a></dt>
+<dd><p>Fetches the AnnData file based on the provided CAS JSON input.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_json</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</span>) – A dictionary containing CAS JSON data. Must include a “matrix_file_id” key.</p></li>
+<li><p><strong>download_dir</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – The directory where the AnnData file should be downloaded.
+If not provided, the current working directory is used.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The path to the downloaded AnnData file.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>KeyError</strong> – If the “matrix_file_id” key is missing from the <cite>input_json</cite>.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="module-cas.utils.validation_utils">
