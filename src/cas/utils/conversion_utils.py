@@ -396,18 +396,43 @@ def reformat_json(
     return json.dumps(output_json)
 
 
-def copy_and_update_file_path(anndata_file_path, output_file_path):
+def copy_and_update_file_path(anndata_file_path: str, output_file_path: Optional[str]) -> str:
+    """
+    Copies the AnnData file to a new location if an output file path is provided, and updates the file path.
+
+    Args:
+        anndata_file_path: The path to the original AnnData file.
+        output_file_path: The path to which the file should be copied. If not provided, no copying occurs.
+
+    Returns:
+        str: The updated file path. If `output_file_path` is provided, it will return the new path,
+        otherwise the original `anndata_file_path`.
+    """
     if output_file_path:
         shutil.copy(anndata_file_path, output_file_path)
         anndata_file_path = output_file_path
     return anndata_file_path
 
 
-def fetch_anndata(input_json):
+def fetch_anndata(input_json: Dict[str, Any], download_dir: Optional[str] = None) -> str:
+    """
+    Fetches the AnnData file based on the provided CAS JSON input.
+
+    Args:
+        input_json: A dictionary containing CAS JSON data. Must include a "matrix_file_id" key.
+        download_dir: The directory where the AnnData file should be downloaded.
+                      If not provided, the current working directory is used.
+
+    Returns:
+        str: The path to the downloaded AnnData file.
+
+    Raises:
+        KeyError: If the "matrix_file_id" key is missing from the `input_json`.
+    """
     matrix_file_id: Optional[str] = input_json.get("matrix_file_id", None)
     if matrix_file_id:
         dataset_retriever = DatasetRetriever.create(matrix_file_id)
-        anndata_file_path = dataset_retriever.download_data()
+        anndata_file_path = dataset_retriever.download_data(download_dir=download_dir)
     else:
         raise KeyError("Matrix file id is missing from CAS json.")
     return anndata_file_path

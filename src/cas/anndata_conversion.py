@@ -48,6 +48,7 @@ def merge_cas_object(
     anndata_file_path: Optional[str],
     validate: bool,
     output_file_path: str,
+    download_dir: Optional[str] = None,
 ):
     """
     Tests if CAS json and AnnData are compatible and merges CAS into AnnData if possible.
@@ -57,10 +58,11 @@ def merge_cas_object(
         anndata_file_path: The path to the AnnData file.
         validate: Boolean to determine if validation checks will be performed before writing to the output AnnData file.
         output_file_path: Output AnnData file name.
+        download_dir: The directory to download AnnData files.
 
     """
     if not anndata_file_path:
-        anndata_file_path = fetch_anndata(input_json)
+        anndata_file_path = fetch_anndata(input_json, download_dir)
     anndata_file_path = copy_and_update_file_path(anndata_file_path, output_file_path)
 
     with read_h5ad(file_path=anndata_file_path, edit=True) as cap_adata:

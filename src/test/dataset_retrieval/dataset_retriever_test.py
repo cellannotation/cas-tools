@@ -1,3 +1,4 @@
+import os
 import unittest
 from unittest import mock
 
@@ -5,6 +6,7 @@ from cas.dataset_retrieval.cxg_downloader import CxGDownloader
 from cas.dataset_retrieval.dataset_retriever import (
     DatasetRetriever,
     check_file_exists,
+    construct_full_download_path,
     create_directory_if_missing,
 )
 from cas.dataset_retrieval.http_downloader import HTTPDownloader
@@ -49,7 +51,7 @@ class TestDatasetRetriever(unittest.TestCase):
         mock_logging.assert_called_once_with(
             "File '/mock/path/to/file.h5ad' already exists. Skipping download."
         )
-        self.assertEqual(result, file_name)
+        self.assertTrue(result)
 
     @mock.patch("os.path.exists")
     @mock.patch("os.path.abspath")
@@ -64,7 +66,7 @@ class TestDatasetRetriever(unittest.TestCase):
         # Verify the correct path and no logging
         mock_abspath.assert_called_once_with(file_name)
         mock_exists.assert_called_once_with("/mock/path/to/file.h5ad")
-        self.assertIsNone(result)
+        self.assertFalse(result)
 
     @mock.patch("os.makedirs")
     @mock.patch("os.path.exists")
@@ -101,6 +103,58 @@ class TestDatasetRetriever(unittest.TestCase):
         mock_dirname.assert_called_once_with(file_name)
         mock_exists.assert_called_once_with("/mock/path/to")
         mock_makedirs.assert_not_called()
+
+    def test_construct_full_download_path_with_file_name_and_dir(self):
+        # Test when both file_name and download_dir are provided
+        file_name = "test_file.h5ad"
+        download_dir = "/mock/download/directory"
+        default_file_name = "default_file.h5ad"
+
+        expected_path = os.path.join(download_dir, file_name)
+        result = construct_full_download_path(
+            file_name, download_dir, default_file_name
+        )
+
+        self.assertEqual(result, expected_path)
+
+    def test_construct_full_download_path_with_default_file_name(self):
+        # Test when file_name is None (default_file_name should be used)
+        file_name = None
+        download_dir = "/mock/download/directory"
+        default_file_name = "default_file.h5ad"
+
+        expected_path = os.path.join(download_dir, default_file_name)
+        result = construct_full_download_path(
+            file_name, download_dir, default_file_name
+        )
+
+        self.assertEqual(result, expected_path)
+
+    def test_construct_full_download_path_with_no_download_dir(self):
+        # Test when download_dir is None (should default to current directory)
+        file_name = "test_file.h5ad"
+        download_dir = None
+        default_file_name = "default_file.h5ad"
+
+        expected_path = os.path.join("", file_name)
+        result = construct_full_download_path(
+            file_name, download_dir, default_file_name
+        )
+
+        self.assertEqual(result, expected_path)
+
+    def test_construct_full_download_path_with_no_file_name_and_no_download_dir(self):
+        # Test when both file_name and download_dir are None
+        file_name = None
+        download_dir = None
+        default_file_name = "default_file.h5ad"
+
+        expected_path = os.path.join("", default_file_name)
+        result = construct_full_download_path(
+            file_name, download_dir, default_file_name
+        )
+
+        self.assertEqual(result, expected_path)
 
 
 if __name__ == "__main__":
