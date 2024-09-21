@@ -14,6 +14,8 @@ from cas.model import (
     Labelset,
 )
 
+NAME_SEPERATOR = "_XX_"
+
 
 def ingest_data(
     data_file: str,
@@ -102,7 +104,7 @@ def ingest_user_data(data_file: str, config_file: str):
         add_user_annotations(ao, headers, record, utilized_columns)
         add_parent_node_names(ao, ao_names, cas, parents)
 
-        ao_names[ao.cell_label] = ao
+        ao_names[ao.labelset + NAME_SEPERATOR + ao.cell_label] = ao
         cas.add_annotation_object(ao)
     return cas
 
@@ -116,18 +118,12 @@ def register_parent(field, labelset_ranks, parent_ao, parents):
         parent_ao: parent to add
         parents: sparse parents list
     """
-    if parent_ao.labelset and parent_ao.labelset != field["column_name"]:
-        # handle annotations existing in the multiple ranks, only keep the highest rank
-        if labelset_ranks[parent_ao.labelset] < int(str(field["rank"]).strip()):
-            parents.insert(labelset_ranks[parent_ao.labelset], None)
-            parents.insert(int(str(field["rank"]).strip()), parent_ao)
-    else:
-        parents.insert(int(str(field["rank"]).strip()), parent_ao)
+    parents.insert(int(str(field["rank"]).strip()), parent_ao)
 
 
 def get_annotation(ao_names, field, record):
     """
-    Creates a annotation object if it does not exist in the ao_names dictionary.
+    Creates a annotation object if it does not exist in the ao_names dictionary at the same labelset.
     Args:
         ao_names: list of existing annotation objects
         field: config field
@@ -135,8 +131,10 @@ def get_annotation(ao_names, field, record):
 
     Returns: annotation object
     """
-    if record[field["column_name"]] in ao_names:
-        ao = ao_names[record[field["column_name"]]]
+    # labelset_XX_label
+    name = field["column_name"] + NAME_SEPERATOR + record[field["column_name"]]
+    if name in ao_names:
+        ao = ao_names[name]
     else:
         ao = Annotation(field["column_name"], record[field["column_name"]])
     ao.labelset = field["column_name"]
@@ -187,12 +185,12 @@ def add_parent_node_names(ao, ao_names, cas, parents):
                                 prev.cell_label,
                             )
                         )
-                    if parent.cell_label != prev.cell_label:  # avoid self-references
+                    if parent.labelset + parent.cell_label != prev.labelset + prev.cell_label:  # avoid self-references
                         parent.parent_cell_set_name = prev.cell_label
                 prev = parent
-                if parent.cell_label not in ao_names:
+                if parent.labelset + NAME_SEPERATOR + parent.cell_label not in ao_names:
                     cas.add_annotation_object(parent)
-                    ao_names[parent.cell_label] = parent
+                    ao_names[parent.labelset + NAME_SEPERATOR + parent.cell_label] = parent
 
 
 def populate_labelsets(cas, config_fields):
