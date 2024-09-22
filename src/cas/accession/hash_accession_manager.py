@@ -18,7 +18,7 @@ class HashAccessionManager(BaseAccessionManager):
         self.accession_ids = list()
 
     def generate_accession_id(
-        self, id_recommendation: str = None, cell_ids: List = None, labelset: str = None
+        self, id_recommendation: str = None, cell_ids: List = None, labelset: str = None, suppress_warnings=False
     ) -> str:
         """
         Generates a Blake2b hashing algorithm based hash for the given cell IDs.
@@ -27,6 +27,7 @@ class HashAccessionManager(BaseAccessionManager):
             valid accession id.
             cell_ids: Cell IDs list. Algorithm sorts cell ids internally.
             labelset: Labelset name. If provided, uses it as a prefix to the accession id.
+            suppress_warnings: If True, suppresses warnings.
         Return: accession_id
         """
         if id_recommendation and labelset and ":" not in id_recommendation:
@@ -45,8 +46,9 @@ class HashAccessionManager(BaseAccessionManager):
             accession_id = labelset + ":" + accession_id
 
         if accession_id in self.accession_ids:
-            print("ERROR: Hash ID conflict occurred: " + accession_id)
-            # raise Exception("Hash ID conflict occurred: " + accession_id)
+            if not suppress_warnings:
+                print("ERROR: Hash ID conflict occurred: " + accession_id)
+                # raise Exception("Hash ID conflict occurred: " + accession_id)
         else:
             self.accession_ids.append(accession_id)
         return accession_id

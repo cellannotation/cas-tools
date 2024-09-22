@@ -53,7 +53,7 @@ class CellTypeAnnotationTests(unittest.TestCase):
         # print(result["labelsets"])
 
         self.assertTrue("annotations" in result)
-        self.assertEqual(354, len(result["annotations"]))
+        self.assertEqual(363, len(result["annotations"]))
         # print(result["annotations"][:10])
 
         test_annotation = [
@@ -117,3 +117,24 @@ class CellTypeAnnotationTests(unittest.TestCase):
         ][0]
         self.assertEqual("CN MGE GABA", parent_annotation.cell_label)
         self.assertEqual("class", parent_annotation.labelset)
+
+        # 11_NN is a child of a Endothelial (supertype) which is child of Endothelial (subclass)
+        test_annotation = [x for x in result.annotations if x.cell_label == "11_NN"][0]
+        print(test_annotation.parent_cell_set_name)
+        annotations_with_parent_name = [
+            x
+            for x in result.annotations
+            if x.cell_label == test_annotation.parent_cell_set_name
+        ]
+        self.assertEqual(2, len(annotations_with_parent_name))  # 2 annotations with the same name
+
+        labelsets = {labelset.name: labelset for labelset in result.labelsets}
+        parent_annotation = min(annotations_with_parent_name, key=lambda d: labelsets[d.labelset].rank)
+        self.assertEqual("Endothelial", parent_annotation.cell_label)
+        self.assertEqual("supertype", parent_annotation.labelset)
+        self.assertEqual("Endothelial", parent_annotation.parent_cell_set_name)
+
+        grand_parent_annotation = max(annotations_with_parent_name, key=lambda d: labelsets[d.labelset].rank)
+        self.assertEqual("Endothelial", grand_parent_annotation.cell_label)
+        self.assertEqual("subclass", grand_parent_annotation.labelset)
+        self.assertEqual("Vascular", grand_parent_annotation.parent_cell_set_name)

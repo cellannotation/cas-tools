@@ -73,7 +73,7 @@ class TabularSerialisationTests(unittest.TestCase):
         headers, records = read_csv_to_dict(
             annotation_table_path, id_column_name="cell_set_accession", delimiter="\t"
         )
-        self.assertEqual(354, len(records))
+        self.assertEqual(363, len(records))
 
         cluster_1 = records["TST_1"]
         self.assertEqual("1_MSN", cluster_1["cell_label"])
@@ -86,21 +86,21 @@ class TabularSerialisationTests(unittest.TestCase):
 
         cluster_288 = records["TST_288"]
         self.assertEqual("D1-Matrix", cluster_288["cell_label"])
-        self.assertEqual("TST_327", cluster_288["parent_cell_set_accession"])
+        self.assertEqual("TST_336", cluster_288["parent_cell_set_accession"])
         self.assertEqual("D1-MSN", cluster_288["parent_cell_set_name"])
         self.assertEqual("level 3 (subclass)", cluster_288["labelset"])
 
-        cluster_327 = records["TST_327"]
-        self.assertEqual("D1-MSN", cluster_327["cell_label"])
-        self.assertEqual("TST_353", cluster_327["parent_cell_set_accession"])
-        self.assertEqual("MSN", cluster_327["parent_cell_set_name"])
-        self.assertEqual("level 2 (neighborhood)", cluster_327["labelset"])
+        cluster_336 = records["TST_336"]
+        self.assertEqual("D1-MSN", cluster_336["cell_label"])
+        self.assertEqual("TST_362", cluster_336["parent_cell_set_accession"])
+        self.assertEqual("MSN", cluster_336["parent_cell_set_name"])
+        self.assertEqual("level 2 (neighborhood)", cluster_336["labelset"])
 
-        cluster_353 = records["TST_353"]
-        self.assertEqual("MSN", cluster_353["cell_label"])
-        self.assertEqual("", cluster_353["parent_cell_set_accession"])
-        self.assertEqual("", cluster_353["parent_cell_set_name"])
-        self.assertEqual("level1 (class)", cluster_353["labelset"])
+        cluster_362 = records["TST_362"]
+        self.assertEqual("MSN", cluster_362["cell_label"])
+        self.assertEqual("", cluster_362["parent_cell_set_accession"])
+        self.assertEqual("", cluster_362["parent_cell_set_name"])
+        self.assertEqual("level1 (class)", cluster_362["labelset"])
 
     def test_annotation_table_nhp_v2(self):
         cta = ingest_user_data(RAW_DATAv2, TEST_CONFIGv2)
@@ -165,6 +165,37 @@ class TabularSerialisationTests(unittest.TestCase):
         ][0]
         self.assertEqual("CN MGE GABA", parent["cell_label"])
         self.assertEqual("class", parent["labelset"])
+
+        # 11_NN is a child of a Endothelial (supertype) which is child of Endothelial (subclass)
+        cluster = [
+            records[rec_id]
+            for rec_id in records
+            if records[rec_id]["cell_label"] == "11_NN"
+        ][0]
+        self.assertEqual("11_NN", cluster["cell_label"])
+        self.assertEqual("cluster", cluster["labelset"])
+        self.assertEqual("Endothelial", cluster["parent_cell_set_name"])
+        self.assertTrue(cluster["parent_cell_set_accession"])
+        parent = [
+            records[rec_id]
+            for rec_id in records
+            if records[rec_id]["cell_set_accession"] == cluster["parent_cell_set_accession"]
+        ][0]
+        self.assertEqual("Endothelial", parent["cell_label"])
+        self.assertEqual("supertype", parent["labelset"])
+        self.assertEqual("Endothelial", parent["parent_cell_set_name"])
+        self.assertTrue(parent["parent_cell_set_accession"])
+        grand_parent = [
+            records[rec_id]
+            for rec_id in records
+            if records[rec_id]["cell_set_accession"] == parent["parent_cell_set_accession"]
+        ][0]
+        self.assertEqual("Endothelial", grand_parent["cell_label"])
+        self.assertEqual("subclass", grand_parent["labelset"])
+        self.assertNotEquals(parent["cell_set_accession"],
+                             grand_parent["cell_set_accession"])
+        self.assertEqual("Vascular", grand_parent["parent_cell_set_name"])
+        self.assertTrue(grand_parent["parent_cell_set_accession"])
 
     def test_labelset_table(self):
         cta = ingest_user_data(RAW_DATA, TEST_CONFIG)
