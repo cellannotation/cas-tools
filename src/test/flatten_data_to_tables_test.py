@@ -166,6 +166,37 @@ class TabularSerialisationTests(unittest.TestCase):
         self.assertEqual("CN MGE GABA", parent["cell_label"])
         self.assertEqual("class", parent["labelset"])
 
+        # 11_NN is a child of a Endothelial (supertype) which is child of Endothelial (subclass)
+        cluster = [
+            records[rec_id]
+            for rec_id in records
+            if records[rec_id]["cell_label"] == "11_NN"
+        ][0]
+        self.assertEqual("11_NN", cluster["cell_label"])
+        self.assertEqual("cluster", cluster["labelset"])
+        self.assertEqual("Endothelial", cluster["parent_cell_set_name"])
+        self.assertTrue(cluster["parent_cell_set_accession"])
+        parent = [
+            records[rec_id]
+            for rec_id in records
+            if records[rec_id]["cell_set_accession"] == cluster["parent_cell_set_accession"]
+        ][0]
+        self.assertEqual("Endothelial", parent["cell_label"])
+        self.assertEqual("supertype", parent["labelset"])
+        self.assertEqual("Endothelial", parent["parent_cell_set_name"])
+        self.assertTrue(parent["parent_cell_set_accession"])
+        grand_parent = [
+            records[rec_id]
+            for rec_id in records
+            if records[rec_id]["cell_set_accession"] == parent["parent_cell_set_accession"]
+        ][0]
+        self.assertEqual("Endothelial", grand_parent["cell_label"])
+        self.assertEqual("subclass", grand_parent["labelset"])
+        self.assertNotEquals(parent["cell_set_accession"],
+                             grand_parent["cell_set_accession"])
+        self.assertEqual("Vascular", grand_parent["parent_cell_set_name"])
+        self.assertTrue(grand_parent["parent_cell_set_accession"])
+
     def test_labelset_table(self):
         cta = ingest_user_data(RAW_DATA, TEST_CONFIG)
         tables = serialize_to_tables(

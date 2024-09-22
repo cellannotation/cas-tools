@@ -243,8 +243,9 @@ def generate_annotation_table(accession_prefix, cta, out_folder):
         else:
             # parent nodes
             parent_label = annotation_object["cell_label"]
-            if parent_label not in [
-                parent["cell_label"] for parent in std_parent_records
+            parent_labelset = annotation_object.get("labelset", "")
+            if parent_labelset + parent_label not in [
+                parent["labelset"] + parent["cell_label"] for parent in std_parent_records
             ]:
                 record["cell_set_accession"] = ""
                 record["cell_label"] = parent_label
@@ -381,7 +382,9 @@ def assign_parent_accession_ids(
 
         children = std_parent_records_dict.get(std_parent_record["cell_label"], list())
         for child in children:
-            child["parent_cell_set_accession"] = accession_id
+            if not (child["cell_label"] == std_parent_record["cell_label"] and child["labelset"] == std_parent_record["labelset"]):  # prevent self reference
+                if not child["parent_cell_set_accession"]:  # prevent overwriting existing parent (same parent name in different labelsets)
+                    child["parent_cell_set_accession"] = accession_id
 
 
 def assign_parent_cell_set_names(id_index: dict):

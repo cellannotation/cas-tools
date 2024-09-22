@@ -334,7 +334,7 @@ def create_cell_label_lookup(df_dict: Dict[str, pd.DataFrame]) -> dict:
                     nested_dict[key_pair][CELL_LABEL] = group[col].iloc[0]
                     # Store cellhash
                     cell_hash = accession_manager.generate_accession_id(
-                        cell_ids=cell_id_list, labelset=col
+                        cell_ids=cell_id_list, labelset=col, suppress_warnings=True
                     )
                     nested_dict[key_pair][AUTHOR_ANNOTATION_FIELDS][
                         CELLHASH
