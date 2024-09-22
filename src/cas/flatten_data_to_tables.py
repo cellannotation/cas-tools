@@ -384,7 +384,8 @@ def assign_parent_accession_ids(
         for child in children:
             if not (child["cell_label"] == std_parent_record["cell_label"] and child["labelset"] == std_parent_record["labelset"]):  # prevent self reference
                 if not child["parent_cell_set_accession"]:  # prevent overwriting existing parent (same parent name in different labelsets)
-                    child["parent_cell_set_accession"] = accession_id
+                    if int(label_set_ranks[child["labelset"]]) < int(label_set_ranks[std_parent_record["labelset"]]):  # prevent parent assignment to a child in a higher rank
+                        child["parent_cell_set_accession"] = accession_id
 
 
 def assign_parent_cell_set_names(id_index: dict):
