@@ -197,6 +197,68 @@ class TabularSerialisationTests(unittest.TestCase):
         self.assertEqual("Vascular", grand_parent["parent_cell_set_name"])
         self.assertTrue(grand_parent["parent_cell_set_accession"])
 
+        # 6_NN is a child of a Microglia (supertype) which is child of Microglia (subclass)
+        cluster = [
+            records[rec_id]
+            for rec_id in records
+            if records[rec_id]["cell_label"] == "6_NN"
+        ][0]
+        self.assertEqual("6_NN", cluster["cell_label"])
+        self.assertEqual("cluster", cluster["labelset"])
+        self.assertEqual("Microglia", cluster["parent_cell_set_name"])
+        self.assertTrue(cluster["parent_cell_set_accession"])
+        parent = [
+            records[rec_id]
+            for rec_id in records
+            if records[rec_id]["cell_set_accession"] == cluster["parent_cell_set_accession"]
+        ][0]
+        self.assertEqual("Microglia", parent["cell_label"])
+        self.assertEqual("supertype", parent["labelset"])
+        self.assertEqual("Microglia", parent["parent_cell_set_name"])
+        self.assertTrue(parent["parent_cell_set_accession"])
+        grand_parent = [
+            records[rec_id]
+            for rec_id in records
+            if records[rec_id]["cell_set_accession"] == parent["parent_cell_set_accession"]
+        ][0]
+        self.assertEqual("Microglia", grand_parent["cell_label"])
+        self.assertEqual("subclass", grand_parent["labelset"])
+        self.assertNotEquals(parent["cell_set_accession"],
+                             grand_parent["cell_set_accession"])
+        self.assertEqual("Immune", grand_parent["parent_cell_set_name"])
+        self.assertTrue(grand_parent["parent_cell_set_accession"])
+
+        # 26_NN is a child of a Microglia-CD163 (supertype) which is child of Microglia (subclass)
+        cluster = [
+            records[rec_id]
+            for rec_id in records
+            if records[rec_id]["cell_label"] == "26_NN"
+        ][0]
+        self.assertEqual("26_NN", cluster["cell_label"])
+        self.assertEqual("cluster", cluster["labelset"])
+        self.assertEqual("Microglia-CD163", cluster["parent_cell_set_name"])
+        self.assertTrue(cluster["parent_cell_set_accession"])
+        parent = [
+            records[rec_id]
+            for rec_id in records
+            if records[rec_id]["cell_set_accession"] == cluster["parent_cell_set_accession"]
+        ][0]
+        self.assertEqual("Microglia-CD163", parent["cell_label"])
+        self.assertEqual("supertype", parent["labelset"])
+        self.assertEqual("Microglia", parent["parent_cell_set_name"])
+        self.assertTrue(parent["parent_cell_set_accession"])
+        grand_parent = [
+            records[rec_id]
+            for rec_id in records
+            if records[rec_id]["cell_set_accession"] == parent["parent_cell_set_accession"]
+        ][0]
+        self.assertEqual("Microglia", grand_parent["cell_label"])
+        self.assertEqual("subclass", grand_parent["labelset"])
+        self.assertNotEquals(parent["cell_set_accession"],
+                             grand_parent["cell_set_accession"])
+        self.assertEqual("Immune", grand_parent["parent_cell_set_name"])
+        self.assertTrue(grand_parent["parent_cell_set_accession"])
+
     def test_labelset_table(self):
         cta = ingest_user_data(RAW_DATA, TEST_CONFIG)
         tables = serialize_to_tables(
