@@ -431,7 +431,7 @@
                     <span class="n">nested_dict</span><span class="p">[</span><span class="n">key_pair</span><span class="p">][</span><span class="n">CELL_LABEL</span><span class="p">]</span> <span class="o">=</span> <span class="n">group</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                     <span class="c1"># Store cellhash</span>
                     <span class="n">cell_hash</span> <span class="o">=</span> <span class="n">accession_manager</span><span class="o">.</span><span class="n">generate_accession_id</span><span class="p">(</span>
-                        <span class="n">cell_ids</span><span class="o">=</span><span class="n">cell_id_list</span><span class="p">,</span> <span class="n">labelset</span><span class="o">=</span><span class="n">col</span>
+                        <span class="n">cell_ids</span><span class="o">=</span><span class="n">cell_id_list</span><span class="p">,</span> <span class="n">labelset</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">True</span>
                     <span class="p">)</span>
                     <span class="n">nested_dict</span><span class="p">[</span><span class="n">key_pair</span><span class="p">][</span><span class="n">AUTHOR_ANNOTATION_FIELDS</span><span class="p">][</span>
                         <span class="n">CELLHASH</span>

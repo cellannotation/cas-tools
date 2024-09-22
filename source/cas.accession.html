@@ -147,7 +147,7 @@ labelset: Labelset name. If provided, uses it as a prefix to the accession id.</
 <dd><p>Bases: <a class="reference internal" href="#cas.accession.base_accession_manager.BaseAccessionManager" title="cas.accession.base_accession_manager.BaseAccessionManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseAccessionManager</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="cas.accession.hash_accession_manager.HashAccessionManager.generate_accession_id">
-<span class="sig-name descname"><span class="pre">generate_accession_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_recommendation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/accession/hash_accession_manager.html#HashAccessionManager.generate_accession_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.accession.hash_accession_manager.HashAccessionManager.generate_accession_id" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">generate_accession_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_recommendation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suppress_warnings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/accession/hash_accession_manager.html#HashAccessionManager.generate_accession_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.accession.hash_accession_manager.HashAccessionManager.generate_accession_id" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span></p>
@@ -166,7 +166,8 @@ Params:</p>
 <div><p>id_recommendation: pre-calculated hash accession recommendation. Returns this value if recommendation is a
 valid accession id.
 cell_ids: Cell IDs list. Algorithm sorts cell ids internally.
-labelset: Labelset name. If provided, uses it as a prefix to the accession id.</p>
+labelset: Labelset name. If provided, uses it as a prefix to the accession id.
+suppress_warnings: If True, suppresses warnings.</p>
 </div></blockquote>
 <p>Return: accession_id</p>
 </dd></dl>
