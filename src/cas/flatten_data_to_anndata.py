@@ -131,9 +131,9 @@ def process_annotations(annotations, obs_index, parent_cell_ids, fill_na):
     accession_manager = HashAccessionManager()
     flatten_data = {}
     for ann in annotations:
-        cell_ids = ann.get(
-            CELL_IDS, parent_cell_ids.get(ann.get("cell_set_accession", []))
-        )
+        cell_ids = ann.get(CELL_IDS, [])
+        if not cell_ids:
+            cell_ids = parent_cell_ids.get(ann.get("cell_set_accession", []))
 
         ann.get("%s" % AUTHOR_ANNOTATION_FIELDS, {}).update(
             {
@@ -200,6 +200,9 @@ def generate_uns_json(input_json):
 
     for key in root_keys:
         value = input_json[key]
+        if not value:
+            continue
+    
         if is_list_of_strings(value):
             uns_json[key] = ", ".join(sorted(value))
         elif isinstance(value, str):
