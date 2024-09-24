@@ -216,9 +216,9 @@
     <span class="n">accession_manager</span> <span class="o">=</span> <span class="n">HashAccessionManager</span><span class="p">()</span>
     <span class="n">flatten_data</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">ann</span> <span class="ow">in</span> <span class="n">annotations</span><span class="p">:</span>
-        <span class="n">cell_ids</span> <span class="o">=</span> <span class="n">ann</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-            <span class="n">CELL_IDS</span><span class="p">,</span> <span class="n">parent_cell_ids</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ann</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">,</span> <span class="p">[]))</span>
-        <span class="p">)</span>
+        <span class="n">cell_ids</span> <span class="o">=</span> <span class="n">ann</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">CELL_IDS</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">cell_ids</span><span class="p">:</span>
+            <span class="n">cell_ids</span> <span class="o">=</span> <span class="n">parent_cell_ids</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ann</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">,</span> <span class="p">[]))</span>
 
         <span class="n">ann</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">AUTHOR_ANNOTATION_FIELDS</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
             <span class="p">{</span>
@@ -288,6 +288,9 @@
 
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">root_keys</span><span class="p">:</span>
         <span class="n">value</span> <span class="o">=</span> <span class="n">input_json</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">continue</span>
+    
         <span class="k">if</span> <span class="n">is_list_of_strings</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
             <span class="n">uns_json</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
