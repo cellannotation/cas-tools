@@ -200,23 +200,23 @@ def generate_uns_json(input_json):
 
     for key in root_keys:
         value = input_json[key]
-    if not value:
-        continue
-
-    if is_list_of_strings(value):
-        uns_json[key] = ", ".join(sorted(value))
-    elif isinstance(value, str):
-        uns_json[key] = value
-    else:
-        metadata_json = {}
-        for labelset in value:
-            metadata_key = labelset.get(LABELSET_NAME, "")
-            metadata_json.update({metadata_key: {}})
-            for k, v in labelset.items():
-                if k == LABELSET_NAME:
-                    continue
-                metadata_json.get(metadata_key, {}).update({k: v})
-        uns_json["cellannotation_metadata"] = metadata_json
+        if not value:
+            continue
+    
+        if is_list_of_strings(value):
+            uns_json[key] = ", ".join(sorted(value))
+        elif isinstance(value, str):
+            uns_json[key] = value
+        else:
+            metadata_json = {}
+            for labelset in value:
+                metadata_key = labelset.get(LABELSET_NAME, "")
+                metadata_json.update({metadata_key: {}})
+                for k, v in labelset.items():
+                    if k == LABELSET_NAME:
+                        continue
+                    metadata_json.get(metadata_key, {}).update({k: v})
+            uns_json["cellannotation_metadata"] = metadata_json
 
     uns_json["cas"] = reformat_json(input_json)
 
