@@ -135,15 +135,15 @@ def process_annotations(annotations, obs_index, parent_cell_ids, fill_na):
         if not cell_ids:
             cell_ids = parent_cell_ids.get(ann.get("cell_set_accession", []))
 
-        ann.get("%s" % AUTHOR_ANNOTATION_FIELDS, {}).update(
+        author_annotations = ann.get(AUTHOR_ANNOTATION_FIELDS, {})
+        author_annotations.update(
             {
                 CELLHASH: ann.get("cell_set_accession")
                 if is_hash_accession(ann.get("cell_set_accession", None))
-                else accession_manager.generate_accession_id(
-                    cell_ids=cell_ids,
-                )
+                else accession_manager.generate_accession_id(cell_ids=cell_ids)
             }
         )
+        ann[AUTHOR_ANNOTATION_FIELDS] = author_annotations
 
         if not cell_ids:
             # only happens if data has multi-inheritance (as in basal ganglia data)
