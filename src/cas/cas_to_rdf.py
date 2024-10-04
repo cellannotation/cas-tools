@@ -2,12 +2,7 @@ from typing import List, Optional, Union
 
 import rdflib
 
-from cas.linkml_ops.data import dump_to_rdf, populate_ids
-from cas.linkml_ops.schema import (
-    convert_cas_schema_to_linkml,
-    decorate_linkml_schema,
-    expand_schema,
-)
+from cell_annotation_schema.ontology import export as ontology_export
 
 
 def export_to_rdf(
@@ -15,7 +10,6 @@ def export_to_rdf(
     data: Union[str, dict],
     ontology_namespace: str,
     ontology_iri: str,
-    labelsets: Optional[List[str]] = None,
     output_path: str = None,
     validate: bool = True,
     include_cells: bool = True,
@@ -43,34 +37,12 @@ def export_to_rdf(
     Returns:
         An RDFlib graph object.
     """
-    # Prepare the linkml schema
-    base_linkml_schema = convert_cas_schema_to_linkml(cas_schema)
-    decorated_schema = decorate_linkml_schema(
-        base_linkml_schema,
+    return ontology_export.export_to_rdf(
+        cas_schema=cas_schema,
+        data=data,
         ontology_namespace=ontology_namespace,
         ontology_iri=ontology_iri,
-        labelsets=labelsets,
-    )
-
-    expanded_schema = expand_schema(
-        config=None, yaml_obj=decorated_schema, value_set_names=["CellTypeEnum"]
-    )
-
-    # Prepare the data
-    instance = populate_ids(
-        data,
-        ontology_namespace=ontology_namespace,
-        ontology_id=ontology_namespace,
-    )
-    rdf_graph = dump_to_rdf(
-        schema=expanded_schema,
-        instance=instance,
-        ontology_namespace=ontology_namespace,
-        ontology_iri=ontology_iri,
-        labelsets=labelsets,
+        output_path=output_path,
         validate=validate,
         include_cells=include_cells,
-        output_path=output_path,
     )
-
-    return rdf_graph
