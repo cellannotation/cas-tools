@@ -179,7 +179,7 @@ cas populate_cells --json path/to/json_file.json --anndata path/to/anndata_file.
 Converts the given CAS data to RDF format.
 
 ```commandline
-cas cas2rdf --schema bican --data path/to/file.json --ontology_ns MTG --ontology_iri https://purl.brain-bican.org/ontology/AIT_MTG/ --labelsets Cluster Subclass Class --out path/to/output.rdf --exclude_cells
+cas cas2rdf --schema bican --data path/to/file.json --ontology_ns MTG --ontology_iri https://purl.brain-bican.org/ontology/AIT_MTG/ --out path/to/output.rdf --exclude_cells
 ```
 
 **Command-line Arguments:**
@@ -188,7 +188,6 @@ cas cas2rdf --schema bican --data path/to/file.json --ontology_ns MTG --ontology
 --data   : Path to the json data file
 --ontology_ns    : Ontology namespace (e.g. `MTG`)
 --ontology_iri    : Ontology IRI (e.g. `https://purl.brain-bican.org/ontology/AIT_MTG/`)
---labelsets    : (Optional) Labelsets used in the taxonomy (such as `["Cluster", "Subclass", "Class"]`).
 --out    : The output RDF file path.
 --skip_validate    : (Optional) Determines if data-schema validation checks will be performed. Validations are performed by default.
 --exclude_cells    : (Optional) Determines if cell data will be included in the RDF output. Cell data is exported to RDF by default.

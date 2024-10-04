@@ -276,7 +276,7 @@ path/to/cluster_annotation_term.csv
 <section id="convert-cas-data-to-rdf">
 <h2>Convert CAS data to RDF<a class="headerlink" href="#convert-cas-data-to-rdf" title="Link to this heading"></a></h2>
 <p>Converts the given CAS data to RDF format.</p>
-<div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>cas cas2rdf --schema bican --data path/to/file.json --ontology_ns MTG --ontology_iri https://purl.brain-bican.org/ontology/AIT_MTG/ --labelsets Cluster Subclass Class --out path/to/output.rdf --exclude_cells
+<div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>cas cas2rdf --schema bican --data path/to/file.json --ontology_ns MTG --ontology_iri https://purl.brain-bican.org/ontology/AIT_MTG/ --out path/to/output.rdf --exclude_cells
 </pre></div>
 </div>
 <p><strong>Command-line Arguments:</strong>
@@ -285,7 +285,6 @@ CAS schema file or url of the schema file. If not provided, reads the <code clas
 –data   : Path to the json data file
 –ontology_ns    : Ontology namespace (e.g. <code class="docutils literal notranslate"><span class="pre">MTG</span></code>)
 –ontology_iri    : Ontology IRI (e.g. <code class="docutils literal notranslate"><span class="pre">https://purl.brain-bican.org/ontology/AIT_MTG/</span></code>)
-–labelsets    : (Optional) Labelsets used in the taxonomy (such as <code class="docutils literal notranslate"><span class="pre">[&quot;Cluster&quot;,</span> <span class="pre">&quot;Subclass&quot;,</span> <span class="pre">&quot;Class&quot;]</span></code>).
 –out    : The output RDF file path.
 –skip_validate    : (Optional) Determines if data-schema validation checks will be performed. Validations are performed by default.
 –exclude_cells    : (Optional) Determines if cell data will be included in the RDF output. Cell data is exported to RDF by default.</p>
