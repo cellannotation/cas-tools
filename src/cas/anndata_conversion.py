@@ -111,9 +111,12 @@ def check_labelsets(cas_json, input_obs, matching_obs_keys, validate):
                 ):
                     handle_matching_labelset(ann, cell_label, input_obs, validate)
                 elif cell_label == ann[CELL_LABEL]:
-                    handle_non_matching_labelset(
-                        ann, input_obs, validate, derived_cell_ids
-                    )
+                    if cell_list == set(ann.get(CELL_IDS, [])):
+                        handle_matching_labelset(ann, cell_label, input_obs, validate)
+                    else:
+                        handle_non_matching_labelset(
+                            ann, input_obs, validate, derived_cell_ids
+                        )
 
 
 def get_matching_obs_keys(obs_keys, cas_labelsets):
