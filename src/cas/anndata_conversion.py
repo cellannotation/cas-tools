@@ -159,7 +159,10 @@ def handle_non_matching_labelset(ann, input_obs, validate, derived_cell_ids):
     # input_anndata.obs.loc[list(cell_list), cell_label] = ""
     # Add labelset from CAS to anndata
     cell_ids = derived_cell_ids.get(str(ann["cell_set_accession"]), set())
-    input_obs.loc[list(cell_ids), ann[LABELSET]] = str(ann[CELL_LABEL])
+    # Bad split workaround, temporary solution
+    # Use Pandas indexing to filter the cell_ids present in obs.index
+    valid_cell_ids = input_obs.index.intersection(cell_ids)
+    input_obs.loc[valid_cell_ids, ann[LABELSET]] = str(ann[CELL_LABEL])
 
 
 def validate_cell_ids(anndata_cell_ids, annotations, validate):
