@@ -27,6 +27,7 @@ from cas.utils.conversion_utils import (
     copy_and_update_file_path,
     fetch_anndata,
     reformat_json,
+    convert_complex_type,
 )
 
 # Configure logging
@@ -202,7 +203,7 @@ def generate_uns_json(input_json):
         value = input_json[key]
         if not value:
             continue
-    
+
         if is_list_of_strings(value):
             uns_json[key] = ", ".join(sorted(value))
         elif isinstance(value, str):
@@ -334,7 +335,9 @@ def create_cell_label_lookup(df_dict: Dict[str, pd.DataFrame]) -> dict:
                 if col == df_key:
                     # Store the labelset and cell label for the first column
                     nested_dict[key_pair][LABELSET] = col
-                    nested_dict[key_pair][CELL_LABEL] = group[col].iloc[0]
+                    nested_dict[key_pair][CELL_LABEL] = convert_complex_type(
+                        group[col].iloc[0]
+                    )
                     # Store cellhash
                     cell_hash = accession_manager.generate_accession_id(
                         cell_ids=cell_id_list, labelset=col, suppress_warnings=True
@@ -356,7 +359,9 @@ def create_cell_label_lookup(df_dict: Dict[str, pd.DataFrame]) -> dict:
                             filtered_annotation_dict
                         )
                     else:
-                        nested_dict[key_pair][annotation_column] = group[col].iloc[0]
+                        nested_dict[key_pair][annotation_column] = convert_complex_type(
+                            group[col].iloc[0]
+                        )
 
     return {
         key_: dict(value)
@@ -397,6 +402,7 @@ def update_cas_json(
                 CELLHASH
             ]
 
+            # TODO Make validation optional
             if cas_cellhash == obs_cellhash:
                 updated_cas_annotations.append(obs_annotation)
             else:
