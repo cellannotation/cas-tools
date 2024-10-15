@@ -6,7 +6,7 @@ from rdflib import Graph, URIRef
 from cas.cas_to_rdf import export_to_rdf
 
 CAS_NS = "https://cellular-semantics.sanger.ac.uk/ontology/CAS/"
-dataset_type = URIRef(CAS_NS + "GeneralCellAnnotationOpenStandard")
+taxonomy_type = URIRef(CAS_NS + "Taxonomy")
 annotation_type = URIRef("http://purl.obolibrary.org/obo/PCL_0010001")
 labelset_type = URIRef(CAS_NS + "Labelset")
 rdftype = URIRef("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
@@ -39,14 +39,13 @@ class CAStoRDFTestCase(unittest.TestCase):
             data=os.path.join(TESTDATA, "AIT_MTG.json"),
             ontology_namespace=ontology_namespace,
             ontology_iri=ontology_iri,
-            labelsets=labelsets,
             output_path=TEST_OUTPUT,
             validate=True,
             include_cells=False,
         )
         self.assertTrue(os.path.isfile(TEST_OUTPUT))
 
-        self.assertEqual(1, len(list(rdf_graph.triples((None, rdftype, dataset_type)))))
+        self.assertEqual(1, len(list(rdf_graph.triples((None, rdftype, taxonomy_type)))))
         self.assertEqual(
             3, len(list(rdf_graph.triples((None, rdftype, labelset_type))))
         )
@@ -81,19 +80,18 @@ class CAStoRDFTestCase(unittest.TestCase):
 
         rdf_graph = export_to_rdf(
             # cas_schema="bican",
-            cas_schema="https://raw.githubusercontent.com/cellannotation/cell-annotation-schema/main/build/BICAN_schema.json",
+            cas_schema="https://raw.githubusercontent.com/Cellular-Semantics/cell-annotation-schema/refs/tags/v0.0.11/build/BICAN_schema.yaml",
             # data=os.path.join(TESTDATA, "CS202210140.json"),
             data=os.path.join(TESTDATA, "Siletti_all_non_neuronal_cells.json"),
             ontology_namespace=ontology_namespace,
             ontology_iri=ontology_iri,
-            labelsets=None,
             output_path=TEST_OUTPUT2,
             validate=True,
             include_cells=False,
         )
 
         self.assertTrue(os.path.isfile(TEST_OUTPUT2))
-        self.assertEqual(1, len(list(rdf_graph.triples((None, rdftype, dataset_type)))))
+        self.assertEqual(1, len(list(rdf_graph.triples((None, rdftype, taxonomy_type)))))
         self.assertEqual(
             2, len(list(rdf_graph.triples((None, rdftype, labelset_type))))
         )

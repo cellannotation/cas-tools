@@ -141,7 +141,6 @@ def main():
             data=args.data,
             ontology_namespace=args.ontology_ns,
             ontology_iri=args.ontology_iri,
-            labelsets=args.labelsets,
             output_path=args.out,
             validate=not args.skip_validate,
             include_cells=not args.exclude_cells,
@@ -554,7 +553,6 @@ def create_cas2rdf_operation_parser(subparsers):
     --data   : Path to the json data file
     --ontology_ns    : Ontology namespace (e.g. `MTG`)
     --ontology_iri    : Ontology IRI (e.g. `https://purl.brain-bican.org/ontology/AIT_MTG/`)
-    --labelsets    : (Optional) Labelsets used in the taxonomy (such as `["Cluster", "Subclass", "Class"]`).
     --out    : The output RDF file path.
     --skip_validate    : (Optional) Determines if data-schema validation checks will be performed. Validations are performed by default.
     --exclude_cells    : (Optional) Determines if cell data will be included in the RDF output. Cell data is exported to RDF by default.
@@ -562,7 +560,7 @@ def create_cas2rdf_operation_parser(subparsers):
     Usage Example:
     --------------
     cd src
-    python -m cas cas2rdf --schema bican --data path/to/file.json --ontology_ns MTG --ontology_iri https://purl.brain-bican.org/ontology/AIT_MTG/ --labelsets Cluster Subclass Class --out path/to/output.rdf --exclude_cells
+    python -m cas cas2rdf --schema bican --data path/to/file.json --ontology_ns MTG --ontology_iri https://purl.brain-bican.org/ontology/AIT_MTG/ --out path/to/output.rdf --exclude_cells
     """
     parser_cas2rdf = subparsers.add_parser(
         "cas2rdf",
@@ -595,12 +593,6 @@ def create_cas2rdf_operation_parser(subparsers):
         "--ontology_iri",
         required=True,
         help="Ontology IRI (e.g. `https://purl.brain-bican.org/ontology/AIT_MTG/`)",
-    )
-    parser_cas2rdf.add_argument(
-        "-ls",
-        "--labelsets",
-        nargs="+",
-        help="List of labelsets used in the taxonomy (such as `Cluster Subclass Class`)",
     )
     parser_cas2rdf.add_argument(
         "-o",
