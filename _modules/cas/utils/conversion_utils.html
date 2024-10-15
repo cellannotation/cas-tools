@@ -78,6 +78,7 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">anndata</span> <span class="k">as</span> <span class="nn">ad</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">requests</span>
 
@@ -241,14 +242,14 @@
 <a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.conversion_utils.collect_parent_cell_ids">[docs]</a>
 <span class="k">def</span> <span class="nf">collect_parent_cell_ids</span><span class="p">(</span><span class="n">cas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Set</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Collects parent cell IDs from the given CAS (Cluster Annotation Service) data.</span>
+<span class="sd">    Collects parent cell IDs from the given CAS data.</span>
 
 <span class="sd">    This function iterates through labelsets in the CAS data and collects parent cell IDs</span>
 <span class="sd">    associated with each labelset annotation. It populates and returns a dictionary</span>
 <span class="sd">    mapping parent cell set accessions to sets of corresponding cell IDs.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        cas: The Cluster Annotation Service data containing labelsets and annotations.</span>
+<span class="sd">        cas: The Cell Annotation Schema data containing labelsets and annotations.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        A dictionary mapping parent cell set accessions to sets of corresponding cell IDs.</span>
@@ -503,6 +504,24 @@
         <span class="n">output_json</span><span class="p">[</span><span class="n">input_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">filtered_annotations</span>
 
     <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">output_json</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># Conversion function to handle complex types for JSON serialization</span>
+<div class="viewcode-block" id="convert_complex_type">
+<a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.conversion_utils.convert_complex_type">[docs]</a>
+<span class="k">def</span> <span class="nf">convert_complex_type</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts all complex types to strings except for bool, int, float, and str.</span>
+<span class="sd">    - Leaves bool types (including numpy.bool_) unchanged.</span>
+<span class="sd">    - Converts everything else to strings.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>  <span class="c1"># Leave bool, int, float, and str unchanged</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">):</span>  <span class="c1"># Special case to convert numpy bool to Python bool</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># Convert everything else to string</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
 
 
 

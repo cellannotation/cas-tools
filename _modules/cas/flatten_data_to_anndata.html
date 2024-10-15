@@ -101,6 +101,7 @@
     <span class="n">copy_and_update_file_path</span><span class="p">,</span>
     <span class="n">fetch_anndata</span><span class="p">,</span>
     <span class="n">reformat_json</span><span class="p">,</span>
+    <span class="n">convert_complex_type</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="c1"># Configure logging</span>
@@ -290,7 +291,7 @@
         <span class="n">value</span> <span class="o">=</span> <span class="n">input_json</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
             <span class="k">continue</span>
-    
+
         <span class="k">if</span> <span class="n">is_list_of_strings</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
             <span class="n">uns_json</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
@@ -431,7 +432,9 @@
                 <span class="k">if</span> <span class="n">col</span> <span class="o">==</span> <span class="n">df_key</span><span class="p">:</span>
                     <span class="c1"># Store the labelset and cell label for the first column</span>
                     <span class="n">nested_dict</span><span class="p">[</span><span class="n">key_pair</span><span class="p">][</span><span class="n">LABELSET</span><span class="p">]</span> <span class="o">=</span> <span class="n">col</span>
-                    <span class="n">nested_dict</span><span class="p">[</span><span class="n">key_pair</span><span class="p">][</span><span class="n">CELL_LABEL</span><span class="p">]</span> <span class="o">=</span> <span class="n">group</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">nested_dict</span><span class="p">[</span><span class="n">key_pair</span><span class="p">][</span><span class="n">CELL_LABEL</span><span class="p">]</span> <span class="o">=</span> <span class="n">convert_complex_type</span><span class="p">(</span>
+                        <span class="n">group</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="p">)</span>
                     <span class="c1"># Store cellhash</span>
                     <span class="n">cell_hash</span> <span class="o">=</span> <span class="n">accession_manager</span><span class="o">.</span><span class="n">generate_accession_id</span><span class="p">(</span>
                         <span class="n">cell_ids</span><span class="o">=</span><span class="n">cell_id_list</span><span class="p">,</span> <span class="n">labelset</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">True</span>
@@ -453,7 +456,9 @@
                             <span class="n">filtered_annotation_dict</span>
                         <span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">nested_dict</span><span class="p">[</span><span class="n">key_pair</span><span class="p">][</span><span class="n">annotation_column</span><span class="p">]</span> <span class="o">=</span> <span class="n">group</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="n">nested_dict</span><span class="p">[</span><span class="n">key_pair</span><span class="p">][</span><span class="n">annotation_column</span><span class="p">]</span> <span class="o">=</span> <span class="n">convert_complex_type</span><span class="p">(</span>
+                            <span class="n">group</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="p">)</span>
 
     <span class="k">return</span> <span class="p">{</span>
         <span class="n">key_</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
@@ -497,6 +502,7 @@
                 <span class="n">CELLHASH</span>
             <span class="p">]</span>
 
+            <span class="c1"># TODO Make validation optional</span>
             <span class="k">if</span> <span class="n">cas_cellhash</span> <span class="o">==</span> <span class="n">obs_cellhash</span><span class="p">:</span>
                 <span class="n">updated_cas_annotations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obs_annotation</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>

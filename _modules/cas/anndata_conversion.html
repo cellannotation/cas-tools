@@ -196,9 +196,12 @@
                 <span class="p">):</span>
                     <span class="n">handle_matching_labelset</span><span class="p">(</span><span class="n">ann</span><span class="p">,</span> <span class="n">cell_label</span><span class="p">,</span> <span class="n">input_obs</span><span class="p">,</span> <span class="n">validate</span><span class="p">)</span>
                 <span class="k">elif</span> <span class="n">cell_label</span> <span class="o">==</span> <span class="n">ann</span><span class="p">[</span><span class="n">CELL_LABEL</span><span class="p">]:</span>
-                    <span class="n">handle_non_matching_labelset</span><span class="p">(</span>
-                        <span class="n">ann</span><span class="p">,</span> <span class="n">input_obs</span><span class="p">,</span> <span class="n">validate</span><span class="p">,</span> <span class="n">derived_cell_ids</span>
-                    <span class="p">)</span></div>
+                    <span class="k">if</span> <span class="n">cell_list</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="n">ann</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">CELL_IDS</span><span class="p">,</span> <span class="p">[])):</span>
+                        <span class="n">handle_matching_labelset</span><span class="p">(</span><span class="n">ann</span><span class="p">,</span> <span class="n">cell_label</span><span class="p">,</span> <span class="n">input_obs</span><span class="p">,</span> <span class="n">validate</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">handle_non_matching_labelset</span><span class="p">(</span>
+                            <span class="n">ann</span><span class="p">,</span> <span class="n">input_obs</span><span class="p">,</span> <span class="n">validate</span><span class="p">,</span> <span class="n">derived_cell_ids</span>
+                        <span class="p">)</span></div>
 
 
 
