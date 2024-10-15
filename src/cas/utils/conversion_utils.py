@@ -4,6 +4,7 @@ import shutil
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 import anndata as ad
+import numpy as np
 import pandas as pd
 import requests
 
@@ -150,14 +151,14 @@ def get_cl_annotations_from_anndata(
 
 def collect_parent_cell_ids(cas: Dict[str, Any]) -> Dict[str, Set]:
     """
-    Collects parent cell IDs from the given CAS (Cluster Annotation Service) data.
+    Collects parent cell IDs from the given CAS data.
 
     This function iterates through labelsets in the CAS data and collects parent cell IDs
     associated with each labelset annotation. It populates and returns a dictionary
     mapping parent cell set accessions to sets of corresponding cell IDs.
 
     Args:
-        cas: The Cluster Annotation Service data containing labelsets and annotations.
+        cas: The Cell Annotation Schema data containing labelsets and annotations.
 
     Returns:
         A dictionary mapping parent cell set accessions to sets of corresponding cell IDs.
@@ -394,6 +395,21 @@ def reformat_json(
         output_json[input_key] = filtered_annotations
 
     return json.dumps(output_json)
+
+
+# Conversion function to handle complex types for JSON serialization
+def convert_complex_type(value):
+    """
+    Converts all complex types to strings except for bool, int, float, and str.
+    - Leaves bool types (including numpy.bool_) unchanged.
+    - Converts everything else to strings.
+    """
+    if isinstance(value, (bool, int, float, str)):  # Leave bool, int, float, and str unchanged
+        return value
+    elif isinstance(value, np.bool_):  # Special case to convert numpy bool to Python bool
+        return bool(value)
+    else:  # Convert everything else to string
+        return str(value)
 
 
 def copy_and_update_file_path(anndata_file_path: str, output_file_path: Optional[str]) -> str:
