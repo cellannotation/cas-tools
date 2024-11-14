@@ -2,21 +2,19 @@ import json
 import logging
 import re
 from collections import OrderedDict
-from importlib import resources
 from typing import List, Optional
 
 import pandas as pd
-from cas_schema import schemas
 
 from cas.anndata_to_cas import calculate_labelset
 from cas.cxg_utils import download_dataset_with_id
-from cas.file_utils import get_cas_schema_names, read_anndata_file
+from cas.file_utils import read_anndata_file
 from cas.utils.conversion_utils import (
     add_labelsets_to_cas,
     add_parent_cell_hierarchy,
     add_parent_hierarchy_to_annotations,
     generate_parent_cell_lookup,
-    get_cell_ids,
+    retrieve_schema,
 )
 
 logging.basicConfig(level=logging.INFO)
@@ -88,16 +86,6 @@ def read_spreadsheet(file_path: str, sheet_name: Optional[str], schema: dict):
         raise ValueError("Header row not found in the spreadsheet.")
 
     return meta_data, column_names, raw_data
-
-
-def retrieve_schema(schema_name):
-    schema_name = str(schema_name).strip().lower()
-    if schema_name not in get_cas_schema_names():
-        raise Exception("Schema name should be one of 'base', 'bican' or 'cap'")
-    schema_file = resources.files(schemas) / get_cas_schema_names()[schema_name]
-    with schema_file.open("rt") as f:
-        schema = json.loads(f.read())
-    return schema
 
 
 def custom_lowercase_transform(s):
