@@ -1,15 +1,18 @@
 import itertools
 import json
 import shutil
+from importlib import resources
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 import anndata as ad
 import numpy as np
 import pandas as pd
 import requests
+from cas_schema import schemas
 
 from cas.accession.hash_accession_manager import HashAccessionManager
 from cas.dataset_retrieval.dataset_retriever import DatasetRetriever
+from cas.file_utils import get_cas_schema_names
 
 CROSSREF_API_URL = "https://api.crossref.org/works/"
 
@@ -65,7 +68,11 @@ def calculate_labelset(
             - "rank": rank of the labelset.
     """
     labelset_dict = {}
-    labelset_rank_dict = calculate_labelset_rank(labelsets)
+    # Assuming that terms at higher levels in the hierarchy have fewer members
+    # compared to terms at lower levels.
+    unique_counts = {col: obs[col].nunique() for col in labelsets}
+    sorted_labelsets = sorted(unique_counts, key=unique_counts.get, reverse=True)
+    labelset_rank_dict = calculate_labelset_rank(sorted_labelsets)
     for item in labelsets:
         labelset_dict.update(
             {
@@ -404,15 +411,21 @@ def convert_complex_type(value):
     - Leaves bool types (including numpy.bool_) unchanged.
     - Converts everything else to strings.
     """
-    if isinstance(value, (bool, int, float, str)):  # Leave bool, int, float, and str unchanged
+    if isinstance(
+        value, (bool, int, float, str)
+    ):  # Leave bool, int, float, and str unchanged
         return value
-    elif isinstance(value, np.bool_):  # Special case to convert numpy bool to Python bool
+    elif isinstance(
+        value, np.bool_
+    ):  # Special case to convert numpy bool to Python bool
         return bool(value)
     else:  # Convert everything else to string
         return str(value)
 
 
-def copy_and_update_file_path(anndata_file_path: str, output_file_path: Optional[str]) -> str:
+def copy_and_update_file_path(
+    anndata_file_path: str, output_file_path: Optional[str]
+) -> str:
     """
     Copies the AnnData file to a new location if an output file path is provided, and updates the file path.
 
@@ -430,7 +443,9 @@ def copy_and_update_file_path(anndata_file_path: str, output_file_path: Optional
     return anndata_file_path
 
 
-def fetch_anndata(input_json: Dict[str, Any], download_dir: Optional[str] = None) -> str:
+def fetch_anndata(
+    input_json: Dict[str, Any], download_dir: Optional[str] = None
+) -> str:
     """
     Fetches the AnnData file based on the provided CAS JSON input.
 
@@ -452,3 +467,13 @@ def fetch_anndata(input_json: Dict[str, Any], download_dir: Optional[str] = None
     else:
         raise KeyError("Matrix file id is missing from CAS json.")
     return anndata_file_path
+
+
+def retrieve_schema(schema_name):
+    schema_name = str(schema_name).strip().lower()
+    if schema_name not in get_cas_schema_names():
+        raise Exception("Schema name should be one of 'base', 'bican' or 'cap'")
+    schema_file = resources.files(schemas) / get_cas_schema_names()[schema_name]
+    with schema_file.open("rt") as f:
+        schema = json.loads(f.read())
+    return schema
