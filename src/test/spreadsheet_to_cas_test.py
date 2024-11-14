@@ -7,7 +7,8 @@ from unittest.mock import patch
 import anndata as ad
 import pandas as pd
 
-from cas.spreadsheet_to_cas import read_spreadsheet, retrieve_schema, spreadsheet2cas
+from cas.spreadsheet_to_cas import read_spreadsheet, spreadsheet2cas
+from cas.utils.conversion_utils import retrieve_schema
 
 warnings.filterwarnings("ignore", category=UserWarning, module="anndata._core.anndata")
 
