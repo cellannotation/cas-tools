@@ -258,7 +258,8 @@ def create_unflatten_operation_parser(subparsers):
         Command-line Arguments:
     -----------------------
     --anndata           : Path to the AnnData file.
-    --json              : Optional path to the CAS JSON file. If not provided, the 'annotations' in uns will be used.
+    --json              : Optional path to the CAS JSON file. If provided, the 'annotations'
+    within the file will be updated. If not provided, a new CAS JSON file will be created.
     --output_anndata    : Optional output AnnData file name. If not provided, 'unflattened.h5ad' will be used as
     default name.
     --output_json       : Optional output CAS JSON file name. If not provided, 'cas.json' will be used as default name.
@@ -284,7 +285,8 @@ def create_unflatten_operation_parser(subparsers):
     parser_unflatten.add_argument(
         "--json",
         required=False,
-        help="Optional path to the CAS JSON file. If not provided, annotations in 'uns' of the AnnData will be used.",
+        help="Optional path to the CAS JSON file. If provided, the 'annotations' within the file "
+             "will be updated. If not provided, a new CAS JSON file will be created.",
     )
     parser_unflatten.add_argument(
         "--output_anndata",

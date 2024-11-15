@@ -280,20 +280,20 @@ def unflatten(
 def unflatten_obs(
     obs_df: pd.DataFrame,
     uns_df: Dict[str, Any],
-    cas_json: Dict[str, Any],
+    cas_json: Optional[Dict[str, Any]],
     cellhash_lookup: Dict[str, Any],
-) -> Optional[Dict[str, Any]]:
+) -> Dict[str, Any]:
     """
     Reverse the flattening process to update the "annotations" section in a CAS object.
 
     Args:
         obs_df: DataFrame containing the flattened obs columns from an AnnData object.
-        uns_df: DataFrame containing the flattened uns section from an AnnData object.
-        cas_json: CAS JSON object.
+        uns_df: Dictionary containing the flattened uns section from an AnnData object.
+        cas_json: Optional CAS JSON object.
         cellhash_lookup: Cell hash lookup dictionary.
 
     Returns:
-        Updated CAS JSON with revised annotations if dataset has a CAS origin.
+        Updated CAS JSON with revised annotations.
     """
     labelset_list = list(uns_df["cellannotation_metadata"].keys())
     obs_columns_by_labelset = {
@@ -311,7 +311,6 @@ def unflatten_obs(
         updated_cas[ANNOTATIONS] = update_cas_annotation(
             cas_dict, cas_json, cellhash_lookup
         )
-    # else:
     # remove redundant cell ids
     name_with_rank_0 = next(
         (
