@@ -75,15 +75,18 @@
 <span></span><span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">resources</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">anndata</span> <span class="k">as</span> <span class="nn">ad</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">cas_schema</span> <span class="kn">import</span> <span class="n">schemas</span>
 
 <span class="kn">from</span> <span class="nn">cas.accession.hash_accession_manager</span> <span class="kn">import</span> <span class="n">HashAccessionManager</span>
 <span class="kn">from</span> <span class="nn">cas.dataset_retrieval.dataset_retriever</span> <span class="kn">import</span> <span class="n">DatasetRetriever</span>
+<span class="kn">from</span> <span class="nn">cas.file_utils</span> <span class="kn">import</span> <span class="n">get_cas_schema_names</span>
 
 <span class="n">CROSSREF_API_URL</span> <span class="o">=</span> <span class="s2">&quot;https://api.crossref.org/works/&quot;</span>
 
@@ -144,7 +147,11 @@
 <span class="sd">            - &quot;rank&quot;: rank of the labelset.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">labelset_dict</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">labelset_rank_dict</span> <span class="o">=</span> <span class="n">calculate_labelset_rank</span><span class="p">(</span><span class="n">labelsets</span><span class="p">)</span>
+    <span class="c1"># Assuming that terms at higher levels in the hierarchy have fewer members</span>
+    <span class="c1"># compared to terms at lower levels.</span>
+    <span class="n">unique_counts</span> <span class="o">=</span> <span class="p">{</span><span class="n">col</span><span class="p">:</span> <span class="n">obs</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">labelsets</span><span class="p">}</span>
+    <span class="n">sorted_labelsets</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">unique_counts</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">unique_counts</span><span class="o">.</span><span class="n">get</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">labelset_rank_dict</span> <span class="o">=</span> <span class="n">calculate_labelset_rank</span><span class="p">(</span><span class="n">sorted_labelsets</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">labelsets</span><span class="p">:</span>
         <span class="n">labelset_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
             <span class="p">{</span>
@@ -516,9 +523,13 @@
 <span class="sd">    - Leaves bool types (including numpy.bool_) unchanged.</span>
 <span class="sd">    - Converts everything else to strings.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>  <span class="c1"># Leave bool, int, float, and str unchanged</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span>
+        <span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+    <span class="p">):</span>  <span class="c1"># Leave bool, int, float, and str unchanged</span>
         <span class="k">return</span> <span class="n">value</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">):</span>  <span class="c1"># Special case to convert numpy bool to Python bool</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span>
+        <span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">bool_</span>
+    <span class="p">):</span>  <span class="c1"># Special case to convert numpy bool to Python bool</span>
         <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>  <span class="c1"># Convert everything else to string</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
@@ -527,7 +538,9 @@
 
 <div class="viewcode-block" id="copy_and_update_file_path">
 <a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.conversion_utils.copy_and_update_file_path">[docs]</a>
-<span class="k">def</span> <span class="nf">copy_and_update_file_path</span><span class="p">(</span><span class="n">anndata_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_file_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">copy_and_update_file_path</span><span class="p">(</span>
+    <span class="n">anndata_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_file_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Copies the AnnData file to a new location if an output file path is provided, and updates the file path.</span>
 
@@ -548,7 +561,9 @@
 
 <div class="viewcode-block" id="fetch_anndata">
 <a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.conversion_utils.fetch_anndata">[docs]</a>
-<span class="k">def</span> <span class="nf">fetch_anndata</span><span class="p">(</span><span class="n">input_json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">download_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">fetch_anndata</span><span class="p">(</span>
+    <span class="n">input_json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">download_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Fetches the AnnData file based on the provided CAS JSON input.</span>
 
@@ -570,6 +585,19 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Matrix file id is missing from CAS json.&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">anndata_file_path</span></div>
+
+
+
+<div class="viewcode-block" id="retrieve_schema">
+<a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.conversion_utils.retrieve_schema">[docs]</a>
+<span class="k">def</span> <span class="nf">retrieve_schema</span><span class="p">(</span><span class="n">schema_name</span><span class="p">):</span>
+    <span class="n">schema_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">schema_name</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">schema_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">get_cas_schema_names</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Schema name should be one of &#39;base&#39;, &#39;bican&#39; or &#39;cap&#39;&quot;</span><span class="p">)</span>
+    <span class="n">schema_file</span> <span class="o">=</span> <span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="n">schemas</span><span class="p">)</span> <span class="o">/</span> <span class="n">get_cas_schema_names</span><span class="p">()[</span><span class="n">schema_name</span><span class="p">]</span>
+    <span class="k">with</span> <span class="n">schema_file</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;rt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">schema</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">schema</span></div>
 
 </pre></div>
 

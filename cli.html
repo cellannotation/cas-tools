@@ -163,7 +163,8 @@ python -m cas unflatten --anndata path/to/anndata_file.h5ad
 <p><strong>Command-line Arguments:</strong></p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">--anndata</span></code>        : Path to the input AnnData file that contains flattened data.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--json</span></code>           : Optional path to the CAS JSON file. If not provided, the ‘annotations’ in <code class="docutils literal notranslate"><span class="pre">uns</span></code> will be used.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--json</span></code>           : Optional path to the CAS JSON file. If provided, the ‘annotations’
+within the file will be updated. If not provided, a new CAS JSON file will be created.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--output_anndata</span></code> : Optional output AnnData file name. If not provided, <code class="docutils literal notranslate"><span class="pre">unflattened.h5ad</span></code> will be used as the default name.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--output_json</span></code>    : Optional output CAS JSON file name. If not provided, <code class="docutils literal notranslate"><span class="pre">cas.json</span></code> will be used as the default name.</p></li>
 </ul>

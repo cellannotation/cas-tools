@@ -76,21 +76,19 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
-<span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">resources</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">cas_schema</span> <span class="kn">import</span> <span class="n">schemas</span>
 
 <span class="kn">from</span> <span class="nn">cas.anndata_to_cas</span> <span class="kn">import</span> <span class="n">calculate_labelset</span>
 <span class="kn">from</span> <span class="nn">cas.cxg_utils</span> <span class="kn">import</span> <span class="n">download_dataset_with_id</span>
-<span class="kn">from</span> <span class="nn">cas.file_utils</span> <span class="kn">import</span> <span class="n">get_cas_schema_names</span><span class="p">,</span> <span class="n">read_anndata_file</span>
+<span class="kn">from</span> <span class="nn">cas.file_utils</span> <span class="kn">import</span> <span class="n">read_anndata_file</span>
 <span class="kn">from</span> <span class="nn">cas.utils.conversion_utils</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">add_labelsets_to_cas</span><span class="p">,</span>
     <span class="n">add_parent_cell_hierarchy</span><span class="p">,</span>
     <span class="n">add_parent_hierarchy_to_annotations</span><span class="p">,</span>
     <span class="n">generate_parent_cell_lookup</span><span class="p">,</span>
-    <span class="n">get_cell_ids</span><span class="p">,</span>
+    <span class="n">retrieve_schema</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
@@ -167,19 +165,6 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Header row not found in the spreadsheet.&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">meta_data</span><span class="p">,</span> <span class="n">column_names</span><span class="p">,</span> <span class="n">raw_data</span></div>
-
-
-
-<div class="viewcode-block" id="retrieve_schema">
-<a class="viewcode-back" href="../../source/cas.html#cas.spreadsheet_to_cas.retrieve_schema">[docs]</a>
-<span class="k">def</span> <span class="nf">retrieve_schema</span><span class="p">(</span><span class="n">schema_name</span><span class="p">):</span>
-    <span class="n">schema_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">schema_name</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">schema_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">get_cas_schema_names</span><span class="p">():</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Schema name should be one of &#39;base&#39;, &#39;bican&#39; or &#39;cap&#39;&quot;</span><span class="p">)</span>
-    <span class="n">schema_file</span> <span class="o">=</span> <span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="n">schemas</span><span class="p">)</span> <span class="o">/</span> <span class="n">get_cas_schema_names</span><span class="p">()[</span><span class="n">schema_name</span><span class="p">]</span>
-    <span class="k">with</span> <span class="n">schema_file</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;rt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">schema</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
-    <span class="k">return</span> <span class="n">schema</span></div>
 
 
 

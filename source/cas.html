@@ -181,6 +181,7 @@
 <li class="toctree-l3"><a class="reference internal" href="cas.utils.html#cas.utils.conversion_utils.convert_complex_type"><code class="docutils literal notranslate"><span class="pre">convert_complex_type()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cas.utils.html#cas.utils.conversion_utils.copy_and_update_file_path"><code class="docutils literal notranslate"><span class="pre">copy_and_update_file_path()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cas.utils.html#cas.utils.conversion_utils.fetch_anndata"><code class="docutils literal notranslate"><span class="pre">fetch_anndata()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.utils.html#cas.utils.conversion_utils.retrieve_schema"><code class="docutils literal notranslate"><span class="pre">retrieve_schema()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="cas.utils.html#module-cas.utils.validation_utils">cas.utils.validation_utils module</a><ul>
@@ -1224,13 +1225,15 @@ field in an AnnData object. The resulting dictionary can be used to populate the
 
 <dl class="py function">
 <dt class="sig sig-object py" id="cas.flatten_data_to_anndata.unflatten_obs">
-<span class="sig-prename descclassname"><span class="pre">cas.flatten_data_to_anndata.</span></span><span class="sig-name descname"><span class="pre">unflatten_obs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cas_json</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/flatten_data_to_anndata.html#unflatten_obs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.flatten_data_to_anndata.unflatten_obs" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">cas.flatten_data_to_anndata.</span></span><span class="sig-name descname"><span class="pre">unflatten_obs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uns_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cas_json</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cellhash_lookup</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/flatten_data_to_anndata.html#unflatten_obs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.flatten_data_to_anndata.unflatten_obs" title="Link to this definition"></a></dt>
 <dd><p>Reverse the flattening process to update the “annotations” section in a CAS object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>obs_df</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – DataFrame containing the flattened obs columns from an AnnData object.</p></li>
-<li><p><strong>cas_json</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</span>) – CAS JSON object.</p></li>
+<li><p><strong>uns_df</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</span>) – Dictionary containing the flattened uns section from an AnnData object.</p></li>
+<li><p><strong>cas_json</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]</span>) – Optional CAS JSON object.</p></li>
+<li><p><strong>cellhash_lookup</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</span>) – Cell hash lookup dictionary.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -1261,8 +1264,8 @@ from the obs field in the AnnData object.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="cas.flatten_data_to_anndata.update_cas_json">
-<span class="sig-prename descclassname"><span class="pre">cas.flatten_data_to_anndata.</span></span><span class="sig-name descname"><span class="pre">update_cas_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cas_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cas_json</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/flatten_data_to_anndata.html#update_cas_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.flatten_data_to_anndata.update_cas_json" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="cas.flatten_data_to_anndata.update_cas_annotation">
+<span class="sig-prename descclassname"><span class="pre">cas.flatten_data_to_anndata.</span></span><span class="sig-name descname"><span class="pre">update_cas_annotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cas_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cas_json</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cellhash_lookup</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/flatten_data_to_anndata.html#update_cas_annotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.flatten_data_to_anndata.update_cas_annotation" title="Link to this definition"></a></dt>
 <dd><p>Update the annotations in the CAS JSON using the provided lookup dictionary.</p>
 <p>This function checks the CAS JSON annotations against a lookup dictionary. It updates
 annotations where cell labels or cell hashes match and discards mismatches. It also
@@ -1273,13 +1276,44 @@ adds new annotations from the lookup dictionary that are not in the CAS JSON.</p
 <li><p><strong>cas_dict</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]</span>) – A lookup dictionary where keys are cell labels or hashes, and
 values are dictionaries with annotation data.</p></li>
 <li><p><strong>cas_json</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</span>) – The CAS JSON object containing existing annotations.</p></li>
+<li><p><strong>cellhash_lookup</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</span>) – The lookup for cell hashes.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The updated annotations based on the lookup dictionary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cas.flatten_data_to_anndata.generate_cas_json">
+<span class="sig-prename descclassname"><span class="pre">cas.flatten_data_to_anndata.</span></span><span class="sig-name descname"><span class="pre">generate_cas_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uns_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cas_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/flatten_data_to_anndata.html#generate_cas_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.flatten_data_to_anndata.generate_cas_json" title="Link to this definition"></a></dt>
+<dd><p>Generates a CAS JSON object from provided annotation metadata and schema.</p>
+<p>This function constructs a CAS JSON object by retrieving a specified schema
+(or the default “cap” schema if none is provided) and using properties and
+metadata from the <cite>uns_data</cite> and <cite>cas_dict</cite> arguments. It populates the top-level
+properties, annotations, and label sets for the CAS JSON structure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>uns_data</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</span>) – A dictionary containing unstructured annotation metadata, which
+provides values for the CAS JSON’s top-level properties and cell
+annotation metadata.</p></li>
+<li><p><strong>cas_dict</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]</span>) – A dictionary of CAS annotation sets, each representing an annotation
+structure used to populate the CAS JSON annotations.</p></li>
+<li><p><strong>schema_name</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – An optional schema name to retrieve the schema for building
+the CAS JSON. If not provided, defaults to “cap”.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</span></p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The updated CAS JSON with synchronized annotations based on the lookup dictionary.</p>
+<dd class="field-odd"><p>A dictionary representing the CAS JSON structure populated with data from
+<cite>uns_data</cite> and <cite>cas_dict</cite>, following the specified schema format.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2072,11 +2106,6 @@ role. An example list; John Smith|Cody Miller|Sarah Jones.</p>
 </dd>
 </dl>
 </dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="cas.spreadsheet_to_cas.retrieve_schema">
-<span class="sig-prename descclassname"><span class="pre">cas.spreadsheet_to_cas.</span></span><span class="sig-name descname"><span class="pre">retrieve_schema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/spreadsheet_to_cas.html#retrieve_schema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.spreadsheet_to_cas.retrieve_schema" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="cas.spreadsheet_to_cas.custom_lowercase_transform">
