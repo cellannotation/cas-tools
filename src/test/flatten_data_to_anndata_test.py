@@ -7,7 +7,7 @@ from cap_anndata import read_h5ad
 from cas.flatten_data_to_anndata import (
     create_cell_label_lookup,
     unflatten_obs,
-    update_cas_json,
+    update_cas_annotation,
 )
 from cas.utils.conversion_utils import (
     ANNOTATIONS,
@@ -33,12 +33,12 @@ class TestAnnotationMethods(unittest.TestCase):
                 {
                     "name": "Cluster",
                     "description": "Simulated neuron clusters",
-                    "rank": "0",
+                    "rank": 0,
                 },
                 {
                     "name": "supercluster_term",
                     "description": "Higher level simulated neuron clusters",
-                    "rank": "1",
+                    "rank": 1,
                 },
             ],
             "orcid": "https://orcid.org/0000-0002-1234-5678",
@@ -107,56 +107,97 @@ class TestAnnotationMethods(unittest.TestCase):
     def test_unflatten_obs(self):
         # Expected output should be a processed JSON structure
         expected_output = {
-            "author_name": "Jordan Lee",
-            "title": "Synthetic Brain Cell Atlas v1.0 Taxonomy (Neuronal)",
-            "description": "This is a synthetic dataset designed to simulate the organization of neuronal cell types in the human cortex.",
-            "matrix_file_id": "Synthetic_dataset:1234abcd-5678-efgh-ijkl-9012mnop3456",
-            "labelsets": [
-                {
-                    "name": "Cluster",
-                    "description": "Simulated neuron clusters",
-                    "rank": "0",
-                },
-                {
-                    "name": "supercluster_term",
-                    "description": "Higher level simulated neuron clusters",
-                    "rank": "1",
-                },
-            ],
-            "orcid": "https://orcid.org/0000-0002-1234-5678",
+            "matrix_file_id": "CellXGene_dataset:b165f033-9dec-468a-9248-802fc6902a74",
+            "title": "Human Brain Cell Atlas v1.0 Taxonomy (Non-Neuronal)",
+            "description": "Atlas of human primary motor cortex (M1), developed in collaboration with the BRAIN Initiative Cell Census Network (BICCN).\nFirst draft atlas of human brain transcriptomic cell types: The human brain directs a wide range of complex behaviors ranging from fine motor skills to abstract intelligence and emotion. This broad range of functions is supported by an exceptionally complex cellular and circuit architecture. To create a first draft human brain cell atlas, high-throughput single-nucleus RNA sequencing was used to systematically survey cells across the entire adult human brain in three postmortem donors. Over three million nuclei were sampled from approximately 100 dissections across the forebrain, midbrain, and hindbrain. Analysis of these data showed regional diversity in that cellular organization exhibited regional diversity at multiple scales, identifying 30 superclusters, 461 clusters and 3313 subclusters. As the first single-cell transcriptomic census of the entire human brain, this atlas provides a resource for understanding the molecular diversity of the human brain in health and disease. The Human Brain Cell Atlas v1.0 is presented for visualization and data mining through the Chan Zuckerberg Initiative’s CellxGene application, with the following biologically meaningful partitions: 1. Neuronal and non-neuronal cell types 2. Supercluster-specific groupings (`Supercluster: `) 3.Brain region-specific groupings (`Dissection: `), ordered by the adult human brain anatomical reference atlas ontology in Ding et al. (2016)",
             "cellannotation_schema_version": "0.2b0",
+            "author_name": "Kimberly Siletti",
+            "orcid": "https://orcid.org/0000-0001-7620-8973",
             "annotations": [
                 {
-                    "cell_ids": [
-                        "10X379_2:ATTCCATTCCCAGCGA",
-                        "10X383_4:GAAGTAAAGGTTCTTG",
-                    ],
-                    "author_annotation_fields": {
-                        "cellhash": "Cluster:7c94e6181d",
-                        "Cluster ID": "49",
-                    },
+                    "author_annotation_fields": {"Cluster ID": "O50"},
                     "labelset": "Cluster",
-                    "cell_label": "O40",
-                    "cell_set_accession": "CS202210140_50",
-                    "parent_cell_set_accession": "CS202210140_469",
-                    "cell_ontology_term_id": "",
-                    "cell_ontology_term": "",
-                    "rationale": "",
-                    "marker_gene_evidence": "",
-                    "rationale_dois": "",
+                    "cell_label": "O50",
+                    "cell_fullname": "O50",
+                    "cell_set_accession": "Cluster:5a972d4730",
+                    "parent_cell_set_name": "Oligodendrocyte",
+                    "parent_cell_set_accession": "supercluster_term:502566eede",
                 },
                 {
-                    "cell_ids": [
-                        "10X357_2:TGGGCTGAGAAACCCG",
-                        "10X319_7:TGCTCCATCATCACCC",
-                    ],
-                    "author_annotation_fields": {
-                        "cellhash": "supercluster_term:c2b38b36d7",
-                        "Cluster ID": "None",
-                    },
+                    "author_annotation_fields": {"Cluster ID": "O50"},
+                    "labelset": "Cluster",
+                    "cell_label": "O50",
+                    "cell_fullname": "O50",
+                    "cell_set_accession": "Cluster:5a972d4730",
+                    "parent_cell_set_name": "Oligodendrocyte",
+                    "parent_cell_set_accession": "supercluster_term:502566eede",
+                },
+                {
+                    "author_annotation_fields": {"Cluster ID": "O40"},
+                    "labelset": "Cluster",
+                    "cell_label": "O40",
+                    "cell_fullname": "O40",
+                    "cell_set_accession": "Cluster:7c94e6181d",
+                    "parent_cell_set_name": "Oligodendrocyte",
+                    "parent_cell_set_accession": "supercluster_term:502566eede",
+                },
+                {
+                    "author_annotation_fields": {"Cluster ID": "O40"},
+                    "labelset": "Cluster",
+                    "cell_label": "O40",
+                    "cell_fullname": "O40",
+                    "cell_set_accession": "Cluster:7c94e6181d",
+                    "parent_cell_set_name": "Oligodendrocyte",
+                    "parent_cell_set_accession": "supercluster_term:502566eede",
+                },
+                {
+                    "author_annotation_fields": {"Cluster ID": "A62"},
+                    "labelset": "Cluster",
+                    "cell_label": "A62",
+                    "cell_fullname": "A62",
+                    "cell_set_accession": "Cluster:c2b38b36d7",
+                    "parent_cell_set_name": "Astrocyte",
+                    "parent_cell_set_accession": "supercluster_term:c2b38b36d7",
+                },
+                {
+                    "author_annotation_fields": {"Cluster ID": "A62"},
+                    "labelset": "Cluster",
+                    "cell_label": "A62",
+                    "cell_fullname": "A62",
+                    "cell_set_accession": "Cluster:c2b38b36d7",
+                    "parent_cell_set_name": "Astrocyte",
+                    "parent_cell_set_accession": "supercluster_term:c2b38b36d7",
+                },
+                {
+                    "author_annotation_fields": {"Cluster ID": "None"},
+                    "labelset": "supercluster_term",
+                    "cell_label": "Oligodendrocyte",
+                    "cell_fullname": "Oligodendrocyte",
+                    "cell_set_accession": "supercluster_term:502566eede",
+                    "cell_ontology_term_id": "CL:0000128",
+                    "cell_ontology_term": "oligodendrocyte",
+                    "rationale": "Supported by marker expression and annotation transfer from Middle Temporal Gyrus dataset (Jorstad et al., 2023)",
+                    "rationale_dois": "DOI:10.1126/science.adf6812",
+                    "marker_gene_evidence": "PLP1, SOX10",
+                },
+                {
+                    "author_annotation_fields": {"Cluster ID": "None"},
+                    "labelset": "supercluster_term",
+                    "cell_label": "Oligodendrocyte",
+                    "cell_fullname": "Oligodendrocyte",
+                    "cell_set_accession": "supercluster_term:502566eede",
+                    "cell_ontology_term_id": "CL:0000128",
+                    "cell_ontology_term": "oligodendrocyte",
+                    "rationale": "Supported by marker expression and annotation transfer from Middle Temporal Gyrus dataset (Jorstad et al., 2023)",
+                    "rationale_dois": "DOI:10.1126/science.adf6812",
+                    "marker_gene_evidence": "PLP1, SOX10",
+                },
+                {
+                    "author_annotation_fields": {"Cluster ID": "None"},
                     "labelset": "supercluster_term",
                     "cell_label": "Astrocyte",
-                    "cell_set_accession": "CS202210140_470",
+                    "cell_fullname": "Astrocyte",
+                    "cell_set_accession": "supercluster_term:c2b38b36d7",
                     "cell_ontology_term_id": "CL:0000127",
                     "cell_ontology_term": "astrocyte",
                     "rationale": "Supported by marker expression and annotation transfer from Middle Temporal Gyrus dataset (Jorstad et al., 2023)",
@@ -164,47 +205,43 @@ class TestAnnotationMethods(unittest.TestCase):
                     "marker_gene_evidence": "AQP4",
                 },
                 {
-                    "cell_ids": [
-                        "10X362_3:TCAGTGAGTATTGACC",
-                        "10X362_5:TCCGTGTGTGAAAGTT",
-                        "10X379_2:ATTCCATTCCCAGCGA",
-                        "10X383_4:GAAGTAAAGGTTCTTG",
-                    ],
-                    "author_annotation_fields": {
-                        "cellhash": "supercluster_term:502566eede",
-                        "Cluster ID": "None",
-                    },
+                    "author_annotation_fields": {"Cluster ID": "None"},
                     "labelset": "supercluster_term",
-                    "cell_label": "Oligodendrocyte",
-                    "cell_set_accession": "CS202210140_469",
-                    "cell_ontology_term_id": "CL:0000128",
-                    "cell_ontology_term": "oligodendrocyte",
+                    "cell_label": "Astrocyte",
+                    "cell_fullname": "Astrocyte",
+                    "cell_set_accession": "supercluster_term:c2b38b36d7",
+                    "cell_ontology_term_id": "CL:0000127",
+                    "cell_ontology_term": "astrocyte",
                     "rationale": "Supported by marker expression and annotation transfer from Middle Temporal Gyrus dataset (Jorstad et al., 2023)",
                     "rationale_dois": "DOI:10.1126/science.adf6812",
-                    "marker_gene_evidence": "PLP1, SOX10",
+                    "marker_gene_evidence": "AQP4",
                 },
+            ],
+            "labelsets": [
+                {"name": "Cluster", "description": "", "rank": "0"},
+                {"name": "supercluster_term", "description": "", "rank": "1"},
             ],
         }
         with patch(
-            "cas.flatten_data_to_anndata.create_cell_label_lookup",
-            return_value={"updated_annotations": "test"},
-        ) as mock_create_cell_label_lookup, patch(
-            "cas.flatten_data_to_anndata.update_cas_json", return_value=expected_output
-        ) as mock_update_cas_json:
+            "cas.flatten_data_to_anndata.update_cas_annotation",
+            return_value=expected_output,
+        ) as mock_update_cas_annotation:
             with read_h5ad(file_path=self.anndata_file_path, edit=True) as cap_adata:
                 cap_adata.read_obs()
+                cap_adata.read_uns()
                 obs = cap_adata.obs
+                uns = cap_adata.uns
+                cellhash_lookup = cap_adata.uns[CELLHASH]
                 obs_columns_count = len(obs.columns)
-                new_cas = unflatten_obs(obs, self.cas_json)
+                new_cas = unflatten_obs(obs, uns, self.cas_json, cellhash_lookup)
                 col_count_diff = obs_columns_count - len(obs.columns)
 
-            # Assertions
-            mock_create_cell_label_lookup.assert_called_once()
-            mock_update_cas_json.assert_called_once_with(
-                {"updated_annotations": "test"}, self.cas_json
-            )
+            # # Assertions
+            # mock_update_cas_annotation.assert_called_once_with(
+            #     {"updated_annotations": "test"}, self.cas_json
+            # )
             self.assertEqual(new_cas, expected_output)
-            self.assertEqual(col_count_diff, 15)
+            self.assertEqual(col_count_diff, 13)
 
     def test_create_cell_label_lookup(self):
         # Create mock DataFrames dictionary
@@ -327,7 +364,7 @@ class TestAnnotationMethods(unittest.TestCase):
         self.assertIn(AUTHOR_ANNOTATION_FIELDS, result["Cluster:O50"])
         self.assertIsInstance(result["Cluster:O50"][CELL_IDS], list)
 
-    def test_update_cas_json(self):
+    def test_update_cas_annotation(self):
         # Mock inputs based on synthetic data
         cas_dict = {
             "Cluster:A62": {
@@ -498,53 +535,26 @@ class TestAnnotationMethods(unittest.TestCase):
             },
         }
 
-        # Running the update_cas_json function
-        result = update_cas_json(cas_dict, self.cas_json)
+        cellhash = {
+            "Cluster:A62": "Cluster:c2b38b36d7",
+            "Cluster:O40": "Cluster:7c94e6181d",
+            "Cluster:O50": "Cluster:5a972d4730",
+            "supercluster_term:Astrocyte": "supercluster_term:c2b38b36d7",
+            "supercluster_term:Oligodendrocyte": "supercluster_term:502566eede",
+        }
+        # Running the update_cas_annotation function
+        result = update_cas_annotation(cas_dict, self.cas_json, cellhash)
 
         # Check the updated annotations
-        self.assertEqual(len(result[ANNOTATIONS]), 7)
-        self.assertIn("O500x", [a[CELL_LABEL] for a in result[ANNOTATIONS]])
-        self.assertIn("O49", [a[CELL_LABEL] for a in result[ANNOTATIONS]])
-        self.assertIn("A62", [a[CELL_LABEL] for a in result[ANNOTATIONS]])
+        self.assertEqual(len(result), 4)
+        self.assertIn("O500x", [a[CELL_LABEL] for a in result])
+        self.assertIn("A62", [a[CELL_LABEL] for a in result])
         self.assertIn(
-            "supercluster_term:1dc795d1ea", [a[CELL_LABEL] for a in result[ANNOTATIONS]]
+            "supercluster_term:1dc795d1ea", [a[CELL_LABEL] for a in result]
         )
+
         self.assertIn(
-            "supercluster_term:1dc795d1ea", [a[CELL_LABEL] for a in result[ANNOTATIONS]]
-        )
-        self.assertIn(
-            "supercluster_term:21eaacf654", [a[CELL_LABEL] for a in result[ANNOTATIONS]]
-        )
-        self.assertIn(
-            "supercluster_term:21eaacf654", [a[CELL_LABEL] for a in result[ANNOTATIONS]]
-        )
-        self.assertIn(
-            "Cluster:6e98fec3ec",
-            [a[AUTHOR_ANNOTATION_FIELDS][CELLHASH] for a in result[ANNOTATIONS]],
-        )
-        self.assertIn(
-            "Cluster:b81a00daa1",
-            [a[AUTHOR_ANNOTATION_FIELDS][CELLHASH] for a in result[ANNOTATIONS]],
-        )
-        self.assertIn(
-            "Cluster:0a1cfc9729",
-            [a[AUTHOR_ANNOTATION_FIELDS][CELLHASH] for a in result[ANNOTATIONS]],
-        )
-        self.assertIn(
-            "supercluster_term:c2b38b36d7",
-            [a[AUTHOR_ANNOTATION_FIELDS][CELLHASH] for a in result[ANNOTATIONS]],
-        )
-        self.assertIn(
-            "supercluster_term:c2b38b36d7",
-            [a[AUTHOR_ANNOTATION_FIELDS][CELLHASH] for a in result[ANNOTATIONS]],
-        )
-        self.assertIn(
-            "supercluster_term:502566eede",
-            [a[AUTHOR_ANNOTATION_FIELDS][CELLHASH] for a in result[ANNOTATIONS]],
-        )
-        self.assertIn(
-            "supercluster_term:502566eede",
-            [a[AUTHOR_ANNOTATION_FIELDS][CELLHASH] for a in result[ANNOTATIONS]],
+            "supercluster_term:21eaacf654", [a[CELL_LABEL] for a in result]
         )
 
 

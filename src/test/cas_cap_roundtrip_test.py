@@ -18,6 +18,8 @@ unflattened_anndata_file_path = (
 )
 cas_file_path = "src/test/test_data/cas_cap_roundtrip/test_cas.json"
 
+cas_output_file_path = "src/test/test_data/cas_cap_roundtrip/cas.json"
+
 
 class TestRoundtrip(unittest.TestCase):
     def test_roundtrip_without_edit(self):
@@ -27,7 +29,7 @@ class TestRoundtrip(unittest.TestCase):
             json_file_path=None,
             anndata_file_path=flattened_anndata_file_path,
             output_file_path=unflattened_anndata_file_path,
-            output_json_path="cas.json",
+            output_json_path=cas_output_file_path,
         )
 
         # Read the input and output AnnData objects
@@ -59,18 +61,20 @@ class TestRoundtrip(unittest.TestCase):
         flattened_anndata.write_h5ad(flattened_anndata_file_path)
 
         unflatten(
-            json_file_path=None,
+            json_file_path=cas_file_path,
             anndata_file_path=flattened_anndata_file_path,
             output_file_path=unflattened_anndata_file_path,
-            output_json_path="cas.json",
+            output_json_path=cas_output_file_path,
         )
 
         # Read the unflattened AnnData objects
         unflattened_anndata = ad.read_h5ad(unflattened_anndata_file_path, backed="r+")
 
-        cas = json.loads(unflattened_anndata.uns["cas"])
+        with open(cas_output_file_path, "r") as file:
+            cas = json.load(file)
+        # cas = json.loads(unflattened_anndata.uns["cas"])
         # Check the updated "annotations"
-        self.assertEqual(len(cas["annotations"]), 5)
+        self.assertEqual(len(cas["annotations"]), 10)
         self.assertIn("O500x", [a["cell_label"] for a in cas["annotations"]])
         self.assertIn("O40", [a["cell_label"] for a in cas["annotations"]])
         self.assertIn("A62", [a["cell_label"] for a in cas["annotations"]])

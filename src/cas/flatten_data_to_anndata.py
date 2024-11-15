@@ -24,10 +24,10 @@ from cas.utils.conversion_utils import (
     LABELSET_NAME,
     LABELSETS,
     collect_parent_cell_ids,
+    convert_complex_type,
     copy_and_update_file_path,
     fetch_anndata,
-    reformat_json,
-    convert_complex_type,
+    retrieve_schema,
 )
 
 # Configure logging
@@ -141,7 +141,9 @@ def process_annotations(annotations, obs_index, parent_cell_ids, fill_na):
             {
                 CELLHASH: ann.get("cell_set_accession")
                 if is_hash_accession(ann.get("cell_set_accession", None))
-                else accession_manager.generate_accession_id(cell_ids=cell_ids)
+                else accession_manager.generate_accession_id(
+                    cell_ids=cell_ids, labelset=ann[LABELSET], suppress_warnings=True
+                )
             }
         )
         ann[AUTHOR_ANNOTATION_FIELDS] = author_annotations
@@ -197,7 +199,6 @@ def generate_uns_json(input_json):
     """
     uns_json = {}
     root_keys = list(input_json.keys())
-    root_keys.remove(ANNOTATIONS)
 
     for key in root_keys:
         value = input_json[key]
@@ -208,18 +209,23 @@ def generate_uns_json(input_json):
             uns_json[key] = ", ".join(sorted(value))
         elif isinstance(value, str):
             uns_json[key] = value
-        else:
-            metadata_json = {}
-            for labelset in value:
-                metadata_key = labelset.get(LABELSET_NAME, "")
-                metadata_json.update({metadata_key: {}})
-                for k, v in labelset.items():
-                    if k == LABELSET_NAME:
-                        continue
-                    metadata_json.get(metadata_key, {}).update({k: v})
+        elif key == LABELSETS:
+            metadata_json = {
+                labelset.get(LABELSET_NAME, ""): {
+                    k: v for k, v in labelset.items() if k != LABELSET_NAME
+                }
+                for labelset in value
+            }
             uns_json["cellannotation_metadata"] = metadata_json
+        elif key == ANNOTATIONS:
+            cellhash_dict = {
+                f"{annotation[LABELSET]}:{annotation[CELL_LABEL]}": annotation[
+                    AUTHOR_ANNOTATION_FIELDS
+                ][CELLHASH]
+                for annotation in value
+            }
 
-    uns_json["cas"] = reformat_json(input_json)
+            uns_json[CELLHASH] = cellhash_dict
 
     return uns_json
 
@@ -247,19 +253,23 @@ def unflatten(
             cas = json.load(file)
 
     with read_h5ad(file_path=anndata_file_path, edit=True) as cap_adata:
-        if not cas:
-            cap_adata.read_uns()
-            if "cas" not in cap_adata.uns:
-                raise KeyError(
-                    "uns section does not have a CAS section. Please check the AnnData file or provide a valid CAS file."
-                )
-            cas = json.loads(cap_adata.uns["cas"])
+        cap_adata.read_uns()
+        # if not cas:
+        if CELLHASH in cap_adata.uns:
+            cellhash_lookup = cap_adata.uns[CELLHASH]
+        else:
+            cellhash_lookup = None
+            #     raise KeyError(
+            #         f"uns section does not have a {CELLHASH} section. Please check the AnnData file or "
+            #         f"provide a valid CAS file."
+            #     )
 
         cap_adata.read_obs()
         obs = cap_adata.obs
-        new_cas = unflatten_obs(obs, cas)
+        uns = cap_adata.uns
+        new_cas = unflatten_obs(obs, uns, cas, cellhash_lookup)
 
-        cap_adata.uns["cas"] = reformat_json(new_cas)
+        # cap_adata.uns["cas"] = reformat_json(new_cas)
         # Save your changes to a new or the same AnnData file
         cap_adata.overwrite()
 
@@ -267,22 +277,28 @@ def unflatten(
         write_dict_to_json_file(output_json_path, new_cas)
 
 
-def unflatten_obs(obs_df: pd.DataFrame, cas_json: Dict[str, Any]) -> Dict[str, Any]:
+def unflatten_obs(
+    obs_df: pd.DataFrame,
+    uns_df: Dict[str, Any],
+    cas_json: Optional[Dict[str, Any]],
+    cellhash_lookup: Dict[str, Any],
+) -> Dict[str, Any]:
     """
     Reverse the flattening process to update the "annotations" section in a CAS object.
 
     Args:
         obs_df: DataFrame containing the flattened obs columns from an AnnData object.
-        cas_json: CAS JSON object.
+        uns_df: Dictionary containing the flattened uns section from an AnnData object.
+        cas_json: Optional CAS JSON object.
+        cellhash_lookup: Cell hash lookup dictionary.
 
     Returns:
         Updated CAS JSON with revised annotations.
     """
-    # Create a dictionary with a list of columns for each labelset and its dataframe
-    labelsets = [labelset[LABELSET_NAME] for labelset in cas_json[LABELSETS]]
+    labelset_list = list(uns_df["cellannotation_metadata"].keys())
     obs_columns_by_labelset = {
         labelset: [col for col in obs_df.columns if labelset in col]
-        for labelset in labelsets
+        for labelset in labelset_list
     }
     filtered_obs_by_labelset = {
         labelset: obs_df[columns]
@@ -290,8 +306,26 @@ def unflatten_obs(obs_df: pd.DataFrame, cas_json: Dict[str, Any]) -> Dict[str, A
     }
     # Find all matching cell sets defined by obs
     cas_dict = create_cell_label_lookup(filtered_obs_by_labelset)
-    # Check cell set membership and update cas
-    updated_cas = update_cas_json(cas_dict, cas_json)
+    updated_cas = generate_cas_json(uns_df, cas_dict)
+    if cas_json and ANNOTATIONS in cas_json:
+        updated_cas[ANNOTATIONS] = update_cas_annotation(
+            cas_dict, cas_json, cellhash_lookup
+        )
+    # remove redundant cell ids
+    name_with_rank_0 = next(
+        (
+            key
+            for key, value in uns_df["cellannotation_metadata"].items()
+            if value.get("rank") == 0
+        ),
+        None,
+    )
+    updated_cas[ANNOTATIONS] = [
+        {k: v for k, v in anno.items() if k != CELL_IDS}
+        if anno[LABELSET] != name_with_rank_0
+        else anno
+        for anno in cas_dict.values()
+    ]
     # Discard flattened obs
     flattened_columns = [
         col
@@ -338,13 +372,6 @@ def create_cell_label_lookup(df_dict: Dict[str, pd.DataFrame]) -> dict:
                     nested_dict[key_pair][CELL_LABEL] = convert_complex_type(
                         group[col].iloc[0]
                     )
-                    # Store cellhash
-                    cell_hash = accession_manager.generate_accession_id(
-                        cell_ids=cell_id_list, labelset=col, suppress_warnings=True
-                    )
-                    nested_dict[key_pair][AUTHOR_ANNOTATION_FIELDS][
-                        CELLHASH
-                    ] = cell_hash
                 else:
                     # Split annotation columns and store them in annotations
                     annotation_column = col.split("--")[-1]
@@ -366,13 +393,22 @@ def create_cell_label_lookup(df_dict: Dict[str, pd.DataFrame]) -> dict:
     return {
         key_: dict(value)
         for key, value in nested_dict.items()
-        for key_ in (key, value[AUTHOR_ANNOTATION_FIELDS][CELLHASH])
+        for key_ in (
+            key,
+            accession_manager.generate_accession_id(
+                cell_ids=value[CELL_IDS],
+                labelset=value[LABELSET],
+                suppress_warnings=True,
+            ),
+        )
     }
 
 
-def update_cas_json(
-    cas_dict: Dict[str, Dict[str, Any]], cas_json: Dict[str, Any]
-) -> Dict[str, Any]:
+def update_cas_annotation(
+    cas_dict: Dict[str, Dict[str, Any]],
+    cas_json: Dict[str, Any],
+    cellhash_lookup: Dict[str, Any],
+) -> List[Dict[str, Any]]:
     """
     Update the annotations in the CAS JSON using the provided lookup dictionary.
 
@@ -384,25 +420,27 @@ def update_cas_json(
         cas_dict: A lookup dictionary where keys are cell labels or hashes, and
                   values are dictionaries with annotation data.
         cas_json: The CAS JSON object containing existing annotations.
+        cellhash_lookup: The lookup for cell hashes.
 
     Returns:
-        The updated CAS JSON with synchronized annotations based on the lookup dictionary.
+        The updated annotations based on the lookup dictionary.
     """
+    accession_manager = HashAccessionManager()
     updated_cas_annotations: List[Dict[str, Any]] = []
     remaining_annotations_labels = list(key for key in cas_dict.keys())
-    # remaining_annotations_labels = list(key for key in cas_dict.keys() if not is_hash_accession(key))
 
     for annotation in cas_json[ANNOTATIONS]:
         labelset_cell_label_pair = f"{annotation[LABELSET]}:{annotation[CELL_LABEL]}"
-        cas_cellhash = annotation[AUTHOR_ANNOTATION_FIELDS][CELLHASH]
+        cas_cellhash = cellhash_lookup.get(labelset_cell_label_pair)
 
         if labelset_cell_label_pair in cas_dict.keys():
             obs_annotation = cas_dict[labelset_cell_label_pair]
-            obs_cellhash = cas_dict[labelset_cell_label_pair][AUTHOR_ANNOTATION_FIELDS][
-                CELLHASH
-            ]
+            obs_cellhash = accession_manager.generate_accession_id(
+                cell_ids=obs_annotation[CELL_IDS],
+                labelset=annotation[LABELSET],
+                suppress_warnings=True,
+            )
 
-            # TODO Make validation optional
             if cas_cellhash == obs_cellhash:
                 updated_cas_annotations.append(obs_annotation)
             else:
@@ -413,8 +451,7 @@ def update_cas_json(
                 labelset_cell_label_pair
             )
             remaining_annotations_labels.pop(index_to_remove)
-            remaining_annotations_labels.pop(index_to_remove)
-            # remaining_annotations_labels.remove(labelset_cell_label_pair)
+            remaining_annotations_labels.pop(index_to_remove)  # Not duplicate
         elif cas_cellhash in cas_dict.keys():
             obs_annotation = cas_dict[cas_cellhash]
             updated_cas_annotations.append(obs_annotation)
@@ -425,13 +462,55 @@ def update_cas_json(
             )
             index_to_remove = remaining_annotations_labels.index(cas_cellhash)
             remaining_annotations_labels.pop(index_to_remove)
-            remaining_annotations_labels.pop(index_to_remove - 1)
+            remaining_annotations_labels.pop(index_to_remove - 1)  # Not duplicate
 
-    for label in remaining_annotations_labels:
+    for label in remaining_annotations_labels[::2]:
         updated_cas_annotations.append(cas_dict[label])
         logger.warning(f"New cell set has been added with label {label}.")
 
-    return {
-        k: (updated_cas_annotations if k == ANNOTATIONS else v)
-        for k, v in cas_json.items()
+    return updated_cas_annotations
+
+
+def generate_cas_json(
+    uns_data: Dict[str, Any],
+    cas_dict: Dict[str, Dict[str, Any]],
+    schema_name: str = None,
+) -> Dict[str, Any]:
+    """
+    Generates a CAS JSON object from provided annotation metadata and schema.
+
+    This function constructs a CAS JSON object by retrieving a specified schema
+    (or the default "cap" schema if none is provided) and using properties and
+    metadata from the `uns_data` and `cas_dict` arguments. It populates the top-level
+    properties, annotations, and label sets for the CAS JSON structure.
+
+    Args:
+        uns_data: A dictionary containing unstructured annotation metadata, which
+            provides values for the CAS JSON's top-level properties and cell
+            annotation metadata.
+        cas_dict: A dictionary of CAS annotation sets, each representing an annotation
+            structure used to populate the CAS JSON annotations.
+        schema_name: An optional schema name to retrieve the schema for building
+            the CAS JSON. If not provided, defaults to "cap".
+
+    Returns:
+        A dictionary representing the CAS JSON structure populated with data from
+        `uns_data` and `cas_dict`, following the specified schema format.
+    """
+    schema = retrieve_schema(schema_name if schema_name else "cap")
+    top_level_properties = {
+        key: value
+        for key, value in schema.get("properties", {}).items()
+        if not isinstance(value, dict) or "items" not in value
     }
+    cas = {key: uns_data[key] for key in top_level_properties.keys() if key in uns_data}
+    cas[ANNOTATIONS] = [anno for anno in cas_dict.values()]
+    cas[LABELSETS] = [
+        {
+            "name": str(key),
+            **{k: int(v) if isinstance(v, np.int64) else v for k, v in value.items()},
+        }
+        for key, value in uns_data["cellannotation_metadata"].items()
+    ]
+
+    return cas
