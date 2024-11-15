@@ -1,0 +1,144 @@
+{
+  "matrix_file_id": "CellXGene_dataset:b165f033-9dec-468a-9248-802fc6902a74",
+  "title": "Human Brain Cell Atlas v1.0 Taxonomy (Non-Neuronal)",
+  "description": "Atlas of human primary motor cortex (M1), developed in collaboration with the BRAIN Initiative Cell Census Network (BICCN).\nFirst draft atlas of human brain transcriptomic cell types: The human brain directs a wide range of complex behaviors ranging from fine motor skills to abstract intelligence and emotion. This broad range of functions is supported by an exceptionally complex cellular and circuit architecture. To create a first draft human brain cell atlas, high-throughput single-nucleus RNA sequencing was used to systematically survey cells across the entire adult human brain in three postmortem donors. Over three million nuclei were sampled from approximately 100 dissections across the forebrain, midbrain, and hindbrain. Analysis of these data showed regional diversity in that cellular organization exhibited regional diversity at multiple scales, identifying 30 superclusters, 461 clusters and 3313 subclusters. As the first single-cell transcriptomic census of the entire human brain, this atlas provides a resource for understanding the molecular diversity of the human brain in health and disease. The Human Brain Cell Atlas v1.0 is presented for visualization and data mining through the Chan Zuckerberg Initiative\u2019s CellxGene application, with the following biologically meaningful partitions: 1. Neuronal and non-neuronal cell types 2. Supercluster-specific groupings (`Supercluster: `) 3.Brain region-specific groupings (`Dissection: `), ordered by the adult human brain anatomical reference atlas ontology in Ding et al. (2016)",
+  "cellannotation_schema_version": "0.2b0",
+  "author_name": "Kimberly Siletti",
+  "orcid": "https://orcid.org/0000-0001-7620-8973",
+  "annotations": [
+    {
+      "author_annotation_fields": {
+        "Cluster ID": "O50"
+      },
+      "labelset": "Cluster",
+      "cell_label": "O50",
+      "cell_fullname": "O50",
+      "cell_set_accession": "Cluster:5a972d4730",
+      "parent_cell_set_name": "Oligodendrocyte",
+      "parent_cell_set_accession": "supercluster_term:502566eede"
+    },
+    {
+      "author_annotation_fields": {
+        "Cluster ID": "O50"
+      },
+      "labelset": "Cluster",
+      "cell_label": "O50",
+      "cell_fullname": "O50",
+      "cell_set_accession": "Cluster:5a972d4730",
+      "parent_cell_set_name": "Oligodendrocyte",
+      "parent_cell_set_accession": "supercluster_term:502566eede"
+    },
+    {
+      "author_annotation_fields": {
+        "Cluster ID": "O40"
+      },
+      "labelset": "Cluster",
+      "cell_label": "O40",
+      "cell_fullname": "O40",
+      "cell_set_accession": "Cluster:7c94e6181d",
+      "parent_cell_set_name": "Oligodendrocyte",
+      "parent_cell_set_accession": "supercluster_term:502566eede"
+    },
+    {
+      "author_annotation_fields": {
+        "Cluster ID": "O40"
+      },
+      "labelset": "Cluster",
+      "cell_label": "O40",
+      "cell_fullname": "O40",
+      "cell_set_accession": "Cluster:7c94e6181d",
+      "parent_cell_set_name": "Oligodendrocyte",
+      "parent_cell_set_accession": "supercluster_term:502566eede"
+    },
+    {
+      "author_annotation_fields": {
+        "Cluster ID": "A62"
+      },
+      "labelset": "Cluster",
+      "cell_label": "A62",
+      "cell_fullname": "A62",
+      "cell_set_accession": "Cluster:c2b38b36d7",
+      "parent_cell_set_name": "Astrocyte",
+      "parent_cell_set_accession": "supercluster_term:c2b38b36d7"
+    },
+    {
+      "author_annotation_fields": {
+        "Cluster ID": "A62"
+      },
+      "labelset": "Cluster",
+      "cell_label": "A62",
+      "cell_fullname": "A62",
+      "cell_set_accession": "Cluster:c2b38b36d7",
+      "parent_cell_set_name": "Astrocyte",
+      "parent_cell_set_accession": "supercluster_term:c2b38b36d7"
+    },
+    {
+      "author_annotation_fields": {
+        "Cluster ID": "None"
+      },
+      "labelset": "supercluster_term",
+      "cell_label": "Oligodendrocyte",
+      "cell_fullname": "Oligodendrocyte",
+      "cell_set_accession": "supercluster_term:502566eede",
+      "cell_ontology_term_id": "CL:0000128",
+      "cell_ontology_term": "oligodendrocyte",
+      "rationale": "Supported by marker expression and annotation transfer from Middle Temporal Gyrus dataset (Jorstad et al., 2023)",
+      "rationale_dois": "DOI:10.1126/science.adf6812",
+      "marker_gene_evidence": "PLP1, SOX10"
+    },
+    {
+      "author_annotation_fields": {
+        "Cluster ID": "None"
+      },
+      "labelset": "supercluster_term",
+      "cell_label": "Oligodendrocyte",
+      "cell_fullname": "Oligodendrocyte",
+      "cell_set_accession": "supercluster_term:502566eede",
+      "cell_ontology_term_id": "CL:0000128",
+      "cell_ontology_term": "oligodendrocyte",
+      "rationale": "Supported by marker expression and annotation transfer from Middle Temporal Gyrus dataset (Jorstad et al., 2023)",
+      "rationale_dois": "DOI:10.1126/science.adf6812",
+      "marker_gene_evidence": "PLP1, SOX10"
+    },
+    {
+      "author_annotation_fields": {
+        "Cluster ID": "None"
+      },
+      "labelset": "supercluster_term",
+      "cell_label": "Astrocyte",
+      "cell_fullname": "Astrocyte",
+      "cell_set_accession": "supercluster_term:c2b38b36d7",
+      "cell_ontology_term_id": "CL:0000127",
+      "cell_ontology_term": "astrocyte",
+      "rationale": "Supported by marker expression and annotation transfer from Middle Temporal Gyrus dataset (Jorstad et al., 2023)",
+      "rationale_dois": "DOI:10.1126/science.adf6812",
+      "marker_gene_evidence": "AQP4"
+    },
+    {
+      "author_annotation_fields": {
+        "Cluster ID": "None"
+      },
+      "labelset": "supercluster_term",
+      "cell_label": "Astrocyte",
+      "cell_fullname": "Astrocyte",
+      "cell_set_accession": "supercluster_term:c2b38b36d7",
+      "cell_ontology_term_id": "CL:0000127",
+      "cell_ontology_term": "astrocyte",
+      "rationale": "Supported by marker expression and annotation transfer from Middle Temporal Gyrus dataset (Jorstad et al., 2023)",
+      "rationale_dois": "DOI:10.1126/science.adf6812",
+      "marker_gene_evidence": "AQP4"
+    }
+  ],
+  "labelsets": [
+    {
+      "name": "Cluster",
+      "description": "",
+      "rank": "0"
+    },
+    {
+      "name": "supercluster_term",
+      "description": "",
+      "rank": "1"
+    }
+  ]
+}
