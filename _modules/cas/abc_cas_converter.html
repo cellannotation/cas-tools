@@ -72,14 +72,14 @@
            <div itemprop="articleBody">
              
   <h1>Source code for cas.abc_cas_converter</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">importlib.metadata</span> <span class="kn">import</span> <span class="n">version</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">version</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<span class="kn">from</span> <span class="nn">cas.file_utils</span> <span class="kn">import</span> <span class="n">read_json_file</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cas.file_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_json_file</span>
 
 <span class="n">CAT_SET_REQUIRED_COLUMNS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;order&quot;</span><span class="p">]</span>
 <span class="n">CAT_REQUIRED_COLUMNS</span> <span class="o">=</span> <span class="p">[</span>
@@ -93,7 +93,7 @@
 
 <div class="viewcode-block" id="validate_dataframe_columns">
 <a class="viewcode-back" href="../../source/cas.html#cas.abc_cas_converter.validate_dataframe_columns">[docs]</a>
-<span class="k">def</span> <span class="nf">validate_dataframe_columns</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">required_columns</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">validate_dataframe_columns</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">required_columns</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Validates a DataFrame for the required columns.</span>
 <span class="sd">    Args:</span>
@@ -108,7 +108,7 @@
 
 <div class="viewcode-block" id="generate_catset_dataframe">
 <a class="viewcode-back" href="../../source/cas.html#cas.abc_cas_converter.generate_catset_dataframe">[docs]</a>
-<span class="k">def</span> <span class="nf">generate_catset_dataframe</span><span class="p">(</span><span class="n">cas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_catset_dataframe</span><span class="p">(</span><span class="n">cas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate a DataFrame representing the Cluster Annotation Term Set (cat_set)</span>
 <span class="sd">    from the given Cell Annotation Schema (CAS) dictionary.</span>
@@ -136,7 +136,7 @@
 
 <div class="viewcode-block" id="generate_cat_dataframe">
 <a class="viewcode-back" href="../../source/cas.html#cas.abc_cas_converter.generate_cat_dataframe">[docs]</a>
-<span class="k">def</span> <span class="nf">generate_cat_dataframe</span><span class="p">(</span><span class="n">cas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_cat_dataframe</span><span class="p">(</span><span class="n">cas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate a DataFrame representing the Cluster Annotation Term (cat) from the given Cell Annotation Schema (CAS)</span>
 <span class="sd">    dictionary.</span>
@@ -178,7 +178,7 @@
 
 <div class="viewcode-block" id="calculate_order_mapping">
 <a class="viewcode-back" href="../../source/cas.html#cas.abc_cas_converter.calculate_order_mapping">[docs]</a>
-<span class="k">def</span> <span class="nf">calculate_order_mapping</span><span class="p">(</span><span class="n">order_values</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_order_mapping</span><span class="p">(</span><span class="n">order_values</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate a mapping dictionary based on the order values.</span>
 
@@ -198,7 +198,7 @@
 
 <div class="viewcode-block" id="abc2cas">
 <a class="viewcode-back" href="../../source/cas.html#cas.abc_cas_converter.abc2cas">[docs]</a>
-<span class="k">def</span> <span class="nf">abc2cas</span><span class="p">(</span><span class="n">cat_set_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cat_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">abc2cas</span><span class="p">(</span><span class="n">cat_set_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cat_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts given ABC files to a Cell Annotation Schema (CAS) JSON and writes it to a file with output_file_path name.</span>
 <span class="sd">    Args:</span>
@@ -225,7 +225,7 @@
 
 <div class="viewcode-block" id="add_annotations">
 <a class="viewcode-back" href="../../source/cas.html#cas.abc_cas_converter.add_annotations">[docs]</a>
-<span class="k">def</span> <span class="nf">add_annotations</span><span class="p">(</span><span class="n">cas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">cat</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_annotations</span><span class="p">(</span><span class="n">cas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">cat</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Adds annotations to the Cell Annotation Schema (CAS) based on the data from the Cluster Annotation Term DataFrame.</span>
 
@@ -278,7 +278,7 @@
 
 <div class="viewcode-block" id="add_labelsets">
 <a class="viewcode-back" href="../../source/cas.html#cas.abc_cas_converter.add_labelsets">[docs]</a>
-<span class="k">def</span> <span class="nf">add_labelsets</span><span class="p">(</span><span class="n">cas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">cat_set</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_labelsets</span><span class="p">(</span><span class="n">cas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">cat_set</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Adds labelsets to the Cell Annotation Schema (CAS) based on the data from the Cluster Annotation Term Set DataFrame.</span>
 
@@ -303,7 +303,7 @@
 
 <div class="viewcode-block" id="init_metadata">
 <a class="viewcode-back" href="../../source/cas.html#cas.abc_cas_converter.init_metadata">[docs]</a>
-<span class="k">def</span> <span class="nf">init_metadata</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">init_metadata</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Initializes metadata for Cell Annotation Schema (CAS).</span>
 
@@ -338,7 +338,7 @@
 
 <div class="viewcode-block" id="cas2abc">
 <a class="viewcode-back" href="../../source/cas.html#cas.abc_cas_converter.cas2abc">[docs]</a>
-<span class="k">def</span> <span class="nf">cas2abc</span><span class="p">(</span><span class="n">cas_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cat_set_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cat_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">cas2abc</span><span class="p">(</span><span class="n">cas_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cat_set_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cat_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts given Cell Annotation Schema (CAS) to ABC files: cluster_annotation_term and</span>
 <span class="sd">    cluster_annotation_term_set, and writes them to files with cat_file_path and cat_set_file_path.</span>

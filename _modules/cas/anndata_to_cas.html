@@ -72,11 +72,11 @@
            <div itemprop="articleBody">
              
   <h1>Source code for cas.anndata_to_cas</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
 
-<span class="kn">from</span> <span class="nn">cas.file_utils</span> <span class="kn">import</span> <span class="n">read_anndata_file</span>
-<span class="kn">from</span> <span class="nn">cas.utils.conversion_utils</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cas.file_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_anndata_file</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cas.utils.conversion_utils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">add_labelsets_to_cas</span><span class="p">,</span>
     <span class="n">add_parent_cell_hierarchy</span><span class="p">,</span>
     <span class="n">add_parent_hierarchy_to_annotations</span><span class="p">,</span>
@@ -88,7 +88,7 @@
 
 <div class="viewcode-block" id="anndata2cas">
 <a class="viewcode-back" href="../../source/cas.html#cas.anndata_to_cas.anndata2cas">[docs]</a>
-<span class="k">def</span> <span class="nf">anndata2cas</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">anndata2cas</span><span class="p">(</span>
     <span class="n">anndata_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">labelsets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="n">output_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -130,7 +130,7 @@
 
 <div class="viewcode-block" id="generate_cas_metadata">
 <a class="viewcode-back" href="../../source/cas.html#cas.anndata_to_cas.generate_cas_metadata">[docs]</a>
-<span class="k">def</span> <span class="nf">generate_cas_metadata</span><span class="p">(</span><span class="n">uns</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_cas_metadata</span><span class="p">(</span><span class="n">uns</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates CAS metadata based on the provided &#39;uns&#39; dictionary.</span>
 
@@ -173,7 +173,7 @@
 
 <div class="viewcode-block" id="add_annotations_to_cas">
 <a class="viewcode-back" href="../../source/cas.html#cas.anndata_to_cas.add_annotations_to_cas">[docs]</a>
-<span class="k">def</span> <span class="nf">add_annotations_to_cas</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_annotations_to_cas</span><span class="p">(</span>
     <span class="n">cas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
     <span class="n">labelset_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
     <span class="n">parent_cell_look_up</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>

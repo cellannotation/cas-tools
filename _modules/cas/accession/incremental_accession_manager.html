@@ -72,17 +72,17 @@
            <div itemprop="articleBody">
              
   <h1>Source code for cas.accession.incremental_accession_manager</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">cas.accession.base_accession_manager</span> <span class="kn">import</span> <span class="n">BaseAccessionManager</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cas.accession.base_accession_manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseAccessionManager</span>
 
 
 <div class="viewcode-block" id="IncrementalAccessionManager">
 <a class="viewcode-back" href="../../../source/cas.accession.html#cas.accession.incremental_accession_manager.IncrementalAccessionManager">[docs]</a>
-<span class="k">class</span> <span class="nc">IncrementalAccessionManager</span><span class="p">(</span><span class="n">BaseAccessionManager</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">IncrementalAccessionManager</span><span class="p">(</span><span class="n">BaseAccessionManager</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Numerically incremental Accession ID generator.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">accession_prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">last_accession_id</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">accession_prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">last_accession_id</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initializer.</span>
 <span class="sd">        Params:</span>
@@ -96,7 +96,7 @@
 
 <div class="viewcode-block" id="IncrementalAccessionManager.generate_accession_id">
 <a class="viewcode-back" href="../../../source/cas.accession.html#cas.accession.incremental_accession_manager.IncrementalAccessionManager.generate_accession_id">[docs]</a>
-    <span class="k">def</span> <span class="nf">generate_accession_id</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_accession_id</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">id_recommendation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">labelset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>

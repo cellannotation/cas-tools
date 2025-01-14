@@ -72,21 +72,21 @@
            <div itemprop="articleBody">
              
   <h1>Source code for cas.flatten_data_to_tables</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">csv</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">asdict</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">asdict</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<span class="kn">from</span> <span class="nn">cas.accession.hash_accession_manager</span> <span class="kn">import</span> <span class="n">HashAccessionManager</span><span class="p">,</span> <span class="n">is_hash_accession</span>
-<span class="kn">from</span> <span class="nn">cas.accession.incremental_accession_manager</span> <span class="kn">import</span> <span class="n">IncrementalAccessionManager</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cas.accession.hash_accession_manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">HashAccessionManager</span><span class="p">,</span> <span class="n">is_hash_accession</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cas.accession.incremental_accession_manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">IncrementalAccessionManager</span>
 
 <span class="n">accession_manager</span> <span class="o">=</span> <span class="kc">None</span>
 
 
 <div class="viewcode-block" id="serialize_to_tables">
 <a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_tables.serialize_to_tables">[docs]</a>
-<span class="k">def</span> <span class="nf">serialize_to_tables</span><span class="p">(</span><span class="n">cta</span><span class="p">,</span> <span class="n">file_name_prefix</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">,</span> <span class="n">project_config</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">serialize_to_tables</span><span class="p">(</span><span class="n">cta</span><span class="p">,</span> <span class="n">file_name_prefix</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">,</span> <span class="n">project_config</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Writes cell type annotation object to a series of tsv files.</span>
 <span class="sd">    Tables to generate:</span>
@@ -119,7 +119,7 @@
 
 <div class="viewcode-block" id="generate_annotation_transfer_table">
 <a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_tables.generate_annotation_transfer_table">[docs]</a>
-<span class="k">def</span> <span class="nf">generate_annotation_transfer_table</span><span class="p">(</span><span class="n">cta</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_annotation_transfer_table</span><span class="p">(</span><span class="n">cta</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates annotation transfer table.</span>
 
@@ -169,7 +169,7 @@
 
 <div class="viewcode-block" id="generate_metadata_table">
 <a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_tables.generate_metadata_table">[docs]</a>
-<span class="k">def</span> <span class="nf">generate_metadata_table</span><span class="p">(</span><span class="n">cta</span><span class="p">,</span> <span class="n">project_config</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_metadata_table</span><span class="p">(</span><span class="n">cta</span><span class="p">,</span> <span class="n">project_config</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates the metadata table.</span>
 
@@ -208,7 +208,7 @@
 
 <div class="viewcode-block" id="generate_labelset_table">
 <a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_tables.generate_labelset_table">[docs]</a>
-<span class="k">def</span> <span class="nf">generate_labelset_table</span><span class="p">(</span><span class="n">cta</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_labelset_table</span><span class="p">(</span><span class="n">cta</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates labelset table.</span>
 
@@ -256,7 +256,7 @@
 
 <div class="viewcode-block" id="generate_annotation_table">
 <a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_tables.generate_annotation_table">[docs]</a>
-<span class="k">def</span> <span class="nf">generate_annotation_table</span><span class="p">(</span><span class="n">accession_prefix</span><span class="p">,</span> <span class="n">cta</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_annotation_table</span><span class="p">(</span><span class="n">accession_prefix</span><span class="p">,</span> <span class="n">cta</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates annotation table.</span>
 
@@ -373,7 +373,7 @@
 
 <div class="viewcode-block" id="generate_reviews_table">
 <a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_tables.generate_reviews_table">[docs]</a>
-<span class="k">def</span> <span class="nf">generate_reviews_table</span><span class="p">(</span><span class="n">cta</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_reviews_table</span><span class="p">(</span><span class="n">cta</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates annotation reviews table.</span>
 
@@ -436,7 +436,7 @@
 
 <div class="viewcode-block" id="list_to_string">
 <a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_tables.list_to_string">[docs]</a>
-<span class="k">def</span> <span class="nf">list_to_string</span><span class="p">(</span><span class="n">my_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">list_to_string</span><span class="p">(</span><span class="n">my_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts a list to its string representation. Nanobot has problem with single quotations so removes them as well.</span>
 <span class="sd">    Parameters:</span>
@@ -454,7 +454,7 @@
 
 <div class="viewcode-block" id="assign_parent_accession_ids">
 <a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_tables.assign_parent_accession_ids">[docs]</a>
-<span class="k">def</span> <span class="nf">assign_parent_accession_ids</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">assign_parent_accession_ids</span><span class="p">(</span>
     <span class="n">accession_manager</span><span class="p">,</span> <span class="n">std_parent_records</span><span class="p">,</span> <span class="n">std_parent_records_dict</span><span class="p">,</span> <span class="n">labelsets</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -488,7 +488,7 @@
 
 <div class="viewcode-block" id="assign_parent_cell_set_names">
 <a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_tables.assign_parent_cell_set_names">[docs]</a>
-<span class="k">def</span> <span class="nf">assign_parent_cell_set_names</span><span class="p">(</span><span class="n">id_index</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">assign_parent_cell_set_names</span><span class="p">(</span><span class="n">id_index</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Assigns parent cell set names to the child cell sets.</span>
 <span class="sd">    Parameters:</span>
@@ -504,7 +504,7 @@
 
 <div class="viewcode-block" id="normalize_column_name">
 <a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_tables.normalize_column_name">[docs]</a>
-<span class="k">def</span> <span class="nf">normalize_column_name</span><span class="p">(</span><span class="n">column_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">normalize_column_name</span><span class="p">(</span><span class="n">column_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Normalizes column name for url compatibility.</span>
 <span class="sd">    URL compatible column name requirement: All names must match: ^[\w_ ]+$&#39; for to_url()</span>

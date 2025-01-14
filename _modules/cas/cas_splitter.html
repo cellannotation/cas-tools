@@ -72,11 +72,11 @@
            <div itemprop="articleBody">
              
   <h1>Source code for cas.cas_splitter</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">from</span> <span class="nn">cas.file_utils</span> <span class="kn">import</span> <span class="n">read_json_file</span><span class="p">,</span> <span class="n">write_dict_to_json_file</span>
-<span class="kn">from</span> <span class="nn">cas.utils.conversion_utils</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cas.file_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_json_file</span><span class="p">,</span> <span class="n">write_dict_to_json_file</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cas.utils.conversion_utils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">ANNOTATIONS</span><span class="p">,</span>
     <span class="n">CELL_SET_ACCESSION</span><span class="p">,</span>
     <span class="n">LABELSET</span><span class="p">,</span>
@@ -88,7 +88,7 @@
 
 <div class="viewcode-block" id="split_cas_to_file">
 <a class="viewcode-back" href="../../source/cas.html#cas.cas_splitter.split_cas_to_file">[docs]</a>
-<span class="k">def</span> <span class="nf">split_cas_to_file</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">split_cas_to_file</span><span class="p">(</span>
     <span class="n">cas_json_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">split_terms</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">],</span> <span class="n">multiple_outputs</span><span class="p">:</span> <span class="nb">bool</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -118,7 +118,7 @@
 
 <div class="viewcode-block" id="split_cas">
 <a class="viewcode-back" href="../../source/cas.html#cas.cas_splitter.split_cas">[docs]</a>
-<span class="k">def</span> <span class="nf">split_cas</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">split_cas</span><span class="p">(</span>
     <span class="n">cas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">split_terms</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">],</span> <span class="n">multiple_outputs</span><span class="p">:</span> <span class="nb">bool</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -172,7 +172,7 @@
 
 <div class="viewcode-block" id="filter_and_copy_cas_entries">
 <a class="viewcode-back" href="../../source/cas.html#cas.cas_splitter.filter_and_copy_cas_entries">[docs]</a>
-<span class="k">def</span> <span class="nf">filter_and_copy_cas_entries</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">filter_and_copy_cas_entries</span><span class="p">(</span>
     <span class="n">cas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">label_to_copy_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -202,7 +202,7 @@
 
 <div class="viewcode-block" id="get_split_terms">
 <a class="viewcode-back" href="../../source/cas.html#cas.cas_splitter.get_split_terms">[docs]</a>
-<span class="k">def</span> <span class="nf">get_split_terms</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_split_terms</span><span class="p">(</span>
     <span class="n">parent_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">split_terms</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>

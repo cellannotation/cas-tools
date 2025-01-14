@@ -72,15 +72,15 @@
            <div itemprop="articleBody">
              
   <h1>Source code for cas.matrix_file.base_resolver</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">abc</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">abc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
 
-<span class="kn">import</span> <span class="nn">anndata</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">anndata</span>
 
 
 <div class="viewcode-block" id="BaseMatrixFileResolver">
 <a class="viewcode-back" href="../../../source/cas.matrix_file.html#cas.matrix_file.base_resolver.BaseMatrixFileResolver">[docs]</a>
-<span class="k">class</span> <span class="nc">BaseMatrixFileResolver</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BaseMatrixFileResolver</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Base abstract matrix file Resolver</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -88,7 +88,7 @@
 <div class="viewcode-block" id="BaseMatrixFileResolver.resolve_matrix_file">
 <a class="viewcode-back" href="../../../source/cas.matrix_file.html#cas.matrix_file.base_resolver.BaseMatrixFileResolver.resolve_matrix_file">[docs]</a>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
-    <span class="k">def</span> <span class="nf">resolve_matrix_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset_id</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">anndata</span><span class="o">.</span><span class="n">AnnData</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">resolve_matrix_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset_id</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">anndata</span><span class="o">.</span><span class="n">AnnData</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Resolves matrix file identified by the given dataset_id.</span>
 <span class="sd">        Parameters:</span>
@@ -102,7 +102,7 @@
 <div class="viewcode-block" id="BaseMatrixFileResolver.resolve_matrix_file_path">
 <a class="viewcode-back" href="../../../source/cas.matrix_file.html#cas.matrix_file.base_resolver.BaseMatrixFileResolver.resolve_matrix_file_path">[docs]</a>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
-    <span class="k">def</span> <span class="nf">resolve_matrix_file_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset_id</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">resolve_matrix_file_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset_id</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Resolves matrix file identified by the given dataset_id and returns its path.</span>
 <span class="sd">        Parameters:</span>

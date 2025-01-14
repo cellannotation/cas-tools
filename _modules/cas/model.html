@@ -72,24 +72,24 @@
            <div itemprop="articleBody">
              
   <h1>Source code for cas.model</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">asdict</span><span class="p">,</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">asdict</span><span class="p">,</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
-<span class="kn">import</span> <span class="nn">dataclasses_json</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">dataclasses_json</span> <span class="kn">import</span> <span class="n">DataClassJsonMixin</span><span class="p">,</span> <span class="n">config</span>
-<span class="kn">from</span> <span class="nn">dateutil.parser</span> <span class="kn">import</span> <span class="n">isoparse</span>
-<span class="kn">from</span> <span class="nn">marshmallow</span> <span class="kn">import</span> <span class="n">fields</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dataclasses_json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses_json</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataClassJsonMixin</span><span class="p">,</span> <span class="n">config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dateutil.parser</span><span class="w"> </span><span class="kn">import</span> <span class="n">isoparse</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">marshmallow</span><span class="w"> </span><span class="kn">import</span> <span class="n">fields</span>
 
-<span class="kn">from</span> <span class="nn">cas.reports</span> <span class="kn">import</span> <span class="n">get_all_annotations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cas.reports</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_all_annotations</span>
 
 <span class="n">exclude_none_values</span> <span class="o">=</span> <span class="kc">True</span>
 
 
 <div class="viewcode-block" id="EncoderMixin">
 <a class="viewcode-back" href="../../source/cas.html#cas.model.EncoderMixin">[docs]</a>
-<span class="k">class</span> <span class="nc">EncoderMixin</span><span class="p">(</span><span class="n">DataClassJsonMixin</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">EncoderMixin</span><span class="p">(</span><span class="n">DataClassJsonMixin</span><span class="p">):</span>
     <span class="n">dataclass_json_config</span> <span class="o">=</span> <span class="n">dataclasses_json</span><span class="o">.</span><span class="n">config</span><span class="p">(</span>
         <span class="c1"># letter_case=dataclasses_json.LetterCase.CAMEL,</span>
         <span class="n">undefined</span><span class="o">=</span><span class="n">dataclasses_json</span><span class="o">.</span><span class="n">Undefined</span><span class="o">.</span><span class="n">EXCLUDE</span><span class="p">,</span>
@@ -101,7 +101,7 @@
 <div class="viewcode-block" id="AutomatedAnnotation">
 <a class="viewcode-back" href="../../source/cas.html#cas.model.AutomatedAnnotation">[docs]</a>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">AutomatedAnnotation</span><span class="p">(</span><span class="n">EncoderMixin</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AutomatedAnnotation</span><span class="p">(</span><span class="n">EncoderMixin</span><span class="p">):</span>
     <span class="n">algorithm_name</span><span class="p">:</span> <span class="nb">str</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;The name of the algorithm used. It MUST be a string of the algorithm&#39;s name.&quot;&quot;&quot;</span>
 
@@ -124,7 +124,7 @@
 <div class="viewcode-block" id="Labelset">
 <a class="viewcode-back" href="../../source/cas.html#cas.model.Labelset">[docs]</a>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">Labelset</span><span class="p">(</span><span class="n">EncoderMixin</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Labelset</span><span class="p">(</span><span class="n">EncoderMixin</span><span class="p">):</span>
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;name of annotation key&quot;&quot;&quot;</span>
 
@@ -148,7 +148,7 @@
 <div class="viewcode-block" id="AnnotationTransfer">
 <a class="viewcode-back" href="../../source/cas.html#cas.model.AnnotationTransfer">[docs]</a>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">AnnotationTransfer</span><span class="p">(</span><span class="n">EncoderMixin</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AnnotationTransfer</span><span class="p">(</span><span class="n">EncoderMixin</span><span class="p">):</span>
     <span class="n">transferred_cell_label</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Transferred cell label&quot;&quot;&quot;</span>
 
@@ -169,7 +169,7 @@
 <div class="viewcode-block" id="Review">
 <a class="viewcode-back" href="../../source/cas.html#cas.model.Review">[docs]</a>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">Review</span><span class="p">(</span><span class="n">EncoderMixin</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Review</span><span class="p">(</span><span class="n">EncoderMixin</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Annotation review.&quot;&quot;&quot;</span>
 
     <span class="n">datestamp</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
@@ -198,7 +198,7 @@
 <div class="viewcode-block" id="Annotation">
 <a class="viewcode-back" href="../../source/cas.html#cas.model.Annotation">[docs]</a>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">Annotation</span><span class="p">(</span><span class="n">EncoderMixin</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Annotation</span><span class="p">(</span><span class="n">EncoderMixin</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A collection of fields recording a cell type/class/state annotation on some set os cells, supporting evidence and</span>
 <span class="sd">    provenance. As this is intended as a general schema, compulsory fields are kept to a minimum. However, tools using</span>
@@ -270,7 +270,7 @@
 
 <div class="viewcode-block" id="Annotation.add_user_annotation">
 <a class="viewcode-back" href="../../source/cas.html#cas.model.Annotation.add_user_annotation">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_user_annotation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_annotation_set</span><span class="p">,</span> <span class="n">user_annotation_label</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_user_annotation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_annotation_set</span><span class="p">,</span> <span class="n">user_annotation_label</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Adds a user defined annotation which is not supported by the standard schema.</span>
 <span class="sd">        :param user_annotation_set: name of the user annotation set</span>
@@ -286,7 +286,7 @@
 <div class="viewcode-block" id="CellTypeAnnotation">
 <a class="viewcode-back" href="../../source/cas.html#cas.model.CellTypeAnnotation">[docs]</a>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">CellTypeAnnotation</span><span class="p">(</span><span class="n">EncoderMixin</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CellTypeAnnotation</span><span class="p">(</span><span class="n">EncoderMixin</span><span class="p">):</span>
     <span class="n">author_name</span><span class="p">:</span> <span class="nb">str</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;This MUST be a string in the format `[FIRST NAME] [LAST NAME]`&quot;&quot;&quot;</span>
 
@@ -340,7 +340,7 @@
 
 <div class="viewcode-block" id="CellTypeAnnotation.add_annotation_object">
 <a class="viewcode-back" href="../../source/cas.html#cas.model.CellTypeAnnotation.add_annotation_object">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_annotation_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_annotation_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Adds given object to annotation objects list</span>
 <span class="sd">        :param obj: Annotation object to add</span>
@@ -350,14 +350,14 @@
 
 <div class="viewcode-block" id="CellTypeAnnotation.set_exclude_none_values">
 <a class="viewcode-back" href="../../source/cas.html#cas.model.CellTypeAnnotation.set_exclude_none_values">[docs]</a>
-    <span class="k">def</span> <span class="nf">set_exclude_none_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_exclude_none_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="k">global</span> <span class="n">exclude_none_values</span>
         <span class="n">exclude_none_values</span> <span class="o">=</span> <span class="n">value</span></div>
 
 
 <div class="viewcode-block" id="CellTypeAnnotation.get_all_annotations">
 <a class="viewcode-back" href="../../source/cas.html#cas.model.CellTypeAnnotation.get_all_annotations">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_all_annotations</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_all_annotations</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">show_cell_ids</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">labels</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>

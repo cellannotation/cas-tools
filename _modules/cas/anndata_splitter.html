@@ -72,18 +72,18 @@
            <div itemprop="articleBody">
              
   <h1>Source code for cas.anndata_splitter</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span>
 
-<span class="kn">from</span> <span class="nn">anndata</span> <span class="kn">import</span> <span class="n">AnnData</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">anndata</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnnData</span>
 
-<span class="kn">from</span> <span class="nn">cas.file_utils</span> <span class="kn">import</span> <span class="n">read_anndata_file</span><span class="p">,</span> <span class="n">read_json_file</span>
-<span class="kn">from</span> <span class="nn">cas.utils.conversion_utils</span> <span class="kn">import</span> <span class="n">ANNOTATIONS</span><span class="p">,</span> <span class="n">CELL_IDS</span><span class="p">,</span> <span class="n">fetch_anndata</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cas.file_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_anndata_file</span><span class="p">,</span> <span class="n">read_json_file</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cas.utils.conversion_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">ANNOTATIONS</span><span class="p">,</span> <span class="n">CELL_IDS</span><span class="p">,</span> <span class="n">fetch_anndata</span>
 
 
 <div class="viewcode-block" id="split_anndata_to_file">
 <a class="viewcode-back" href="../../source/cas.html#cas.anndata_splitter.split_anndata_to_file">[docs]</a>
-<span class="k">def</span> <span class="nf">split_anndata_to_file</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">split_anndata_to_file</span><span class="p">(</span>
     <span class="n">anndata_file_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="n">cas_json_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="n">multiple_outputs</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
@@ -126,7 +126,7 @@
 
 <div class="viewcode-block" id="split_anndata">
 <a class="viewcode-back" href="../../source/cas.html#cas.anndata_splitter.split_anndata">[docs]</a>
-<span class="k">def</span> <span class="nf">split_anndata</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">split_anndata</span><span class="p">(</span>
     <span class="n">adata</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span> <span class="n">cas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">multiple_outputs</span><span class="p">:</span> <span class="nb">bool</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">AnnData</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -144,7 +144,7 @@
 <span class="sd">        ValueError: If any required terms do not exist in the CAS data under &#39;parent_cell_set_name&#39;.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">get_cell_ids</span><span class="p">(</span><span class="n">cas_data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_cell_ids</span><span class="p">(</span><span class="n">cas_data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract unique cell IDs from CAS data.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span>
             <span class="nb">set</span><span class="p">(</span>

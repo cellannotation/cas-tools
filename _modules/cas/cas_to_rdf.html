@@ -72,16 +72,16 @@
            <div itemprop="articleBody">
              
   <h1>Source code for cas.cas_to_rdf</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">import</span> <span class="nn">rdflib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rdflib</span>
 
-<span class="kn">from</span> <span class="nn">cell_annotation_schema.ontology</span> <span class="kn">import</span> <span class="n">export</span> <span class="k">as</span> <span class="n">ontology_export</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cell_annotation_schema.ontology</span><span class="w"> </span><span class="kn">import</span> <span class="n">export</span> <span class="k">as</span> <span class="n">ontology_export</span>
 
 
 <div class="viewcode-block" id="export_to_rdf">
 <a class="viewcode-back" href="../../source/cas.html#cas.cas_to_rdf.export_to_rdf">[docs]</a>
-<span class="k">def</span> <span class="nf">export_to_rdf</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">export_to_rdf</span><span class="p">(</span>
     <span class="n">cas_schema</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]],</span>
     <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span>
     <span class="n">ontology_namespace</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>

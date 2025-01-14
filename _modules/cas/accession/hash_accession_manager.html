@@ -72,17 +72,17 @@
            <div itemprop="articleBody">
              
   <h1>Source code for cas.accession.hash_accession_manager</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">hashlib</span>
-<span class="kn">import</span> <span class="nn">string</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">string</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
 
-<span class="kn">from</span> <span class="nn">cas.accession.base_accession_manager</span> <span class="kn">import</span> <span class="n">BaseAccessionManager</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cas.accession.base_accession_manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseAccessionManager</span>
 
 
 <div class="viewcode-block" id="HashAccessionManager">
 <a class="viewcode-back" href="../../../source/cas.accession.html#cas.accession.hash_accession_manager.HashAccessionManager">[docs]</a>
-<span class="k">class</span> <span class="nc">HashAccessionManager</span><span class="p">(</span><span class="n">BaseAccessionManager</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">accession_prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">digest_size</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">HashAccessionManager</span><span class="p">(</span><span class="n">BaseAccessionManager</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">accession_prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">digest_size</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initializer.</span>
 <span class="sd">        Params:</span>
@@ -95,7 +95,7 @@
 
 <div class="viewcode-block" id="HashAccessionManager.generate_accession_id">
 <a class="viewcode-back" href="../../../source/cas.accession.html#cas.accession.hash_accession_manager.HashAccessionManager.generate_accession_id">[docs]</a>
-    <span class="k">def</span> <span class="nf">generate_accession_id</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_accession_id</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">id_recommendation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cell_ids</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">labelset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -136,7 +136,7 @@
 
 <div class="viewcode-block" id="is_hash_accession">
 <a class="viewcode-back" href="../../../source/cas.accession.html#cas.accession.hash_accession_manager.is_hash_accession">[docs]</a>
-<span class="k">def</span> <span class="nf">is_hash_accession</span><span class="p">(</span><span class="n">accession_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_hash_accession</span><span class="p">(</span><span class="n">accession_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Checks if the given accession is a valid hash accession. Hash accessions are 10 char long and only has hexdigits</span>
 <span class="sd">    Args:</span>

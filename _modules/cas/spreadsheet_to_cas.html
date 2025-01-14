@@ -72,18 +72,18 @@
            <div itemprop="articleBody">
              
   <h1>Source code for cas.spreadsheet_to_cas</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<span class="kn">from</span> <span class="nn">cas.anndata_to_cas</span> <span class="kn">import</span> <span class="n">calculate_labelset</span>
-<span class="kn">from</span> <span class="nn">cas.cxg_utils</span> <span class="kn">import</span> <span class="n">download_dataset_with_id</span>
-<span class="kn">from</span> <span class="nn">cas.file_utils</span> <span class="kn">import</span> <span class="n">read_anndata_file</span>
-<span class="kn">from</span> <span class="nn">cas.utils.conversion_utils</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cas.anndata_to_cas</span><span class="w"> </span><span class="kn">import</span> <span class="n">calculate_labelset</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cas.cxg_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">download_dataset_with_id</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cas.file_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_anndata_file</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cas.utils.conversion_utils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">add_labelsets_to_cas</span><span class="p">,</span>
     <span class="n">add_parent_cell_hierarchy</span><span class="p">,</span>
     <span class="n">add_parent_hierarchy_to_annotations</span><span class="p">,</span>
@@ -104,7 +104,7 @@
 
 <div class="viewcode-block" id="resolve_ref">
 <a class="viewcode-back" href="../../source/cas.html#cas.spreadsheet_to_cas.resolve_ref">[docs]</a>
-<span class="k">def</span> <span class="nf">resolve_ref</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">ref</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">resolve_ref</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">ref</span><span class="p">):</span>
     <span class="n">parts</span> <span class="o">=</span> <span class="n">ref</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
     <span class="n">definition</span> <span class="o">=</span> <span class="n">schema</span>
     <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
@@ -115,7 +115,7 @@
 
 <div class="viewcode-block" id="read_spreadsheet">
 <a class="viewcode-back" href="../../source/cas.html#cas.spreadsheet_to_cas.read_spreadsheet">[docs]</a>
-<span class="k">def</span> <span class="nf">read_spreadsheet</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sheet_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">schema</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_spreadsheet</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sheet_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">schema</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read the specific sheet from the Excel file into a pandas DataFrame.</span>
 
@@ -170,7 +170,7 @@
 
 <div class="viewcode-block" id="custom_lowercase_transform">
 <a class="viewcode-back" href="../../source/cas.html#cas.spreadsheet_to_cas.custom_lowercase_transform">[docs]</a>
-<span class="k">def</span> <span class="nf">custom_lowercase_transform</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">custom_lowercase_transform</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transforms the given string to lowercase except for words that are acronyms or specific cell type names</span>
 <span class="sd">    which are three characters or fewer.</span>
@@ -183,7 +183,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Define a function to decide whether a word should stay uppercase</span>
-    <span class="k">def</span> <span class="nf">transform_word</span><span class="p">(</span><span class="n">match</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">transform_word</span><span class="p">(</span><span class="n">match</span><span class="p">):</span>
         <span class="n">word</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">()</span>
         <span class="c1"># If a word is three characters or fewer, it stays uppercase</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
@@ -201,7 +201,7 @@
 
 <div class="viewcode-block" id="spreadsheet2cas">
 <a class="viewcode-back" href="../../source/cas.html#cas.spreadsheet_to_cas.spreadsheet2cas">[docs]</a>
-<span class="k">def</span> <span class="nf">spreadsheet2cas</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">spreadsheet2cas</span><span class="p">(</span>
     <span class="n">spreadsheet_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">sheet_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="n">anndata_file_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
@@ -258,7 +258,7 @@
 
 <div class="viewcode-block" id="add_annotations_to_cas">
 <a class="viewcode-back" href="../../source/cas.html#cas.spreadsheet_to_cas.add_annotations_to_cas">[docs]</a>
-<span class="k">def</span> <span class="nf">add_annotations_to_cas</span><span class="p">(</span><span class="n">cas</span><span class="p">,</span> <span class="n">raw_data_result</span><span class="p">,</span> <span class="n">columns</span><span class="p">,</span> <span class="n">schema</span><span class="p">,</span> <span class="n">parent_cell_look_up</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_annotations_to_cas</span><span class="p">(</span><span class="n">cas</span><span class="p">,</span> <span class="n">raw_data_result</span><span class="p">,</span> <span class="n">columns</span><span class="p">,</span> <span class="n">schema</span><span class="p">,</span> <span class="n">parent_cell_look_up</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Adds processed annotations from raw data to the CAS structure and tracks labelsets.</span>
 <span class="sd">    Assumes certain external definitions for column names and transformation functions.</span>
@@ -320,7 +320,7 @@
 
 <div class="viewcode-block" id="initialize_cas_structure">
 <a class="viewcode-back" href="../../source/cas.html#cas.spreadsheet_to_cas.initialize_cas_structure">[docs]</a>
-<span class="k">def</span> <span class="nf">initialize_cas_structure</span><span class="p">(</span><span class="n">matrix_file_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">meta_data_result</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">initialize_cas_structure</span><span class="p">(</span><span class="n">matrix_file_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">meta_data_result</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Initializes the Cell Annotation Schema (CAS) structure with basic information and placeholders</span>
 <span class="sd">    for annotations and labelsets. Fields initialized with None values are omitted in the final output.</span>
@@ -349,7 +349,7 @@
 
 <div class="viewcode-block" id="load_or_fetch_anndata">
 <a class="viewcode-back" href="../../source/cas.html#cas.spreadsheet_to_cas.load_or_fetch_anndata">[docs]</a>
-<span class="k">def</span> <span class="nf">load_or_fetch_anndata</span><span class="p">(</span><span class="n">anndata_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">meta_data_result</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_or_fetch_anndata</span><span class="p">(</span><span class="n">anndata_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">meta_data_result</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Loads or fetches an AnnData file, based on a local path or a matrix file ID from metadata.</span>
 

@@ -72,21 +72,21 @@
            <div itemprop="articleBody">
              
   <h1>Source code for cas.validate</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">resources</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">importlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">resources</span>
 
-<span class="kn">from</span> <span class="nn">cas_schema</span> <span class="kn">import</span> <span class="n">schema_validator</span><span class="p">,</span> <span class="n">schemas</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cas_schema</span><span class="w"> </span><span class="kn">import</span> <span class="n">schema_validator</span><span class="p">,</span> <span class="n">schemas</span>
 
-<span class="kn">from</span> <span class="nn">cas.file_utils</span> <span class="kn">import</span> <span class="n">get_cas_schema</span><span class="p">,</span> <span class="n">get_cas_schema_names</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cas.file_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_cas_schema</span><span class="p">,</span> <span class="n">get_cas_schema_names</span>
 
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;always&quot;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="validate">
 <a class="viewcode-back" href="../../source/cas.html#cas.validate.validate">[docs]</a>
-<span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Validates all instances in data_path against the given schema.</span>
 <span class="sd">    Assumes all *.json files in the test_dir should validate against the schema.</span>

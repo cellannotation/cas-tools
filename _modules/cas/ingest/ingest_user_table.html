@@ -72,15 +72,15 @@
            <div itemprop="articleBody">
              
   <h1>Source code for cas.ingest.ingest_user_table</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">importlib.metadata</span> <span class="kn">import</span> <span class="n">version</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">get_type_hints</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">version</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_type_hints</span>
 
-<span class="kn">from</span> <span class="nn">cas.file_utils</span> <span class="kn">import</span> <span class="n">read_config</span><span class="p">,</span> <span class="n">read_table_to_dict</span><span class="p">,</span> <span class="n">write_json_file</span>
-<span class="kn">from</span> <span class="nn">cas.flatten_data_to_tables</span> <span class="kn">import</span> <span class="n">serialize_to_tables</span>
-<span class="kn">from</span> <span class="nn">cas.ingest.config_validator</span> <span class="kn">import</span> <span class="n">validate</span>
-<span class="kn">from</span> <span class="nn">cas.model</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cas.file_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_config</span><span class="p">,</span> <span class="n">read_table_to_dict</span><span class="p">,</span> <span class="n">write_json_file</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cas.flatten_data_to_tables</span><span class="w"> </span><span class="kn">import</span> <span class="n">serialize_to_tables</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cas.ingest.config_validator</span><span class="w"> </span><span class="kn">import</span> <span class="n">validate</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cas.model</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">Annotation</span><span class="p">,</span>
     <span class="n">AnnotationTransfer</span><span class="p">,</span>
     <span class="n">AutomatedAnnotation</span><span class="p">,</span>
@@ -93,7 +93,7 @@
 
 <div class="viewcode-block" id="ingest_data">
 <a class="viewcode-back" href="../../../source/cas.ingest.html#cas.ingest.ingest_user_table.ingest_data">[docs]</a>
-<span class="k">def</span> <span class="nf">ingest_data</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ingest_data</span><span class="p">(</span>
     <span class="n">data_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">config_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">out_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -129,7 +129,7 @@
 
 <div class="viewcode-block" id="ingest_user_data">
 <a class="viewcode-back" href="../../../source/cas.ingest.html#cas.ingest.ingest_user_table.ingest_user_data">[docs]</a>
-<span class="k">def</span> <span class="nf">ingest_user_data</span><span class="p">(</span><span class="n">data_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">config_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ingest_user_data</span><span class="p">(</span><span class="n">data_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">config_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Ingest given user data into standard cell annotation schema data structure using the given configuration.</span>
 <span class="sd">    :param data_file: Unformatted user data in tsv/csv format.</span>
@@ -191,7 +191,7 @@
 
 <div class="viewcode-block" id="register_parent">
 <a class="viewcode-back" href="../../../source/cas.ingest.html#cas.ingest.ingest_user_table.register_parent">[docs]</a>
-<span class="k">def</span> <span class="nf">register_parent</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">labelset_ranks</span><span class="p">,</span> <span class="n">parent_ao</span><span class="p">,</span> <span class="n">parents</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">register_parent</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">labelset_ranks</span><span class="p">,</span> <span class="n">parent_ao</span><span class="p">,</span> <span class="n">parents</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Registers the parent annotation object to the parents list.</span>
 <span class="sd">    Args:</span>
@@ -206,7 +206,7 @@
 
 <div class="viewcode-block" id="get_annotation">
 <a class="viewcode-back" href="../../../source/cas.ingest.html#cas.ingest.ingest_user_table.get_annotation">[docs]</a>
-<span class="k">def</span> <span class="nf">get_annotation</span><span class="p">(</span><span class="n">ao_names</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_annotation</span><span class="p">(</span><span class="n">ao_names</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates a annotation object if it does not exist in the ao_names dictionary at the same labelset.</span>
 <span class="sd">    Args:</span>
@@ -229,7 +229,7 @@
 
 <div class="viewcode-block" id="add_user_annotations">
 <a class="viewcode-back" href="../../../source/cas.ingest.html#cas.ingest.ingest_user_table.add_user_annotations">[docs]</a>
-<span class="k">def</span> <span class="nf">add_user_annotations</span><span class="p">(</span><span class="n">ao</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">utilized_columns</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_user_annotations</span><span class="p">(</span><span class="n">ao</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">utilized_columns</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Adds user annotations that are not supported by the standard schema.</span>
 <span class="sd">    :param ao: current annotation object</span>
@@ -248,7 +248,7 @@
 
 <div class="viewcode-block" id="add_parent_node_names">
 <a class="viewcode-back" href="../../../source/cas.ingest.html#cas.ingest.ingest_user_table.add_parent_node_names">[docs]</a>
-<span class="k">def</span> <span class="nf">add_parent_node_names</span><span class="p">(</span><span class="n">ao</span><span class="p">,</span> <span class="n">ao_names</span><span class="p">,</span> <span class="n">cas</span><span class="p">,</span> <span class="n">parents</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_parent_node_names</span><span class="p">(</span><span class="n">ao</span><span class="p">,</span> <span class="n">ao_names</span><span class="p">,</span> <span class="n">cas</span><span class="p">,</span> <span class="n">parents</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates parent nodes if necessary and creates a cluster hierarchy through assigning parent_node_names.</span>
 <span class="sd">    :param ao: current annotation object</span>
@@ -287,7 +287,7 @@
 
 <div class="viewcode-block" id="populate_labelsets">
 <a class="viewcode-back" href="../../../source/cas.ingest.html#cas.ingest.ingest_user_table.populate_labelsets">[docs]</a>
-<span class="k">def</span> <span class="nf">populate_labelsets</span><span class="p">(</span><span class="n">cas</span><span class="p">,</span> <span class="n">config_fields</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">populate_labelsets</span><span class="p">(</span><span class="n">cas</span><span class="p">,</span> <span class="n">config_fields</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Populates labelsets list based on the fields of the config.</span>
 <span class="sd">    :param cas: main object</span>

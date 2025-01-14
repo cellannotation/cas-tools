@@ -72,23 +72,23 @@
            <div itemprop="articleBody">
              
   <h1>Source code for cas.flatten_data_to_anndata</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">cap_anndata</span> <span class="kn">import</span> <span class="n">read_h5ad</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cap_anndata</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_h5ad</span>
 
-<span class="kn">from</span> <span class="nn">cas.accession.hash_accession_manager</span> <span class="kn">import</span> <span class="n">HashAccessionManager</span><span class="p">,</span> <span class="n">is_hash_accession</span>
-<span class="kn">from</span> <span class="nn">cas.file_utils</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cas.accession.hash_accession_manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">HashAccessionManager</span><span class="p">,</span> <span class="n">is_hash_accession</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cas.file_utils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">read_json_file</span><span class="p">,</span>
     <span class="n">update_obs</span><span class="p">,</span>
     <span class="n">update_uns</span><span class="p">,</span>
     <span class="n">write_dict_to_json_file</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">cas.utils.conversion_utils</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cas.utils.conversion_utils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">ANNOTATIONS</span><span class="p">,</span>
     <span class="n">AUTHOR_ANNOTATION_FIELDS</span><span class="p">,</span>
     <span class="n">CELL_IDS</span><span class="p">,</span>
@@ -111,7 +111,7 @@
 
 <div class="viewcode-block" id="is_list_of_strings">
 <a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_anndata.is_list_of_strings">[docs]</a>
-<span class="k">def</span> <span class="nf">is_list_of_strings</span><span class="p">(</span><span class="n">var</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_list_of_strings</span><span class="p">(</span><span class="n">var</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Check if a value is a list of strings.</span>
 
@@ -129,7 +129,7 @@
 
 <div class="viewcode-block" id="flatten">
 <a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_anndata.flatten">[docs]</a>
-<span class="k">def</span> <span class="nf">flatten</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">flatten</span><span class="p">(</span>
     <span class="n">cas_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">anndata_file_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="n">output_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -154,7 +154,7 @@
 
 <div class="viewcode-block" id="flatten_cas_object">
 <a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_anndata.flatten_cas_object">[docs]</a>
-<span class="k">def</span> <span class="nf">flatten_cas_object</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">flatten_cas_object</span><span class="p">(</span>
     <span class="n">input_json</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
     <span class="n">anndata_file_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="n">output_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -201,7 +201,7 @@
 
 <div class="viewcode-block" id="process_annotations">
 <a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_anndata.process_annotations">[docs]</a>
-<span class="k">def</span> <span class="nf">process_annotations</span><span class="p">(</span><span class="n">annotations</span><span class="p">,</span> <span class="n">obs_index</span><span class="p">,</span> <span class="n">parent_cell_ids</span><span class="p">,</span> <span class="n">fill_na</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_annotations</span><span class="p">(</span><span class="n">annotations</span><span class="p">,</span> <span class="n">obs_index</span><span class="p">,</span> <span class="n">parent_cell_ids</span><span class="p">,</span> <span class="n">fill_na</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Processes annotations and generates flattened data for obs dataset.</span>
 
@@ -270,7 +270,7 @@
 
 <div class="viewcode-block" id="generate_uns_json">
 <a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_anndata.generate_uns_json">[docs]</a>
-<span class="k">def</span> <span class="nf">generate_uns_json</span><span class="p">(</span><span class="n">input_json</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_uns_json</span><span class="p">(</span><span class="n">input_json</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates a dictionary representing the uns (unstructured) field in an AnnData object from a given JSON input.</span>
 
@@ -321,7 +321,7 @@
 
 <div class="viewcode-block" id="unflatten">
 <a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_anndata.unflatten">[docs]</a>
-<span class="k">def</span> <span class="nf">unflatten</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">unflatten</span><span class="p">(</span>
     <span class="n">json_file_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="n">anndata_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">output_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -371,7 +371,7 @@
 
 <div class="viewcode-block" id="unflatten_obs">
 <a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_anndata.unflatten_obs">[docs]</a>
-<span class="k">def</span> <span class="nf">unflatten_obs</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">unflatten_obs</span><span class="p">(</span>
     <span class="n">obs_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">uns_df</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
     <span class="n">cas_json</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span>
@@ -391,7 +391,11 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">labelset_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">uns_df</span><span class="p">[</span><span class="s2">&quot;cellannotation_metadata&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
     <span class="n">obs_columns_by_labelset</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="n">labelset</span><span class="p">:</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">obs_df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">labelset</span> <span class="ow">in</span> <span class="n">col</span><span class="p">]</span>
+        <span class="n">labelset</span><span class="p">:</span> <span class="p">[</span>
+            <span class="n">col</span>
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">obs_df</span><span class="o">.</span><span class="n">columns</span>
+            <span class="k">if</span> <span class="n">col</span> <span class="o">==</span> <span class="n">labelset</span> <span class="ow">or</span> <span class="n">col</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">labelset</span><span class="si">}</span><span class="s2">--&quot;</span><span class="p">)</span>
+        <span class="p">]</span>
         <span class="k">for</span> <span class="n">labelset</span> <span class="ow">in</span> <span class="n">labelset_list</span>
     <span class="p">}</span>
     <span class="n">filtered_obs_by_labelset</span> <span class="o">=</span> <span class="p">{</span>
@@ -436,7 +440,7 @@
 
 <div class="viewcode-block" id="create_cell_label_lookup">
 <a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_anndata.create_cell_label_lookup">[docs]</a>
-<span class="k">def</span> <span class="nf">create_cell_label_lookup</span><span class="p">(</span><span class="n">df_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_cell_label_lookup</span><span class="p">(</span><span class="n">df_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a lookup dictionary for cell labels with corresponding observations.</span>
 
@@ -504,7 +508,7 @@
 
 <div class="viewcode-block" id="update_cas_annotation">
 <a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_anndata.update_cas_annotation">[docs]</a>
-<span class="k">def</span> <span class="nf">update_cas_annotation</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">update_cas_annotation</span><span class="p">(</span>
     <span class="n">cas_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span>
     <span class="n">cas_json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
     <span class="n">cellhash_lookup</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
@@ -574,7 +578,7 @@
 
 <div class="viewcode-block" id="generate_cas_json">
 <a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_anndata.generate_cas_json">[docs]</a>
-<span class="k">def</span> <span class="nf">generate_cas_json</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_cas_json</span><span class="p">(</span>
     <span class="n">uns_data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
     <span class="n">cas_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span>
     <span class="n">schema_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
