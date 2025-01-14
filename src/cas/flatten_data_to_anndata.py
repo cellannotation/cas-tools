@@ -297,7 +297,11 @@ def unflatten_obs(
     """
     labelset_list = list(uns_df["cellannotation_metadata"].keys())
     obs_columns_by_labelset = {
-        labelset: [col for col in obs_df.columns if labelset in col]
+        labelset: [
+            col
+            for col in obs_df.columns
+            if col == labelset or col.startswith(f"{labelset}--")
+        ]
         for labelset in labelset_list
     }
     filtered_obs_by_labelset = {
