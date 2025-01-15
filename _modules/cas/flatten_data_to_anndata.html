@@ -422,7 +422,7 @@
         <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">anno</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="n">CELL_IDS</span><span class="p">}</span>
         <span class="k">if</span> <span class="n">anno</span><span class="p">[</span><span class="n">LABELSET</span><span class="p">]</span> <span class="o">!=</span> <span class="n">name_with_rank_0</span>
         <span class="k">else</span> <span class="n">anno</span>
-        <span class="k">for</span> <span class="n">anno</span> <span class="ow">in</span> <span class="n">cas_dict</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">anno</span> <span class="ow">in</span> <span class="n">updated_cas</span><span class="p">[</span><span class="n">ANNOTATIONS</span><span class="p">]</span>
     <span class="p">]</span>
     <span class="c1"># Discard flattened obs</span>
     <span class="n">flattened_columns</span> <span class="o">=</span> <span class="p">[</span>
