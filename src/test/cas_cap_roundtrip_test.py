@@ -74,7 +74,7 @@ class TestRoundtrip(unittest.TestCase):
             cas = json.load(file)
         # cas = json.loads(unflattened_anndata.uns["cas"])
         # Check the updated "annotations"
-        self.assertEqual(len(cas["annotations"]), 10)
+        self.assertEqual(len(cas["annotations"]), 5)
         self.assertIn("O500x", [a["cell_label"] for a in cas["annotations"]])
         self.assertIn("O40", [a["cell_label"] for a in cas["annotations"]])
         self.assertIn("A62", [a["cell_label"] for a in cas["annotations"]])
