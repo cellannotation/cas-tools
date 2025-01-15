@@ -4500,13 +4500,13 @@ solrcloud = ["kazoo (>=2.5.0)"]
 
 [[package]]
 name = "pystow"
-version = "0.6.1"
+version = "0.7.0"
 description = "Easily pick a place to store data for your Python code"
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "pystow-0.6.1-py3-none-any.whl", hash = "sha256:aee05079f26e6fa58687f18e4f01ecc74204e66ca645e452cb007fe44bf7bace"},
-    {file = "pystow-0.6.1.tar.gz", hash = "sha256:db853bb906ffeb124c6bb20ed99f4594161b6c6c7883f04c2ec593d07897951a"},
+    {file = "pystow-0.7.0-py3-none-any.whl", hash = "sha256:5b6ed4b322a625f0163471f76989bae3b870fd20d64fed55a9150c68d34eb39d"},
+    {file = "pystow-0.7.0.tar.gz", hash = "sha256:5f8935a76d5f03b0645bedbe5dfcb3b777a0e755fda3e3fd3e4be7a1d2d058d0"},
 ]
 
 [package.dependencies]
@@ -4517,10 +4517,10 @@ typing-extensions = "*"
 
 [package.extras]
 aws = ["boto3"]
-docs = ["sphinx (>=8)", "sphinx-click", "sphinx-rtd-theme (>=3.0)", "sphinx_automodapi"]
+docs = ["sphinx (>=8)", "sphinx-automodapi", "sphinx-click", "sphinx-rtd-theme (>=3.0)"]
 pandas = ["pandas"]
 rdf = ["rdflib"]
-tests = ["coverage", "pytest", "requests_file"]
+tests = ["coverage[toml]", "pytest", "requests-file"]
 xml = ["lxml"]
 
 [[package]]
