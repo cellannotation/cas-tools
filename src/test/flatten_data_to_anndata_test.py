@@ -124,15 +124,6 @@ class TestAnnotationMethods(unittest.TestCase):
                     "parent_cell_set_accession": "supercluster_term:502566eede",
                 },
                 {
-                    "author_annotation_fields": {"Cluster ID": "O50"},
-                    "labelset": "Cluster",
-                    "cell_label": "O50",
-                    "cell_fullname": "O50",
-                    "cell_set_accession": "Cluster:5a972d4730",
-                    "parent_cell_set_name": "Oligodendrocyte",
-                    "parent_cell_set_accession": "supercluster_term:502566eede",
-                },
-                {
                     "author_annotation_fields": {"Cluster ID": "O40"},
                     "labelset": "Cluster",
                     "cell_label": "O40",
@@ -140,24 +131,6 @@ class TestAnnotationMethods(unittest.TestCase):
                     "cell_set_accession": "Cluster:7c94e6181d",
                     "parent_cell_set_name": "Oligodendrocyte",
                     "parent_cell_set_accession": "supercluster_term:502566eede",
-                },
-                {
-                    "author_annotation_fields": {"Cluster ID": "O40"},
-                    "labelset": "Cluster",
-                    "cell_label": "O40",
-                    "cell_fullname": "O40",
-                    "cell_set_accession": "Cluster:7c94e6181d",
-                    "parent_cell_set_name": "Oligodendrocyte",
-                    "parent_cell_set_accession": "supercluster_term:502566eede",
-                },
-                {
-                    "author_annotation_fields": {"Cluster ID": "A62"},
-                    "labelset": "Cluster",
-                    "cell_label": "A62",
-                    "cell_fullname": "A62",
-                    "cell_set_accession": "Cluster:c2b38b36d7",
-                    "parent_cell_set_name": "Astrocyte",
-                    "parent_cell_set_accession": "supercluster_term:c2b38b36d7",
                 },
                 {
                     "author_annotation_fields": {"Cluster ID": "A62"},
@@ -179,30 +152,6 @@ class TestAnnotationMethods(unittest.TestCase):
                     "rationale": "Supported by marker expression and annotation transfer from Middle Temporal Gyrus dataset (Jorstad et al., 2023)",
                     "rationale_dois": "DOI:10.1126/science.adf6812",
                     "marker_gene_evidence": "PLP1, SOX10",
-                },
-                {
-                    "author_annotation_fields": {"Cluster ID": "None"},
-                    "labelset": "supercluster_term",
-                    "cell_label": "Oligodendrocyte",
-                    "cell_fullname": "Oligodendrocyte",
-                    "cell_set_accession": "supercluster_term:502566eede",
-                    "cell_ontology_term_id": "CL:0000128",
-                    "cell_ontology_term": "oligodendrocyte",
-                    "rationale": "Supported by marker expression and annotation transfer from Middle Temporal Gyrus dataset (Jorstad et al., 2023)",
-                    "rationale_dois": "DOI:10.1126/science.adf6812",
-                    "marker_gene_evidence": "PLP1, SOX10",
-                },
-                {
-                    "author_annotation_fields": {"Cluster ID": "None"},
-                    "labelset": "supercluster_term",
-                    "cell_label": "Astrocyte",
-                    "cell_fullname": "Astrocyte",
-                    "cell_set_accession": "supercluster_term:c2b38b36d7",
-                    "cell_ontology_term_id": "CL:0000127",
-                    "cell_ontology_term": "astrocyte",
-                    "rationale": "Supported by marker expression and annotation transfer from Middle Temporal Gyrus dataset (Jorstad et al., 2023)",
-                    "rationale_dois": "DOI:10.1126/science.adf6812",
-                    "marker_gene_evidence": "AQP4",
                 },
                 {
                     "author_annotation_fields": {"Cluster ID": "None"},
@@ -218,13 +167,13 @@ class TestAnnotationMethods(unittest.TestCase):
                 },
             ],
             "labelsets": [
-                {"name": "Cluster", "description": "", "rank": "0"},
-                {"name": "supercluster_term", "description": "", "rank": "1"},
+                {"name": "Cluster", "description": "", "rank": 0},
+                {"name": "supercluster_term", "description": "", "rank": 1},
             ],
         }
         with patch(
             "cas.flatten_data_to_anndata.update_cas_annotation",
-            return_value=expected_output,
+            return_value=expected_output["annotations"],
         ) as mock_update_cas_annotation:
             with read_h5ad(file_path=self.anndata_file_path, edit=True) as cap_adata:
                 cap_adata.read_obs()
