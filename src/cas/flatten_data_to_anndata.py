@@ -328,7 +328,7 @@ def unflatten_obs(
         {k: v for k, v in anno.items() if k != CELL_IDS}
         if anno[LABELSET] != name_with_rank_0
         else anno
-        for anno in updated_cas[ANNOTATIONS]
+        for anno in (updated_cas[ANNOTATIONS][::2] if not cas_json else updated_cas[ANNOTATIONS])
     ]
     # Discard flattened obs
     flattened_columns = [
