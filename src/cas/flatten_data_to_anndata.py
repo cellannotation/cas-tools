@@ -311,8 +311,6 @@ def unflatten_obs(
     # Find all matching cell sets defined by obs
     cas_dict = create_cell_label_lookup(filtered_obs_by_labelset)
     updated_cas = generate_cas_json(uns_df, cas_dict)
-    # TODO need better handling for duplication removal coming from cas_dict look-up dict when
-    #  cas json is not provided
     if cas_json and ANNOTATIONS in cas_json:
         updated_cas[ANNOTATIONS] = update_cas_annotation(
             cas_dict, cas_json, cellhash_lookup
@@ -330,7 +328,7 @@ def unflatten_obs(
         {k: v for k, v in anno.items() if k != CELL_IDS}
         if anno[LABELSET] != name_with_rank_0
         else anno
-        for anno in updated_cas[ANNOTATIONS]
+        for anno in (updated_cas[ANNOTATIONS][::2] if not cas_json else updated_cas[ANNOTATIONS])
     ]
     # Discard flattened obs
     flattened_columns = [
