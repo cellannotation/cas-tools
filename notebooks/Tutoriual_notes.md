@@ -13,24 +13,28 @@ Work so far:
      4. UMAP embedding name doesn't work with scanpy default standard (X-UMAP --> umap)
         
 2. CAS functionality needed.
+   3. cas flatten should use cas in head by default.
+   4. cas flatten should store cas in header
+   5. flatten - rename to export2CAP + should only flatten CAP fields
+   6. It should be possible to update with obs<->cas without going through a flattening step
 
-
-4. Starting points:
+5. Starting points:
     1. Intro - what is CAS / CAS-tools + show pre-rolled h5ad file in use
          1. Reporting
-         2. Add a column
-         3. Export to CAP
+         2. Add a column (author annotation) https://github.com/cellannotation/cas-tools/blob/main/docs/cli.md#add-author-annotations-to-cas-json
+         3. Export to CAP Needs intro text to explain - !cas flatten (Currently needs separate file)
     3. CxG dataset
-         1. Generate CAS from CxG --> embedded h5ad file 
-    2. Allen style taxonomy spreadsheet + h5ad (we should also point users to TDT repo)
+         1. Generate CAS from Anndata (e.g. from CxG) https://github.com/cellannotation/cas-tools/blob/main/docs/cli.md#convert-anndata-to-cas --> embedded h5ad file 
+    2. Allen style taxonomy spreadsheet + h5ad (we should also point users to TDT repo). HKIR will do this, using WMB example
        1. Generate CAS
        2. Validate CAS against h5ad
        3. Populate IDs
        4. Merge
-    4. CAS repo
+    4. CAS repo --> point to TDT doc for this.
+    5. Roundtripping  See existing NB CAS-CAP round-tripping demo.ipynb - Needs better annotation.
     
    
-5. To Demo:
+6. To Demo:
    4.  Export to CAP
 
-6. 
+7. 
