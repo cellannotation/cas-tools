@@ -1,4 +1,5 @@
 import os
+import json
 import unittest
 
 from cas.ingest.ingest_user_table import ingest_data, ingest_user_data
@@ -138,3 +139,47 @@ class CellTypeAnnotationTests(unittest.TestCase):
         self.assertEqual("Endothelial", grand_parent_annotation.cell_label)
         self.assertEqual("subclass", grand_parent_annotation.labelset)
         self.assertEqual("Vascular", grand_parent_annotation.parent_cell_set_name)
+
+
+    def test_data_formatting_wmb(self):
+        result = ingest_user_data(
+            os.path.join(
+                os.path.dirname(os.path.realpath(__file__)),
+                "./test_data/wmb/wmb_class_29_annotation.tsv",
+            ),
+            os.path.join(
+                os.path.dirname(os.path.realpath(__file__)),
+                "./test_data/wmb/wmb_ingestion_config.yaml",
+            ),
+            True
+        )
+
+        self.assertTrue(result)
+        self.assertTrue(result.author_name)
+        self.assertEqual("Hongkui Zeng", result.author_name)
+
+        self.assertIsNotNone(result.title)
+        self.assertEqual("Whole Mouse Brain taxonomy", result.title)
+
+        self.assertIsNotNone(result.annotations)
+
+        test_annotation = [x for x in result.annotations if x.cell_label == "5201 CB Granule Glut_2"][0]
+        # print(test_annotation.get("parent_cell_set_accession"))
+        self.assertIsNotNone(test_annotation.parent_cell_set_accession)
+        self.assertEqual("1155 CB Granule Glut_2", test_annotation.parent_cell_set_name)
+        parent_annotation = [
+            x
+            for x in result.annotations
+            if x.cell_label == test_annotation.parent_cell_set_name
+        ][0]
+        self.assertEqual("1155 CB Granule Glut_2", parent_annotation.cell_label)
+        self.assertEqual("supertype", parent_annotation.labelset)
+        self.assertEqual(test_annotation.parent_cell_set_accession, parent_annotation.cell_set_accession)
+
+        print(result.labelsets[0].rank)
+        print(type(result.labelsets[0].rank))
+        self.assertTrue(type(result.labelsets[0].rank) == int)
+
+        data = result.as_dictionary()
+        print(json.dumps(data, indent=2))
+
