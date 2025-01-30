@@ -1,0 +1,28 @@
+taxonomy_id: CS20230722
+brain_region_names:
+  - Whole Brain
+species_names:
+  - Mouse
+author_name: Hongkui Zeng
+title: Whole Mouse Brain taxonomy
+
+fields:
+  - column_name: cluster_id
+    column_type: cluster_id
+    rank: 0
+
+  - column_name: cluster
+    column_type: cluster_name
+    rank: 0
+
+  - column_name: supertype
+    column_type: cell_set
+    rank: 1
+
+  - column_name: subclass
+    column_type: cell_set
+    rank: 2
+
+  - column_name: class
+    column_type: cell_set
+    rank: 3
