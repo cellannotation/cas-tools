@@ -14,6 +14,7 @@ from cas.file_utils import (
     update_uns,
     write_dict_to_json_file,
 )
+from cas.populate_cell_ids import update_cas_with_cell_ids
 from cas.utils.conversion_utils import (
     ANNOTATIONS,
     AUTHOR_ANNOTATION_FIELDS,
@@ -27,7 +28,7 @@ from cas.utils.conversion_utils import (
     convert_complex_type,
     copy_and_update_file_path,
     fetch_anndata,
-    retrieve_schema,
+    retrieve_schema, reformat_json,
 )
 
 # Configure logging
@@ -50,7 +51,7 @@ def is_list_of_strings(var):
     return isinstance(var, list) and all(isinstance(item, str) for item in var)
 
 
-def flatten(
+def export2cap(
     cas_file_path: str,
     anndata_file_path: Optional[str],
     output_file_path: str,
@@ -67,13 +68,13 @@ def flatten(
         fill_na: Boolean flag indicating whether to fill missing values in the 'obs' field with pd.NA. If True, missing
                  values will be replaced with pd.NA; if False, they will remain as empty strings.
     """
-    input_json = read_json_file(cas_file_path)
+    input_json = read_json_file(cas_file_path) if cas_file_path else None
 
-    flatten_cas_object(input_json, anndata_file_path, output_file_path, fill_na)
+    export_cas_object2cap(input_json, anndata_file_path, output_file_path, fill_na)
 
 
-def flatten_cas_object(
-    input_json: dict,
+def export_cas_object2cap(
+    input_json: Optional[dict],
     anndata_file_path: Optional[str],
     output_file_path: str,
     fill_na: bool,
@@ -83,23 +84,28 @@ def flatten_cas_object(
      object that incorporates the metadata. The resulting AnnData object is then saved to a new file.
 
     Args:
-        input_json: CAS json file.
+        input_json: CAS json object.
         anndata_file_path: The path to the AnnData file.
         output_file_path: Output AnnData file name.
         fill_na: Boolean flag indicating whether to fill missing values in the 'obs' field with pd.NA. If True, missing
                  values will be replaced with pd.NA; if False, they will remain as empty strings.
     """
-    if not anndata_file_path:
+    if input_json and not anndata_file_path:
         anndata_file_path = fetch_anndata(input_json)
     anndata_file_path = copy_and_update_file_path(anndata_file_path, output_file_path)
-
-    annotations = input_json[ANNOTATIONS]
-    parent_cell_ids = collect_parent_cell_ids(input_json)
 
     with read_h5ad(file_path=anndata_file_path, edit=True) as cap_adata:
         cap_adata.read_obs()
         obs = cap_adata.obs
         obs_index = np.array(cap_adata.obs.axes[0].tolist())
+
+        cap_adata.read_uns()
+        if not input_json:
+            input_json = json.loads(cap_adata.uns["cas"])
+            input_json = update_cas_with_cell_ids(input_json, obs)
+
+        annotations = input_json[ANNOTATIONS]
+        parent_cell_ids = collect_parent_cell_ids(input_json)
 
         # obs
         flatten_data = process_annotations(
@@ -109,7 +115,6 @@ def flatten_cas_object(
 
         # uns
         uns_json = generate_uns_json(input_json)
-        cap_adata.read_uns()
         uns = cap_adata.uns
         update_uns(uns, uns_json)
 
@@ -137,6 +142,7 @@ def process_annotations(annotations, obs_index, parent_cell_ids, fill_na):
             cell_ids = parent_cell_ids.get(ann.get("cell_set_accession", []))
 
         author_annotations = ann.get(AUTHOR_ANNOTATION_FIELDS, {})
+        # TODO Do we still need/want this?
         author_annotations.update(
             {
                 CELLHASH: ann.get("cell_set_accession")
@@ -226,6 +232,9 @@ def generate_uns_json(input_json):
             }
 
             uns_json[CELLHASH] = cellhash_dict
+
+    # store CAS in the header
+    uns_json["cas"] = reformat_json(input_json)
 
     return uns_json
 

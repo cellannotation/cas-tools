@@ -1,7 +1,9 @@
 import json
-from typing import Optional
+from typing import Optional, List, Union
 
 import anndata
+from cap_anndata import CapAnnDataDF
+from pandas import DataFrame
 
 from cas.file_utils import read_anndata_file, read_json_file
 
@@ -16,9 +18,10 @@ def populate_cell_ids(cas_json_path: str, anndata_path: str, labelsets: list = N
         labelsets: List of labelsets to update with IDs from AnnData. If value is null, rank '0' labelset is used.
     """
     ad = read_anndata_file(anndata_path)
+    ad_obs = ad.obs
     if ad is not None:
         cas = read_json_file(cas_json_path)
-        cas = add_cell_ids(cas, ad, labelsets)
+        cas = add_cell_ids(cas, ad_obs, labelsets)
         if cas:
             with open(cas_json_path, "w") as json_file:
                 json.dump(cas, json_file, indent=2)
@@ -26,7 +29,27 @@ def populate_cell_ids(cas_json_path: str, anndata_path: str, labelsets: list = N
         raise Exception("Anndata read operation failed: {}".format(anndata_path))
 
 
-def add_cell_ids(cas: dict, ad: Optional[anndata.AnnData], labelsets: list = None):
+def update_cas_with_cell_ids(cas_json: dict, anndata_obs: CapAnnDataDF, labelsets: list = None) -> dict:
+    """
+    Update a CAS dictionary by adding or modifying CellIDs using matching AnnData observations.
+
+    This function takes a CAS dictionary and an AnnData `obs` DataFrame and updates the CAS
+    with cell IDs extracted from the specified labelsets in the AnnData.
+
+    Parameters:
+        cas_json (dict): The CAS dictionary to update with cell IDs from AnnData.
+        anndata_obs (CapAnnDataDF): The `obs` DataFrame extracted from an AnnData object.
+        labelsets (list, optional): A list of labelsets to update with IDs from AnnData.
+            If None, the labelset with rank '0' is used.
+
+    Returns:
+        dict: The updated CAS dictionary with CellIDs populated.
+    """
+    cas = add_cell_ids(cas_json, anndata_obs, labelsets)
+    return cas
+
+
+def add_cell_ids(cas: dict, ad: Union[DataFrame, CapAnnDataDF], labelsets: list = None):
     """
     Add/update CellIDs to CAS from matching AnnData file.
 
@@ -44,10 +67,11 @@ def add_cell_ids(cas: dict, ad: Optional[anndata.AnnData], labelsets: list = Non
         or lbl_set.get("rank") == "0"
     ][0]
     if not labelsets:
-        labelsets = rank_zero_labelset
+        labelsets = [rank_zero_labelset]
 
+    obs_keys = ad.columns.tolist()
     cluster_identifier_column = get_obs_cluster_identifier_column(
-        ad, labelsets, rank_zero_labelset
+        obs_keys, labelsets, rank_zero_labelset
     )
 
     if cluster_identifier_column:
@@ -70,8 +94,8 @@ def add_cell_ids(cas: dict, ad: Optional[anndata.AnnData], labelsets: list = Non
                             )
                         )
                     cell_ids = list(
-                        ad.obs.loc[
-                            ad.obs[cluster_identifier_column] == int(cluster_id),
+                        ad.loc[
+                            ad[cluster_identifier_column] == int(cluster_id),
                             cluster_identifier_column,
                         ].index
                     )
@@ -79,8 +103,8 @@ def add_cell_ids(cas: dict, ad: Optional[anndata.AnnData], labelsets: list = Non
                     # cluster column value is cell label
                     cluster_label = anno["cell_label"]
                     cell_ids = list(
-                        ad.obs.loc[
-                            ad.obs[cluster_identifier_column] == cluster_label
+                        ad.loc[
+                            ad[cluster_identifier_column] == cluster_label
                         ].index
                     )
                 anno["cell_ids"] = cell_ids
@@ -106,19 +130,19 @@ def add_cell_ids(cas: dict, ad: Optional[anndata.AnnData], labelsets: list = Non
 
 
 def get_obs_cluster_identifier_column(
-    ad, labelsets: list = None, rank_zero_labelset: str = None
+    obs_keys: List[str], labelsets: list = None, rank_zero_labelset: str = None
 ):
     """
     Anndata files may use different column names to uniquely identify Clusters. Get the cluster identifier column name for the current file.
     Args:
-        ad: anndata object
+        obs_keys: Anndata observation keys.
         labelsets: List of labelsets to update with IDs from AnnData. The labelsets should be provided in order,
         starting from rank 0 (leaf nodes) and ascending to higher ranks.
         rank_zero_labelset: rank 0 labelset name
     Returns:
         cluster identifier column name
     """
-    obs_keys = ad.obs_keys()
+    # obs_keys = ad.obs_keys()
     cluster_identifier_column = ""
     if labelsets and labelsets[0] in obs_keys:
         cluster_identifier_column = labelsets[0]

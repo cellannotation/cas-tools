@@ -6,7 +6,7 @@ import anndata as ad
 import numpy as np
 import pandas as pd
 
-from cas.flatten_data_to_anndata import flatten, unflatten
+from cas.flatten_data_to_anndata import export2cap, unflatten
 
 # File paths
 anndata_file_path = "src/test/test_data/cas_cap_roundtrip/test_data.h5ad"
@@ -24,7 +24,7 @@ cas_output_file_path = "src/test/test_data/cas_cap_roundtrip/cas.json"
 class TestRoundtrip(unittest.TestCase):
     def test_roundtrip_without_edit(self):
         # Perform flattening and unflattening
-        flatten(cas_file_path, anndata_file_path, flattened_anndata_file_path, False)
+        export2cap(cas_file_path, anndata_file_path, flattened_anndata_file_path, False)
         unflatten(
             json_file_path=None,
             anndata_file_path=flattened_anndata_file_path,
@@ -45,7 +45,7 @@ class TestRoundtrip(unittest.TestCase):
 
     def test_roundtrip_with_edit(self):
         # Perform flattening, update on flattened data and unflattening
-        flatten(cas_file_path, anndata_file_path, flattened_anndata_file_path, False)
+        export2cap(cas_file_path, anndata_file_path, flattened_anndata_file_path, False)
         # Read the flattened Anndata object
         flattened_anndata = ad.read_h5ad(flattened_anndata_file_path, backed="r+")
         # rename a labelset cell label

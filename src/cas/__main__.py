@@ -10,7 +10,7 @@ from cas.anndata_splitter import split_anndata_to_file
 from cas.anndata_to_cas import anndata2cas
 from cas.cas_splitter import split_cas_to_file
 from cas.cas_to_rdf import export_to_rdf
-from cas.flatten_data_to_anndata import flatten, unflatten
+from cas.flatten_data_to_anndata import export2cap, unflatten
 from cas.populate_cell_ids import populate_cell_ids
 from cas.spreadsheet_to_cas import spreadsheet2cas
 from cas.validate import validate as schema_validate
@@ -50,7 +50,7 @@ def main():
             raise ValueError("--anndata and --output cannot be the same")
 
         merge(json_file_path, anndata_file_path, validate, output_file_path)
-    elif args.action == "flatten":
+    elif args.action == "export2CAP":
         args = parser.parse_args()
         json_file_path = args.json
         anndata_file_path = args.anndata
@@ -61,7 +61,7 @@ def main():
             output_file_path
         ):
             raise ValueError("--anndata and --output cannot be the same")
-        flatten(json_file_path, anndata_file_path, output_file_path, fill_na)
+        export2cap(json_file_path, anndata_file_path, output_file_path, fill_na)
     elif args.action == "unflatten":
         args = parser.parse_args()
         json_file_path = args.json
@@ -229,15 +229,15 @@ def create_flatten_operation_parser(subparsers):
     Usage Example:
     --------------
     cd src
-    python -m cas flatten --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --output path/to/output_file.h5ad
+    python -m cas export2CAP --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --output path/to/output_file.h5ad
     """
     parser_flatten = subparsers.add_parser(
-        "flatten",
+        "export2CAP",
         description="Flattens all content of CAS annotations to an AnnData file.",
         help="Flattens all content of CAS annotations to obs key:value pairs.",
     )
 
-    parser_flatten.add_argument("--json", required=True, help="Input JSON file path")
+    parser_flatten.add_argument("--json", required=False, help="Input JSON file path")
     parser_flatten.add_argument("--anndata", help="Input AnnData file path")
     parser_flatten.add_argument(
         "--output",
