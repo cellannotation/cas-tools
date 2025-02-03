@@ -228,7 +228,7 @@ class SpreadsheetToCasTests(unittest.TestCase):
 
             self.assertEqual(len(json_data), 9)
             self.assertEqual(len(json_data["annotations"]), 8)
-            self.assertEqual(len(json_data["annotations"][0]), 9)
+            self.assertEqual(len(json_data["annotations"][0]), 7)
             self.assertEqual(len(json_data["labelsets"]), 2)
         finally:
             # Remove the JSON file after the test
