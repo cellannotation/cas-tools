@@ -327,7 +327,7 @@ def add_parent_hierarchy_to_annotations(
                 }
             )
             # Remove redundant CL annotations
-            parent_dict = parent_cell_look_up.get(parent, {})
+            parent_dict = parent_cell_look_up.get(f"{p_accession.split(':')[0]}:{parent}", {})
             if parent_dict.get("cell_ontology_term_id") == annotation.get(
                 "cell_ontology_term_id"
             ) and parent_dict.get("cell_ontology_term") == annotation.get(
