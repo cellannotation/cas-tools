@@ -35,6 +35,9 @@ from cas.utils.conversion_utils import (
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.WARNING)
 
+# Suppress warning messages from cap_anndata.cap_anndata
+logging.getLogger("cap_anndata.cap_anndata").setLevel(logging.ERROR)
+
 
 def is_list_of_strings(var):
     """
