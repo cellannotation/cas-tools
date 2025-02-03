@@ -1,4 +1,5 @@
 import os
+import re
 from importlib.metadata import version
 from pathlib import Path
 from typing import get_type_hints
@@ -6,6 +7,7 @@ from typing import get_type_hints
 from cas.file_utils import read_config, read_table_to_dict, write_json_file
 from cas.flatten_data_to_tables import serialize_to_tables
 from cas.ingest.config_validator import validate
+from cas.accession.incremental_accession_manager import IncrementalAccessionManager
 from cas.model import (
     Annotation,
     AnnotationTransfer,
@@ -23,6 +25,7 @@ def ingest_data(
     out_file: str,
     format: str = "json",
     print_undefined: bool = False,
+    generate_accession_ids: bool = False
 ) -> dict:
     """
     Ingests given data into standard cell annotation schema data structure using the given configuration.
@@ -33,9 +36,10 @@ def ingest_data(
     :param format: Data export format. Supported formats are 'json' and 'tsv'
     :param print_undefined: prints null values to the output json if true. Omits undefined values from the json output if
     false. False by default. Only effective in json serialization.
+    :param generate_accession_ids: determines if incrementally generate accession_ids for all annotations that don't have an id.
     :return: output data as dict
     """
-    cas = ingest_user_data(data_file, config_file)
+    cas = ingest_user_data(data_file, config_file, generate_accession_ids)
 
     if format == "json":
         write_json_file(cas, out_file, print_undefined)
@@ -50,11 +54,12 @@ def ingest_data(
     return cas.to_dict()
 
 
-def ingest_user_data(data_file: str, config_file: str):
+def ingest_user_data(data_file: str, config_file: str, generate_accession_ids: bool = False) -> CellTypeAnnotation:
     """
     Ingest given user data into standard cell annotation schema data structure using the given configuration.
     :param data_file: Unformatted user data in tsv/csv format.
     :param config_file: configuration file path.
+    :param generate_accession_ids: determines if incrementally generate accession_ids for all annotations that don't have an id.
     """
 
     config = read_config(config_file)
@@ -106,6 +111,50 @@ def ingest_user_data(data_file: str, config_file: str):
 
         ao_names[ao.labelset + NAME_SEPERATOR + ao.cell_label] = ao
         cas.add_annotation_object(ao)
+
+    if generate_accession_ids:
+        cas = generate_ids_for_annotations(cas, config)
+    return cas
+
+
+def generate_ids_for_annotations(cas: CellTypeAnnotation, config: dict) -> CellTypeAnnotation:
+    """
+    Generates unique IDs for the annotations in the given CellTypeAnnotation object.
+    :param cas: CellTypeAnnotation object
+    :param config: ingestion configuration dictionary
+    :return: CellTypeAnnotation object with generated IDs.
+    """
+    max_accession = None
+    example_accession = None
+    max_value = -1
+
+    for annotation in cas.annotations:
+        accession = annotation.cell_set_accession
+        if accession:
+            example_accession = accession
+            parts = re.split(r'[_:]', accession)
+            last_part = parts[-1]
+            if last_part.isdigit():
+                value = int(last_part)
+                if value > max_value:
+                    max_value = value
+                    max_accession = accession
+
+    prefix = ""
+    if "_" in example_accession:
+        prefix = config.get("taxonomy_id", "")
+    accession_manager = IncrementalAccessionManager(prefix, max_value)
+
+    label_to_accession = dict()
+    for annotation in cas.annotations:
+        if not annotation.cell_set_accession:
+            annotation.cell_set_accession = accession_manager.generate_accession_id()
+        label_to_accession[annotation.cell_label] = annotation.cell_set_accession
+
+    for annotation in cas.annotations:
+        if annotation.parent_cell_set_name:
+            annotation.parent_cell_set_accession = label_to_accession.get(annotation.parent_cell_set_name, None)
+
     return cas
 
 
@@ -206,7 +255,7 @@ def populate_labelsets(cas, config_fields):
         if field["column_type"] == "cell_set" or field["column_type"] == "cluster_name":
             label_set = Labelset(field["column_name"])
             if "rank" in field:
-                label_set.rank = str(field["rank"])
+                label_set.rank = int(field["rank"])
                 ranks[field["column_name"]] = int(field["rank"])
             labelsets.append(label_set)
     if labelsets:

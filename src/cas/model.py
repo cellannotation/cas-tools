@@ -267,3 +267,33 @@ class CellTypeAnnotation(EncoderMixin):
         return get_all_annotations(
             asdict(self), show_cell_ids=show_cell_ids, labels=labels
         )
+
+    def as_dictionary(self):
+        dictionary = asdict(self)
+        dictionary = self.remove_none_values(dictionary)
+        # for labelset in dictionary["labelsets"]:
+        #     if "rank" in labelset:
+        #         labelset["rank"] = int(labelset["rank"])
+        for annotation in dictionary["annotations"]:
+            if "parent_cell_set_name" in annotation:
+                del annotation["parent_cell_set_name"]
+            if "reviews" in annotation:
+                for review in annotation["reviews"]:
+                    if "datestamp" in review:
+                        review["datestamp"] = review["datestamp"].strftime(
+                            "%Y-%m-%dT%H:%M:%S.%f"
+                        )[:-3] + "Z"
+        return dictionary
+
+    def remove_none_values(self, d):
+        """
+        Recursively removes all key-value pairs from the dictionary where the value is None.
+        :param d: The dictionary to clean.
+        :return: A new dictionary with None values removed.
+        """
+        if isinstance(d, dict):
+            return {k: self.remove_none_values(v) for k, v in d.items() if v is not None}
+        elif isinstance(d, list):
+            return [self.remove_none_values(i) for i in d if i is not None]
+        else:
+            return d

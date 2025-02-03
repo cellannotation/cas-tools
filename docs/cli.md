@@ -14,32 +14,38 @@ cas validate --schema bican --data path/to/file
 - `--schema`    : One of 'base', 'bican' or 'cap'. Identifies the CAS schema to validate data against.
 - `--data`   : Path to the data file (or folder) to validate. If given path is a folder, validates all json files inside.
 
-## Flatten onto AnnData
+Here's your updated **Markdown documentation** to align with the **`export2cap`** naming convention:
 
-Flattens all content of CAS annotations to `obs` key:value pairs. Flattens all other content to key_value pairs in `uns`. The resulting AnnData object is then saved to a new file.
+---
 
-Key Features:
+## **Export CAS to CAP format in AnnData**
+
+`export2cap` converts CAS annotations into `obs` key-value pairs and stores other CAS content as key-value pairs in `uns`. The resulting AnnData object is then saved to a new file.
+
+### **Key Features:**
 1. Parses command-line arguments for input JSON file, input AnnData file, and output file.
 2. Reads and processes the input JSON file and AnnData file.
-3. Updates the AnnData object with information from the JSON annotations and root keys.
+3. Updates the AnnData object with information from the CAS JSON annotations and root keys.
 4. Writes the modified AnnData object to a specified output file.
 
-Detailed specification about the `flatten` operation can be found in the [related issue](https://github.com/cellannotation/cas-tools/issues/7).
+A detailed specification about the `export2cap` operation can be found in the [related issue](https://github.com/cellannotation/cas-tools/issues/7).
 
 ```commandline
-cas flatten --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --output path/to/output_file.h5ad
+cas export2cap --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --output path/to/output_file.h5ad
 ```
 
-**Command-line Arguments:**
+### **Command-line Arguments:**
 - `--json`      : Path to the CAS JSON schema file.
-- `--anndata`   : Path to the AnnData file. If not provided, AnnData will be downloaded using matrix file id from CAS JSON.
-- `--output`    : Optional output AnnData file name. If provided a new flatten anndata file will be created,
-    otherwise the inputted anndata file will be updated with the flatten data.
-- `--fill-na`   : Optional boolean flag indicating whether to fill missing values in the 'obs' field with pd.NA. If 
-                    provided, missing values will be replaced with pd.NA; if not provided, they will remain as empty 
-  strings.
+- `--anndata`   : Path to the AnnData file. If not provided, AnnData will be downloaded using the matrix file ID from CAS JSON.
+- `--output`    : Optional output AnnData file name. If provided, a new AnnData file with CAS exported to CAP format will be created.
+    Otherwise, the input AnnData file will be updated in place.
+- `--fill-na`   : Optional boolean flag indicating whether to fill missing values in the `obs` field with `pd.NA`. 
+  - If provided, missing values will be replaced with `pd.NA`.
+  - If not provided, missing values will remain as empty strings.
 
-Please check the [related notebook](../notebooks/test_flatten.ipynb) to evaluate the output data format.
+Please check the [related notebook](../notebooks/test_export2cap.ipynb) to evaluate the output data format.
+
+---
 
 ## Unflatten Operation
 
