@@ -77,13 +77,13 @@ def update_cas_with_cell_ids(
     return cas
 
 
-def add_cell_ids(cas: dict, ad: Union[DataFrame, CapAnnDataDF], labelsets: list = None):
+def add_cell_ids(cas: dict, ad_obs: Union[DataFrame, CapAnnDataDF], labelsets: list = None):
     """
     Add/update CellIDs to CAS from matching AnnData file.
 
     Parameters:
         cas: CAS JSON object
-        ad: anndata object
+        ad_obs: Obs DataFrame extracted from an AnnData object.
         labelsets: List of labelsets to update with IDs from AnnData. If value is null, rank '0' labelset is used. The
         labelsets should be provided in order, starting from rank 0 (leaf nodes) and ascending to higher ranks.
     """
@@ -99,7 +99,7 @@ def add_cell_ids(cas: dict, ad: Union[DataFrame, CapAnnDataDF], labelsets: list 
     if not labelsets:
         labelsets = [rank_zero_labelset]
 
-    obs_keys = ad.columns.tolist()
+    obs_keys = ad_obs.columns.tolist()
     cluster_identifier_column = get_obs_cluster_identifier_column(
         obs_keys, labelsets, rank_zero_labelset
     )
@@ -124,8 +124,8 @@ def add_cell_ids(cas: dict, ad: Union[DataFrame, CapAnnDataDF], labelsets: list 
                             )
                         )
                     cell_ids = list(
-                        ad.loc[
-                            ad[cluster_identifier_column] == int(cluster_id),
+                        ad_obs.loc[
+                            ad_obs[cluster_identifier_column] == int(cluster_id),
                             cluster_identifier_column,
                         ].index
                     )
@@ -133,7 +133,7 @@ def add_cell_ids(cas: dict, ad: Union[DataFrame, CapAnnDataDF], labelsets: list 
                     # cluster column value is cell label
                     cluster_label = anno["cell_label"]
                     cell_ids = list(
-                        ad.loc[ad[cluster_identifier_column] == cluster_label].index
+                        ad_obs.loc[ad_obs[cluster_identifier_column] == cluster_label].index
                     )
                 anno["cell_ids"] = cell_ids
                 if "parent_cell_set_name" in anno:
