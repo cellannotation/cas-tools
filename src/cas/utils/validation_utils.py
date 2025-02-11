@@ -193,6 +193,8 @@ def validate_labelset_values(
 
             if missing_members:
                 missing_values[labelset_name] = missing_members
+        else:
+            missing_values[labelset_name] = members
 
     # Log warnings for missing values
     if missing_values:
