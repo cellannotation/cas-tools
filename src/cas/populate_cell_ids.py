@@ -92,9 +92,7 @@ def add_cell_ids(cas: dict, ad_obs: Union[DataFrame, CapAnnDataDF], labelsets: l
     rank_zero_labelset = [
         lbl_set["name"]
         for lbl_set in cas["labelsets"]
-        if isinstance(cas["labelsets"][0].get("rank"), int)
-        and lbl_set.get("rank") == 0
-        or lbl_set.get("rank") == "0"
+        if lbl_set.get("rank") in (0, "0")
     ][0]
     if not labelsets:
         labelsets = [rank_zero_labelset]
