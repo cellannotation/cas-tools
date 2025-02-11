@@ -168,18 +168,33 @@ cas merge --json path/to/CAS_schema.json --anndata path/to/input_anndata.h5ad --
 
 Please check the [related notebook](../notebooks/test_merge.ipynb) to evaluate the output data format.
 
+Here’s the **raw Markdown** version without emojis and keeping the original format:
+
 ## Populate Cell IDs
 
 Add/update CellIDs to CAS from matching AnnData file. Checks for alignment between `obs` key:value pairs in AnnData file and labelset:cell_label pairs in CAS for some specified list of `labelsets`. If they are aligned, updates `cell_ids` in CAS.
 
 ```commandline
-cas populate_cells --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --labelsets Cluster,Supercluster
+cas populate_cells --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --labelsets Cluster,Supercluster --validate
 ```
 
 **Command-line Arguments:**
-- `--json`      : Path to the CAS JSON schema file.
-- `--anndata`   : Path to the AnnData file. Ideally, the location will be specified by a resolvable path in the CAS file.
-- `--labelsets` : (Optional) List of labelsets to update with IDs from AnnData. If value is not provided, rank '0' labelset is used.
+- `--json`      : (Required) Path to the CAS JSON schema file.
+- `--anndata`   : (Required) Path to the AnnData file. Ideally, the location will be specified by a resolvable path in the CAS file.
+- `--labelsets` : (Optional) A comma-separated list of labelsets to update with IDs from AnnData. If not provided, the rank '0' labelset is used. The labelsets should be provided in hierarchical order, starting from rank 0 (leaf nodes) and ascending to higher ranks.
+- `--validate`  : (Optional) If set, strict validation is enforced. If validation fails, the program exits immediately with an error code (`sys.exit(1)`). Otherwise, it logs warnings but continues execution.
+
+**Usage Examples:**
+
+Run without validation (default mode):
+```commandline
+cas populate_cells --json cas.json --anndata data.h5ad --labelsets Cluster,Supercluster
+```
+
+Run with strict validation (`--validate`):
+```commandline
+cas populate_cells --json cas.json --anndata data.h5ad --labelsets Cluster,Supercluster --validate
+```
 
 ## Convert CAS data to RDF
 

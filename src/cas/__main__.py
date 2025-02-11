@@ -128,7 +128,8 @@ def main():
         labelsets = None
         if "labelsets" in args and args.labelsets:
             labelsets = [item.strip() for item in str(args.labelsets).split(",")]
-        populate_cell_ids(json_file_path, anndata_file_path, labelsets)
+        validate = getattr(args, "validate", False)
+        populate_cell_ids(json_file_path, anndata_file_path, labelsets, validate)
     elif args.action == "validate":
         args = parser.parse_args()
         schema = args.schema
@@ -488,17 +489,39 @@ def create_cas2abc_operation_parser(subparsers):
 
 def create_populate_cells_operation_parser(subparsers):
     """
+    Creates a command-line argument parser for the `populate_cells` operation.
+
+    This command populates CellIDs in a CAS JSON file using data from an AnnData file. It ensures
+    alignment between labelset values in AnnData's `obs` DataFrame and CAS-defined labelsets before
+    updating cell IDs. If the `--validate` flag is enabled, validation errors will cause the
+    program to exit.
+
     Command-line Arguments:
     -----------------------
-    --json      : Path to the CAS JSON schema file.
-    --anndata   : Path to the AnnData file. Ideally, the location will be specified by a resolvable path in the CAS file.
-    --labelsets : List of labelsets to update with IDs from AnnData. If value is not provided, rank '0' labelset is used.
-    The labelsets should be provided in order, starting from rank 0 (leaf nodes) and ascending to higher ranks.
+    --json      (required) : Path to the CAS JSON schema file.
+    --anndata   (required) : Path to the AnnData file. Ideally, this should be specified by a
+                             resolvable path in the CAS file.
+    --labelsets (optional) : A comma-separated list of labelsets to update with IDs from AnnData.
+                             If not provided, the labelset with rank '0' is used by default.
+                             The labelsets should be provided in hierarchical order, starting from
+                             rank 0 (leaf nodes) and ascending to higher ranks.
+    --validate  (optional) : If set, the program exits with an error if validation fails.
+                             Otherwise, it logs warnings and continues execution.
 
     Usage Example:
     --------------
     cd src
-    python -m cas populate_cells --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --labelsets Cluster,Supercluster
+    python -m cas populate_cells --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --labelsets Cluster,Supercluster --validate
+
+    This command:
+    - Reads the CAS JSON schema from `path/to/json_file.json`.
+    - Reads the AnnData file from `path/to/anndata_file.h5ad`.
+    - Aligns the labelsets **Cluster** and **Supercluster** with the AnnData data.
+    - Runs validation checks.
+    - If `--validate` is enabled, the process **stops on validation failure**.
+
+    Returns:
+        None
     """
     parser_populate = subparsers.add_parser(
         "populate_cells",
@@ -514,6 +537,11 @@ def create_populate_cells_operation_parser(subparsers):
         "--labelsets",
         help="List of labelsets to update with IDs from AnnData",
         default="",
+    )
+    parser_populate.add_argument(
+        "--validate",
+        action="store_true",
+        help="Enable strict validation. If validation fails, the process will exit with an error.",
     )
 
 
