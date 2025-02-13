@@ -233,47 +233,5 @@ class TestMarkerValidation(unittest.TestCase):
             "Y": None,
         }
 
-        hierarchy, warnings = infer_obs_cell_hierarchy(obs, cas_ranks)
+        hierarchy = infer_obs_cell_hierarchy(obs, cas_ranks)
         self.assertEqual(hierarchy, expected_hierarchy)
-        self.assertEqual(warnings, [])  # No duplicate labelsets
-
-        # Identical row memberships (Should trigger warnings)
-        obs_with_identical_labelsets = pd.DataFrame(
-            {
-                "set1": [
-                    "A1",
-                    "A2",
-                    "A3",
-                    "B1",
-                    "B2",
-                    "B3",
-                    "C1",
-                    "C2",
-                ],  # Lowest level (children)
-                "set2": [
-                    "A",
-                    "A",
-                    "A",
-                    "B",
-                    "B",
-                    "B",
-                    "C",
-                    "C",
-                ],  # Middle level (parents)
-                "set3": [
-                    "X",
-                    "X",
-                    "X",
-                    "Y",
-                    "Y",
-                    "Y",
-                    "Y",
-                    "Y",
-                ],  # Top level (grandparents)
-            },
-            index=range(8),
-        )
-        hierarchy, warnings = infer_obs_cell_hierarchy(
-            obs_with_identical_labelsets, cas_ranks
-        )
-        self.assertIn(warnings, [["A and X are identical labelsets"]])

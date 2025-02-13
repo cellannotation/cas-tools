@@ -224,13 +224,13 @@ def check_parent_child_consistency(
     # Extract ranks from CAS (store expected rank per cell label)
     cas_ranks = {entry["name"]: entry["rank"] for entry in cas[LABELSETS]}
 
-    obs_inferred_hierarchy, identical_labelset_warning = infer_obs_cell_hierarchy(
+    obs_inferred_hierarchy = infer_obs_cell_hierarchy(
         obs, cas_ranks
     )
     cas_inferred_hierarchy = infer_cas_cell_hierarchy(cas)
 
     # Compare inferred hierarchy with CAS ranks
-    mismatches = identical_labelset_warning
+    mismatches = []
 
     for child, parent in obs_inferred_hierarchy.items():
         if child in cas_inferred_hierarchy and parent != cas_inferred_hierarchy[child]:
@@ -251,7 +251,7 @@ def check_parent_child_consistency(
 
 def infer_obs_cell_hierarchy(
     obs: Union[pd.DataFrame, CapAnnDataDF], cas_ranks: Dict[str, int]
-) -> Tuple[Dict[str, Optional[str]], list[str]]:
+) -> Dict[str, Optional[str]]:
     """
     Infers a direct parent-child hierarchy between cell labels based on row co-occurrence.
 
@@ -266,11 +266,8 @@ def infer_obs_cell_hierarchy(
                                     where lower values indicate higher ranks.
 
     Returns:
-        Tuple:
-            - Dict[Any, Optional[Any]]: A dictionary mapping each cell label to its inferred direct parent.
-                                        Labels without a parent are assigned `None`.
-            - list[str]: A list of warnings for labels that have identical row memberships, indicating
-                         potential duplicate labelsets.
+        Dict[Any, Optional[Any]]: A dictionary mapping each cell label to its inferred direct parent.
+            Labels without a parent are assigned `None`.
     """
     labelset_list = [k for k, v in cas_ranks.items()]
 
@@ -284,7 +281,6 @@ def infer_obs_cell_hierarchy(
     }
 
     child_parent_map = {}
-    identical_labelset_warning = []
 
     # Infer direct parent-child relationships based on row containment
     for labelset_child in labelset_list:
@@ -295,20 +291,16 @@ def infer_obs_cell_hierarchy(
                 for parent_label, parent_rows in cell_label_row_indices[
                     labelset_parent
                 ].items():
-                    if child_label == parent_label:  # Prevent self-matching
+                    if child_label == parent_label:
                         continue
                     if child_rows.issubset(parent_rows) and cas_ranks.get(
                         labelset_parent
                     ) > cas_ranks.get(
                         labelset_child
-                    ):  # Parent fully contains child
+                    ):
                         possible_parents[parent_label] = cas_ranks.get(labelset_parent)
-                        if child_rows == parent_rows:
-                            identical_labelset_warning.append(
-                                f"{child_label} and {parent_label} are identical labelsets"
-                            )
 
-            # Select the closest parent (highest-ranked parent)
+            # Select the closest parent (lowest-ranked parent)
             if possible_parents:
                 direct_parent = min(possible_parents, key=lambda k: possible_parents[k])
                 child_parent_map[child_label] = direct_parent
@@ -324,7 +316,7 @@ def infer_obs_cell_hierarchy(
     for root in roots:
         child_parent_map[root] = None  # Root labels have no parent
 
-    return child_parent_map, identical_labelset_warning
+    return child_parent_map
 
 
 def infer_cas_cell_hierarchy(cas: Dict[str, Any]) -> Dict[str, Optional[str]]:
