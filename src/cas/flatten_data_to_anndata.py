@@ -55,24 +55,30 @@ def is_list_of_strings(var):
 
 
 def export2cap(
-    cas_file_path: str,
+    cas_file_path: Optional[str],
     anndata_file_path: Optional[str],
     output_file_path: str,
     fill_na: bool,
 ):
     """
-     Processes and integrates information from a JSON file and an AnnData (Annotated Data) file, creating a new AnnData
-     object that incorporates the metadata. The resulting AnnData object is then saved to a new file.
+    Processes and integrates information from a CAS JSON file and an AnnData file, creating a new AnnData
+    object that incorporates metadata. The resulting AnnData object is then saved to a new file.
+
+    Note:
+        At least one of `cas_file_path` or `anndata_file_path` must be provided. If `cas_file_path` is not supplied,
+        the CAS JSON will be loaded from the AnnData file's 'uns' section. Conversely, if `anndata_file_path` is not
+        provided, the AnnData file will be downloaded using the matrix file id from the CAS JSON.
 
     Args:
-        cas_file_path: The path to the CAS json file.
-        anndata_file_path: The path to the AnnData file.
+        cas_file_path: Optional path to the CAS JSON file. If not provided, the CAS JSON will be extracted from
+                       the AnnData file's 'uns' section.
+        anndata_file_path: Optional path to the AnnData file. If not provided, the AnnData file will be downloaded
+                           using the matrix file id from the CAS JSON.
         output_file_path: Output AnnData file name.
-        fill_na: Boolean flag indicating whether to fill missing values in the 'obs' field with pd.NA. If True, missing
-                 values will be replaced with pd.NA; if False, they will remain as empty strings.
+        fill_na: Boolean flag indicating whether to fill missing values in the 'obs' field with pd.NA. If True,
+                 missing values will be replaced with pd.NA; if False, they will remain as empty strings.
     """
     input_json = read_json_file(cas_file_path) if cas_file_path else None
-
     export_cas_object2cap(input_json, anndata_file_path, output_file_path, fill_na)
 
 
@@ -83,15 +89,23 @@ def export_cas_object2cap(
     fill_na: bool,
 ):
     """
-     Processes and integrates information from a JSON file and an AnnData (Annotated Data) file, creating a new AnnData
-     object that incorporates the metadata. The resulting AnnData object is then saved to a new file.
+    Processes and integrates information from a CAS JSON and an AnnData (Annotated Data) file, creating a new AnnData
+    object that incorporates metadata. If a CAS JSON object is not provided via the input parameter, it is extracted
+    from the AnnData file's 'uns' section. Conversely, if the AnnData file is not provided, it will be downloaded using
+    the matrix file id from the CAS JSON.
+
+    Note:
+        At least one of `input_json` or `anndata_file_path` must be provided. If neither is provided, the operation cannot
+        proceed.
 
     Args:
-        input_json: CAS json object.
-        anndata_file_path: The path to the AnnData file.
+        input_json: Optional CAS JSON object. If not provided, the CAS JSON will be extracted from the AnnData file's
+                    'uns' section.
+        anndata_file_path: Optional path to the AnnData file. If not provided, the AnnData file will be downloaded using
+                           the matrix file id from the CAS JSON.
         output_file_path: Output AnnData file name.
-        fill_na: Boolean flag indicating whether to fill missing values in the 'obs' field with pd.NA. If True, missing
-                 values will be replaced with pd.NA; if False, they will remain as empty strings.
+        fill_na: Boolean flag indicating whether to fill missing values in the 'obs' field with pd.NA. If True,
+                 missing values will be replaced with pd.NA; if False, they will remain as empty strings.
     """
     if input_json and not anndata_file_path:
         anndata_file_path = fetch_anndata(input_json)
@@ -104,19 +118,25 @@ def export_cas_object2cap(
 
         cap_adata.read_uns()
         if not input_json:
-            input_json = json.loads(cap_adata.uns["cas"])
-            input_json = update_cas_with_cell_ids(input_json, obs)
+            if "cas" in cap_adata.uns:
+                input_json = json.loads(cap_adata.uns["cas"])
+                input_json = update_cas_with_cell_ids(input_json, obs)
+            else:
+                raise ValueError(
+                    "CAS JSON is not provided and could not be found in the AnnData file's uns['cas'] field. "
+                    "Please provide a valid CAS JSON file via --json or use an AnnData file with embedded CAS JSON in its 'uns' section."
+                )
 
         annotations = input_json[ANNOTATIONS]
         parent_cell_ids = collect_parent_cell_ids(input_json)
 
-        # obs
+        # Process obs
         flatten_data = process_annotations(
             annotations, obs_index, parent_cell_ids, fill_na
         )
         update_obs(obs, flatten_data)
 
-        # uns
+        # Process uns
         uns_json = generate_uns_json(input_json)
         uns = cap_adata.uns
         update_uns(uns, uns_json)

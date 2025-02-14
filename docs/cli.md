@@ -18,15 +18,17 @@ Here's your updated **Markdown documentation** to align with the **`export2cap`*
 
 ---
 
-## **Export CAS to CAP format in AnnData**
+## **Export CAS to CAP Format in AnnData**
 
 `export2cap` converts CAS annotations into `obs` key-value pairs and stores other CAS content as key-value pairs in `uns`. The resulting AnnData object is then saved to a new file.
 
 ### **Key Features:**
-1. Parses command-line arguments for input JSON file, input AnnData file, and output file.
-2. Reads and processes the input JSON file and AnnData file.
-3. Updates the AnnData object with information from the CAS JSON annotations and root keys.
-4. Writes the modified AnnData object to a specified output file.
+1. Parses command-line arguments for an optional input JSON file and/or an AnnData file.
+2. **Requires at least one of the following to be supplied:** a CAS JSON file (`--json`) or an AnnData file (`--anndata`).
+3. If the CAS JSON file is not provided via `--json`, the tool expects to find the CAS JSON embedded in the AnnData file’s `uns` section.
+4. If the AnnData file is not provided via `--anndata`, it will be downloaded using the matrix file ID from the CAS JSON.
+5. Updates the AnnData object with information from the CAS JSON annotations and root keys.
+6. Writes the modified AnnData object to a specified output file.
 
 A detailed specification about the `export2cap` operation can be found in the [related issue](https://github.com/cellannotation/cas-tools/issues/7).
 
@@ -35,13 +37,17 @@ cas export2cap --json path/to/json_file.json --anndata path/to/anndata_file.h5ad
 ```
 
 ### **Command-line Arguments:**
-- `--json`      : Path to the CAS JSON schema file.
-- `--anndata`   : Path to the AnnData file. If not provided, AnnData will be downloaded using the matrix file ID from CAS JSON.
-- `--output`    : Optional output AnnData file name. If provided, a new AnnData file with CAS exported to CAP format will be created.
-    Otherwise, the input AnnData file will be updated in place.
-- `--fill-na`   : Optional boolean flag indicating whether to fill missing values in the `obs` field with `pd.NA`. 
-  - If provided, missing values will be replaced with `pd.NA`.
+- `--json`      : **Optional** path to the CAS JSON schema file.  
+  - *If not provided*, the CAS JSON is expected to be embedded in the AnnData file’s `uns` section.
+- `--anndata`   : **Optional** path to the AnnData file.  
+  - *If not provided*, the AnnData file will be downloaded using the matrix file ID from the CAS JSON.
+- `--output`    : Optional output AnnData file name.  
+  - If provided, a new AnnData file with CAS exported to CAP format will be created; otherwise, the input AnnData file will be updated in place.
+- `--fill-na`   : Optional boolean flag indicating whether to fill missing values in the `obs` field with `pd.NA`.  
+  - If provided, missing values will be replaced with `pd.NA`.  
   - If not provided, missing values will remain as empty strings.
+
+**Note:** At least one of `--json` or `--anndata` must be supplied. Additionally, if the CAS JSON is not provided via `--json` and the AnnData file does not contain the CAS JSON in its `uns` section, the operation will fail with an error indicating that the CAS JSON is missing.
 
 Please check the [related notebook](../notebooks/test_export2cap.ipynb) to evaluate the output data format.
 

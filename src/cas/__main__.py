@@ -224,14 +224,19 @@ def create_merge_operation_parser(subparsers):
 
 def create_flatten_operation_parser(subparsers):
     """
-        Command-line Arguments:
+    Command-line Arguments:
     -----------------------
-    --json      : Path to the CAS JSON schema file.
-    --anndata   : Path to the AnnData file. If not provided, AnnData will be downloaded using matrix file id from CAS JSON.
-    --output    : Optional output AnnData file name. If provided a new flatten anndata file will be created,
-                    otherwise the inputted anndata file will be updated with the flatten data.
+    --json      : Optional path to the CAS JSON schema file. If not provided, the CAS JSON will be extracted from the
+                  AnnData file's 'uns' section.
+    --anndata   : Optional path to the AnnData file. If not provided, the AnnData file will be downloaded using the
+                  matrix file id from the CAS JSON.
+    --output    : Optional output AnnData file name. If provided, a new flattened AnnData file will be created;
+                  otherwise, the input AnnData file will be updated with the flattened data.
     --fill-na   : Optional boolean flag indicating whether to fill missing values in the 'obs' field with pd.NA. If
-                    provided, missing values will be replaced with pd.NA; if not provided, they will remain as empty strings.
+                  provided, missing values will be replaced with pd.NA; if not provided, they will remain as empty strings.
+
+    Note:
+        Either --json or --anndata must be supplied to execute the operation.
 
     Usage Example:
     --------------
@@ -244,8 +249,16 @@ def create_flatten_operation_parser(subparsers):
         help="Flattens all content of CAS annotations to obs key:value pairs.",
     )
 
-    parser_flatten.add_argument("--json", required=False, help="Input JSON file path")
-    parser_flatten.add_argument("--anndata", help="Input AnnData file path")
+    parser_flatten.add_argument(
+        "--json",
+        required=False,
+        help="Optional input JSON file path. If not provided, the CAS JSON will be extracted from the AnnData file's 'uns' section.",
+    )
+    parser_flatten.add_argument(
+        "--anndata",
+        required=False,
+        help="Optional input AnnData file path. If not provided, the AnnData file will be downloaded using the matrix file id from the CAS JSON.",
+    )
     parser_flatten.add_argument(
         "--output",
         required=False,
@@ -256,7 +269,7 @@ def create_flatten_operation_parser(subparsers):
         required=False,
         action="store_true",
         help="Boolean flag indicating whether to fill missing values in the 'obs' field with pd.NA. If provided, "
-        "missing values will be replaced with pd.NA; if not provided, they will remain as empty strings.",
+             "missing values will be replaced with pd.NA; if not provided, they will remain as empty strings.",
     )
 
 
