@@ -187,6 +187,12 @@ def create_merge_operation_parser(subparsers):
     --validate  : Perform validation checks before writing to the output AnnData file.
     --output    : Output AnnData file name (default: output.h5ad).
 
+    If `--validate` is used, the following checks will be performed:
+        1. Verifies that all cell barcodes (cell IDs) in CAS exist in AnnData and vice versa.
+        2. Identifies matching labelset names between CAS and AnnData.
+        3. Validates that cell sets associated with each annotation match between CAS and AnnData.
+        4. Checks if the cell labels are identical; if not, provides options to update or terminate.
+
     Usage Example:
     --------------
     cd src

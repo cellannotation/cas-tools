@@ -35,6 +35,12 @@ def merge(
     """
     Tests if CAS json and AnnData are compatible and merges CAS into AnnData if possible.
 
+    This function performs the following checks:
+        1. Verifies that all cell barcodes (cell IDs) in CAS exist in AnnData and vice versa.
+        2. Identifies matching labelset names between CAS and AnnData.
+        3. Validates that cell sets associated with each annotation match between CAS and AnnData.
+        4. Checks if the cell labels are identical; if not, provides options to update or terminate.
+
     Args:
         cas_file_path: The path to the CAS json file.
         anndata_path: The path to the AnnData file.
@@ -56,6 +62,12 @@ def merge_cas_object(
 ):
     """
     Tests if CAS json and AnnData are compatible and merges CAS into AnnData if possible.
+
+    This function performs the following checks:
+        1. Verifies that all cell barcodes (cell IDs) in CAS exist in AnnData and vice versa.
+        2. Identifies matching labelset names between CAS and AnnData.
+        3. Validates that cell sets associated with each annotation match between CAS and AnnData.
+        4. Checks if the cell labels are identical; if not, provides options to update or terminate.
 
     Args:
         input_json: The CAS json object.

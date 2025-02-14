@@ -154,7 +154,7 @@ path/to/cluster_annotation_term.csv
 
 ## Merge CAS to AnnData file
 
-Integrates cell annotations from a CAS (Cell Annotation Schema) JSON file into an AnnData object.  It performs validation checks to ensure data consistency between the CAS file and the AnnData file.  The AnnData file location should ideally be specified as a resolvable path in the CAS file.
+Integrates cell annotations from a CAS (Cell Annotation Schema) JSON file into an AnnData object. It performs validation checks to ensure data consistency between the CAS file and the AnnData file. The AnnData file location should ideally be specified as a resolvable path in the CAS file.
 
 ```commandline
 cas merge --json path/to/CAS_schema.json --anndata path/to/input_anndata.h5ad --validate --output path/to/output.h5ad
@@ -162,17 +162,19 @@ cas merge --json path/to/CAS_schema.json --anndata path/to/input_anndata.h5ad --
 
 **Command-line Arguments:**
 - `--json`      : Path to the CAS JSON schema file.
-- `--anndata`   : Path to the AnnData file. Path to the AnnData file. If not provided, AnnData will be downloaded using matrix file id from CAS JSON.
-- `--validate`  : (Optional) Perform validation checks before writing to the output AnnData file.
+- `--anndata`   : Path to the AnnData file. If not provided, AnnData will be downloaded using the matrix file ID from the CAS JSON.
+- `--validate`  : (Optional) If set, the following validation checks will be performed before writing to the output AnnData file:
+    1. Verifies that all cell barcodes (cell IDs) in CAS exist in AnnData and vice versa.
+    2. Identifies matching labelset names between CAS and AnnData.
+    3. Validates that cell sets associated with each annotation match between CAS and AnnData.
+    4. Checks if the cell labels are identical; if not, provides options to update or terminate.
 - `--output`    : Output AnnData file name (default: output.h5ad).
 
 Please check the [related notebook](../notebooks/test_merge.ipynb) to evaluate the output data format.
 
-Here’s the **raw Markdown** version without emojis and keeping the original format:
-
 ## Populate Cell IDs
 
-Add/update CellIDs to CAS from matching AnnData file. Checks for alignment between `obs` key:value pairs in AnnData file and labelset:cell_label pairs in CAS for some specified list of `labelsets`. If they are aligned, updates `cell_ids` in CAS.
+Add/update CellIDs to CAS from a matching AnnData file. Checks for alignment between `obs` key-value pairs in the AnnData file and labelset:cell_label pairs in CAS for a specified list of `labelsets`. If they are aligned, updates `cell_ids` in CAS.
 
 ```commandline
 cas populate_cells --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --labelsets Cluster,Supercluster --validate
