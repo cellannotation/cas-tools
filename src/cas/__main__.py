@@ -50,7 +50,7 @@ def main():
             raise ValueError("--anndata and --output cannot be the same")
 
         merge(json_file_path, anndata_file_path, validate, output_file_path)
-    elif args.action == "export2CAP":
+    elif args.action == "export2cap":
         args = parser.parse_args()
         json_file_path = args.json
         anndata_file_path = args.anndata
@@ -200,7 +200,7 @@ def create_merge_operation_parser(subparsers):
     """
     parser_merge = subparsers.add_parser(
         "merge",
-        description="The CAS and AnnData merge parser",
+        description="The CAS and AnnData merge operation",
         help="Test if CAS can be merged to the AnnData and merges if possible.",
     )
     parser_merge.add_argument(
@@ -236,10 +236,10 @@ def create_flatten_operation_parser(subparsers):
     Usage Example:
     --------------
     cd src
-    python -m cas export2CAP --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --output path/to/output_file.h5ad
+    python -m cas export2cap --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --output path/to/output_file.h5ad
     """
     parser_flatten = subparsers.add_parser(
-        "export2CAP",
+        "export2cap",
         description="Flattens all content of CAS annotations to an AnnData file.",
         help="Flattens all content of CAS annotations to obs key:value pairs.",
     )
