@@ -39,6 +39,11 @@
       - Point to TDT documentation for this.
    5. **Round-Tripping**
       - See existing notebook: `CAS-CAP round-tripping demo.ipynb` - Needs better annotation.
+         -  Switch to using file stored on Sanger storage http://cellular-semantics.cog.sanger.ac.uk/public/merged_Siletti_All_non-neuronal.h5ad
+         -  Add additional file to sanger storage showing changes
+         -  Downloads should be in first cell with warning about sizes etc
+         -  Framing story should be around Use in TDT.  Annotation edited & we want to move to CAP, edit and move back.
+         -  Ideally files should be openly available on CAP - This has never happened despite being avialable for 6 months to a year for most files!  DOS to chase.
 
 4. **To Demo**
    1. Export to CAP.

@@ -17,3 +17,5 @@ notebooks/*.h5ad
 .ipynb_checkpoints/
 .idea
 
+notebooks/CLAS_29_ad.json
+notebooks/wmb_class_29.json
