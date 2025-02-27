@@ -32,6 +32,8 @@ CELL_SET_ACCESSION = "cell_set_accession"
 
 PARENT_CELL_SET_ACCESSION = "parent_cell_set_accession"
 
+NT_ACCESSION = "neurotransmitter_accession"
+
 AUTHOR_ANNOTATION_FIELDS = "author_annotation_fields"
 
 CELLHASH = "cellhash"
@@ -327,7 +329,9 @@ def add_parent_hierarchy_to_annotations(
                 }
             )
             # Remove redundant CL annotations
-            parent_dict = parent_cell_look_up.get(f"{p_accession.split(':')[0]}:{parent}", {})
+            parent_dict = parent_cell_look_up.get(
+                f"{p_accession.split(':')[0]}:{parent}", {}
+            )
             if parent_dict.get("cell_ontology_term_id") == annotation.get(
                 "cell_ontology_term_id"
             ) and parent_dict.get("cell_ontology_term") == annotation.get(
