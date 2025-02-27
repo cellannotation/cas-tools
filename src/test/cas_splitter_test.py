@@ -40,19 +40,29 @@ class TestCASSplitter(unittest.TestCase):
                     "cell_set_accession": "A1",
                     "parent_cell_set_accession": "A",
                     "labelset": "Gamma",
+                    "neurotransmitter_accession": "Nt1",
                 },
                 {
                     "cell_set_accession": "B1",
                     "parent_cell_set_accession": "B",
                     "labelset": "Gamma",
+                    "neurotransmitter_accession": "Nt2",
                 },
                 {
                     "cell_set_accession": "B2",
                     "parent_cell_set_accession": "BB",
                     "labelset": "Gamma",
                 },
+                {
+                    "cell_set_accession": "Nt1",
+                    "labelset": "Nt",
+                },
+                {
+                    "cell_set_accession": "Nt2",
+                    "labelset": "Nt",
+                },
             ],
-            "labelsets": [{"name": "Alpha"}, {"name": "Beta"}, {"name": "Gamma"}],
+            "labelsets": [{"name": "Alpha"}, {"name": "Beta"}, {"name": "Gamma"}, {"name": "Nt"}],
         }
         self.split_terms = ["X", "Y"]
 
@@ -80,6 +90,10 @@ class TestCASSplitter(unittest.TestCase):
         result = split_cas(self.sample_cas, self.split_terms, True)
         self.assertEqual(len(result), 2)
         self.assertIsInstance(result, list)
+        self.assertEqual(len(result[0]["annotations"]), 4)
+        self.assertIn({'cell_set_accession': 'Nt1', 'labelset': 'Nt'}, result[0]["annotations"])
+        self.assertEqual(len(result[1]["annotations"]), 6)
+        self.assertIn({'cell_set_accession': 'Nt2', 'labelset': 'Nt'}, result[1]["annotations"])
 
     def test_filter_and_copy_cas_entries(self):
         label_to_copy_list = ["Z", "C"]
