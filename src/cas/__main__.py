@@ -57,8 +57,10 @@ def main():
         output_file_path = args.output
         fill_na = args.fill_na
 
-        if output_file_path and os.path.abspath(anndata_file_path) == os.path.abspath(
-            output_file_path
+        if (
+            anndata_file_path
+            and output_file_path
+            and os.path.abspath(anndata_file_path) == os.path.abspath(output_file_path)
         ):
             raise ValueError("--anndata and --output cannot be the same")
         export2cap(json_file_path, anndata_file_path, output_file_path, fill_na)
@@ -269,7 +271,7 @@ def create_flatten_operation_parser(subparsers):
         required=False,
         action="store_true",
         help="Boolean flag indicating whether to fill missing values in the 'obs' field with pd.NA. If provided, "
-             "missing values will be replaced with pd.NA; if not provided, they will remain as empty strings.",
+        "missing values will be replaced with pd.NA; if not provided, they will remain as empty strings.",
     )
 
 
@@ -306,7 +308,7 @@ def create_unflatten_operation_parser(subparsers):
         "--json",
         required=False,
         help="Optional path to the CAS JSON file. If provided, the 'annotations' within the file "
-             "will be updated. If not provided, a new CAS JSON file will be created.",
+        "will be updated. If not provided, a new CAS JSON file will be created.",
     )
     parser_unflatten.add_argument(
         "--output_anndata",
