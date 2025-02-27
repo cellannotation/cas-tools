@@ -92,8 +92,10 @@ class TestCASSplitter(unittest.TestCase):
         self.assertIsInstance(result, list)
         self.assertEqual(len(result[0]["annotations"]), 4)
         self.assertIn({'cell_set_accession': 'Nt1', 'labelset': 'Nt'}, result[0]["annotations"])
+        self.assertIn({'name': 'Nt'}, result[0]["labelsets"])
         self.assertEqual(len(result[1]["annotations"]), 6)
         self.assertIn({'cell_set_accession': 'Nt2', 'labelset': 'Nt'}, result[1]["annotations"])
+        self.assertIn({'name': 'Nt'}, result[1]["labelsets"])
 
     def test_filter_and_copy_cas_entries(self):
         label_to_copy_list = ["Z", "C"]
