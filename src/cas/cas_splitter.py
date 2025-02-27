@@ -8,6 +8,7 @@ from cas.utils.conversion_utils import (
     LABELSET,
     LABELSET_NAME,
     LABELSETS,
+    NT_ACCESSION,
     PARENT_CELL_SET_ACCESSION,
 )
 
@@ -56,14 +57,19 @@ def split_cas(
     Raises:
         ValueError: If any split_terms do not exist in the CAS data under 'parent_cell_set_name'.
     """
-    cell_dict = {
-        annotation[CELL_SET_ACCESSION]: annotation[PARENT_CELL_SET_ACCESSION]
-        for annotation in cas[ANNOTATIONS]
-        if (PARENT_CELL_SET_ACCESSION in annotation)
-    }
     parent_cell_dict = defaultdict(list)
-    for child_cell, parent_cell in cell_dict.items():
-        parent_cell_dict[parent_cell].append(child_cell)
+
+    for annotation in cas[ANNOTATIONS]:
+        child = annotation[CELL_SET_ACCESSION]
+        # Map parent cell accession to the child cell
+        if PARENT_CELL_SET_ACCESSION in annotation:
+            parent_cell = annotation[PARENT_CELL_SET_ACCESSION]
+            parent_cell_dict[parent_cell].append(child)
+        # Map NT accession to the child cell
+        if NT_ACCESSION in annotation:
+            nt_parent = annotation[NT_ACCESSION]
+            parent_cell_dict[child].append(nt_parent)
+
     if isinstance(split_terms, str):
         split_terms = [split_terms]
     keys_and_values = list(parent_cell_dict.keys()) + [
@@ -132,11 +138,11 @@ def get_split_terms(
     """
     if isinstance(split_terms, str):
         split_terms = [split_terms]
-    result = []
+    result = set()
     stack = list(split_terms)
     while stack:
         term = stack.pop()
         if term in parent_dict:
             stack.extend(parent_dict[term])
-        result.append(term)
-    return result
+        result.add(term)
+    return list(result)
