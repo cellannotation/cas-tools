@@ -174,7 +174,9 @@ def collect_parent_cell_ids(cas: Dict[str, Any]) -> Dict[str, Set]:
     """
     parent_cell_ids = dict()
 
-    labelsets = sorted(cas[LABELSETS], key=lambda x: int(x["rank"]))
+    labelsets = sorted(
+        [ls for ls in cas[LABELSETS] if "rank" in ls], key=lambda x: int(x["rank"])
+    )
     for labelset in labelsets:
         ls_annotations = [
             ann for ann in cas[ANNOTATIONS] if ann[LABELSET] == labelset[LABELSET_NAME]

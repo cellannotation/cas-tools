@@ -4,12 +4,12 @@ from unittest.mock import MagicMock, patch
 import pandas as pd
 
 from cas.utils.validation_utils import (
-    validate_labelset_markers,
-    validate_markers,
     compare_labelsets_cas_obs,
-    validate_labelset_values,
     infer_cas_cell_hierarchy,
     infer_obs_cell_hierarchy,
+    validate_labelset_markers,
+    validate_labelset_values,
+    validate_markers,
 )
 
 
@@ -78,7 +78,7 @@ class TestMarkerValidation(unittest.TestCase):
     def test_compare_labelsets_cas_obs(self):
         obs = pd.DataFrame({"set1": ["A", "B"], "set2": ["X", "Y"]})
 
-        cas = {"labelsets": [{"name": "set1"}, {"name": "set2"}]}
+        cas = {"labelsets": [{"name": "set1", "rank": 0}, {"name": "set2", "rank": 1}]}
 
         # All labelsets exist in obs (should return True)
         result = compare_labelsets_cas_obs(cas, obs)
@@ -113,7 +113,12 @@ class TestMarkerValidation(unittest.TestCase):
                 {"labelset": "set2", "cell_label": "X"},
                 {"labelset": "set2", "cell_label": "Y"},
                 {"labelset": "set2", "cell_label": "Z"},
-            ]
+            ],
+            "labelsets": [
+                {"name": "set1", "rank": 0},
+                {"name": "set2", "rank": 1},
+                {"name": "set3"},
+            ],
         }
 
         # All labelset members exist (should return True)
@@ -133,7 +138,14 @@ class TestMarkerValidation(unittest.TestCase):
         self.assertFalse(validate_labelset_values(cas, missing_labelset_obs))
 
         # Empty CAS annotations (should return True)
-        empty_cas = {"annotations": []}
+        empty_cas = {
+            "annotations": [],
+            "labelsets": [
+                {"name": "set1", "rank": 0},
+                {"name": "set2", "rank": 1},
+                {"name": "set3"},
+            ],
+        }
         self.assertTrue(validate_labelset_values(empty_cas, obs))
 
         # Empty obs DataFrame (should return False)
