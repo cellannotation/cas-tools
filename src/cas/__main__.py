@@ -778,8 +778,10 @@ def create_split_anndata_parser(subparsers):
     cd src
     python -m cas split_anndata --cas_json path/to/cas.json
     python -m cas split_anndata --anndata path/to/anndata.h5ad --cas_json path/to/cas.json
-    python -m cas split_anndata --anndata path/to/anndata.h5ad path/to/cas_1.json path/to/cas_2.json --compression lzf
-    python -m cas split_anndata --anndata path/to/anndata.h5ad path/to/cas_1.json path/to/cas_2.json
+    python -m cas split_anndata --anndata path/to/anndata.h5ad --cas_json path/to/cas_1.json
+    path/to/cas_2.json --compression lzf
+    python -m cas split_anndata --anndata path/to/anndata.h5ad --cas_json path/to/cas_1.json
+    path/to/cas_2.json
     --multiple_outputs --compression
     """
     parser_split_anndata = subparsers.add_parser(
