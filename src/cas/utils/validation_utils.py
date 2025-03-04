@@ -1,17 +1,17 @@
 import logging
 import sys
-from typing import Any, Dict, List, Union, Tuple, Optional
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import pandas as pd
 from cap_anndata import CapAnnDataDF
 
 from cas.utils.conversion_utils import (
-    LABELSETS,
-    LABELSET_NAME,
     ANNOTATIONS,
-    LABELSET,
     CELL_LABEL,
     CELL_SET_ACCESSION,
+    LABELSET,
+    LABELSET_NAME,
+    LABELSETS,
     PARENT_CELL_SET_ACCESSION,
 )
 
@@ -142,7 +142,9 @@ def compare_labelsets_cas_obs(
     Returns:
         True if all labelsets from CAS exist as columns in obs, otherwise False.
     """
-    labelset_list = [labelset[LABELSET_NAME] for labelset in cas[LABELSETS]]
+    labelset_list = [
+        labelset[LABELSET_NAME] for labelset in cas[LABELSETS] if "rank" in labelset
+    ]
     obs_columns = set(obs.columns)
 
     # Find missing labelsets
@@ -171,11 +173,16 @@ def validate_labelset_values(
     Returns:
         True if all labelset members from CAS exist in obs, otherwise False.
     """
+    labelset_list = [
+        labelset[LABELSET_NAME] for labelset in cas[LABELSETS] if "rank" in labelset
+    ]
     labelset_members = {}
 
     # Collect all labelset members from CAS annotations
     for annotation in cas[ANNOTATIONS]:
         labelset_name = annotation[LABELSET]
+        if labelset_name not in labelset_list:
+            continue
         cell_label = annotation[CELL_LABEL]
 
         if labelset_name not in labelset_members:
@@ -222,11 +229,11 @@ def check_parent_child_consistency(
               otherwise False.
     """
     # Extract ranks from CAS (store expected rank per cell label)
-    cas_ranks = {entry["name"]: entry["rank"] for entry in cas[LABELSETS]}
+    cas_ranks = {
+        entry["name"]: entry["rank"] for entry in cas[LABELSETS] if "rank" in entry
+    }
 
-    obs_inferred_hierarchy = infer_obs_cell_hierarchy(
-        obs, cas_ranks
-    )
+    obs_inferred_hierarchy = infer_obs_cell_hierarchy(obs, cas_ranks)
     cas_inferred_hierarchy = infer_cas_cell_hierarchy(cas)
 
     # Compare inferred hierarchy with CAS ranks
@@ -295,9 +302,7 @@ def infer_obs_cell_hierarchy(
                         continue
                     if child_rows.issubset(parent_rows) and cas_ranks.get(
                         labelset_parent
-                    ) > cas_ranks.get(
-                        labelset_child
-                    ):
+                    ) > cas_ranks.get(labelset_child):
                         possible_parents[parent_label] = cas_ranks.get(labelset_parent)
 
             # Select the closest parent (lowest-ranked parent)

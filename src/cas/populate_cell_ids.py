@@ -1,12 +1,16 @@
 import json
+import logging
 from typing import List, Optional, Union
 
-import anndata
 from cap_anndata import CapAnnDataDF
 from pandas import DataFrame
 
 from cas.file_utils import read_anndata_file, read_json_file
 from cas.utils.validation_utils import validate_labelset_hierarchy
+
+# Configure logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.WARNING)
 
 
 def populate_cell_ids(
@@ -43,10 +47,7 @@ def populate_cell_ids(
     ad_obs = ad.obs
     cas = read_json_file(cas_json_path)
 
-    # Run validation checks (exit if validation fails and validate=True)
-    validate_labelset_hierarchy(cas, ad_obs, validate)
-
-    cas = add_cell_ids(cas, ad_obs, labelsets)
+    cas = add_cell_ids(cas, ad_obs, labelsets, validate)
 
     if cas:
         with open(cas_json_path, "w") as json_file:
@@ -77,7 +78,12 @@ def update_cas_with_cell_ids(
     return cas
 
 
-def add_cell_ids(cas: dict, ad_obs: Union[DataFrame, CapAnnDataDF], labelsets: list = None):
+def add_cell_ids(
+    cas: dict,
+    ad_obs: Union[DataFrame, CapAnnDataDF],
+    labelsets: list = None,
+    validate: bool = False,
+):
     """
     Add/update CellIDs to CAS from matching AnnData file.
 
@@ -86,13 +92,16 @@ def add_cell_ids(cas: dict, ad_obs: Union[DataFrame, CapAnnDataDF], labelsets: l
         ad_obs: Obs DataFrame extracted from an AnnData object.
         labelsets: List of labelsets to update with IDs from AnnData. If value is null, rank '0' labelset is used. The
         labelsets should be provided in order, starting from rank 0 (leaf nodes) and ascending to higher ranks.
+        validate (bool, optional): If True, runs validation checks to ensure labelset consistency.
+                           The program wil`l exit with an error if validation fails. Defaults to False.
     """
-    # TODO check the hierarchy in cas and anndata before populating cell ids. And, warn the
-    #  users, similarly to merge, about all the differences
+    # Run validation checks (exit if validation fails and validate=True)
+    validate_labelset_hierarchy(cas, ad_obs, validate)
+
     rank_zero_labelset = [
         lbl_set["name"]
         for lbl_set in cas["labelsets"]
-        if lbl_set.get("rank") in (0, "0")
+        if "rank" in lbl_set and lbl_set.get("rank") in (0, "0")
     ][0]
     if not labelsets:
         labelsets = [rank_zero_labelset]
@@ -131,7 +140,9 @@ def add_cell_ids(cas: dict, ad_obs: Union[DataFrame, CapAnnDataDF], labelsets: l
                     # cluster column value is cell label
                     cluster_label = anno["cell_label"]
                     cell_ids = list(
-                        ad_obs.loc[ad_obs[cluster_identifier_column] == cluster_label].index
+                        ad_obs.loc[
+                            ad_obs[cluster_identifier_column] == cluster_label
+                        ].index
                     )
                 anno["cell_ids"] = cell_ids
                 if "parent_cell_set_name" in anno:
@@ -148,8 +159,8 @@ def add_cell_ids(cas: dict, ad_obs: Union[DataFrame, CapAnnDataDF], labelsets: l
 
         return cas
     else:
-        print(
-            "WARN: Cluster identifier column couldn't be identified in OBS. Populate cell ids operation is aborted."
+        logger.warning(
+            "Cluster identifier column couldn't be identified in OBS. Populate cell ids operation is aborted."
         )
 
     return None
@@ -183,42 +194,3 @@ def get_obs_cluster_identifier_column(
         elif rank_zero_labelset.lower() + " id" in obs_keys:
             cluster_identifier_column = rank_zero_labelset.lower() + " id"
     return cluster_identifier_column
-
-
-# def populate_cell_ids(cas_json_path: str, anndata_path: str, labelsets: list = None):
-#     """
-#     Add/update CellIDs to CAS from matching AnnData file.
-#
-#     Parameters:
-#         cas_json_path: path to CAS JSON file
-#         anndata_path: path to anndata file
-#         labelsets: List of labelsets to update with IDs from AnnData. If value is null, rank '0' labelset is used.
-#     """
-#     ad = read_anndata_file(anndata_path)
-#     cas = read_json_file(cas_json_path)
-#
-#     if not labelsets:
-#         labelsets = [lbl_set["name"] for lbl_set in cas["labelsets"] if lbl_set["rank"] == "0"]
-#
-#     print(labelsets)
-#     out = {}
-#     for k, v in ad.obs.iterrows():
-#         for r in labelsets:
-#             val = v[r]
-#             if val:
-#                 if not r in out.keys(): out[r] = {}
-#                 if not val in out[r].keys(): out[r][val] = []
-#                 out[r][v[r]].append(k)
-#
-#     for a in cas['annotations']:
-#         if not (a['labelset'] in out.keys()):
-#             print("Unknown labelset %s", (a['labelset']))
-#         elif not (a['cell_label']) in out[a['labelset']].keys():
-#             print("Unknown value %s in labelset %s", (a['cell_label'], a['labelset']))
-#         else:
-#             a['cell_ids'] = out[a['labelset']][a['cell_label']]
-#
-#     with open(cas_json_path, 'w') as f:
-#         f.write(json.dumps(cas))
-#
-#     ad.file.close()
