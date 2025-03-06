@@ -18,15 +18,17 @@ Here's your updated **Markdown documentation** to align with the **`export2cap`*
 
 ---
 
-## **Export CAS to CAP format in AnnData**
+## **Export CAS to CAP Format in AnnData**
 
 `export2cap` converts CAS annotations into `obs` key-value pairs and stores other CAS content as key-value pairs in `uns`. The resulting AnnData object is then saved to a new file.
 
 ### **Key Features:**
-1. Parses command-line arguments for input JSON file, input AnnData file, and output file.
-2. Reads and processes the input JSON file and AnnData file.
-3. Updates the AnnData object with information from the CAS JSON annotations and root keys.
-4. Writes the modified AnnData object to a specified output file.
+1. Parses command-line arguments for an optional input JSON file and/or an AnnData file.
+2. **Requires at least one of the following to be supplied:** a CAS JSON file (`--json`) or an AnnData file (`--anndata`).
+3. If the CAS JSON file is not provided via `--json`, the tool expects to find the CAS JSON embedded in the AnnData file’s `uns` section.
+4. If the AnnData file is not provided via `--anndata`, it will be downloaded using the matrix file ID from the CAS JSON.
+5. Updates the AnnData object with information from the CAS JSON annotations and root keys.
+6. Writes the modified AnnData object to a specified output file.
 
 A detailed specification about the `export2cap` operation can be found in the [related issue](https://github.com/cellannotation/cas-tools/issues/7).
 
@@ -35,13 +37,17 @@ cas export2cap --json path/to/json_file.json --anndata path/to/anndata_file.h5ad
 ```
 
 ### **Command-line Arguments:**
-- `--json`      : Path to the CAS JSON schema file.
-- `--anndata`   : Path to the AnnData file. If not provided, AnnData will be downloaded using the matrix file ID from CAS JSON.
-- `--output`    : Optional output AnnData file name. If provided, a new AnnData file with CAS exported to CAP format will be created.
-    Otherwise, the input AnnData file will be updated in place.
-- `--fill-na`   : Optional boolean flag indicating whether to fill missing values in the `obs` field with `pd.NA`. 
-  - If provided, missing values will be replaced with `pd.NA`.
+- `--json`      : **Optional** path to the CAS JSON schema file.  
+  - *If not provided*, the CAS JSON is expected to be embedded in the AnnData file’s `uns` section.
+- `--anndata`   : **Optional** path to the AnnData file.  
+  - *If not provided*, the AnnData file will be downloaded using the matrix file ID from the CAS JSON.
+- `--output`    : Optional output AnnData file name.  
+  - If provided, a new AnnData file with CAS exported to CAP format will be created; otherwise, the input AnnData file will be updated in place.
+- `--fill-na`   : Optional boolean flag indicating whether to fill missing values in the `obs` field with `pd.NA`.  
+  - If provided, missing values will be replaced with `pd.NA`.  
   - If not provided, missing values will remain as empty strings.
+
+**Note:** At least one of `--json` or `--anndata` must be supplied. Additionally, if the CAS JSON is not provided via `--json` and the AnnData file does not contain the CAS JSON in its `uns` section, the operation will fail with an error indicating that the CAS JSON is missing.
 
 Please check the [related notebook](../notebooks/test_export2cap.ipynb) to evaluate the output data format.
 
@@ -154,7 +160,7 @@ path/to/cluster_annotation_term.csv
 
 ## Merge CAS to AnnData file
 
-Integrates cell annotations from a CAS (Cell Annotation Schema) JSON file into an AnnData object.  It performs validation checks to ensure data consistency between the CAS file and the AnnData file.  The AnnData file location should ideally be specified as a resolvable path in the CAS file.
+Integrates cell annotations from a CAS (Cell Annotation Schema) JSON file into an AnnData object. It performs validation checks to ensure data consistency between the CAS file and the AnnData file. The AnnData file location should ideally be specified as a resolvable path in the CAS file.
 
 ```commandline
 cas merge --json path/to/CAS_schema.json --anndata path/to/input_anndata.h5ad --validate --output path/to/output.h5ad
@@ -162,24 +168,41 @@ cas merge --json path/to/CAS_schema.json --anndata path/to/input_anndata.h5ad --
 
 **Command-line Arguments:**
 - `--json`      : Path to the CAS JSON schema file.
-- `--anndata`   : Path to the AnnData file. Path to the AnnData file. If not provided, AnnData will be downloaded using matrix file id from CAS JSON.
-- `--validate`  : (Optional) Perform validation checks before writing to the output AnnData file.
+- `--anndata`   : Path to the AnnData file. If not provided, AnnData will be downloaded using the matrix file ID from the CAS JSON.
+- `--validate`  : (Optional) If set, the following validation checks will be performed before writing to the output AnnData file:
+    1. Verifies that all cell barcodes (cell IDs) in CAS exist in AnnData and vice versa.
+    2. Identifies matching labelset names between CAS and AnnData.
+    3. Validates that cell sets associated with each annotation match between CAS and AnnData.
+    4. Checks if the cell labels are identical; if not, provides options to update or terminate.
 - `--output`    : Output AnnData file name (default: output.h5ad).
 
 Please check the [related notebook](../notebooks/test_merge.ipynb) to evaluate the output data format.
 
 ## Populate Cell IDs
 
-Add/update CellIDs to CAS from matching AnnData file. Checks for alignment between `obs` key:value pairs in AnnData file and labelset:cell_label pairs in CAS for some specified list of `labelsets`. If they are aligned, updates `cell_ids` in CAS.
+Add/update CellIDs to CAS from a matching AnnData file. Checks for alignment between `obs` key-value pairs in the AnnData file and labelset:cell_label pairs in CAS for a specified list of `labelsets`. If they are aligned, updates `cell_ids` in CAS.
 
 ```commandline
-cas populate_cells --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --labelsets Cluster,Supercluster
+cas populate_cells --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --labelsets Cluster,Supercluster --validate
 ```
 
 **Command-line Arguments:**
-- `--json`      : Path to the CAS JSON schema file.
-- `--anndata`   : Path to the AnnData file. Ideally, the location will be specified by a resolvable path in the CAS file.
-- `--labelsets` : (Optional) List of labelsets to update with IDs from AnnData. If value is not provided, rank '0' labelset is used.
+- `--json`      : (Required) Path to the CAS JSON schema file.
+- `--anndata`   : (Required) Path to the AnnData file. Ideally, the location will be specified by a resolvable path in the CAS file.
+- `--labelsets` : (Optional) A comma-separated list of labelsets to update with IDs from AnnData. If not provided, the rank '0' labelset is used. The labelsets should be provided in hierarchical order, starting from rank 0 (leaf nodes) and ascending to higher ranks.
+- `--validate`  : (Optional) If set, strict validation is enforced. If validation fails, the program exits immediately with an error code (`sys.exit(1)`). Otherwise, it logs warnings but continues execution.
+
+**Usage Examples:**
+
+Run without validation (default mode):
+```commandline
+cas populate_cells --json cas.json --anndata data.h5ad --labelsets Cluster,Supercluster
+```
+
+Run with strict validation (`--validate`):
+```commandline
+cas populate_cells --json cas.json --anndata data.h5ad --labelsets Cluster,Supercluster --validate
+```
 
 ## Convert CAS data to RDF
 

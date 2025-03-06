@@ -50,15 +50,17 @@ def main():
             raise ValueError("--anndata and --output cannot be the same")
 
         merge(json_file_path, anndata_file_path, validate, output_file_path)
-    elif args.action == "export2CAP":
+    elif args.action == "export2cap":
         args = parser.parse_args()
         json_file_path = args.json
         anndata_file_path = args.anndata
         output_file_path = args.output
         fill_na = args.fill_na
 
-        if output_file_path and os.path.abspath(anndata_file_path) == os.path.abspath(
-            output_file_path
+        if (
+            anndata_file_path
+            and output_file_path
+            and os.path.abspath(anndata_file_path) == os.path.abspath(output_file_path)
         ):
             raise ValueError("--anndata and --output cannot be the same")
         export2cap(json_file_path, anndata_file_path, output_file_path, fill_na)
@@ -128,7 +130,8 @@ def main():
         labelsets = None
         if "labelsets" in args and args.labelsets:
             labelsets = [item.strip() for item in str(args.labelsets).split(",")]
-        populate_cell_ids(json_file_path, anndata_file_path, labelsets)
+        validate = getattr(args, "validate", False)
+        populate_cell_ids(json_file_path, anndata_file_path, labelsets, validate)
     elif args.action == "validate":
         args = parser.parse_args()
         schema = args.schema
@@ -186,6 +189,12 @@ def create_merge_operation_parser(subparsers):
     --validate  : Perform validation checks before writing to the output AnnData file.
     --output    : Output AnnData file name (default: output.h5ad).
 
+    If `--validate` is used, the following checks will be performed:
+        1. Verifies that all cell barcodes (cell IDs) in CAS exist in AnnData and vice versa.
+        2. Identifies matching labelset names between CAS and AnnData.
+        3. Validates that cell sets associated with each annotation match between CAS and AnnData.
+        4. Checks if the cell labels are identical; if not, provides options to update or terminate.
+
     Usage Example:
     --------------
     cd src
@@ -193,7 +202,7 @@ def create_merge_operation_parser(subparsers):
     """
     parser_merge = subparsers.add_parser(
         "merge",
-        description="The CAS and AnnData merge parser",
+        description="The CAS and AnnData merge operation",
         help="Test if CAS can be merged to the AnnData and merges if possible.",
     )
     parser_merge.add_argument(
@@ -217,28 +226,41 @@ def create_merge_operation_parser(subparsers):
 
 def create_flatten_operation_parser(subparsers):
     """
-        Command-line Arguments:
+    Command-line Arguments:
     -----------------------
-    --json      : Path to the CAS JSON schema file.
-    --anndata   : Path to the AnnData file. If not provided, AnnData will be downloaded using matrix file id from CAS JSON.
-    --output    : Optional output AnnData file name. If provided a new flatten anndata file will be created,
-                    otherwise the inputted anndata file will be updated with the flatten data.
+    --json      : Optional path to the CAS JSON schema file. If not provided, the CAS JSON will be extracted from the
+                  AnnData file's 'uns' section.
+    --anndata   : Optional path to the AnnData file. If not provided, the AnnData file will be downloaded using the
+                  matrix file id from the CAS JSON.
+    --output    : Optional output AnnData file name. If provided, a new flattened AnnData file will be created;
+                  otherwise, the input AnnData file will be updated with the flattened data.
     --fill-na   : Optional boolean flag indicating whether to fill missing values in the 'obs' field with pd.NA. If
-                    provided, missing values will be replaced with pd.NA; if not provided, they will remain as empty strings.
+                  provided, missing values will be replaced with pd.NA; if not provided, they will remain as empty strings.
+
+    Note:
+        Either --json or --anndata must be supplied to execute the operation.
 
     Usage Example:
     --------------
     cd src
-    python -m cas export2CAP --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --output path/to/output_file.h5ad
+    python -m cas export2cap --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --output path/to/output_file.h5ad
     """
     parser_flatten = subparsers.add_parser(
-        "export2CAP",
+        "export2cap",
         description="Flattens all content of CAS annotations to an AnnData file.",
         help="Flattens all content of CAS annotations to obs key:value pairs.",
     )
 
-    parser_flatten.add_argument("--json", required=False, help="Input JSON file path")
-    parser_flatten.add_argument("--anndata", help="Input AnnData file path")
+    parser_flatten.add_argument(
+        "--json",
+        required=False,
+        help="Optional input JSON file path. If not provided, the CAS JSON will be extracted from the AnnData file's 'uns' section.",
+    )
+    parser_flatten.add_argument(
+        "--anndata",
+        required=False,
+        help="Optional input AnnData file path. If not provided, the AnnData file will be downloaded using the matrix file id from the CAS JSON.",
+    )
     parser_flatten.add_argument(
         "--output",
         required=False,
@@ -286,7 +308,7 @@ def create_unflatten_operation_parser(subparsers):
         "--json",
         required=False,
         help="Optional path to the CAS JSON file. If provided, the 'annotations' within the file "
-             "will be updated. If not provided, a new CAS JSON file will be created.",
+        "will be updated. If not provided, a new CAS JSON file will be created.",
     )
     parser_unflatten.add_argument(
         "--output_anndata",
@@ -488,17 +510,39 @@ def create_cas2abc_operation_parser(subparsers):
 
 def create_populate_cells_operation_parser(subparsers):
     """
+    Creates a command-line argument parser for the `populate_cells` operation.
+
+    This command populates CellIDs in a CAS JSON file using data from an AnnData file. It ensures
+    alignment between labelset values in AnnData's `obs` DataFrame and CAS-defined labelsets before
+    updating cell IDs. If the `--validate` flag is enabled, validation errors will cause the
+    program to exit.
+
     Command-line Arguments:
     -----------------------
-    --json      : Path to the CAS JSON schema file.
-    --anndata   : Path to the AnnData file. Ideally, the location will be specified by a resolvable path in the CAS file.
-    --labelsets : List of labelsets to update with IDs from AnnData. If value is not provided, rank '0' labelset is used.
-    The labelsets should be provided in order, starting from rank 0 (leaf nodes) and ascending to higher ranks.
+    --json      (required) : Path to the CAS JSON schema file.
+    --anndata   (required) : Path to the AnnData file. Ideally, this should be specified by a
+                             resolvable path in the CAS file.
+    --labelsets (optional) : A comma-separated list of labelsets to update with IDs from AnnData.
+                             If not provided, the labelset with rank '0' is used by default.
+                             The labelsets should be provided in hierarchical order, starting from
+                             rank 0 (leaf nodes) and ascending to higher ranks.
+    --validate  (optional) : If set, the program exits with an error if validation fails.
+                             Otherwise, it logs warnings and continues execution.
 
     Usage Example:
     --------------
     cd src
-    python -m cas populate_cells --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --labelsets Cluster,Supercluster
+    python -m cas populate_cells --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --labelsets Cluster,Supercluster --validate
+
+    This command:
+    - Reads the CAS JSON schema from `path/to/json_file.json`.
+    - Reads the AnnData file from `path/to/anndata_file.h5ad`.
+    - Aligns the labelsets **Cluster** and **Supercluster** with the AnnData data.
+    - Runs validation checks.
+    - If `--validate` is enabled, the process **stops on validation failure**.
+
+    Returns:
+        None
     """
     parser_populate = subparsers.add_parser(
         "populate_cells",
@@ -514,6 +558,11 @@ def create_populate_cells_operation_parser(subparsers):
         "--labelsets",
         help="List of labelsets to update with IDs from AnnData",
         default="",
+    )
+    parser_populate.add_argument(
+        "--validate",
+        action="store_true",
+        help="Enable strict validation. If validation fails, the process will exit with an error.",
     )
 
 
@@ -729,8 +778,10 @@ def create_split_anndata_parser(subparsers):
     cd src
     python -m cas split_anndata --cas_json path/to/cas.json
     python -m cas split_anndata --anndata path/to/anndata.h5ad --cas_json path/to/cas.json
-    python -m cas split_anndata --anndata path/to/anndata.h5ad path/to/cas_1.json path/to/cas_2.json --compression lzf
-    python -m cas split_anndata --anndata path/to/anndata.h5ad path/to/cas_1.json path/to/cas_2.json
+    python -m cas split_anndata --anndata path/to/anndata.h5ad --cas_json path/to/cas_1.json
+    path/to/cas_2.json --compression lzf
+    python -m cas split_anndata --anndata path/to/anndata.h5ad --cas_json path/to/cas_1.json
+    path/to/cas_2.json
     --multiple_outputs --compression
     """
     parser_split_anndata = subparsers.add_parser(
