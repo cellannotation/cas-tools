@@ -6,7 +6,6 @@ from typing import Any, Dict, List, Optional
 import numpy as np
 import pandas as pd
 from cap_anndata import read_h5ad
-
 from cas.accession.hash_accession_manager import HashAccessionManager, is_hash_accession
 from cas.file_utils import (
     read_json_file,
@@ -28,7 +27,8 @@ from cas.utils.conversion_utils import (
     convert_complex_type,
     copy_and_update_file_path,
     fetch_anndata,
-    retrieve_schema, reformat_json,
+    reformat_json,
+    retrieve_schema,
 )
 
 # Configure logging
@@ -126,8 +126,16 @@ def export_cas_object2cap(
                     "CAS JSON is not provided and could not be found in the AnnData file's uns['cas'] field. "
                     "Please provide a valid CAS JSON file via --json or use an AnnData file with embedded CAS JSON in its 'uns' section."
                 )
-
-        annotations = input_json[ANNOTATIONS]
+        ranked_labelsets = [
+            labelset[LABELSET_NAME]
+            for labelset in input_json[LABELSETS]
+            if "rank" in labelset
+        ]
+        annotations = [
+            annotation
+            for annotation in input_json[ANNOTATIONS]
+            if annotation[LABELSET] in ranked_labelsets
+        ]
         parent_cell_ids = collect_parent_cell_ids(input_json)
 
         # Process obs
@@ -178,7 +186,8 @@ def process_annotations(annotations, obs_index, parent_cell_ids, fill_na):
         ann[AUTHOR_ANNOTATION_FIELDS] = author_annotations
 
         if not cell_ids:
-            # only happens if data has multi-inheritance (as in basal ganglia data)
+            # This can occur in cases of multiple inheritance (e.g., basal ganglia data)
+            # or when the labelset is rankless.
             continue
         # Convert cell_ids to a list if it's not already for np.isin
         if not isinstance(cell_ids, list):
@@ -244,6 +253,7 @@ def generate_uns_json(input_json):
                     k: v for k, v in labelset.items() if k != LABELSET_NAME
                 }
                 for labelset in value
+                if "rank" in labelset
             }
             uns_json["cellannotation_metadata"] = metadata_json
         elif key == ANNOTATIONS:
@@ -252,6 +262,8 @@ def generate_uns_json(input_json):
                     AUTHOR_ANNOTATION_FIELDS
                 ][CELLHASH]
                 for annotation in value
+                if AUTHOR_ANNOTATION_FIELDS in annotation
+                and (CELLHASH in annotation[AUTHOR_ANNOTATION_FIELDS])
             }
 
             uns_json[CELLHASH] = cellhash_dict
@@ -286,7 +298,8 @@ def unflatten(
 
     with read_h5ad(file_path=anndata_file_path, edit=True) as cap_adata:
         cap_adata.read_uns()
-        # if not cas:
+        if not cas and "cas" in cap_adata.uns:
+            cas = json.loads(cap_adata.uns["cas"])
         if CELLHASH in cap_adata.uns:
             cellhash_lookup = cap_adata.uns[CELLHASH]
         else:
@@ -360,8 +373,15 @@ def unflatten_obs(
         {k: v for k, v in anno.items() if k != CELL_IDS}
         if anno[LABELSET] != name_with_rank_0
         else anno
-        for anno in (updated_cas[ANNOTATIONS][::2] if not cas_json else updated_cas[ANNOTATIONS])
+        for anno in (
+            updated_cas[ANNOTATIONS][::2] if not cas_json else updated_cas[ANNOTATIONS]
+        )
     ]
+    # Handle rankless labelsets
+    rankless_labelsets = [
+        labelset for labelset in cas_json[LABELSETS] if "rank" not in labelset
+    ]
+    updated_cas[LABELSETS].extend(rankless_labelsets)
     # Discard flattened obs
     flattened_columns = [
         col
@@ -464,6 +484,11 @@ def update_cas_annotation(
     accession_manager = HashAccessionManager()
     updated_cas_annotations: List[Dict[str, Any]] = []
     remaining_annotations_labels = list(key for key in cas_dict.keys())
+    rankless_labelsets = [
+        labelset[LABELSET_NAME]
+        for labelset in cas_json[LABELSETS]
+        if "rank" not in labelset
+    ]
 
     for annotation in cas_json[ANNOTATIONS]:
         labelset_cell_label_pair = f"{annotation[LABELSET]}:{annotation[CELL_LABEL]}"
@@ -499,6 +524,8 @@ def update_cas_annotation(
             index_to_remove = remaining_annotations_labels.index(cas_cellhash)
             remaining_annotations_labels.pop(index_to_remove)
             remaining_annotations_labels.pop(index_to_remove - 1)  # Not duplicate
+        elif annotation[LABELSET] in rankless_labelsets:
+            updated_cas_annotations.append(annotation)
 
     for label in remaining_annotations_labels[::2]:
         updated_cas_annotations.append(cas_dict[label])
