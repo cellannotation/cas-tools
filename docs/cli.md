@@ -250,7 +250,9 @@ This tool allows you to split a CAS JSON file based on specified cell accession_
 ### Command-line Arguments:
 - **--cas_json**: Path to the CAS JSON file that will be updated. This parameter is required.
 - **--split_on**: Specifies the cell accession_id(s) to split the CAS file. Multiple accession_ids can be provided.
-- **--multiple_outputs**: If set, creates multiple output files for each label provided in `--split_on`. If not set, creates a single output file containing all child terms from the split.
+- **--multiple_outputs**: If set, create multiple output files for each term provided in split_on.
+                          If not set, a single output file will be created containing all child terms,
+                          and it will be named as `split_cas.json`.
 
 ### Usage Examples:
 ```commandline

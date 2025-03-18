@@ -736,7 +736,9 @@ def create_split_cas_parser(subparsers):
     --cas_json          : Path to the CAS JSON file that will be split.
     --split_on          : Cell accession_id(s) to split the CAS file.
     --multiple_outputs  : If set, create multiple output files for each term provided in split_on.
-                          If not set, create a single output file containing all child terms.
+                          If not set, a single output file will be created containing all child terms,
+                          and it will be named as `split_cas.json`.
+
     Usage Example:
     --------------
     cd src
@@ -758,7 +760,7 @@ def create_split_cas_parser(subparsers):
     parser_split_cas.add_argument(
         "--multiple_outputs",
         action="store_true",
-        help="If set, create multiple output files for each split_on term; if not set, create a single output file.",
+        help="If set, create multiple output files for each split_on term; if not set, create a single output file named `split_cas.json`.",
     )
 
 
