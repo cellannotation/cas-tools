@@ -58,10 +58,15 @@ Please check the [related notebook](../notebooks/test_export2cap.ipynb) to evalu
 Unflattens all content of a flattened AnnData file into a CAS JSON file and creates an unflattened AnnData file.
 
 **Key Features:**
-1. Parses command-line arguments for input AnnData file and optional JSON and output files.
-2. Processes the input AnnData file and optionally a JSON file.
+1. Parses command-line arguments for the input AnnData file and optional JSON and output files.
+2. Processes the input AnnData file and, optionally, a JSON file.
 3. Converts flattened AnnData content back to its unflattened version and creates corresponding CAS JSON files.
-4. Saves the unflattened AnnData and CAS JSON files to specified output locations.
+4. Annotation Verification and Update:  
+   - Uses a lookup dictionary (stored in the `uns` section of the AnnData file and generated in the export2cap step) to verify and update annotations.  
+   - **Direct Update:** Annotations are updated when both the labelset-label pair and the generated cell hash (computed using labelset labels and `cell_ids`) match.  
+   - **Discarding Mismatches:** If the labelset-label pair matches but the hashes do not, the annotation is discarded.  
+   - **Handling Label Changes:** If the cell hash matches without a matching labelset-label pair, it suggests a possible label change, and the annotation is updated accordingly.
+5. Saves the unflattened AnnData and CAS JSON files to the specified output locations.
 
 ```commandline
 cd src
@@ -71,12 +76,12 @@ python -m cas unflatten --anndata path/to/anndata_file.h5ad
 
 **Command-line Arguments:**
 - `--anndata`        : Path to the input AnnData file that contains flattened data.
-- `--json`           : Optional path to the CAS JSON file. If provided, the 'annotations'
-    within the file will be updated. If not provided, a new CAS JSON file will be created.
+- `--json`           : Optional path to the CAS JSON file. If provided, the 'annotations' within the file will be updated based on lookup dictionary checks; if not provided, a new CAS JSON file will be created.
 - `--output_anndata` : Optional output AnnData file name. If not provided, `unflattened.h5ad` will be used as the default name.
 - `--output_json`    : Optional output CAS JSON file name. If not provided, `cas.json` will be used as the default name.
 
 ### Usage Example
+
 To execute the `unflatten` operation, use the following command:
 
 ```commandline
