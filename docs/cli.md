@@ -188,25 +188,25 @@ Please check the [related notebook](../notebooks/test_merge.ipynb) to evaluate t
 Add/update CellIDs to CAS from a matching AnnData file. Checks for alignment between `obs` key-value pairs in the AnnData file and labelset:cell_label pairs in CAS for a specified list of `labelsets`. If they are aligned, updates `cell_ids` in CAS.
 
 ```commandline
-cas populate_cells --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --labelsets Cluster,Supercluster --validate
+cas populate_cells --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --labelsets Cluster Supercluster --validate
 ```
 
 **Command-line Arguments:**
 - `--json`      : (Required) Path to the CAS JSON schema file.
 - `--anndata`   : (Required) Path to the AnnData file. Ideally, the location will be specified by a resolvable path in the CAS file.
-- `--labelsets` : (Optional) A comma-separated list of labelsets to update with IDs from AnnData. If not provided, the rank '0' labelset is used. The labelsets should be provided in hierarchical order, starting from rank 0 (leaf nodes) and ascending to higher ranks.
+- `--labelsets` : (Optional) A space-separated list of labelsets to update with IDs from AnnData. If not provided, the labelset with rank '0' is used by default. The labelsets should be provided in hierarchical order, starting from rank 0 (leaf nodes) and ascending to higher ranks.
 - `--validate`  : (Optional) If set, strict validation is enforced. If validation fails, the program exits immediately with an error code (`sys.exit(1)`). Otherwise, it logs warnings but continues execution.
 
 **Usage Examples:**
 
 Run without validation (default mode):
 ```commandline
-cas populate_cells --json cas.json --anndata data.h5ad --labelsets Cluster,Supercluster
+cas populate_cells --json cas.json --anndata data.h5ad --labelsets Cluster Supercluster
 ```
 
 Run with strict validation (`--validate`):
 ```commandline
-cas populate_cells --json cas.json --anndata data.h5ad --labelsets Cluster,Supercluster --validate
+cas populate_cells --json cas.json --anndata data.h5ad --labelsets Cluster Supercluster --validate
 ```
 
 ## Convert CAS data to RDF
