@@ -127,9 +127,7 @@ def main():
         args = parser.parse_args()
         json_file_path = args.json
         anndata_file_path = args.anndata
-        labelsets = None
-        if "labelsets" in args and args.labelsets:
-            labelsets = [item.strip() for item in str(args.labelsets).split(",")]
+        labelsets = args.labelsets
         validate = getattr(args, "validate", False)
         populate_cell_ids(json_file_path, anndata_file_path, labelsets, validate)
     elif args.action == "validate":
@@ -522,17 +520,17 @@ def create_populate_cells_operation_parser(subparsers):
     --json      (required) : Path to the CAS JSON schema file.
     --anndata   (required) : Path to the AnnData file. Ideally, this should be specified by a
                              resolvable path in the CAS file.
-    --labelsets (optional) : A comma-separated list of labelsets to update with IDs from AnnData.
-                             If not provided, the labelset with rank '0' is used by default.
-                             The labelsets should be provided in hierarchical order, starting from
-                             rank 0 (leaf nodes) and ascending to higher ranks.
+    --labelsets (optional) : A space-separated list of labelsets to update with IDs from AnnData.
+                             If not provided, the labelset with rank '0' is used by default. The
+                             labelsets should be provided in hierarchical order,
+                             starting from rank 0 (leaf nodes) and ascending to higher ranks.
     --validate  (optional) : If set, the program exits with an error if validation fails.
                              Otherwise, it logs warnings and continues execution.
 
     Usage Example:
     --------------
     cd src
-    python -m cas populate_cells --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --labelsets Cluster,Supercluster --validate
+    python -m cas populate_cells --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --labelsets Cluster Supercluster --validate
 
     This command:
     - Reads the CAS JSON schema from `path/to/json_file.json`.
@@ -556,14 +554,16 @@ def create_populate_cells_operation_parser(subparsers):
     )
     parser_populate.add_argument(
         "--labelsets",
-        help="List of labelsets to update with IDs from AnnData",
-        default="",
+        default=None,
+        nargs="+",
+        help="Space-separated list of labelsets to update with IDs from AnnData",
     )
     parser_populate.add_argument(
         "--validate",
         action="store_true",
         help="Enable strict validation. If validation fails, the process will exit with an error.",
     )
+
 
 
 def create_schema_validation_operation_parser(subparsers):

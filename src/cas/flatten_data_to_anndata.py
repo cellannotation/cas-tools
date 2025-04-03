@@ -314,7 +314,7 @@ def unflatten(
         uns = cap_adata.uns
         new_cas = unflatten_obs(obs, uns, cas, cellhash_lookup)
 
-        # cap_adata.uns["cas"] = reformat_json(new_cas)
+        cap_adata.uns["cas"] = reformat_json(new_cas)
         # Save your changes to a new or the same AnnData file
         cap_adata.overwrite()
 

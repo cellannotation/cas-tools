@@ -58,10 +58,15 @@ Please check the [related notebook](../notebooks/test_export2cap.ipynb) to evalu
 Unflattens all content of a flattened AnnData file into a CAS JSON file and creates an unflattened AnnData file.
 
 **Key Features:**
-1. Parses command-line arguments for input AnnData file and optional JSON and output files.
-2. Processes the input AnnData file and optionally a JSON file.
+1. Parses command-line arguments for the input AnnData file and optional JSON and output files.
+2. Processes the input AnnData file and, optionally, a JSON file.
 3. Converts flattened AnnData content back to its unflattened version and creates corresponding CAS JSON files.
-4. Saves the unflattened AnnData and CAS JSON files to specified output locations.
+4. Annotation Verification and Update:  
+   - Uses a lookup dictionary (stored in the `uns` section of the AnnData file and generated in the export2cap step) to verify and update annotations.  
+   - **Direct Update:** Annotations are updated when both the labelset-label pair and the generated cell hash (computed using labelset labels and `cell_ids`) match.  
+   - **Discarding Mismatches:** If the labelset-label pair matches but the hashes do not, the annotation is discarded.  
+   - **Handling Label Changes:** If the cell hash matches without a matching labelset-label pair, it suggests a possible label change, and the annotation is updated accordingly.
+5. Saves the unflattened AnnData and CAS JSON files to the specified output locations.
 
 ```commandline
 cd src
@@ -71,12 +76,12 @@ python -m cas unflatten --anndata path/to/anndata_file.h5ad
 
 **Command-line Arguments:**
 - `--anndata`        : Path to the input AnnData file that contains flattened data.
-- `--json`           : Optional path to the CAS JSON file. If provided, the 'annotations'
-    within the file will be updated. If not provided, a new CAS JSON file will be created.
+- `--json`           : Optional path to the CAS JSON file. If provided, the 'annotations' within the file will be updated based on lookup dictionary checks; if not provided, a new CAS JSON file will be created.
 - `--output_anndata` : Optional output AnnData file name. If not provided, `unflattened.h5ad` will be used as the default name.
 - `--output_json`    : Optional output CAS JSON file name. If not provided, `cas.json` will be used as the default name.
 
 ### Usage Example
+
 To execute the `unflatten` operation, use the following command:
 
 ```commandline
@@ -183,25 +188,25 @@ Please check the [related notebook](../notebooks/test_merge.ipynb) to evaluate t
 Add/update CellIDs to CAS from a matching AnnData file. Checks for alignment between `obs` key-value pairs in the AnnData file and labelset:cell_label pairs in CAS for a specified list of `labelsets`. If they are aligned, updates `cell_ids` in CAS.
 
 ```commandline
-cas populate_cells --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --labelsets Cluster,Supercluster --validate
+cas populate_cells --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --labelsets Cluster Supercluster --validate
 ```
 
 **Command-line Arguments:**
 - `--json`      : (Required) Path to the CAS JSON schema file.
 - `--anndata`   : (Required) Path to the AnnData file. Ideally, the location will be specified by a resolvable path in the CAS file.
-- `--labelsets` : (Optional) A comma-separated list of labelsets to update with IDs from AnnData. If not provided, the rank '0' labelset is used. The labelsets should be provided in hierarchical order, starting from rank 0 (leaf nodes) and ascending to higher ranks.
+- `--labelsets` : (Optional) A space-separated list of labelsets to update with IDs from AnnData. If not provided, the labelset with rank '0' is used by default. The labelsets should be provided in hierarchical order, starting from rank 0 (leaf nodes) and ascending to higher ranks.
 - `--validate`  : (Optional) If set, strict validation is enforced. If validation fails, the program exits immediately with an error code (`sys.exit(1)`). Otherwise, it logs warnings but continues execution.
 
 **Usage Examples:**
 
 Run without validation (default mode):
 ```commandline
-cas populate_cells --json cas.json --anndata data.h5ad --labelsets Cluster,Supercluster
+cas populate_cells --json cas.json --anndata data.h5ad --labelsets Cluster Supercluster
 ```
 
 Run with strict validation (`--validate`):
 ```commandline
-cas populate_cells --json cas.json --anndata data.h5ad --labelsets Cluster,Supercluster --validate
+cas populate_cells --json cas.json --anndata data.h5ad --labelsets Cluster Supercluster --validate
 ```
 
 ## Convert CAS data to RDF
