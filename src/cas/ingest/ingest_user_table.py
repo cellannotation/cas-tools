@@ -248,7 +248,7 @@ def assign_accession_ids(cas, accession_prefix):
         if annotation_object.cell_set_accession:
             if not annotation_object.cell_set_accession.startswith(accession_prefix):
                 annotation_object.cell_set_accession = (
-                    accession_prefix + '_' + annotation_object.cell_set_accession
+                    accession_prefix + annotation_object.cell_set_accession
                 )
                 labelset = annotation_object.labelset
                 accession = annotation_object.cell_set_accession or ""
