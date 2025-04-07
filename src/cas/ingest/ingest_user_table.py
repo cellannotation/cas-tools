@@ -13,6 +13,8 @@ from cas.model import (
     CellTypeAnnotation,
     Labelset,
 )
+from cas.accession.hash_accession_manager import HashAccessionManager, is_hash_accession
+from cas.accession.incremental_accession_manager import IncrementalAccessionManager
 
 NAME_SEPERATOR = "_XX_"
 
@@ -36,8 +38,9 @@ def ingest_data(
     :return: output data as dict
     """
     cas = ingest_user_data(data_file, config_file)
-
+    project_config = read_config(config_file)
     if format == "json":
+        assign_accession_ids(cas, project_config.get("taxonomy_id", ""))
         write_json_file(cas, out_file, print_undefined)
     elif format == "tsv":
         table_name_prefix = os.path.splitext(os.path.basename(data_file))[0]
@@ -45,7 +48,7 @@ def ingest_data(
             out_folder = Path(out_file).parent.absolute()
         else:
             out_folder = out_file
-        serialize_to_tables(cas, table_name_prefix, out_folder)
+        serialize_to_tables(cas, table_name_prefix, out_folder, project_config)
 
     return cas.to_dict()
 
@@ -212,3 +215,90 @@ def populate_labelsets(cas, config_fields):
     if labelsets:
         cas.labelsets = labelsets
     return ranks
+
+def assign_accession_ids(cas, accession_prefix):
+    """
+    Assigns accession IDs to the annotations in the given CellTypeAnnotation object.
+    :param cas: CellTypeAnnotation object
+    :param accession_prefix: Prefix for the accession IDs.
+    """
+    parent_records = list()
+    parent_records_dict = dict()
+
+    if not accession_prefix.endswith("_"):
+        accession_prefix += "_"
+
+    first_accession = cas.annotations[0].cell_set_accession
+    if is_hash_accession(first_accession):
+        accession_manager = HashAccessionManager()
+    else:
+        accession_manager = IncrementalAccessionManager(accession_prefix)
+        # sort annotations by accession ids incrementing (if there is)
+        if str(first_accession).split(":")[-1].split("_")[-1].isdigit():
+            cas.annotations.sort(
+                key=lambda x: (
+                    int(str(x.cell_set_accession).split(":")[-1].split("_")[-1])
+                    if x.cell_set_accession
+                       and "_" in x.cell_set_accession
+                    else 0
+                )
+            )
+
+    id_index = dict()
+    for annotation_object in cas.annotations:
+        if annotation_object.cell_set_accession:
+            if not annotation_object.cell_set_accession.startswith(accession_prefix):
+                annotation_object.cell_set_accession = (
+                    accession_prefix + '_' + annotation_object.cell_set_accession
+                )
+                labelset = annotation_object.labelset
+                accession = annotation_object.cell_set_accession or ""
+                annotation_object.cell_set_accession = accession_manager.generate_accession_id(
+                    id_recommendation=accession,
+                    labelset=labelset,
+                )
+        else:
+            # parent nodes
+            parent_records.append(annotation_object)
+        if annotation_object.parent_cell_set_name in parent_records_dict:
+            parent_records_dict.get(
+                annotation_object.parent_cell_set_name
+            ).append(annotation_object)
+        else:
+            children = list()
+            children.append(annotation_object)
+            parent_records_dict[annotation_object.parent_cell_set_name] = children
+
+    assign_parent_accession_ids(accession_manager, parent_records, parent_records_dict, cas.labelsets)
+
+
+def assign_parent_accession_ids(
+    accession_manager, std_parent_records, std_parent_records_dict, labelsets
+):
+    """
+    Assigns accession ids to parent nodes and updates their references from the childs.
+    Args:
+        accession_manager: accession ID generator
+        std_parent_records: list of all parents to assign accession ids
+        std_parent_records_dict: parent cluster - child clusters dictionary
+        labelsets: labelsets list
+    """
+    label_set_ranks = dict(
+        [
+            (label_set.name.replace("_name", ""), label_set.rank)
+            for label_set in labelsets
+        ]
+    )
+    std_parent_records.sort(key=lambda x: int(label_set_ranks[x.labelset]))
+    for std_parent_record in std_parent_records:
+        accession_id = accession_manager.generate_accession_id()
+        std_parent_record.cell_set_accession = accession_id
+
+        children = std_parent_records_dict.get(std_parent_record.cell_label, list())
+        for child in children:
+            if not (child.cell_label == std_parent_record.cell_label and child.labelset ==
+                    std_parent_record.labelset):  # prevent self reference
+                if not child.parent_cell_set_accession:  # prevent overwriting existing parent (same parent name in different labelsets)
+                    if int(label_set_ranks[child.labelset]) < int(label_set_ranks[
+                                                                         std_parent_record.labelset]):  # prevent parent assignment to a child in a higher rank
+                        child.parent_cell_set_accession = accession_id
