@@ -25,6 +25,7 @@ def ingest_data(
     out_file: str,
     format: str = "json",
     print_undefined: bool = False,
+    generate_ids: bool = False,
 ) -> dict:
     """
     Ingests given data into standard cell annotation schema data structure using the given configuration.
@@ -35,12 +36,14 @@ def ingest_data(
     :param format: Data export format. Supported formats are 'json' and 'tsv'
     :param print_undefined: prints null values to the output json if true. Omits undefined values from the json output if
     false. False by default. Only effective in json serialization.
+    :param generate_ids: if true, generates new accession IDs for the annotations. False by default.
     :return: output data as dict
     """
     cas = ingest_user_data(data_file, config_file)
     project_config = read_config(config_file)
     if format == "json":
-        assign_accession_ids(cas, project_config.get("taxonomy_id", ""))
+        if generate_ids:
+            assign_accession_ids(cas, project_config.get("taxonomy_id", ""))
         write_json_file(cas, out_file, print_undefined)
     elif format == "tsv":
         table_name_prefix = os.path.splitext(os.path.basename(data_file))[0]
