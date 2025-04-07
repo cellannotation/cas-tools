@@ -244,7 +244,6 @@ def assign_accession_ids(cas, accession_prefix):
                 )
             )
 
-    id_index = dict()
     for annotation_object in cas.annotations:
         if annotation_object.cell_set_accession:
             if not annotation_object.cell_set_accession.startswith(accession_prefix):
