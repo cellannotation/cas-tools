@@ -73,60 +73,124 @@
              
   <h1>Source code for cas.populate_cell_ids</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">anndata</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cap_anndata</span><span class="w"> </span><span class="kn">import</span> <span class="n">CapAnnDataDF</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataFrame</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">cas.file_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_anndata_file</span><span class="p">,</span> <span class="n">read_json_file</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cas.utils.validation_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">validate_labelset_hierarchy</span>
+
+<span class="c1"># Configure logging</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="populate_cell_ids">
 <a class="viewcode-back" href="../../source/cas.html#cas.populate_cell_ids.populate_cell_ids">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">populate_cell_ids</span><span class="p">(</span><span class="n">cas_json_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">anndata_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">labelsets</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">populate_cell_ids</span><span class="p">(</span>
+    <span class="n">cas_json_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">anndata_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">labelsets</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Add/update CellIDs to CAS from matching AnnData file.</span>
+<span class="sd">    Add/update CellIDs in a CAS JSON file using matching data from an AnnData file.</span>
+
+<span class="sd">    This function reads a CAS JSON file and an AnnData file, validates their consistency, and updates</span>
+<span class="sd">    CellIDs in CAS based on matching labelsets from the AnnData `obs` DataFrame. The modified CAS JSON</span>
+<span class="sd">    is then saved back to the original file.</span>
 
 <span class="sd">    Parameters:</span>
-<span class="sd">        cas_json_path: path to CAS JSON file</span>
-<span class="sd">        anndata_path: path to anndata file</span>
-<span class="sd">        labelsets: List of labelsets to update with IDs from AnnData. If value is null, rank &#39;0&#39; labelset is used.</span>
+<span class="sd">        cas_json_path (str): Path to the CAS JSON file.</span>
+<span class="sd">        anndata_path (str): Path to the AnnData file.</span>
+<span class="sd">        labelsets (list, optional): A list of labelsets to update with CellIDs from AnnData. If None,</span>
+<span class="sd">                                    the labelset with rank &#39;0&#39; is used by default.</span>
+<span class="sd">        validate (bool, optional): If True, runs validation checks to ensure labelset consistency.</span>
+<span class="sd">                                   The program will exit with an error if validation fails. Defaults to False.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        Exception: If the AnnData file cannot be read.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ad</span> <span class="o">=</span> <span class="n">read_anndata_file</span><span class="p">(</span><span class="n">anndata_path</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">ad</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">cas</span> <span class="o">=</span> <span class="n">read_json_file</span><span class="p">(</span><span class="n">cas_json_path</span><span class="p">)</span>
-        <span class="n">cas</span> <span class="o">=</span> <span class="n">add_cell_ids</span><span class="p">(</span><span class="n">cas</span><span class="p">,</span> <span class="n">ad</span><span class="p">,</span> <span class="n">labelsets</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">cas</span><span class="p">:</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cas_json_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
-                <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">cas</span><span class="p">,</span> <span class="n">json_file</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Anndata read operation failed: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">anndata_path</span><span class="p">))</span></div>
+    <span class="k">if</span> <span class="n">ad</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;AnnData read operation failed: </span><span class="si">{</span><span class="n">anndata_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">ad_obs</span> <span class="o">=</span> <span class="n">ad</span><span class="o">.</span><span class="n">obs</span>
+    <span class="n">cas</span> <span class="o">=</span> <span class="n">read_json_file</span><span class="p">(</span><span class="n">cas_json_path</span><span class="p">)</span>
+
+    <span class="n">cas</span> <span class="o">=</span> <span class="n">add_cell_ids</span><span class="p">(</span><span class="n">cas</span><span class="p">,</span> <span class="n">ad_obs</span><span class="p">,</span> <span class="n">labelsets</span><span class="p">,</span> <span class="n">validate</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">cas</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cas_json_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">cas</span><span class="p">,</span> <span class="n">json_file</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="update_cas_with_cell_ids">
+<a class="viewcode-back" href="../../source/cas.html#cas.populate_cell_ids.update_cas_with_cell_ids">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">update_cas_with_cell_ids</span><span class="p">(</span>
+    <span class="n">cas_json</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">anndata_obs</span><span class="p">:</span> <span class="n">CapAnnDataDF</span><span class="p">,</span> <span class="n">labelsets</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Update a CAS dictionary by adding or modifying CellIDs using matching AnnData observations.</span>
+
+<span class="sd">    This function takes a CAS dictionary and an AnnData `obs` DataFrame and updates the CAS</span>
+<span class="sd">    with cell IDs extracted from the specified labelsets in the AnnData.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        cas_json (dict): The CAS dictionary to update with cell IDs from AnnData.</span>
+<span class="sd">        anndata_obs (CapAnnDataDF): The `obs` DataFrame extracted from an AnnData object.</span>
+<span class="sd">        labelsets (list, optional): A list of labelsets to update with IDs from AnnData.</span>
+<span class="sd">            If None, the labelset with rank &#39;0&#39; is used.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: The updated CAS dictionary with CellIDs populated.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># validation step</span>
+    <span class="n">validate_labelset_hierarchy</span><span class="p">(</span><span class="n">cas_json</span><span class="p">,</span> <span class="n">anndata_obs</span><span class="p">)</span>
+    <span class="n">cas</span> <span class="o">=</span> <span class="n">add_cell_ids</span><span class="p">(</span><span class="n">cas_json</span><span class="p">,</span> <span class="n">anndata_obs</span><span class="p">,</span> <span class="n">labelsets</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cas</span></div>
 
 
 
 <div class="viewcode-block" id="add_cell_ids">
 <a class="viewcode-back" href="../../source/cas.html#cas.populate_cell_ids.add_cell_ids">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">add_cell_ids</span><span class="p">(</span><span class="n">cas</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">ad</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">anndata</span><span class="o">.</span><span class="n">AnnData</span><span class="p">],</span> <span class="n">labelsets</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_cell_ids</span><span class="p">(</span>
+    <span class="n">cas</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">ad_obs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">CapAnnDataDF</span><span class="p">],</span>
+    <span class="n">labelsets</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Add/update CellIDs to CAS from matching AnnData file.</span>
 
 <span class="sd">    Parameters:</span>
 <span class="sd">        cas: CAS JSON object</span>
-<span class="sd">        ad: anndata object</span>
+<span class="sd">        ad_obs: Obs DataFrame extracted from an AnnData object.</span>
 <span class="sd">        labelsets: List of labelsets to update with IDs from AnnData. If value is null, rank &#39;0&#39; labelset is used. The</span>
 <span class="sd">        labelsets should be provided in order, starting from rank 0 (leaf nodes) and ascending to higher ranks.</span>
+<span class="sd">        validate (bool, optional): If True, runs validation checks to ensure labelset consistency.</span>
+<span class="sd">                           The program wil`l exit with an error if validation fails. Defaults to False.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Run validation checks (exit if validation fails and validate=True)</span>
+    <span class="n">validate_labelset_hierarchy</span><span class="p">(</span><span class="n">cas</span><span class="p">,</span> <span class="n">ad_obs</span><span class="p">,</span> <span class="n">validate</span><span class="p">)</span>
+
     <span class="n">rank_zero_labelset</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">lbl_set</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">lbl_set</span> <span class="ow">in</span> <span class="n">cas</span><span class="p">[</span><span class="s2">&quot;labelsets&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cas</span><span class="p">[</span><span class="s2">&quot;labelsets&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rank&quot;</span><span class="p">),</span> <span class="nb">int</span><span class="p">)</span>
-        <span class="ow">and</span> <span class="n">lbl_set</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rank&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
-        <span class="ow">or</span> <span class="n">lbl_set</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rank&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;0&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;rank&quot;</span> <span class="ow">in</span> <span class="n">lbl_set</span> <span class="ow">and</span> <span class="n">lbl_set</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rank&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;0&quot;</span><span class="p">)</span>
     <span class="p">][</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">labelsets</span><span class="p">:</span>
-        <span class="n">labelsets</span> <span class="o">=</span> <span class="n">rank_zero_labelset</span>
+        <span class="n">labelsets</span> <span class="o">=</span> <span class="p">[</span><span class="n">rank_zero_labelset</span><span class="p">]</span>
 
+    <span class="n">obs_keys</span> <span class="o">=</span> <span class="n">ad_obs</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
     <span class="n">cluster_identifier_column</span> <span class="o">=</span> <span class="n">get_obs_cluster_identifier_column</span><span class="p">(</span>
-        <span class="n">ad</span><span class="p">,</span> <span class="n">labelsets</span><span class="p">,</span> <span class="n">rank_zero_labelset</span>
+        <span class="n">obs_keys</span><span class="p">,</span> <span class="n">labelsets</span><span class="p">,</span> <span class="n">rank_zero_labelset</span>
     <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">cluster_identifier_column</span><span class="p">:</span>
@@ -149,8 +213,8 @@
                             <span class="p">)</span>
                         <span class="p">)</span>
                     <span class="n">cell_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
-                        <span class="n">ad</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
-                            <span class="n">ad</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="n">cluster_identifier_column</span><span class="p">]</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">cluster_id</span><span class="p">),</span>
+                        <span class="n">ad_obs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+                            <span class="n">ad_obs</span><span class="p">[</span><span class="n">cluster_identifier_column</span><span class="p">]</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">cluster_id</span><span class="p">),</span>
                             <span class="n">cluster_identifier_column</span><span class="p">,</span>
                         <span class="p">]</span><span class="o">.</span><span class="n">index</span>
                     <span class="p">)</span>
@@ -158,8 +222,8 @@
                     <span class="c1"># cluster column value is cell label</span>
                     <span class="n">cluster_label</span> <span class="o">=</span> <span class="n">anno</span><span class="p">[</span><span class="s2">&quot;cell_label&quot;</span><span class="p">]</span>
                     <span class="n">cell_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
-                        <span class="n">ad</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
-                            <span class="n">ad</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="n">cluster_identifier_column</span><span class="p">]</span> <span class="o">==</span> <span class="n">cluster_label</span>
+                        <span class="n">ad_obs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+                            <span class="n">ad_obs</span><span class="p">[</span><span class="n">cluster_identifier_column</span><span class="p">]</span> <span class="o">==</span> <span class="n">cluster_label</span>
                         <span class="p">]</span><span class="o">.</span><span class="n">index</span>
                     <span class="p">)</span>
                 <span class="n">anno</span><span class="p">[</span><span class="s2">&quot;cell_ids&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cell_ids</span>
@@ -177,8 +241,8 @@
 
         <span class="k">return</span> <span class="n">cas</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">&quot;WARN: Cluster identifier column couldn&#39;t be identified in OBS. Populate cell ids operation is aborted.&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+            <span class="s2">&quot;Cluster identifier column couldn&#39;t be identified in OBS. Populate cell ids operation is aborted.&quot;</span>
         <span class="p">)</span>
 
     <span class="k">return</span> <span class="kc">None</span></div>
@@ -188,19 +252,19 @@
 <div class="viewcode-block" id="get_obs_cluster_identifier_column">
 <a class="viewcode-back" href="../../source/cas.html#cas.populate_cell_ids.get_obs_cluster_identifier_column">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_obs_cluster_identifier_column</span><span class="p">(</span>
-    <span class="n">ad</span><span class="p">,</span> <span class="n">labelsets</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">rank_zero_labelset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">obs_keys</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">labelsets</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">rank_zero_labelset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Anndata files may use different column names to uniquely identify Clusters. Get the cluster identifier column name for the current file.</span>
 <span class="sd">    Args:</span>
-<span class="sd">        ad: anndata object</span>
+<span class="sd">        obs_keys: Anndata observation keys.</span>
 <span class="sd">        labelsets: List of labelsets to update with IDs from AnnData. The labelsets should be provided in order,</span>
 <span class="sd">        starting from rank 0 (leaf nodes) and ascending to higher ranks.</span>
 <span class="sd">        rank_zero_labelset: rank 0 labelset name</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        cluster identifier column name</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">obs_keys</span> <span class="o">=</span> <span class="n">ad</span><span class="o">.</span><span class="n">obs_keys</span><span class="p">()</span>
+    <span class="c1"># obs_keys = ad.obs_keys()</span>
     <span class="n">cluster_identifier_column</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="k">if</span> <span class="n">labelsets</span> <span class="ow">and</span> <span class="n">labelsets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">obs_keys</span><span class="p">:</span>
         <span class="n">cluster_identifier_column</span> <span class="o">=</span> <span class="n">labelsets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -216,45 +280,6 @@
             <span class="n">cluster_identifier_column</span> <span class="o">=</span> <span class="n">rank_zero_labelset</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot; id&quot;</span>
     <span class="k">return</span> <span class="n">cluster_identifier_column</span></div>
 
-
-
-<span class="c1"># def populate_cell_ids(cas_json_path: str, anndata_path: str, labelsets: list = None):</span>
-<span class="c1">#     &quot;&quot;&quot;</span>
-<span class="c1">#     Add/update CellIDs to CAS from matching AnnData file.</span>
-<span class="c1">#</span>
-<span class="c1">#     Parameters:</span>
-<span class="c1">#         cas_json_path: path to CAS JSON file</span>
-<span class="c1">#         anndata_path: path to anndata file</span>
-<span class="c1">#         labelsets: List of labelsets to update with IDs from AnnData. If value is null, rank &#39;0&#39; labelset is used.</span>
-<span class="c1">#     &quot;&quot;&quot;</span>
-<span class="c1">#     ad = read_anndata_file(anndata_path)</span>
-<span class="c1">#     cas = read_json_file(cas_json_path)</span>
-<span class="c1">#</span>
-<span class="c1">#     if not labelsets:</span>
-<span class="c1">#         labelsets = [lbl_set[&quot;name&quot;] for lbl_set in cas[&quot;labelsets&quot;] if lbl_set[&quot;rank&quot;] == &quot;0&quot;]</span>
-<span class="c1">#</span>
-<span class="c1">#     print(labelsets)</span>
-<span class="c1">#     out = {}</span>
-<span class="c1">#     for k, v in ad.obs.iterrows():</span>
-<span class="c1">#         for r in labelsets:</span>
-<span class="c1">#             val = v[r]</span>
-<span class="c1">#             if val:</span>
-<span class="c1">#                 if not r in out.keys(): out[r] = {}</span>
-<span class="c1">#                 if not val in out[r].keys(): out[r][val] = []</span>
-<span class="c1">#                 out[r][v[r]].append(k)</span>
-<span class="c1">#</span>
-<span class="c1">#     for a in cas[&#39;annotations&#39;]:</span>
-<span class="c1">#         if not (a[&#39;labelset&#39;] in out.keys()):</span>
-<span class="c1">#             print(&quot;Unknown labelset %s&quot;, (a[&#39;labelset&#39;]))</span>
-<span class="c1">#         elif not (a[&#39;cell_label&#39;]) in out[a[&#39;labelset&#39;]].keys():</span>
-<span class="c1">#             print(&quot;Unknown value %s in labelset %s&quot;, (a[&#39;cell_label&#39;], a[&#39;labelset&#39;]))</span>
-<span class="c1">#         else:</span>
-<span class="c1">#             a[&#39;cell_ids&#39;] = out[a[&#39;labelset&#39;]][a[&#39;cell_label&#39;]]</span>
-<span class="c1">#</span>
-<span class="c1">#     with open(cas_json_path, &#39;w&#39;) as f:</span>
-<span class="c1">#         f.write(json.dumps(cas))</span>
-<span class="c1">#</span>
-<span class="c1">#     ad.file.close()</span>
 </pre></div>
 
            </div>

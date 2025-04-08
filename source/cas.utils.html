@@ -74,6 +74,12 @@
 <li class="toctree-l3"><a class="reference internal" href="#module-cas.utils.validation_utils">cas.utils.validation_utils module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#cas.utils.validation_utils.validate_markers"><code class="docutils literal notranslate"><span class="pre">validate_markers()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#cas.utils.validation_utils.validate_labelset_markers"><code class="docutils literal notranslate"><span class="pre">validate_labelset_markers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cas.utils.validation_utils.validate_labelset_hierarchy"><code class="docutils literal notranslate"><span class="pre">validate_labelset_hierarchy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cas.utils.validation_utils.compare_labelsets_cas_obs"><code class="docutils literal notranslate"><span class="pre">compare_labelsets_cas_obs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cas.utils.validation_utils.validate_labelset_values"><code class="docutils literal notranslate"><span class="pre">validate_labelset_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cas.utils.validation_utils.check_parent_child_consistency"><code class="docutils literal notranslate"><span class="pre">check_parent_child_consistency()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cas.utils.validation_utils.infer_obs_cell_hierarchy"><code class="docutils literal notranslate"><span class="pre">infer_obs_cell_hierarchy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cas.utils.validation_utils.infer_cas_cell_hierarchy"><code class="docutils literal notranslate"><span class="pre">infer_cas_cell_hierarchy()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-cas.utils">Module contents</a></li>
@@ -485,6 +491,143 @@ any markers are missing.</p>
 <p class="admonition-title">Note</p>
 <p>This function is intended to be used within <cite>validate_markers</cite> to handle individual annotation validation.</p>
 </div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cas.utils.validation_utils.validate_labelset_hierarchy">
+<span class="sig-prename descclassname"><span class="pre">cas.utils.validation_utils.</span></span><span class="sig-name descname"><span class="pre">validate_labelset_hierarchy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/utils/validation_utils.html#validate_labelset_hierarchy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.utils.validation_utils.validate_labelset_hierarchy" title="Link to this definition"></a></dt>
+<dd><p>Validates the labelset hierarchy by performing multiple consistency checks between CAS and obs.</p>
+<p>This function runs three validation checks:
+1. Ensures all labelsets from CAS exist in obs.
+2. Verifies that all labelset values from CAS annotations exist in the corresponding obs columns.
+3. Checks if the inferred parent-child hierarchy from obs matches CAS-defined ranks.</p>
+<p>If any of these checks fail, warnings or errors will be logged. If <cite>validate=True</cite>, the process
+will terminate with <cite>sys.exit(1)</cite> if any validation check fails.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cas</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – The CAS JSON object containing labelset definitions and annotations.</p></li>
+<li><p><strong>obs</strong> (<em>Union</em><em>[</em><em>pd.DataFrame</em><em>, </em><em>CapAnnDataDF</em><em>]</em>) – The AnnData obs DataFrame or a CapAnnDataDF object.</p></li>
+<li><p><strong>validate</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, exits the program with an error code if any validation fails.
+Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cas.utils.validation_utils.compare_labelsets_cas_obs">
+<span class="sig-prename descclassname"><span class="pre">cas.utils.validation_utils.</span></span><span class="sig-name descname"><span class="pre">compare_labelsets_cas_obs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/utils/validation_utils.html#compare_labelsets_cas_obs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.utils.validation_utils.compare_labelsets_cas_obs" title="Link to this definition"></a></dt>
+<dd><p>Compare labelsets from CAS JSON object with the columns of the obs DataFrame.</p>
+<p>Logs a warning if any labelsets from CAS are missing in obs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cas</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</span>) – The CAS JSON object.</p></li>
+<li><p><strong>obs</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">CapAnnDataDF</span></code>]</span>) – The AnnData obs DataFrame.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if all labelsets from CAS exist as columns in obs, otherwise False.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cas.utils.validation_utils.validate_labelset_values">
+<span class="sig-prename descclassname"><span class="pre">cas.utils.validation_utils.</span></span><span class="sig-name descname"><span class="pre">validate_labelset_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/utils/validation_utils.html#validate_labelset_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.utils.validation_utils.validate_labelset_values" title="Link to this definition"></a></dt>
+<dd><p>Validate that all labelset members from CAS annotations exist in the corresponding obs labelset columns.</p>
+<p>Logs warnings for any missing labelset members.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cas</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – The CAS JSON object.</p></li>
+<li><p><strong>obs</strong> (<em>pd.DataFrame</em>) – The AnnData obs DataFrame.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if all labelset members from CAS exist in obs, otherwise False.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cas.utils.validation_utils.check_parent_child_consistency">
+<span class="sig-prename descclassname"><span class="pre">cas.utils.validation_utils.</span></span><span class="sig-name descname"><span class="pre">check_parent_child_consistency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/utils/validation_utils.html#check_parent_child_consistency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.utils.validation_utils.check_parent_child_consistency" title="Link to this definition"></a></dt>
+<dd><p>Checks if the inferred hierarchy from cell labels in obs matches the expected hierarchy from
+CAS rank data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cas</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – The CAS JSON object containing labelset ranks.</p></li>
+<li><p><strong>obs</strong> (<em>pd.DataFrame</em>) – The AnnData obs DataFrame.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>True if all inferred parent-child relationships from obs match those from cas,</dt><dd><p>otherwise False.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cas.utils.validation_utils.infer_obs_cell_hierarchy">
+<span class="sig-prename descclassname"><span class="pre">cas.utils.validation_utils.</span></span><span class="sig-name descname"><span class="pre">infer_obs_cell_hierarchy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cas_ranks</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/utils/validation_utils.html#infer_obs_cell_hierarchy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.utils.validation_utils.infer_obs_cell_hierarchy" title="Link to this definition"></a></dt>
+<dd><p>Infers a direct parent-child hierarchy between cell labels based on row co-occurrence.</p>
+<p>This function analyzes the hierarchical relationships between cell labels by comparing their
+row indices in the <cite>obs</cite> DataFrame. A label is considered a child if its row indices are fully
+contained within another label’s indices. The closest (direct) parent is selected based on
+CAS-defined ranks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obs</strong> (<em>pd.DataFrame</em>) – The AnnData <cite>obs</cite> DataFrame containing labelset columns.</p></li>
+<li><p><strong>cas_ranks</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>int</em><em>]</em>) – A dictionary mapping cell labels to their CAS-defined rank,
+where lower values indicate higher ranks.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A dictionary mapping each cell label to its inferred direct parent.</dt><dd><p>Labels without a parent are assigned <cite>None</cite>.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[Any, Optional[Any]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cas.utils.validation_utils.infer_cas_cell_hierarchy">
+<span class="sig-prename descclassname"><span class="pre">cas.utils.validation_utils.</span></span><span class="sig-name descname"><span class="pre">infer_cas_cell_hierarchy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cas</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/utils/validation_utils.html#infer_cas_cell_hierarchy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.utils.validation_utils.infer_cas_cell_hierarchy" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>cas</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>)</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

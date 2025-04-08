@@ -47,7 +47,11 @@
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">CAS Tools</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">CLI Operations</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#validate-cas-file">Validate CAS file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#flatten-onto-anndata">Flatten onto AnnData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#export-cas-to-cap-format-in-anndata"><strong>Export CAS to CAP Format in AnnData</strong></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#key-features"><strong>Key Features:</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#command-line-arguments"><strong>Command-line Arguments:</strong></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#unflatten-operation">Unflatten Operation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#usage-example">Usage Example</a></li>
 </ul>
@@ -60,18 +64,18 @@
 <li class="toctree-l2"><a class="reference internal" href="#populate-cell-ids">Populate Cell IDs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#convert-cas-data-to-rdf">Convert CAS data to RDF</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#add-author-annotations-to-cas-json">Add Author Annotations to CAS JSON</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#command-line-arguments">Command-line Arguments:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Command-line Arguments:</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#usage-examples">Usage Examples:</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#split-cas-json-by-cell-label">Split CAS JSON by Cell Label</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id1">Command-line Arguments:</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id2">Usage Examples:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Command-line Arguments:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Usage Examples:</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#split-anndata-with-cas-json">Split AnnData with CAS JSON</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id3">Command-line Arguments:</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id4">Usage Examples:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Command-line Arguments:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Usage Examples:</a></li>
 </ul>
 </li>
 </ul>
@@ -118,42 +122,74 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">--schema</span></code>    : One of ‘base’, ‘bican’ or ‘cap’. Identifies the CAS schema to validate data against.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--data</span></code>   : Path to the data file (or folder) to validate. If given path is a folder, validates all json files inside.</p></li>
 </ul>
+<p>Here’s your updated <strong>Markdown documentation</strong> to align with the <strong><code class="docutils literal notranslate"><span class="pre">export2cap</span></code></strong> naming convention:</p>
 </section>
-<section id="flatten-onto-anndata">
-<h2>Flatten onto AnnData<a class="headerlink" href="#flatten-onto-anndata" title="Link to this heading"></a></h2>
-<p>Flattens all content of CAS annotations to <code class="docutils literal notranslate"><span class="pre">obs</span></code> key:value pairs. Flattens all other content to key_value pairs in <code class="docutils literal notranslate"><span class="pre">uns</span></code>. The resulting AnnData object is then saved to a new file.</p>
-<p>Key Features:</p>
+<hr class="docutils" />
+<section id="export-cas-to-cap-format-in-anndata">
+<h2><strong>Export CAS to CAP Format in AnnData</strong><a class="headerlink" href="#export-cas-to-cap-format-in-anndata" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">export2cap</span></code> converts CAS annotations into <code class="docutils literal notranslate"><span class="pre">obs</span></code> key-value pairs and stores other CAS content as key-value pairs in <code class="docutils literal notranslate"><span class="pre">uns</span></code>. The resulting AnnData object is then saved to a new file.</p>
+<section id="key-features">
+<h3><strong>Key Features:</strong><a class="headerlink" href="#key-features" title="Link to this heading"></a></h3>
 <ol class="arabic simple">
-<li><p>Parses command-line arguments for input JSON file, input AnnData file, and output file.</p></li>
-<li><p>Reads and processes the input JSON file and AnnData file.</p></li>
-<li><p>Updates the AnnData object with information from the JSON annotations and root keys.</p></li>
+<li><p>Parses command-line arguments for an optional input JSON file and/or an AnnData file.</p></li>
+<li><p><strong>Requires at least one of the following to be supplied:</strong> a CAS JSON file (<code class="docutils literal notranslate"><span class="pre">--json</span></code>) or an AnnData file (<code class="docutils literal notranslate"><span class="pre">--anndata</span></code>).</p></li>
+<li><p>If the CAS JSON file is not provided via <code class="docutils literal notranslate"><span class="pre">--json</span></code>, the tool expects to find the CAS JSON embedded in the AnnData file’s <code class="docutils literal notranslate"><span class="pre">uns</span></code> section.</p></li>
+<li><p>If the AnnData file is not provided via <code class="docutils literal notranslate"><span class="pre">--anndata</span></code>, it will be downloaded using the matrix file ID from the CAS JSON.</p></li>
+<li><p>Updates the AnnData object with information from the CAS JSON annotations and root keys.</p></li>
 <li><p>Writes the modified AnnData object to a specified output file.</p></li>
 </ol>
-<p>Detailed specification about the <code class="docutils literal notranslate"><span class="pre">flatten</span></code> operation can be found in the <a class="reference external" href="https://github.com/cellannotation/cas-tools/issues/7">related issue</a>.</p>
-<div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>cas flatten --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --output path/to/output_file.h5ad
+<p>A detailed specification about the <code class="docutils literal notranslate"><span class="pre">export2cap</span></code> operation can be found in the <a class="reference external" href="https://github.com/cellannotation/cas-tools/issues/7">related issue</a>.</p>
+<div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>cas export2cap --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --output path/to/output_file.h5ad
 </pre></div>
 </div>
-<p><strong>Command-line Arguments:</strong></p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">--json</span></code>      : Path to the CAS JSON schema file.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--anndata</span></code>   : Path to the AnnData file. If not provided, AnnData will be downloaded using matrix file id from CAS JSON.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--output</span></code>    : Optional output AnnData file name. If provided a new flatten anndata file will be created,
-otherwise the inputted anndata file will be updated with the flatten data.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--fill-na</span></code>   : Optional boolean flag indicating whether to fill missing values in the ‘obs’ field with pd.NA. If
-provided, missing values will be replaced with pd.NA; if not provided, they will remain as empty
-strings.</p></li>
-</ul>
-<p>Please check the <a class="reference download internal" download="" href="_downloads/9a7802a317dc249a85b975d1951e636e/test_flatten.ipynb"><span class="xref download myst">related notebook</span></a> to evaluate the output data format.</p>
 </section>
+<section id="command-line-arguments">
+<h3><strong>Command-line Arguments:</strong><a class="headerlink" href="#command-line-arguments" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--json</span></code>      : <strong>Optional</strong> path to the CAS JSON schema file.</p>
+<ul>
+<li><p><em>If not provided</em>, the CAS JSON is expected to be embedded in the AnnData file’s <code class="docutils literal notranslate"><span class="pre">uns</span></code> section.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--anndata</span></code>   : <strong>Optional</strong> path to the AnnData file.</p>
+<ul>
+<li><p><em>If not provided</em>, the AnnData file will be downloaded using the matrix file ID from the CAS JSON.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--output</span></code>    : Optional output AnnData file name.</p>
+<ul>
+<li><p>If provided, a new AnnData file with CAS exported to CAP format will be created; otherwise, the input AnnData file will be updated in place.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--fill-na</span></code>   : Optional boolean flag indicating whether to fill missing values in the <code class="docutils literal notranslate"><span class="pre">obs</span></code> field with <code class="docutils literal notranslate"><span class="pre">pd.NA</span></code>.</p>
+<ul>
+<li><p>If provided, missing values will be replaced with <code class="docutils literal notranslate"><span class="pre">pd.NA</span></code>.</p></li>
+<li><p>If not provided, missing values will remain as empty strings.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Note:</strong> At least one of <code class="docutils literal notranslate"><span class="pre">--json</span></code> or <code class="docutils literal notranslate"><span class="pre">--anndata</span></code> must be supplied. Additionally, if the CAS JSON is not provided via <code class="docutils literal notranslate"><span class="pre">--json</span></code> and the AnnData file does not contain the CAS JSON in its <code class="docutils literal notranslate"><span class="pre">uns</span></code> section, the operation will fail with an error indicating that the CAS JSON is missing.</p>
+<p>Please check the <a class="reference internal" href="#../notebooks/test_export2cap.ipynb"><span class="xref myst">related notebook</span></a> to evaluate the output data format.</p>
+</section>
+</section>
+<hr class="docutils" />
 <section id="unflatten-operation">
 <h2>Unflatten Operation<a class="headerlink" href="#unflatten-operation" title="Link to this heading"></a></h2>
 <p>Unflattens all content of a flattened AnnData file into a CAS JSON file and creates an unflattened AnnData file.</p>
 <p><strong>Key Features:</strong></p>
 <ol class="arabic simple">
-<li><p>Parses command-line arguments for input AnnData file and optional JSON and output files.</p></li>
-<li><p>Processes the input AnnData file and optionally a JSON file.</p></li>
+<li><p>Parses command-line arguments for the input AnnData file and optional JSON and output files.</p></li>
+<li><p>Processes the input AnnData file and, optionally, a JSON file.</p></li>
 <li><p>Converts flattened AnnData content back to its unflattened version and creates corresponding CAS JSON files.</p></li>
-<li><p>Saves the unflattened AnnData and CAS JSON files to specified output locations.</p></li>
+<li><p>Annotation Verification and Update:</p>
+<ul class="simple">
+<li><p>Uses a lookup dictionary (stored in the <code class="docutils literal notranslate"><span class="pre">uns</span></code> section of the AnnData file and generated in the export2cap step) to verify and update annotations.</p></li>
+<li><p><strong>Direct Update:</strong> Annotations are updated when both the labelset-label pair and the generated cell hash (computed using labelset labels and <code class="docutils literal notranslate"><span class="pre">cell_ids</span></code>) match.</p></li>
+<li><p><strong>Discarding Mismatches:</strong> If the labelset-label pair matches but the hashes do not, the annotation is discarded.</p></li>
+<li><p><strong>Handling Label Changes:</strong> If the cell hash matches without a matching labelset-label pair, it suggests a possible label change, and the annotation is updated accordingly.</p></li>
+</ul>
+</li>
+<li><p>Saves the unflattened AnnData and CAS JSON files to the specified output locations.</p></li>
 </ol>
 <div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>cd src
 python -m cas unflatten --anndata path/to/anndata_file.h5ad --json path/to/json_file.json --output_anndata path/to/output_file.h5ad --output_json path/to/output_cas.json
@@ -163,8 +199,7 @@ python -m cas unflatten --anndata path/to/anndata_file.h5ad
 <p><strong>Command-line Arguments:</strong></p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">--anndata</span></code>        : Path to the input AnnData file that contains flattened data.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--json</span></code>           : Optional path to the CAS JSON file. If provided, the ‘annotations’
-within the file will be updated. If not provided, a new CAS JSON file will be created.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--json</span></code>           : Optional path to the CAS JSON file. If provided, the ‘annotations’ within the file will be updated based on lookup dictionary checks; if not provided, a new CAS JSON file will be created.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--output_anndata</span></code> : Optional output AnnData file name. If not provided, <code class="docutils literal notranslate"><span class="pre">unflattened.h5ad</span></code> will be used as the default name.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--output_json</span></code>    : Optional output CAS JSON file name. If not provided, <code class="docutils literal notranslate"><span class="pre">cas.json</span></code> will be used as the default name.</p></li>
 </ul>
@@ -248,31 +283,48 @@ path/to/cluster_annotation_term.csv
 </section>
 <section id="merge-cas-to-anndata-file">
 <h2>Merge CAS to AnnData file<a class="headerlink" href="#merge-cas-to-anndata-file" title="Link to this heading"></a></h2>
-<p>Integrates cell annotations from a CAS (Cell Annotation Schema) JSON file into an AnnData object.  It performs validation checks to ensure data consistency between the CAS file and the AnnData file.  The AnnData file location should ideally be specified as a resolvable path in the CAS file.</p>
+<p>Integrates cell annotations from a CAS (Cell Annotation Schema) JSON file into an AnnData object. It performs validation checks to ensure data consistency between the CAS file and the AnnData file. The AnnData file location should ideally be specified as a resolvable path in the CAS file.</p>
 <div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>cas merge --json path/to/CAS_schema.json --anndata path/to/input_anndata.h5ad --validate --output path/to/output.h5ad
 </pre></div>
 </div>
 <p><strong>Command-line Arguments:</strong></p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">--json</span></code>      : Path to the CAS JSON schema file.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--anndata</span></code>   : Path to the AnnData file. Path to the AnnData file. If not provided, AnnData will be downloaded using matrix file id from CAS JSON.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--validate</span></code>  : (Optional) Perform validation checks before writing to the output AnnData file.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--anndata</span></code>   : Path to the AnnData file. If not provided, AnnData will be downloaded using the matrix file ID from the CAS JSON.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--validate</span></code>  : (Optional) If set, the following validation checks will be performed before writing to the output AnnData file:</p>
+<ol class="arabic simple">
+<li><p>Verifies that all cell barcodes (cell IDs) in CAS exist in AnnData and vice versa.</p></li>
+<li><p>Identifies matching labelset names between CAS and AnnData.</p></li>
+<li><p>Validates that cell sets associated with each annotation match between CAS and AnnData.</p></li>
+<li><p>Checks if the cell labels are identical; if not, provides options to update or terminate.</p></li>
+</ol>
+</li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--output</span></code>    : Output AnnData file name (default: output.h5ad).</p></li>
 </ul>
-<p>Please check the <a class="reference download internal" download="" href="_downloads/e2789f4adf73433dc098ff24a7f3550e/test_merge.ipynb"><span class="xref download myst">related notebook</span></a> to evaluate the output data format.</p>
+<p>Please check the <a class="reference internal" href="#../notebooks/test_merge.ipynb"><span class="xref myst">related notebook</span></a> to evaluate the output data format.</p>
 </section>
 <section id="populate-cell-ids">
 <h2>Populate Cell IDs<a class="headerlink" href="#populate-cell-ids" title="Link to this heading"></a></h2>
-<p>Add/update CellIDs to CAS from matching AnnData file. Checks for alignment between <code class="docutils literal notranslate"><span class="pre">obs</span></code> key:value pairs in AnnData file and labelset:cell_label pairs in CAS for some specified list of <code class="docutils literal notranslate"><span class="pre">labelsets</span></code>. If they are aligned, updates <code class="docutils literal notranslate"><span class="pre">cell_ids</span></code> in CAS.</p>
-<div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>cas populate_cells --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --labelsets Cluster,Supercluster
+<p>Add/update CellIDs to CAS from a matching AnnData file. Checks for alignment between <code class="docutils literal notranslate"><span class="pre">obs</span></code> key-value pairs in the AnnData file and labelset:cell_label pairs in CAS for a specified list of <code class="docutils literal notranslate"><span class="pre">labelsets</span></code>. If they are aligned, updates <code class="docutils literal notranslate"><span class="pre">cell_ids</span></code> in CAS.</p>
+<div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>cas populate_cells --json path/to/json_file.json --anndata path/to/anndata_file.h5ad --labelsets Cluster Supercluster --validate
 </pre></div>
 </div>
 <p><strong>Command-line Arguments:</strong></p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">--json</span></code>      : Path to the CAS JSON schema file.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--anndata</span></code>   : Path to the AnnData file. Ideally, the location will be specified by a resolvable path in the CAS file.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--labelsets</span></code> : (Optional) List of labelsets to update with IDs from AnnData. If value is not provided, rank ‘0’ labelset is used.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--json</span></code>      : (Required) Path to the CAS JSON schema file.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--anndata</span></code>   : (Required) Path to the AnnData file. Ideally, the location will be specified by a resolvable path in the CAS file.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--labelsets</span></code> : (Optional) A space-separated list of labelsets to update with IDs from AnnData. If not provided, the labelset with rank ‘0’ is used by default. The labelsets should be provided in hierarchical order, starting from rank 0 (leaf nodes) and ascending to higher ranks.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--validate</span></code>  : (Optional) If set, strict validation is enforced. If validation fails, the program exits immediately with an error code (<code class="docutils literal notranslate"><span class="pre">sys.exit(1)</span></code>). Otherwise, it logs warnings but continues execution.</p></li>
 </ul>
+<p><strong>Usage Examples:</strong></p>
+<p>Run without validation (default mode):</p>
+<div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>cas populate_cells --json cas.json --anndata data.h5ad --labelsets Cluster Supercluster
+</pre></div>
+</div>
+<p>Run with strict validation (<code class="docutils literal notranslate"><span class="pre">--validate</span></code>):</p>
+<div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>cas populate_cells --json cas.json --anndata data.h5ad --labelsets Cluster Supercluster --validate
+</pre></div>
+</div>
 </section>
 <section id="convert-cas-data-to-rdf">
 <h2>Convert CAS data to RDF<a class="headerlink" href="#convert-cas-data-to-rdf" title="Link to this heading"></a></h2>
@@ -293,8 +345,8 @@ CAS schema file or url of the schema file. If not provided, reads the <code clas
 <section id="add-author-annotations-to-cas-json">
 <h2>Add Author Annotations to CAS JSON<a class="headerlink" href="#add-author-annotations-to-cas-json" title="Link to this heading"></a></h2>
 <p>This tool processes input CSV and CAS JSON files to add annotation fields to the CAS JSON based on matching columns specified by the user. It can optionally use selected columns from the CSV for annotations and outputs the annotated CAS JSON to a specified file. If no specific columns are provided, all columns from the CSV file will be used.</p>
-<section id="command-line-arguments">
-<h3>Command-line Arguments:<a class="headerlink" href="#command-line-arguments" title="Link to this heading"></a></h3>
+<section id="id1">
+<h3>Command-line Arguments:<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><strong>–cas_json</strong>: Path to the CAS JSON file that will be updated with annotations. This parameter is required.</p></li>
 <li><p><strong>–csv</strong>: Specifies the path to the CSV file containing the data for annotation. This parameter is required.</p></li>
@@ -318,16 +370,18 @@ python -m cas add_author_annotations --cas_json path_to_cas.json --csv path_to_c
 <section id="split-cas-json-by-cell-label">
 <h2>Split CAS JSON by Cell Label<a class="headerlink" href="#split-cas-json-by-cell-label" title="Link to this heading"></a></h2>
 <p>This tool allows you to split a CAS JSON file based on specified cell accession_id(s). It supports creating multiple output files, each corresponding to one of the specified accession_id(s), or a single output file containing all specified accession_id, depending on the user’s choice.</p>
-<section id="id1">
-<h3>Command-line Arguments:<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<section id="id2">
+<h3>Command-line Arguments:<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><strong>–cas_json</strong>: Path to the CAS JSON file that will be updated. This parameter is required.</p></li>
 <li><p><strong>–split_on</strong>: Specifies the cell accession_id(s) to split the CAS file. Multiple accession_ids can be provided.</p></li>
-<li><p><strong>–multiple_outputs</strong>: If set, creates multiple output files for each label provided in <code class="docutils literal notranslate"><span class="pre">--split_on</span></code>. If not set, creates a single output file containing all child terms from the split.</p></li>
+<li><p><strong>–multiple_outputs</strong>: If set, create multiple output files for each term provided in split_on.
+If not set, a single output file will be created containing all child terms,
+and it will be named as <code class="docutils literal notranslate"><span class="pre">split_cas.json</span></code>.</p></li>
 </ul>
 </section>
-<section id="id2">
-<h3>Usage Examples:<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<section id="id3">
+<h3>Usage Examples:<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
 <div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>cd src
 python -m cas split_cas --cas_json path/to/cas.json --split_on term1
 python -m cas split_cas --cas_json path/to/cas.json --split_on term1 term2
@@ -340,8 +394,8 @@ python -m cas split_cas --cas_json path/to/cas.json --split_on term1 term2 --mul
 <section id="split-anndata-with-cas-json">
 <h2>Split AnnData with CAS JSON<a class="headerlink" href="#split-anndata-with-cas-json" title="Link to this heading"></a></h2>
 <p>This tool allows you to split an AnnData file based on specified CAS JSON files. It supports creating multiple output files, each corresponding to one of the specified CAS JSON files, or a single output file that contains all cells from the input CAS JSON files, depending on the user’s choice.</p>
-<section id="id3">
-<h3>Command-line Arguments:<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<section id="id4">
+<h3>Command-line Arguments:<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><strong>–anndata</strong>: Path to the AnnData file. If not provided, AnnData will be downloaded using matrix file id from CAS JSON.</p></li>
 <li><p><strong>–cas_json</strong>: List of CAS JSON file paths that will be used to split the AnnData file. Multiple paths can be provided.</p></li>
@@ -349,8 +403,8 @@ python -m cas split_cas --cas_json path/to/cas.json --split_on term1 term2 --mul
 <li><p><strong>–compression</strong>: Compression method utilized in anndata write function. It can be <code class="docutils literal notranslate"><span class="pre">gzip</span></code>, <code class="docutils literal notranslate"><span class="pre">lzf</span></code>,  or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is “gzip” if flag is provided without a value. If the flag is not provided, defaults to None.</p></li>
 </ul>
 </section>
-<section id="id4">
-<h3>Usage Examples:<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<section id="id5">
+<h3>Usage Examples:<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
 <div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>cd src
 python -m cas split_anndata --anndata path/to/anndata.h5ad --cas_json path/to/cas.json
 python -m cas split_anndata --anndata path/to/anndata.h5ad --cas_json path/to/cas.json

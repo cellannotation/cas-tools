@@ -82,6 +82,7 @@
     <span class="n">LABELSET</span><span class="p">,</span>
     <span class="n">LABELSET_NAME</span><span class="p">,</span>
     <span class="n">LABELSETS</span><span class="p">,</span>
+    <span class="n">NT_ACCESSION</span><span class="p">,</span>
     <span class="n">PARENT_CELL_SET_ACCESSION</span><span class="p">,</span>
 <span class="p">)</span>
 
@@ -135,14 +136,19 @@
 <span class="sd">    Raises:</span>
 <span class="sd">        ValueError: If any split_terms do not exist in the CAS data under &#39;parent_cell_set_name&#39;.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">cell_dict</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="n">annotation</span><span class="p">[</span><span class="n">CELL_SET_ACCESSION</span><span class="p">]:</span> <span class="n">annotation</span><span class="p">[</span><span class="n">PARENT_CELL_SET_ACCESSION</span><span class="p">]</span>
-        <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">cas</span><span class="p">[</span><span class="n">ANNOTATIONS</span><span class="p">]</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">PARENT_CELL_SET_ACCESSION</span> <span class="ow">in</span> <span class="n">annotation</span><span class="p">)</span>
-    <span class="p">}</span>
     <span class="n">parent_cell_dict</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">child_cell</span><span class="p">,</span> <span class="n">parent_cell</span> <span class="ow">in</span> <span class="n">cell_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">parent_cell_dict</span><span class="p">[</span><span class="n">parent_cell</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child_cell</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">cas</span><span class="p">[</span><span class="n">ANNOTATIONS</span><span class="p">]:</span>
+        <span class="n">child</span> <span class="o">=</span> <span class="n">annotation</span><span class="p">[</span><span class="n">CELL_SET_ACCESSION</span><span class="p">]</span>
+        <span class="c1"># Map parent cell accession to the child cell</span>
+        <span class="k">if</span> <span class="n">PARENT_CELL_SET_ACCESSION</span> <span class="ow">in</span> <span class="n">annotation</span><span class="p">:</span>
+            <span class="n">parent_cell</span> <span class="o">=</span> <span class="n">annotation</span><span class="p">[</span><span class="n">PARENT_CELL_SET_ACCESSION</span><span class="p">]</span>
+            <span class="n">parent_cell_dict</span><span class="p">[</span><span class="n">parent_cell</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+        <span class="c1"># Map NT accession to the child cell</span>
+        <span class="k">if</span> <span class="n">NT_ACCESSION</span> <span class="ow">in</span> <span class="n">annotation</span><span class="p">:</span>
+            <span class="n">nt_parent</span> <span class="o">=</span> <span class="n">annotation</span><span class="p">[</span><span class="n">NT_ACCESSION</span><span class="p">]</span>
+            <span class="n">parent_cell_dict</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nt_parent</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">split_terms</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">split_terms</span> <span class="o">=</span> <span class="p">[</span><span class="n">split_terms</span><span class="p">]</span>
     <span class="n">keys_and_values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">parent_cell_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">+</span> <span class="p">[</span>
@@ -217,14 +223,14 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">split_terms</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">split_terms</span> <span class="o">=</span> <span class="p">[</span><span class="n">split_terms</span><span class="p">]</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
     <span class="n">stack</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">split_terms</span><span class="p">)</span>
     <span class="k">while</span> <span class="n">stack</span><span class="p">:</span>
         <span class="n">term</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">parent_dict</span><span class="p">:</span>
             <span class="n">stack</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">parent_dict</span><span class="p">[</span><span class="n">term</span><span class="p">])</span>
-        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">term</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">result</span></div>
+        <span class="n">result</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">term</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
 
 </pre></div>
 

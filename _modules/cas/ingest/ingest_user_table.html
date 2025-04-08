@@ -73,6 +73,7 @@
              
   <h1>Source code for cas.ingest.ingest_user_table</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">version</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_type_hints</span>
@@ -80,6 +81,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">cas.file_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_config</span><span class="p">,</span> <span class="n">read_table_to_dict</span><span class="p">,</span> <span class="n">write_json_file</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">cas.flatten_data_to_tables</span><span class="w"> </span><span class="kn">import</span> <span class="n">serialize_to_tables</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">cas.ingest.config_validator</span><span class="w"> </span><span class="kn">import</span> <span class="n">validate</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cas.accession.incremental_accession_manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">IncrementalAccessionManager</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">cas.model</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">Annotation</span><span class="p">,</span>
     <span class="n">AnnotationTransfer</span><span class="p">,</span>
@@ -99,6 +101,7 @@
     <span class="n">out_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="nb">format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;json&quot;</span><span class="p">,</span>
     <span class="n">print_undefined</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">generate_accession_ids</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Ingests given data into standard cell annotation schema data structure using the given configuration.</span>
@@ -109,9 +112,10 @@
 <span class="sd">    :param format: Data export format. Supported formats are &#39;json&#39; and &#39;tsv&#39;</span>
 <span class="sd">    :param print_undefined: prints null values to the output json if true. Omits undefined values from the json output if</span>
 <span class="sd">    false. False by default. Only effective in json serialization.</span>
+<span class="sd">    :param generate_accession_ids: determines if incrementally generate accession_ids for all annotations that don&#39;t have an id.</span>
 <span class="sd">    :return: output data as dict</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">cas</span> <span class="o">=</span> <span class="n">ingest_user_data</span><span class="p">(</span><span class="n">data_file</span><span class="p">,</span> <span class="n">config_file</span><span class="p">)</span>
+    <span class="n">cas</span> <span class="o">=</span> <span class="n">ingest_user_data</span><span class="p">(</span><span class="n">data_file</span><span class="p">,</span> <span class="n">config_file</span><span class="p">,</span> <span class="n">generate_accession_ids</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">format</span> <span class="o">==</span> <span class="s2">&quot;json&quot;</span><span class="p">:</span>
         <span class="n">write_json_file</span><span class="p">(</span><span class="n">cas</span><span class="p">,</span> <span class="n">out_file</span><span class="p">,</span> <span class="n">print_undefined</span><span class="p">)</span>
@@ -129,11 +133,12 @@
 
 <div class="viewcode-block" id="ingest_user_data">
 <a class="viewcode-back" href="../../../source/cas.ingest.html#cas.ingest.ingest_user_table.ingest_user_data">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">ingest_user_data</span><span class="p">(</span><span class="n">data_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">config_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ingest_user_data</span><span class="p">(</span><span class="n">data_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">config_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">generate_accession_ids</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CellTypeAnnotation</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Ingest given user data into standard cell annotation schema data structure using the given configuration.</span>
 <span class="sd">    :param data_file: Unformatted user data in tsv/csv format.</span>
 <span class="sd">    :param config_file: configuration file path.</span>
+<span class="sd">    :param generate_accession_ids: determines if incrementally generate accession_ids for all annotations that don&#39;t have an id.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">config</span> <span class="o">=</span> <span class="n">read_config</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
@@ -185,6 +190,53 @@
 
         <span class="n">ao_names</span><span class="p">[</span><span class="n">ao</span><span class="o">.</span><span class="n">labelset</span> <span class="o">+</span> <span class="n">NAME_SEPERATOR</span> <span class="o">+</span> <span class="n">ao</span><span class="o">.</span><span class="n">cell_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">ao</span>
         <span class="n">cas</span><span class="o">.</span><span class="n">add_annotation_object</span><span class="p">(</span><span class="n">ao</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">generate_accession_ids</span><span class="p">:</span>
+        <span class="n">cas</span> <span class="o">=</span> <span class="n">generate_ids_for_annotations</span><span class="p">(</span><span class="n">cas</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cas</span></div>
+
+
+
+<div class="viewcode-block" id="generate_ids_for_annotations">
+<a class="viewcode-back" href="../../../source/cas.ingest.html#cas.ingest.ingest_user_table.generate_ids_for_annotations">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_ids_for_annotations</span><span class="p">(</span><span class="n">cas</span><span class="p">:</span> <span class="n">CellTypeAnnotation</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CellTypeAnnotation</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates unique IDs for the annotations in the given CellTypeAnnotation object.</span>
+<span class="sd">    :param cas: CellTypeAnnotation object</span>
+<span class="sd">    :param config: ingestion configuration dictionary</span>
+<span class="sd">    :return: CellTypeAnnotation object with generated IDs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">max_accession</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">example_accession</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">max_value</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">cas</span><span class="o">.</span><span class="n">annotations</span><span class="p">:</span>
+        <span class="n">accession</span> <span class="o">=</span> <span class="n">annotation</span><span class="o">.</span><span class="n">cell_set_accession</span>
+        <span class="k">if</span> <span class="n">accession</span><span class="p">:</span>
+            <span class="n">example_accession</span> <span class="o">=</span> <span class="n">accession</span>
+            <span class="n">parts</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[_:]&#39;</span><span class="p">,</span> <span class="n">accession</span><span class="p">)</span>
+            <span class="n">last_part</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">last_part</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">last_part</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="n">max_value</span><span class="p">:</span>
+                    <span class="n">max_value</span> <span class="o">=</span> <span class="n">value</span>
+                    <span class="n">max_accession</span> <span class="o">=</span> <span class="n">accession</span>
+
+    <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="s2">&quot;_&quot;</span> <span class="ow">in</span> <span class="n">example_accession</span><span class="p">:</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;taxonomy_id&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">accession_manager</span> <span class="o">=</span> <span class="n">IncrementalAccessionManager</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">max_value</span><span class="p">)</span>
+
+    <span class="n">label_to_accession</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">cas</span><span class="o">.</span><span class="n">annotations</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">annotation</span><span class="o">.</span><span class="n">cell_set_accession</span><span class="p">:</span>
+            <span class="n">annotation</span><span class="o">.</span><span class="n">cell_set_accession</span> <span class="o">=</span> <span class="n">accession_manager</span><span class="o">.</span><span class="n">generate_accession_id</span><span class="p">()</span>
+        <span class="n">label_to_accession</span><span class="p">[</span><span class="n">annotation</span><span class="o">.</span><span class="n">cell_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">annotation</span><span class="o">.</span><span class="n">cell_set_accession</span>
+
+    <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">cas</span><span class="o">.</span><span class="n">annotations</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">annotation</span><span class="o">.</span><span class="n">parent_cell_set_name</span><span class="p">:</span>
+            <span class="n">annotation</span><span class="o">.</span><span class="n">parent_cell_set_accession</span> <span class="o">=</span> <span class="n">label_to_accession</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">annotation</span><span class="o">.</span><span class="n">parent_cell_set_name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">cas</span></div>
 
 
@@ -300,7 +352,7 @@
         <span class="k">if</span> <span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;cell_set&quot;</span> <span class="ow">or</span> <span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;cluster_name&quot;</span><span class="p">:</span>
             <span class="n">label_set</span> <span class="o">=</span> <span class="n">Labelset</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">])</span>
             <span class="k">if</span> <span class="s2">&quot;rank&quot;</span> <span class="ow">in</span> <span class="n">field</span><span class="p">:</span>
-                <span class="n">label_set</span><span class="o">.</span><span class="n">rank</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">])</span>
+                <span class="n">label_set</span><span class="o">.</span><span class="n">rank</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">])</span>
                 <span class="n">ranks</span><span class="p">[</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">])</span>
             <span class="n">labelsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label_set</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">labelsets</span><span class="p">:</span>

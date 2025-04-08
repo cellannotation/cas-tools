@@ -144,7 +144,7 @@
 <span id="cas-ingest-ingest-user-table-module"></span><h2>cas.ingest.ingest_user_table module<a class="headerlink" href="#module-cas.ingest.ingest_user_table" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="cas.ingest.ingest_user_table.ingest_data">
-<span class="sig-prename descclassname"><span class="pre">cas.ingest.ingest_user_table.</span></span><span class="sig-name descname"><span class="pre">ingest_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'json'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_undefined</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/ingest/ingest_user_table.html#ingest_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.ingest.ingest_user_table.ingest_data" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">cas.ingest.ingest_user_table.</span></span><span class="sig-name descname"><span class="pre">ingest_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'json'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_undefined</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generate_accession_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/ingest/ingest_user_table.html#ingest_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.ingest.ingest_user_table.ingest_data" title="Link to this definition"></a></dt>
 <dd><p>Ingests given data into standard cell annotation schema data structure using the given configuration.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -154,6 +154,7 @@
 <li><p><strong>out_file</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – output file path.</p></li>
 <li><p><strong>format</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Data export format. Supported formats are ‘json’ and ‘tsv’</p></li>
 <li><p><strong>print_undefined</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – prints null values to the output json if true. Omits undefined values from the json output if</p></li>
+<li><p><strong>generate_accession_ids</strong> (<em>bool</em>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -161,24 +162,55 @@
 </dd>
 </dl>
 <p>false. False by default. Only effective in json serialization.
+:type generate_accession_ids: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>
+:param generate_accession_ids: determines if incrementally generate accession_ids for all annotations that don’t have an id.
 :rtype: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></span>
 :return: output data as dict</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="cas.ingest.ingest_user_table.ingest_user_data">
-<span class="sig-prename descclassname"><span class="pre">cas.ingest.ingest_user_table.</span></span><span class="sig-name descname"><span class="pre">ingest_user_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/ingest/ingest_user_table.html#ingest_user_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.ingest.ingest_user_table.ingest_user_data" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">cas.ingest.ingest_user_table.</span></span><span class="sig-name descname"><span class="pre">ingest_user_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generate_accession_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/ingest/ingest_user_table.html#ingest_user_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.ingest.ingest_user_table.ingest_user_data" title="Link to this definition"></a></dt>
 <dd><p>Ingest given user data into standard cell annotation schema data structure using the given configuration.
 :type data_file: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>
 :param data_file: Unformatted user data in tsv/csv format.
 :type config_file: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>
-:param config_file: configuration file path.</p>
+:param config_file: configuration file path.
+:type generate_accession_ids: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>
+:param generate_accession_ids: determines if incrementally generate accession_ids for all annotations that don’t have an id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="cas.html#cas.model.CellTypeAnnotation" title="cas.model.CellTypeAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">CellTypeAnnotation</span></code></a></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>data_file</strong> (<em>str</em>)</p></li>
+<li><p><strong>config_file</strong> (<em>str</em>)</p></li>
+<li><p><strong>generate_accession_ids</strong> (<em>bool</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cas.ingest.ingest_user_table.generate_ids_for_annotations">
+<span class="sig-prename descclassname"><span class="pre">cas.ingest.ingest_user_table.</span></span><span class="sig-name descname"><span class="pre">generate_ids_for_annotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/ingest/ingest_user_table.html#generate_ids_for_annotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.ingest.ingest_user_table.generate_ids_for_annotations" title="Link to this definition"></a></dt>
+<dd><p>Generates unique IDs for the annotations in the given CellTypeAnnotation object.
+:type cas: <span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="cas.html#cas.model.CellTypeAnnotation" title="cas.model.CellTypeAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">CellTypeAnnotation</span></code></a></span>
+:param cas: CellTypeAnnotation object
+:type config: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></span>
+:param config: ingestion configuration dictionary
+:rtype: <span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="cas.html#cas.model.CellTypeAnnotation" title="cas.model.CellTypeAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">CellTypeAnnotation</span></code></a></span>
+:return: CellTypeAnnotation object with generated IDs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data_file</strong> (<em>str</em>)</p></li>
-<li><p><strong>config_file</strong> (<em>str</em>)</p></li>
+<li><p><strong>cas</strong> (<a class="reference internal" href="cas.html#cas.model.CellTypeAnnotation" title="cas.model.CellTypeAnnotation"><em>CellTypeAnnotation</em></a>)</p></li>
+<li><p><strong>config</strong> (<em>dict</em>)</p></li>
 </ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="cas.html#cas.model.CellTypeAnnotation" title="cas.model.CellTypeAnnotation"><em>CellTypeAnnotation</em></a></p>
 </dd>
 </dl>
 </dd></dl>

@@ -119,6 +119,7 @@
 <li class="toctree-l2"><a class="reference internal" href="cas.ingest.html#module-cas.ingest.ingest_user_table">cas.ingest.ingest_user_table module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="cas.ingest.html#cas.ingest.ingest_user_table.ingest_data"><code class="docutils literal notranslate"><span class="pre">ingest_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cas.ingest.html#cas.ingest.ingest_user_table.ingest_user_data"><code class="docutils literal notranslate"><span class="pre">ingest_user_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.ingest.html#cas.ingest.ingest_user_table.generate_ids_for_annotations"><code class="docutils literal notranslate"><span class="pre">generate_ids_for_annotations()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cas.ingest.html#cas.ingest.ingest_user_table.register_parent"><code class="docutils literal notranslate"><span class="pre">register_parent()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cas.ingest.html#cas.ingest.ingest_user_table.get_annotation"><code class="docutils literal notranslate"><span class="pre">get_annotation()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cas.ingest.html#cas.ingest.ingest_user_table.add_user_annotations"><code class="docutils literal notranslate"><span class="pre">add_user_annotations()</span></code></a></li>
@@ -187,6 +188,12 @@
 <li class="toctree-l2"><a class="reference internal" href="cas.utils.html#module-cas.utils.validation_utils">cas.utils.validation_utils module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="cas.utils.html#cas.utils.validation_utils.validate_markers"><code class="docutils literal notranslate"><span class="pre">validate_markers()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cas.utils.html#cas.utils.validation_utils.validate_labelset_markers"><code class="docutils literal notranslate"><span class="pre">validate_labelset_markers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.utils.html#cas.utils.validation_utils.validate_labelset_hierarchy"><code class="docutils literal notranslate"><span class="pre">validate_labelset_hierarchy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.utils.html#cas.utils.validation_utils.compare_labelsets_cas_obs"><code class="docutils literal notranslate"><span class="pre">compare_labelsets_cas_obs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.utils.html#cas.utils.validation_utils.validate_labelset_values"><code class="docutils literal notranslate"><span class="pre">validate_labelset_values()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.utils.html#cas.utils.validation_utils.check_parent_child_consistency"><code class="docutils literal notranslate"><span class="pre">check_parent_child_consistency()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.utils.html#cas.utils.validation_utils.infer_obs_cell_hierarchy"><code class="docutils literal notranslate"><span class="pre">infer_obs_cell_hierarchy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.utils.html#cas.utils.validation_utils.infer_cas_cell_hierarchy"><code class="docutils literal notranslate"><span class="pre">infer_cas_cell_hierarchy()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="cas.utils.html#module-cas.utils">Module contents</a></li>
@@ -474,6 +481,15 @@ for rows matching the condition is converted.</p>
 <dt class="sig sig-object py" id="cas.anndata_conversion.merge">
 <span class="sig-prename descclassname"><span class="pre">cas.anndata_conversion.</span></span><span class="sig-name descname"><span class="pre">merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cas_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anndata_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/anndata_conversion.html#merge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.anndata_conversion.merge" title="Link to this definition"></a></dt>
 <dd><p>Tests if CAS json and AnnData are compatible and merges CAS into AnnData if possible.</p>
+<dl class="simple">
+<dt>This function performs the following checks:</dt><dd><ol class="arabic simple">
+<li><p>Verifies that all cell barcodes (cell IDs) in CAS exist in AnnData and vice versa.</p></li>
+<li><p>Identifies matching labelset names between CAS and AnnData.</p></li>
+<li><p>Validates that cell sets associated with each annotation match between CAS and AnnData.</p></li>
+<li><p>Checks if the cell labels are identical; if not, provides options to update or terminate.</p></li>
+</ol>
+</dd>
+</dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -490,6 +506,15 @@ for rows matching the condition is converted.</p>
 <dt class="sig sig-object py" id="cas.anndata_conversion.merge_cas_object">
 <span class="sig-prename descclassname"><span class="pre">cas.anndata_conversion.</span></span><span class="sig-name descname"><span class="pre">merge_cas_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_json</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anndata_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/anndata_conversion.html#merge_cas_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.anndata_conversion.merge_cas_object" title="Link to this definition"></a></dt>
 <dd><p>Tests if CAS json and AnnData are compatible and merges CAS into AnnData if possible.</p>
+<dl class="simple">
+<dt>This function performs the following checks:</dt><dd><ol class="arabic simple">
+<li><p>Verifies that all cell barcodes (cell IDs) in CAS exist in AnnData and vice versa.</p></li>
+<li><p>Identifies matching labelset names between CAS and AnnData.</p></li>
+<li><p>Validates that cell sets associated with each annotation match between CAS and AnnData.</p></li>
+<li><p>Checks if the cell labels are identical; if not, provides options to update or terminate.</p></li>
+</ol>
+</dd>
+</dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1121,40 +1146,53 @@ content is the first column value and the values are dict of row values.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="cas.flatten_data_to_anndata.flatten">
-<span class="sig-prename descclassname"><span class="pre">cas.flatten_data_to_anndata.</span></span><span class="sig-name descname"><span class="pre">flatten</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cas_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anndata_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_na</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/flatten_data_to_anndata.html#flatten"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.flatten_data_to_anndata.flatten" title="Link to this definition"></a></dt>
-<dd><blockquote>
-<div><p>Processes and integrates information from a JSON file and an AnnData (Annotated Data) file, creating a new AnnData
-object that incorporates the metadata. The resulting AnnData object is then saved to a new file.</p>
-</div></blockquote>
+<dt class="sig sig-object py" id="cas.flatten_data_to_anndata.export2cap">
+<span class="sig-prename descclassname"><span class="pre">cas.flatten_data_to_anndata.</span></span><span class="sig-name descname"><span class="pre">export2cap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cas_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anndata_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_na</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/flatten_data_to_anndata.html#export2cap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.flatten_data_to_anndata.export2cap" title="Link to this definition"></a></dt>
+<dd><p>Processes and integrates information from a CAS JSON file and an AnnData file, creating a new AnnData
+object that incorporates metadata. The resulting AnnData object is then saved to a new file.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>At least one of <cite>cas_file_path</cite> or <cite>anndata_file_path</cite> must be provided. If <cite>cas_file_path</cite> is not supplied,
+the CAS JSON will be loaded from the AnnData file’s ‘uns’ section. Conversely, if <cite>anndata_file_path</cite> is not
+provided, the AnnData file will be downloaded using the matrix file id from the CAS JSON.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>cas_file_path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – The path to the CAS json file.</p></li>
-<li><p><strong>anndata_file_path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – The path to the AnnData file.</p></li>
+<li><p><strong>cas_file_path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – Optional path to the CAS JSON file. If not provided, the CAS JSON will be extracted from
+the AnnData file’s ‘uns’ section.</p></li>
+<li><p><strong>anndata_file_path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – Optional path to the AnnData file. If not provided, the AnnData file will be downloaded
+using the matrix file id from the CAS JSON.</p></li>
 <li><p><strong>output_file_path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Output AnnData file name.</p></li>
-<li><p><strong>fill_na</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – Boolean flag indicating whether to fill missing values in the ‘obs’ field with pd.NA. If True, missing
-values will be replaced with pd.NA; if False, they will remain as empty strings.</p></li>
+<li><p><strong>fill_na</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – Boolean flag indicating whether to fill missing values in the ‘obs’ field with pd.NA. If True,
+missing values will be replaced with pd.NA; if False, they will remain as empty strings.</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="cas.flatten_data_to_anndata.flatten_cas_object">
-<span class="sig-prename descclassname"><span class="pre">cas.flatten_data_to_anndata.</span></span><span class="sig-name descname"><span class="pre">flatten_cas_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_json</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anndata_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_na</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/flatten_data_to_anndata.html#flatten_cas_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.flatten_data_to_anndata.flatten_cas_object" title="Link to this definition"></a></dt>
-<dd><blockquote>
-<div><p>Processes and integrates information from a JSON file and an AnnData (Annotated Data) file, creating a new AnnData
-object that incorporates the metadata. The resulting AnnData object is then saved to a new file.</p>
-</div></blockquote>
+<dt class="sig sig-object py" id="cas.flatten_data_to_anndata.export_cas_object2cap">
+<span class="sig-prename descclassname"><span class="pre">cas.flatten_data_to_anndata.</span></span><span class="sig-name descname"><span class="pre">export_cas_object2cap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_json</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anndata_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_na</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/flatten_data_to_anndata.html#export_cas_object2cap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.flatten_data_to_anndata.export_cas_object2cap" title="Link to this definition"></a></dt>
+<dd><p>Processes and integrates information from a CAS JSON and an AnnData (Annotated Data) file, creating a new AnnData
+object that incorporates metadata. If a CAS JSON object is not provided via the input parameter, it is extracted
+from the AnnData file’s ‘uns’ section. Conversely, if the AnnData file is not provided, it will be downloaded using
+the matrix file id from the CAS JSON.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>At least one of <cite>input_json</cite> or <cite>anndata_file_path</cite> must be provided. If neither is provided, the operation cannot
+proceed.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_json</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></span>) – CAS json file.</p></li>
-<li><p><strong>anndata_file_path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – The path to the AnnData file.</p></li>
+<li><p><strong>input_json</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]</span>) – Optional CAS JSON object. If not provided, the CAS JSON will be extracted from the AnnData file’s
+‘uns’ section.</p></li>
+<li><p><strong>anndata_file_path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – Optional path to the AnnData file. If not provided, the AnnData file will be downloaded using
+the matrix file id from the CAS JSON.</p></li>
 <li><p><strong>output_file_path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Output AnnData file name.</p></li>
-<li><p><strong>fill_na</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – Boolean flag indicating whether to fill missing values in the ‘obs’ field with pd.NA. If True, missing
-values will be replaced with pd.NA; if False, they will remain as empty strings.</p></li>
+<li><p><strong>fill_na</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – Boolean flag indicating whether to fill missing values in the ‘obs’ field with pd.NA. If True,
+missing values will be replaced with pd.NA; if False, they will remain as empty strings.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1304,7 +1342,7 @@ provides values for the CAS JSON’s top-level properties and cell
 annotation metadata.</p></li>
 <li><p><strong>cas_dict</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]</span>) – A dictionary of CAS annotation sets, each representing an annotation
 structure used to populate the CAS JSON annotations.</p></li>
-<li><p><strong>schema_name</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – An optional schema name to retrieve the schema for building
+<li><p><strong>schema_name</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – An optional schema name to retrieve the schema for building
 the CAS JSON. If not provided, defaults to “cap”.</p></li>
 </ul>
 </dd>
@@ -1974,7 +2012,7 @@ role. An example list; John Smith|Cody Miller|Sarah Jones.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>show_cell_ids</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – identifies if result have ‘cell_ids’ column. Default value is false</p></li>
-<li><p><strong>labels</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>]</span>) – list of key(labelset), value(cell_label) pairs to filter annotations</p></li>
+<li><p><strong>labels</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></span>) – list of key(labelset), value(cell_label) pairs to filter annotations</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -1986,6 +2024,20 @@ role. An example list; John Smith|Cody Miller|Sarah Jones.</p>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="cas.model.CellTypeAnnotation.as_dictionary">
+<span class="sig-name descname"><span class="pre">as_dictionary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/model.html#CellTypeAnnotation.as_dictionary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.model.CellTypeAnnotation.as_dictionary" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cas.model.CellTypeAnnotation.remove_none_values">
+<span class="sig-name descname"><span class="pre">remove_none_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/model.html#CellTypeAnnotation.remove_none_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.model.CellTypeAnnotation.remove_none_values" title="Link to this definition"></a></dt>
+<dd><p>Recursively removes all key-value pairs from the dictionary where the value is None.
+:type d: 
+:param d: The dictionary to clean.
+:return: A new dictionary with None values removed.</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -1993,31 +2045,69 @@ role. An example list; John Smith|Cody Miller|Sarah Jones.</p>
 <span id="cas-populate-cell-ids-module"></span><h2>cas.populate_cell_ids module<a class="headerlink" href="#module-cas.populate_cell_ids" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="cas.populate_cell_ids.populate_cell_ids">
-<span class="sig-prename descclassname"><span class="pre">cas.populate_cell_ids.</span></span><span class="sig-name descname"><span class="pre">populate_cell_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cas_json_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anndata_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelsets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/populate_cell_ids.html#populate_cell_ids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.populate_cell_ids.populate_cell_ids" title="Link to this definition"></a></dt>
-<dd><p>Add/update CellIDs to CAS from matching AnnData file.</p>
+<span class="sig-prename descclassname"><span class="pre">cas.populate_cell_ids.</span></span><span class="sig-name descname"><span class="pre">populate_cell_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cas_json_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anndata_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelsets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/populate_cell_ids.html#populate_cell_ids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.populate_cell_ids.populate_cell_ids" title="Link to this definition"></a></dt>
+<dd><p>Add/update CellIDs in a CAS JSON file using matching data from an AnnData file.</p>
+<p>This function reads a CAS JSON file and an AnnData file, validates their consistency, and updates
+CellIDs in CAS based on matching labelsets from the AnnData <cite>obs</cite> DataFrame. The modified CAS JSON
+is then saved back to the original file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>cas_json_path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – path to CAS JSON file</p></li>
-<li><p><strong>anndata_path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – path to anndata file</p></li>
-<li><p><strong>labelsets</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>]</span>) – List of labelsets to update with IDs from AnnData. If value is null, rank ‘0’ labelset is used.</p></li>
+<li><p><strong>cas_json_path</strong> (<em>str</em>) – Path to the CAS JSON file.</p></li>
+<li><p><strong>anndata_path</strong> (<em>str</em>) – Path to the AnnData file.</p></li>
+<li><p><strong>labelsets</strong> (<em>list</em><em>, </em><em>optional</em>) – A list of labelsets to update with CellIDs from AnnData. If None,
+the labelset with rank ‘0’ is used by default.</p></li>
+<li><p><strong>validate</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, runs validation checks to ensure labelset consistency.
+The program will exit with an error if validation fails. Defaults to False.</p></li>
 </ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Exception</strong> – If the AnnData file cannot be read.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cas.populate_cell_ids.update_cas_with_cell_ids">
+<span class="sig-prename descclassname"><span class="pre">cas.populate_cell_ids.</span></span><span class="sig-name descname"><span class="pre">update_cas_with_cell_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cas_json</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anndata_obs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelsets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/populate_cell_ids.html#update_cas_with_cell_ids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.populate_cell_ids.update_cas_with_cell_ids" title="Link to this definition"></a></dt>
+<dd><p>Update a CAS dictionary by adding or modifying CellIDs using matching AnnData observations.</p>
+<p>This function takes a CAS dictionary and an AnnData <cite>obs</cite> DataFrame and updates the CAS
+with cell IDs extracted from the specified labelsets in the AnnData.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cas_json</strong> (<em>dict</em>) – The CAS dictionary to update with cell IDs from AnnData.</p></li>
+<li><p><strong>anndata_obs</strong> (<em>CapAnnDataDF</em>) – The <cite>obs</cite> DataFrame extracted from an AnnData object.</p></li>
+<li><p><strong>labelsets</strong> (<em>list</em><em>, </em><em>optional</em>) – A list of labelsets to update with IDs from AnnData.
+If None, the labelset with rank ‘0’ is used.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The updated CAS dictionary with CellIDs populated.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="cas.populate_cell_ids.add_cell_ids">
-<span class="sig-prename descclassname"><span class="pre">cas.populate_cell_ids.</span></span><span class="sig-name descname"><span class="pre">add_cell_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelsets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/populate_cell_ids.html#add_cell_ids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.populate_cell_ids.add_cell_ids" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">cas.populate_cell_ids.</span></span><span class="sig-name descname"><span class="pre">add_cell_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ad_obs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelsets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/populate_cell_ids.html#add_cell_ids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.populate_cell_ids.add_cell_ids" title="Link to this definition"></a></dt>
 <dd><p>Add/update CellIDs to CAS from matching AnnData file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>cas</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></span>) – CAS JSON object</p></li>
-<li><p><strong>ad</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">AnnData</span></code>]</span>) – anndata object</p></li>
-<li><p><strong>labelsets</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>]</span>) – List of labelsets to update with IDs from AnnData. If value is null, rank ‘0’ labelset is used. The</p></li>
+<li><p><strong>ad_obs</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">CapAnnDataDF</span></code>]</span>) – Obs DataFrame extracted from an AnnData object.</p></li>
+<li><p><strong>labelsets</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></span>) – List of labelsets to update with IDs from AnnData. If value is null, rank ‘0’ labelset is used. The</p></li>
 <li><p><strong>order</strong> (<em>labelsets should be provided in</em>)</p></li>
 <li><p><strong>0</strong> (<em>starting from rank</em>)</p></li>
+<li><p><strong>validate</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, runs validation checks to ensure labelset consistency.
+The program wil`l exit with an error if validation fails. Defaults to False.</p></li>
 </ul>
 </dd>
 </dl>
@@ -2025,15 +2115,15 @@ role. An example list; John Smith|Cody Miller|Sarah Jones.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="cas.populate_cell_ids.get_obs_cluster_identifier_column">
-<span class="sig-prename descclassname"><span class="pre">cas.populate_cell_ids.</span></span><span class="sig-name descname"><span class="pre">get_obs_cluster_identifier_column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelsets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rank_zero_labelset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/populate_cell_ids.html#get_obs_cluster_identifier_column"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.populate_cell_ids.get_obs_cluster_identifier_column" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">cas.populate_cell_ids.</span></span><span class="sig-name descname"><span class="pre">get_obs_cluster_identifier_column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs_keys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelsets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rank_zero_labelset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/populate_cell_ids.html#get_obs_cluster_identifier_column"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.populate_cell_ids.get_obs_cluster_identifier_column" title="Link to this definition"></a></dt>
 <dd><p>Anndata files may use different column names to uniquely identify Clusters. Get the cluster identifier column name for the current file.
-:type ad: 
-:param ad: anndata object
-:type labelsets: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>]</span>
+:type obs_keys: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>
+:param obs_keys: Anndata observation keys.
+:type labelsets: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></span>
 :param labelsets: List of labelsets to update with IDs from AnnData. The labelsets should be provided in order,
 :param starting from rank 0:
 :type starting from rank 0: leaf nodes
-:type rank_zero_labelset: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>
+:type rank_zero_labelset: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>
 :param rank_zero_labelset: rank 0 labelset name</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -2041,8 +2131,9 @@ role. An example list; John Smith|Cody Miller|Sarah Jones.</p>
 </dd>
 <dt class="field-even">Parameters<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>labelsets</strong> (<em>list</em><em> | </em><em>None</em>)</p></li>
-<li><p><strong>rank_zero_labelset</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>obs_keys</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>)</p></li>
+<li><p><strong>labelsets</strong> (<em>list</em>)</p></li>
+<li><p><strong>rank_zero_labelset</strong> (<em>str</em>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -2060,7 +2151,7 @@ role. An example list; John Smith|Cody Miller|Sarah Jones.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>cas</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></span>) – Cell Annotation Schema json object.</p></li>
 <li><p><strong>show_cell_ids</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – identifies if result have ‘cell_ids’ column. Default value is false</p></li>
-<li><p><strong>labels</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>]</span>) – list of key(labelset), value(cell_label) pairs to filter annotations</p></li>
+<li><p><strong>labels</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></span>) – list of key(labelset), value(cell_label) pairs to filter annotations</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>

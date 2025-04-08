@@ -73,9 +73,21 @@
              
   <h1>Source code for cas.utils.validation_utils</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cap_anndata</span><span class="w"> </span><span class="kn">import</span> <span class="n">CapAnnDataDF</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">cas.utils.conversion_utils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ANNOTATIONS</span><span class="p">,</span>
+    <span class="n">CELL_LABEL</span><span class="p">,</span>
+    <span class="n">CELL_SET_ACCESSION</span><span class="p">,</span>
+    <span class="n">LABELSET</span><span class="p">,</span>
+    <span class="n">LABELSET_NAME</span><span class="p">,</span>
+    <span class="n">LABELSETS</span><span class="p">,</span>
+    <span class="n">PARENT_CELL_SET_ACCESSION</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="c1"># Configure logging</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
@@ -151,6 +163,280 @@
             <span class="sa">f</span><span class="s2">&quot;Not all marker genes from </span><span class="si">{</span><span class="n">annotation</span><span class="p">[</span><span class="s1">&#39;labelset&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">annotation</span><span class="p">[</span><span class="s1">&#39;cell_label&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> pair exist in anndata&#39;s var section. &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;Missing markers: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing_markers</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="validate_labelset_hierarchy">
+<a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.validation_utils.validate_labelset_hierarchy">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">validate_labelset_hierarchy</span><span class="p">(</span>
+    <span class="n">cas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">obs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">CapAnnDataDF</span><span class="p">],</span> <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Validates the labelset hierarchy by performing multiple consistency checks between CAS and obs.</span>
+
+<span class="sd">    This function runs three validation checks:</span>
+<span class="sd">    1. Ensures all labelsets from CAS exist in obs.</span>
+<span class="sd">    2. Verifies that all labelset values from CAS annotations exist in the corresponding obs columns.</span>
+<span class="sd">    3. Checks if the inferred parent-child hierarchy from obs matches CAS-defined ranks.</span>
+
+<span class="sd">    If any of these checks fail, warnings or errors will be logged. If `validate=True`, the process</span>
+<span class="sd">    will terminate with `sys.exit(1)` if any validation check fails.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        cas (Dict[str, Any]): The CAS JSON object containing labelset definitions and annotations.</span>
+<span class="sd">        obs (Union[pd.DataFrame, CapAnnDataDF]): The AnnData obs DataFrame or a CapAnnDataDF object.</span>
+<span class="sd">        validate (bool, optional): If True, exits the program with an error code if any validation fails.</span>
+<span class="sd">                                   Defaults to False.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">failures</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Run all validation checks</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">compare_labelsets_cas_obs</span><span class="p">(</span><span class="n">cas</span><span class="p">,</span> <span class="n">obs</span><span class="p">):</span>
+        <span class="n">failures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Labelset comparison failed.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">validate_labelset_values</span><span class="p">(</span><span class="n">cas</span><span class="p">,</span> <span class="n">obs</span><span class="p">):</span>
+        <span class="n">failures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Labelset value validation failed.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">check_parent_child_consistency</span><span class="p">(</span><span class="n">cas</span><span class="p">,</span> <span class="n">obs</span><span class="p">):</span>
+        <span class="n">failures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Parent-child consistency check failed.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Stop execution if validate=True and any failures occurred</span>
+    <span class="k">if</span> <span class="n">failures</span> <span class="ow">and</span> <span class="n">validate</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Validation failed. Exiting the process.&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="compare_labelsets_cas_obs">
+<a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.validation_utils.compare_labelsets_cas_obs">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compare_labelsets_cas_obs</span><span class="p">(</span>
+    <span class="n">cas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">obs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">CapAnnDataDF</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compare labelsets from CAS JSON object with the columns of the obs DataFrame.</span>
+
+<span class="sd">    Logs a warning if any labelsets from CAS are missing in obs.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        cas: The CAS JSON object.</span>
+<span class="sd">        obs: The AnnData obs DataFrame.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        True if all labelsets from CAS exist as columns in obs, otherwise False.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">labelset_list</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">labelset</span><span class="p">[</span><span class="n">LABELSET_NAME</span><span class="p">]</span> <span class="k">for</span> <span class="n">labelset</span> <span class="ow">in</span> <span class="n">cas</span><span class="p">[</span><span class="n">LABELSETS</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;rank&quot;</span> <span class="ow">in</span> <span class="n">labelset</span>
+    <span class="p">]</span>
+    <span class="n">obs_columns</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">obs</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+
+    <span class="c1"># Find missing labelsets</span>
+    <span class="n">missing_labelsets</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">labelset_list</span><span class="p">)</span> <span class="o">-</span> <span class="n">obs_columns</span>
+
+    <span class="k">if</span> <span class="n">missing_labelsets</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing labelsets in obs: </span><span class="si">{</span><span class="n">missing_labelsets</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;All labelsets exist in obs.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+
+<div class="viewcode-block" id="validate_labelset_values">
+<a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.validation_utils.validate_labelset_values">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">validate_labelset_values</span><span class="p">(</span>
+    <span class="n">cas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">obs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">CapAnnDataDF</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Validate that all labelset members from CAS annotations exist in the corresponding obs labelset columns.</span>
+
+<span class="sd">    Logs warnings for any missing labelset members.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        cas (Dict[str, Any]): The CAS JSON object.</span>
+<span class="sd">        obs (pd.DataFrame): The AnnData obs DataFrame.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        True if all labelset members from CAS exist in obs, otherwise False.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">labelset_list</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">labelset</span><span class="p">[</span><span class="n">LABELSET_NAME</span><span class="p">]</span> <span class="k">for</span> <span class="n">labelset</span> <span class="ow">in</span> <span class="n">cas</span><span class="p">[</span><span class="n">LABELSETS</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;rank&quot;</span> <span class="ow">in</span> <span class="n">labelset</span>
+    <span class="p">]</span>
+    <span class="n">labelset_members</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># Collect all labelset members from CAS annotations</span>
+    <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">cas</span><span class="p">[</span><span class="n">ANNOTATIONS</span><span class="p">]:</span>
+        <span class="n">labelset_name</span> <span class="o">=</span> <span class="n">annotation</span><span class="p">[</span><span class="n">LABELSET</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">labelset_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">labelset_list</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">cell_label</span> <span class="o">=</span> <span class="n">annotation</span><span class="p">[</span><span class="n">CELL_LABEL</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">labelset_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">labelset_members</span><span class="p">:</span>
+            <span class="n">labelset_members</span><span class="p">[</span><span class="n">labelset_name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="n">labelset_members</span><span class="p">[</span><span class="n">labelset_name</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">cell_label</span><span class="p">)</span>
+
+    <span class="c1"># Check if all labelset members exist in obs</span>
+    <span class="n">missing_values</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">labelset_name</span><span class="p">,</span> <span class="n">members</span> <span class="ow">in</span> <span class="n">labelset_members</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">labelset_name</span> <span class="ow">in</span> <span class="n">obs</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">obs_values</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">obs</span><span class="p">[</span><span class="n">labelset_name</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+            <span class="n">missing_members</span> <span class="o">=</span> <span class="n">members</span> <span class="o">-</span> <span class="n">obs_values</span>
+
+            <span class="k">if</span> <span class="n">missing_members</span><span class="p">:</span>
+                <span class="n">missing_values</span><span class="p">[</span><span class="n">labelset_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">missing_members</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">missing_values</span><span class="p">[</span><span class="n">labelset_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">members</span>
+
+    <span class="c1"># Log warnings for missing values</span>
+    <span class="k">if</span> <span class="n">missing_values</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">labelset</span><span class="p">,</span> <span class="n">missing</span> <span class="ow">in</span> <span class="n">missing_values</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing labelset members in obs[&#39;</span><span class="si">{</span><span class="n">labelset</span><span class="si">}</span><span class="s2">&#39;]: </span><span class="si">{</span><span class="n">missing</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;All labelset members exist in the corresponding obs columns.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+
+<div class="viewcode-block" id="check_parent_child_consistency">
+<a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.validation_utils.check_parent_child_consistency">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_parent_child_consistency</span><span class="p">(</span>
+    <span class="n">cas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">obs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">CapAnnDataDF</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks if the inferred hierarchy from cell labels in obs matches the expected hierarchy from</span>
+<span class="sd">    CAS rank data.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        cas (Dict[str, Any]): The CAS JSON object containing labelset ranks.</span>
+<span class="sd">        obs (pd.DataFrame): The AnnData obs DataFrame.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        True if all inferred parent-child relationships from obs match those from cas,</span>
+<span class="sd">              otherwise False.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Extract ranks from CAS (store expected rank per cell label)</span>
+    <span class="n">cas_ranks</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">entry</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]:</span> <span class="n">entry</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">cas</span><span class="p">[</span><span class="n">LABELSETS</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;rank&quot;</span> <span class="ow">in</span> <span class="n">entry</span>
+    <span class="p">}</span>
+
+    <span class="n">obs_inferred_hierarchy</span> <span class="o">=</span> <span class="n">infer_obs_cell_hierarchy</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">cas_ranks</span><span class="p">)</span>
+    <span class="n">cas_inferred_hierarchy</span> <span class="o">=</span> <span class="n">infer_cas_cell_hierarchy</span><span class="p">(</span><span class="n">cas</span><span class="p">)</span>
+
+    <span class="c1"># Compare inferred hierarchy with CAS ranks</span>
+    <span class="n">mismatches</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">child</span><span class="p">,</span> <span class="n">parent</span> <span class="ow">in</span> <span class="n">obs_inferred_hierarchy</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">cas_inferred_hierarchy</span> <span class="ow">and</span> <span class="n">parent</span> <span class="o">!=</span> <span class="n">cas_inferred_hierarchy</span><span class="p">[</span><span class="n">child</span><span class="p">]:</span>
+            <span class="n">mismatches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">child</span><span class="si">}</span><span class="s2">-&gt;</span><span class="si">{</span><span class="n">parent</span><span class="si">}</span><span class="s2"> relation from anndata does not match with </span><span class="si">{</span><span class="n">child</span><span class="si">}</span><span class="s2">-&gt;&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cas_inferred_hierarchy</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="si">}</span><span class="s2"> relation from cas.&quot;</span>
+            <span class="p">)</span>
+
+    <span class="c1"># Report mismatches</span>
+    <span class="k">if</span> <span class="n">mismatches</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">issue</span> <span class="ow">in</span> <span class="n">mismatches</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">issue</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Parent-child relationships are consistent between CAS and OBS.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+
+<div class="viewcode-block" id="infer_obs_cell_hierarchy">
+<a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.validation_utils.infer_obs_cell_hierarchy">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">infer_obs_cell_hierarchy</span><span class="p">(</span>
+    <span class="n">obs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">CapAnnDataDF</span><span class="p">],</span> <span class="n">cas_ranks</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Infers a direct parent-child hierarchy between cell labels based on row co-occurrence.</span>
+
+<span class="sd">    This function analyzes the hierarchical relationships between cell labels by comparing their</span>
+<span class="sd">    row indices in the `obs` DataFrame. A label is considered a child if its row indices are fully</span>
+<span class="sd">    contained within another label&#39;s indices. The closest (direct) parent is selected based on</span>
+<span class="sd">    CAS-defined ranks.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        obs (pd.DataFrame): The AnnData `obs` DataFrame containing labelset columns.</span>
+<span class="sd">        cas_ranks (Dict[str, int]): A dictionary mapping cell labels to their CAS-defined rank,</span>
+<span class="sd">                                    where lower values indicate higher ranks.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Dict[Any, Optional[Any]]: A dictionary mapping each cell label to its inferred direct parent.</span>
+<span class="sd">            Labels without a parent are assigned `None`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">labelset_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">cas_ranks</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+
+    <span class="c1"># Compute row indices for each cell label within each labelset</span>
+    <span class="n">cell_label_row_indices</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">labelset</span><span class="p">:</span> <span class="p">{</span>
+            <span class="n">label</span><span class="p">:</span> <span class="nb">set</span><span class="p">(</span><span class="n">obs</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">obs</span><span class="p">[</span><span class="n">labelset</span><span class="p">]</span> <span class="o">==</span> <span class="n">label</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">obs</span><span class="p">[</span><span class="n">labelset</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">labelset</span> <span class="ow">in</span> <span class="n">labelset_list</span>
+    <span class="p">}</span>
+
+    <span class="n">child_parent_map</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># Infer direct parent-child relationships based on row containment</span>
+    <span class="k">for</span> <span class="n">labelset_child</span> <span class="ow">in</span> <span class="n">labelset_list</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">child_label</span><span class="p">,</span> <span class="n">child_rows</span> <span class="ow">in</span> <span class="n">cell_label_row_indices</span><span class="p">[</span><span class="n">labelset_child</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">possible_parents</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="k">for</span> <span class="n">labelset_parent</span> <span class="ow">in</span> <span class="n">labelset_list</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">parent_label</span><span class="p">,</span> <span class="n">parent_rows</span> <span class="ow">in</span> <span class="n">cell_label_row_indices</span><span class="p">[</span>
+                    <span class="n">labelset_parent</span>
+                <span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">child_label</span> <span class="o">==</span> <span class="n">parent_label</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="k">if</span> <span class="n">child_rows</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">parent_rows</span><span class="p">)</span> <span class="ow">and</span> <span class="n">cas_ranks</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                        <span class="n">labelset_parent</span>
+                    <span class="p">)</span> <span class="o">&gt;</span> <span class="n">cas_ranks</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">labelset_child</span><span class="p">):</span>
+                        <span class="n">possible_parents</span><span class="p">[</span><span class="n">parent_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">cas_ranks</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">labelset_parent</span><span class="p">)</span>
+
+            <span class="c1"># Select the closest parent (lowest-ranked parent)</span>
+            <span class="k">if</span> <span class="n">possible_parents</span><span class="p">:</span>
+                <span class="n">direct_parent</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">possible_parents</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="n">possible_parents</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+                <span class="n">child_parent_map</span><span class="p">[</span><span class="n">child_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">direct_parent</span>
+
+    <span class="c1"># Assign root labels (labels without a parent)</span>
+    <span class="n">all_labels</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">label</span>
+        <span class="k">for</span> <span class="n">labelset</span> <span class="ow">in</span> <span class="n">labelset_list</span>
+        <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">cell_label_row_indices</span><span class="p">[</span><span class="n">labelset</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="n">roots</span> <span class="o">=</span> <span class="p">{</span><span class="n">label</span> <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">all_labels</span> <span class="k">if</span> <span class="n">label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">child_parent_map</span><span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">root</span> <span class="ow">in</span> <span class="n">roots</span><span class="p">:</span>
+        <span class="n">child_parent_map</span><span class="p">[</span><span class="n">root</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Root labels have no parent</span>
+
+    <span class="k">return</span> <span class="n">child_parent_map</span></div>
+
+
+
+<div class="viewcode-block" id="infer_cas_cell_hierarchy">
+<a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.validation_utils.infer_cas_cell_hierarchy">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">infer_cas_cell_hierarchy</span><span class="p">(</span><span class="n">cas</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+    <span class="n">child_parent_map</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">accession_lookup</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">annotations</span> <span class="o">=</span> <span class="n">cas</span><span class="p">[</span><span class="n">ANNOTATIONS</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">annotations</span><span class="p">:</span>
+        <span class="n">accession_lookup</span><span class="p">[</span><span class="n">annotation</span><span class="p">[</span><span class="n">CELL_SET_ACCESSION</span><span class="p">]]</span> <span class="o">=</span> <span class="n">annotation</span><span class="p">[</span><span class="n">CELL_LABEL</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">annotations</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">PARENT_CELL_SET_ACCESSION</span> <span class="ow">in</span> <span class="n">annotation</span><span class="p">:</span>
+            <span class="n">child_parent_map</span><span class="p">[</span><span class="n">annotation</span><span class="p">[</span><span class="n">CELL_LABEL</span><span class="p">]]</span> <span class="o">=</span> <span class="n">accession_lookup</span><span class="p">[</span>
+                <span class="n">annotation</span><span class="p">[</span><span class="n">PARENT_CELL_SET_ACCESSION</span><span class="p">]</span>
+            <span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">child_parent_map</span><span class="p">[</span><span class="n">annotation</span><span class="p">[</span><span class="n">CELL_LABEL</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">child_parent_map</span></div>
 
 </pre></div>
 

@@ -372,6 +372,42 @@
         <span class="k">return</span> <span class="n">get_all_annotations</span><span class="p">(</span>
             <span class="n">asdict</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="n">show_cell_ids</span><span class="o">=</span><span class="n">show_cell_ids</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span>
         <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CellTypeAnnotation.as_dictionary">
+<a class="viewcode-back" href="../../source/cas.html#cas.model.CellTypeAnnotation.as_dictionary">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">as_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">dictionary</span> <span class="o">=</span> <span class="n">asdict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">dictionary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_none_values</span><span class="p">(</span><span class="n">dictionary</span><span class="p">)</span>
+        <span class="c1"># for labelset in dictionary[&quot;labelsets&quot;]:</span>
+        <span class="c1">#     if &quot;rank&quot; in labelset:</span>
+        <span class="c1">#         labelset[&quot;rank&quot;] = int(labelset[&quot;rank&quot;])</span>
+        <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">dictionary</span><span class="p">[</span><span class="s2">&quot;annotations&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="s2">&quot;parent_cell_set_name&quot;</span> <span class="ow">in</span> <span class="n">annotation</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">annotation</span><span class="p">[</span><span class="s2">&quot;parent_cell_set_name&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s2">&quot;reviews&quot;</span> <span class="ow">in</span> <span class="n">annotation</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">review</span> <span class="ow">in</span> <span class="n">annotation</span><span class="p">[</span><span class="s2">&quot;reviews&quot;</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="s2">&quot;datestamp&quot;</span> <span class="ow">in</span> <span class="n">review</span><span class="p">:</span>
+                        <span class="n">review</span><span class="p">[</span><span class="s2">&quot;datestamp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">review</span><span class="p">[</span><span class="s2">&quot;datestamp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span>
+                            <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span>
+                        <span class="p">)[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;Z&quot;</span>
+        <span class="k">return</span> <span class="n">dictionary</span></div>
+
+
+<div class="viewcode-block" id="CellTypeAnnotation.remove_none_values">
+<a class="viewcode-back" href="../../source/cas.html#cas.model.CellTypeAnnotation.remove_none_values">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove_none_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Recursively removes all key-value pairs from the dictionary where the value is None.</span>
+<span class="sd">        :param d: The dictionary to clean.</span>
+<span class="sd">        :return: A new dictionary with None values removed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_none_values</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">}</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">remove_none_values</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">d</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">d</span></div>
 </div>
 
 </pre></div>
