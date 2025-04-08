@@ -476,7 +476,7 @@ files = [
 ]
 
 [[package]]
-name = "cap-anndata"
+name = "cap_anndata"
 version = "0.3.1"
 description = "Partial read/write of AnnData (h5ad) files for low-memory operations with large datasets."
 optional = false
@@ -2235,7 +2235,7 @@ kgcl-schema = ">=0.5.0"
 linkml-runtime = ">=1.1.24"
 
 [[package]]
-name = "kgcl-schema"
+name = "kgcl_schema"
 version = "0.6.9"
 description = "Schema for the KGCL project."
 optional = false
@@ -4913,7 +4913,7 @@ test-full = ["dask-ml", "dask[array] (>=2022.09.2,<2024.8.0)", "harmonypy", "igr
 test-min = ["profimp", "pytest (>=8.2)", "pytest-cov", "pytest-mock", "pytest-randomly", "pytest-rerunfailures", "pytest-xdist[psutil]"]
 
 [[package]]
-name = "schema-automator"
+name = "schema_automator"
 version = "0.5.1"
 description = "Infer models, enrich with meaning for terms including enum permissible values"
 optional = false
@@ -5208,7 +5208,7 @@ docs = ["matplotlib", "numpydoc (==1.1.*)", "sphinx", "sphinx-book-theme", "sphi
 test = ["pytest", "pytest-cov", "scipy-doctest"]
 
 [[package]]
-name = "shexjsg"
+name = "ShExJSG"
 version = "0.8.2"
 description = "ShExJSG - Astract Syntax Tree for the ShEx 2.0 language"
 optional = false
