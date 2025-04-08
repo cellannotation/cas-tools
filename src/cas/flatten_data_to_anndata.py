@@ -6,7 +6,6 @@ from typing import Any, Dict, List, Optional
 import numpy as np
 import pandas as pd
 from cap_anndata import read_h5ad
-
 from cas.accession.hash_accession_manager import HashAccessionManager, is_hash_accession
 from cas.file_utils import (
     read_json_file,
@@ -14,6 +13,7 @@ from cas.file_utils import (
     update_uns,
     write_dict_to_json_file,
 )
+from cas.populate_cell_ids import update_cas_with_cell_ids
 from cas.utils.conversion_utils import (
     ANNOTATIONS,
     AUTHOR_ANNOTATION_FIELDS,
@@ -27,12 +27,16 @@ from cas.utils.conversion_utils import (
     convert_complex_type,
     copy_and_update_file_path,
     fetch_anndata,
+    reformat_json,
     retrieve_schema,
 )
 
 # Configure logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.WARNING)
+
+# Suppress warning messages from cap_anndata.cap_anndata
+logging.getLogger("cap_anndata.cap_anndata").setLevel(logging.ERROR)
 
 
 def is_list_of_strings(var):
@@ -50,66 +54,98 @@ def is_list_of_strings(var):
     return isinstance(var, list) and all(isinstance(item, str) for item in var)
 
 
-def flatten(
-    cas_file_path: str,
+def export2cap(
+    cas_file_path: Optional[str],
     anndata_file_path: Optional[str],
     output_file_path: str,
     fill_na: bool,
 ):
     """
-     Processes and integrates information from a JSON file and an AnnData (Annotated Data) file, creating a new AnnData
-     object that incorporates the metadata. The resulting AnnData object is then saved to a new file.
+    Processes and integrates information from a CAS JSON file and an AnnData file, creating a new AnnData
+    object that incorporates metadata. The resulting AnnData object is then saved to a new file.
+
+    Note:
+        At least one of `cas_file_path` or `anndata_file_path` must be provided. If `cas_file_path` is not supplied,
+        the CAS JSON will be loaded from the AnnData file's 'uns' section. Conversely, if `anndata_file_path` is not
+        provided, the AnnData file will be downloaded using the matrix file id from the CAS JSON.
 
     Args:
-        cas_file_path: The path to the CAS json file.
-        anndata_file_path: The path to the AnnData file.
+        cas_file_path: Optional path to the CAS JSON file. If not provided, the CAS JSON will be extracted from
+                       the AnnData file's 'uns' section.
+        anndata_file_path: Optional path to the AnnData file. If not provided, the AnnData file will be downloaded
+                           using the matrix file id from the CAS JSON.
         output_file_path: Output AnnData file name.
-        fill_na: Boolean flag indicating whether to fill missing values in the 'obs' field with pd.NA. If True, missing
-                 values will be replaced with pd.NA; if False, they will remain as empty strings.
+        fill_na: Boolean flag indicating whether to fill missing values in the 'obs' field with pd.NA. If True,
+                 missing values will be replaced with pd.NA; if False, they will remain as empty strings.
     """
-    input_json = read_json_file(cas_file_path)
+    input_json = read_json_file(cas_file_path) if cas_file_path else None
+    export_cas_object2cap(input_json, anndata_file_path, output_file_path, fill_na)
 
-    flatten_cas_object(input_json, anndata_file_path, output_file_path, fill_na)
 
-
-def flatten_cas_object(
-    input_json: dict,
+def export_cas_object2cap(
+    input_json: Optional[dict],
     anndata_file_path: Optional[str],
     output_file_path: str,
     fill_na: bool,
 ):
     """
-     Processes and integrates information from a JSON file and an AnnData (Annotated Data) file, creating a new AnnData
-     object that incorporates the metadata. The resulting AnnData object is then saved to a new file.
+    Processes and integrates information from a CAS JSON and an AnnData (Annotated Data) file, creating a new AnnData
+    object that incorporates metadata. If a CAS JSON object is not provided via the input parameter, it is extracted
+    from the AnnData file's 'uns' section. Conversely, if the AnnData file is not provided, it will be downloaded using
+    the matrix file id from the CAS JSON.
+
+    Note:
+        At least one of `input_json` or `anndata_file_path` must be provided. If neither is provided, the operation cannot
+        proceed.
 
     Args:
-        input_json: CAS json file.
-        anndata_file_path: The path to the AnnData file.
+        input_json: Optional CAS JSON object. If not provided, the CAS JSON will be extracted from the AnnData file's
+                    'uns' section.
+        anndata_file_path: Optional path to the AnnData file. If not provided, the AnnData file will be downloaded using
+                           the matrix file id from the CAS JSON.
         output_file_path: Output AnnData file name.
-        fill_na: Boolean flag indicating whether to fill missing values in the 'obs' field with pd.NA. If True, missing
-                 values will be replaced with pd.NA; if False, they will remain as empty strings.
+        fill_na: Boolean flag indicating whether to fill missing values in the 'obs' field with pd.NA. If True,
+                 missing values will be replaced with pd.NA; if False, they will remain as empty strings.
     """
-    if not anndata_file_path:
+    if input_json and not anndata_file_path:
         anndata_file_path = fetch_anndata(input_json)
     anndata_file_path = copy_and_update_file_path(anndata_file_path, output_file_path)
-
-    annotations = input_json[ANNOTATIONS]
-    parent_cell_ids = collect_parent_cell_ids(input_json)
 
     with read_h5ad(file_path=anndata_file_path, edit=True) as cap_adata:
         cap_adata.read_obs()
         obs = cap_adata.obs
         obs_index = np.array(cap_adata.obs.axes[0].tolist())
 
-        # obs
+        cap_adata.read_uns()
+        if not input_json:
+            if "cas" in cap_adata.uns:
+                input_json = json.loads(cap_adata.uns["cas"])
+                input_json = update_cas_with_cell_ids(input_json, obs)
+            else:
+                raise ValueError(
+                    "CAS JSON is not provided and could not be found in the AnnData file's uns['cas'] field. "
+                    "Please provide a valid CAS JSON file via --json or use an AnnData file with embedded CAS JSON in its 'uns' section."
+                )
+        ranked_labelsets = [
+            labelset[LABELSET_NAME]
+            for labelset in input_json[LABELSETS]
+            if "rank" in labelset
+        ]
+        annotations = [
+            annotation
+            for annotation in input_json[ANNOTATIONS]
+            if annotation[LABELSET] in ranked_labelsets
+        ]
+        parent_cell_ids = collect_parent_cell_ids(input_json)
+
+        # Process obs
         flatten_data = process_annotations(
             annotations, obs_index, parent_cell_ids, fill_na
         )
         update_obs(obs, flatten_data)
 
-        # uns
+        # Process uns
         uns_json = generate_uns_json(input_json)
-        cap_adata.read_uns()
         uns = cap_adata.uns
         update_uns(uns, uns_json)
 
@@ -137,6 +173,7 @@ def process_annotations(annotations, obs_index, parent_cell_ids, fill_na):
             cell_ids = parent_cell_ids.get(ann.get("cell_set_accession", []))
 
         author_annotations = ann.get(AUTHOR_ANNOTATION_FIELDS, {})
+        # TODO Do we still need/want this?
         author_annotations.update(
             {
                 CELLHASH: ann.get("cell_set_accession")
@@ -149,7 +186,8 @@ def process_annotations(annotations, obs_index, parent_cell_ids, fill_na):
         ann[AUTHOR_ANNOTATION_FIELDS] = author_annotations
 
         if not cell_ids:
-            # only happens if data has multi-inheritance (as in basal ganglia data)
+            # This can occur in cases of multiple inheritance (e.g., basal ganglia data)
+            # or when the labelset is rankless.
             continue
         # Convert cell_ids to a list if it's not already for np.isin
         if not isinstance(cell_ids, list):
@@ -215,6 +253,7 @@ def generate_uns_json(input_json):
                     k: v for k, v in labelset.items() if k != LABELSET_NAME
                 }
                 for labelset in value
+                if "rank" in labelset
             }
             uns_json["cellannotation_metadata"] = metadata_json
         elif key == ANNOTATIONS:
@@ -223,9 +262,14 @@ def generate_uns_json(input_json):
                     AUTHOR_ANNOTATION_FIELDS
                 ][CELLHASH]
                 for annotation in value
+                if AUTHOR_ANNOTATION_FIELDS in annotation
+                and (CELLHASH in annotation[AUTHOR_ANNOTATION_FIELDS])
             }
 
             uns_json[CELLHASH] = cellhash_dict
+
+    # store CAS in the header
+    uns_json["cas"] = reformat_json(input_json)
 
     return uns_json
 
@@ -254,7 +298,8 @@ def unflatten(
 
     with read_h5ad(file_path=anndata_file_path, edit=True) as cap_adata:
         cap_adata.read_uns()
-        # if not cas:
+        if not cas and "cas" in cap_adata.uns:
+            cas = json.loads(cap_adata.uns["cas"])
         if CELLHASH in cap_adata.uns:
             cellhash_lookup = cap_adata.uns[CELLHASH]
         else:
@@ -269,7 +314,7 @@ def unflatten(
         uns = cap_adata.uns
         new_cas = unflatten_obs(obs, uns, cas, cellhash_lookup)
 
-        # cap_adata.uns["cas"] = reformat_json(new_cas)
+        cap_adata.uns["cas"] = reformat_json(new_cas)
         # Save your changes to a new or the same AnnData file
         cap_adata.overwrite()
 
@@ -328,8 +373,15 @@ def unflatten_obs(
         {k: v for k, v in anno.items() if k != CELL_IDS}
         if anno[LABELSET] != name_with_rank_0
         else anno
-        for anno in (updated_cas[ANNOTATIONS][::2] if not cas_json else updated_cas[ANNOTATIONS])
+        for anno in (
+            updated_cas[ANNOTATIONS][::2] if not cas_json else updated_cas[ANNOTATIONS]
+        )
     ]
+    # Handle rankless labelsets
+    rankless_labelsets = [
+        labelset for labelset in cas_json[LABELSETS] if "rank" not in labelset
+    ]
+    updated_cas[LABELSETS].extend(rankless_labelsets)
     # Discard flattened obs
     flattened_columns = [
         col
@@ -432,6 +484,11 @@ def update_cas_annotation(
     accession_manager = HashAccessionManager()
     updated_cas_annotations: List[Dict[str, Any]] = []
     remaining_annotations_labels = list(key for key in cas_dict.keys())
+    rankless_labelsets = [
+        labelset[LABELSET_NAME]
+        for labelset in cas_json[LABELSETS]
+        if "rank" not in labelset
+    ]
 
     for annotation in cas_json[ANNOTATIONS]:
         labelset_cell_label_pair = f"{annotation[LABELSET]}:{annotation[CELL_LABEL]}"
@@ -467,6 +524,8 @@ def update_cas_annotation(
             index_to_remove = remaining_annotations_labels.index(cas_cellhash)
             remaining_annotations_labels.pop(index_to_remove)
             remaining_annotations_labels.pop(index_to_remove - 1)  # Not duplicate
+        elif annotation[LABELSET] in rankless_labelsets:
+            updated_cas_annotations.append(annotation)
 
     for label in remaining_annotations_labels[::2]:
         updated_cas_annotations.append(cas_dict[label])

@@ -32,6 +32,8 @@ CELL_SET_ACCESSION = "cell_set_accession"
 
 PARENT_CELL_SET_ACCESSION = "parent_cell_set_accession"
 
+NT_ACCESSION = "neurotransmitter_accession"
+
 AUTHOR_ANNOTATION_FIELDS = "author_annotation_fields"
 
 CELLHASH = "cellhash"
@@ -172,7 +174,9 @@ def collect_parent_cell_ids(cas: Dict[str, Any]) -> Dict[str, Set]:
     """
     parent_cell_ids = dict()
 
-    labelsets = sorted(cas[LABELSETS], key=lambda x: int(x["rank"]))
+    labelsets = sorted(
+        [ls for ls in cas[LABELSETS] if "rank" in ls], key=lambda x: int(x["rank"])
+    )
     for labelset in labelsets:
         ls_annotations = [
             ann for ann in cas[ANNOTATIONS] if ann[LABELSET] == labelset[LABELSET_NAME]
@@ -327,7 +331,9 @@ def add_parent_hierarchy_to_annotations(
                 }
             )
             # Remove redundant CL annotations
-            parent_dict = parent_cell_look_up.get(parent, {})
+            parent_dict = parent_cell_look_up.get(
+                f"{p_accession.split(':')[0]}:{parent}", {}
+            )
             if parent_dict.get("cell_ontology_term_id") == annotation.get(
                 "cell_ontology_term_id"
             ) and parent_dict.get("cell_ontology_term") == annotation.get(

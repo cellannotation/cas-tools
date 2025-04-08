@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cas-tools"
-version = "1.0.19"
+version = "1.1.5"
 description = "Cell Annotation Schema tools."
 authors = ["Huseyin Kir <hk9@sanger.ac.uk>", "Ugur Bayindir <ub2@sanger.ac.uk>"]
 license = "Apache-2.0 license"
@@ -14,7 +14,7 @@ repository = "https://github.com/cellannotation/cas-tools"
 [tool.poetry.dependencies]
 python = "^3.10"
 anndata = "0.10.5"
-cellxgene-census = { version = "1.17.0", python = ">=3.10,<3.13" }
+cellxgene-census = { version = "1.16.0", python = ">=3.10,<3.13" }
 urllib3 = "<2"
 openpyxl = "3.1.2"
 dataclasses-json = "0.6.4"
@@ -22,7 +22,7 @@ pandas = "2.2.1"
 jsonschema = "4.4.0"
 ordered-set = "4.1.0"
 deepmerge = "1.1.0"
-cell-annotation-schema = "1.1.0"
+cell-annotation-schema = "1.0.0"
 h5py = "3.10.0"
 numpy = "1.26.4"
 marshmallow = "3.21.1"

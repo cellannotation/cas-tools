@@ -1,6 +1,7 @@
 import logging
 import sys
 from typing import Optional
+import warnings
 
 from cap_anndata import read_h5ad
 
@@ -21,6 +22,9 @@ from cas.utils.conversion_utils import (
 # Set up logging
 logger = logging.getLogger(__name__)
 
+# Suppress warning messages from cap_anndata.cap_anndata
+logging.getLogger("cap_anndata.cap_anndata").setLevel(logging.ERROR)
+
 
 def merge(
     cas_file_path: str,
@@ -30,6 +34,12 @@ def merge(
 ):
     """
     Tests if CAS json and AnnData are compatible and merges CAS into AnnData if possible.
+
+    This function performs the following checks:
+        1. Verifies that all cell barcodes (cell IDs) in CAS exist in AnnData and vice versa.
+        2. Identifies matching labelset names between CAS and AnnData.
+        3. Validates that cell sets associated with each annotation match between CAS and AnnData.
+        4. Checks if the cell labels are identical; if not, provides options to update or terminate.
 
     Args:
         cas_file_path: The path to the CAS json file.
@@ -52,6 +62,12 @@ def merge_cas_object(
 ):
     """
     Tests if CAS json and AnnData are compatible and merges CAS into AnnData if possible.
+
+    This function performs the following checks:
+        1. Verifies that all cell barcodes (cell IDs) in CAS exist in AnnData and vice versa.
+        2. Identifies matching labelset names between CAS and AnnData.
+        3. Validates that cell sets associated with each annotation match between CAS and AnnData.
+        4. Checks if the cell labels are identical; if not, provides options to update or terminate.
 
     Args:
         input_json: The CAS json object.
@@ -106,8 +122,12 @@ def check_labelsets(cas_json, input_obs, matching_obs_keys, validate):
                 .to_dict()
             )
             for cell_label, cell_list in anndata_labelset_cell_ids.items():
-                if cell_list == derived_cell_ids.get(
-                    str(ann["cell_set_accession"]), set()
+                cell_ids = set(ann.get(CELL_IDS, []))
+
+                if cell_ids and cell_list == cell_ids:
+                    handle_matching_labelset(ann, cell_label, input_obs, validate)
+                elif cell_list == derived_cell_ids.get(
+                    str(ann["cell_set_accession"]), ann.get(CELL_IDS, [])
                 ):
                     handle_matching_labelset(ann, cell_label, input_obs, validate)
                 elif cell_label == ann[CELL_LABEL]:
