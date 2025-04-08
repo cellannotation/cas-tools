@@ -12,9 +12,9 @@ homepage = "https://github.com/cellannotation/cas-tools"
 repository = "https://github.com/cellannotation/cas-tools"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.10"
 anndata = "0.10.5"
-cellxgene-census = { version = "1.15.0", python = ">=3.9,<3.12" }
+cellxgene-census = { version = "1.17.0", python = ">=3.10,<3.13" }
 urllib3 = "<2"
 openpyxl = "3.1.2"
 dataclasses-json = "0.6.4"
@@ -22,7 +22,7 @@ pandas = "2.2.1"
 jsonschema = "4.4.0"
 ordered-set = "4.1.0"
 deepmerge = "1.1.0"
-cell-annotation-schema = "1.0.0"
+cell-annotation-schema = "1.1.0"
 h5py = "3.10.0"
 numpy = "1.26.4"
 marshmallow = "3.21.1"

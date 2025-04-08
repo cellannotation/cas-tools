@@ -9,16 +9,13 @@ import pandas as pd
 from cas.flatten_data_to_anndata import flatten, unflatten
 
 # File paths
-anndata_file_path = "src/test/test_data/cas_cap_roundtrip/test_data.h5ad"
-flattened_anndata_file_path = (
-    "src/test/test_data/cas_cap_roundtrip/flattened_test_data.h5ad"
-)
-unflattened_anndata_file_path = (
-    "src/test/test_data/cas_cap_roundtrip/unflattened_test_data.h5ad"
-)
-cas_file_path = "src/test/test_data/cas_cap_roundtrip/test_cas.json"
+current_path = os.path.dirname(os.path.realpath(__file__))
+anndata_file_path = os.path.join(current_path, "./test_data/cas_cap_roundtrip/test_data.h5ad")
+flattened_anndata_file_path = os.path.join(current_path, "./test_data/cas_cap_roundtrip/flattened_test_data.h5ad")
+unflattened_anndata_file_path = os.path.join(current_path, "./test_data/cas_cap_roundtrip/unflattened_test_data.h5ad")
+cas_file_path = os.path.join(current_path, "./test_data/cas_cap_roundtrip/test_cas.json")
 
-cas_output_file_path = "src/test/test_data/cas_cap_roundtrip/cas.json"
+cas_output_file_path = os.path.join(current_path, "./test_data/cas_cap_roundtrip/cas.json")
 
 
 class TestRoundtrip(unittest.TestCase):
