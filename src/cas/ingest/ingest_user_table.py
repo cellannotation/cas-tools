@@ -66,6 +66,7 @@ def ingest_user_data(data_file: str, config_file: str, generate_accession_ids: b
     is_config_valid = validate(config)
     if not is_config_valid:
         raise Exception("Configuration file is not valid!")
+    accession_prefix = config.get("taxonomy_id").strip()
     cas = CellTypeAnnotation(config["author_name"], list(), config["title"])
     cas.description = config.get("description", "")
     cas.cellannotation_schema_version = version("cell-annotation-schema")
@@ -86,7 +87,11 @@ def ingest_user_data(data_file: str, config_file: str, generate_accession_ids: b
                     ao.cell_label = str(record[field["column_name"]])
                     utilized_columns.add(field["column_name"])
                 elif field["column_type"] == "cluster_id":
-                    ao.cell_set_accession = str(record[field["column_name"]])
+                    cell_set_accession = str(record[field["column_name"]])
+                    if "_" not in cell_set_accession and ":" not in cell_set_accession:
+                        if not cell_set_accession.startswith(accession_prefix):
+                            cell_set_accession = accession_prefix + "_" + cell_set_accession
+                    ao.cell_set_accession = cell_set_accession
                     ao.rank = int(str(field["rank"]).strip())
                     utilized_columns.add(field["column_name"])
                 elif field["column_type"] == "cell_set":
@@ -124,7 +129,6 @@ def generate_ids_for_annotations(cas: CellTypeAnnotation, config: dict) -> CellT
     :param config: ingestion configuration dictionary
     :return: CellTypeAnnotation object with generated IDs.
     """
-    max_accession = None
     example_accession = None
     max_value = -1
 
@@ -138,12 +142,14 @@ def generate_ids_for_annotations(cas: CellTypeAnnotation, config: dict) -> CellT
                 value = int(last_part)
                 if value > max_value:
                     max_value = value
-                    max_accession = accession
 
-    prefix = ""
-    if "_" in example_accession:
-        prefix = config.get("taxonomy_id", "")
-    accession_manager = IncrementalAccessionManager(prefix, max_value)
+    if "_" not in example_accession:
+        accession_prefix = config.get("taxonomy_id", "").strip()
+        if not accession_prefix.endswith("_"):
+            accession_prefix += "_"
+    else:
+        accession_prefix = example_accession.split("_")[0] + "_"
+    accession_manager = IncrementalAccessionManager(accession_prefix, max_value)
 
     label_to_accession = dict()
     for annotation in cas.annotations:
