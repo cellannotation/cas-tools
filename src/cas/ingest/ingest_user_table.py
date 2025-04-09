@@ -39,7 +39,9 @@ def ingest_data(
     :param generate_accession_ids: determines if incrementally generate accession_ids for all annotations that don't have an id.
     :return: output data as dict
     """
-    cas = ingest_user_data(data_file, config_file, generate_accession_ids)
+    config = read_config(config_file)
+    accession_prefix = config.get("taxonomy_id").strip()
+    cas = ingest_user_data(data_file, config_file, generate_accession_ids, accession_prefix)
 
     if format == "json":
         write_json_file(cas, out_file, print_undefined)
@@ -54,19 +56,18 @@ def ingest_data(
     return cas.to_dict()
 
 
-def ingest_user_data(data_file: str, config_file: str, generate_accession_ids: bool = False) -> CellTypeAnnotation:
+def ingest_user_data(data_file: str, config_file: str, generate_accession_ids: bool = False, accession_prefix: str = '') -> CellTypeAnnotation:
     """
     Ingest given user data into standard cell annotation schema data structure using the given configuration.
     :param data_file: Unformatted user data in tsv/csv format.
     :param config_file: configuration file path.
     :param generate_accession_ids: determines if incrementally generate accession_ids for all annotations that don't have an id.
+    :param accession_prefix: optional prefix for the generated accession ids.
     """
-
     config = read_config(config_file)
     is_config_valid = validate(config)
     if not is_config_valid:
         raise Exception("Configuration file is not valid!")
-    accession_prefix = config.get("taxonomy_id").strip()
     cas = CellTypeAnnotation(config["author_name"], list(), config["title"])
     cas.description = config.get("description", "")
     cas.cellannotation_schema_version = version("cell-annotation-schema")
@@ -88,9 +89,8 @@ def ingest_user_data(data_file: str, config_file: str, generate_accession_ids: b
                     utilized_columns.add(field["column_name"])
                 elif field["column_type"] == "cluster_id":
                     cell_set_accession = str(record[field["column_name"]])
-                    if "_" not in cell_set_accession and ":" not in cell_set_accession:
-                        if not cell_set_accession.startswith(accession_prefix):
-                            cell_set_accession = accession_prefix + "_" + cell_set_accession
+                    if accession_prefix and not cell_set_accession.startswith(accession_prefix):
+                        cell_set_accession = accession_prefix + "_" + cell_set_accession
                     ao.cell_set_accession = cell_set_accession
                     ao.rank = int(str(field["rank"]).strip())
                     utilized_columns.add(field["column_name"])

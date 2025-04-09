@@ -1,27 +1,29 @@
 import os
+
+CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 import json
 import unittest
 
 from cas.ingest.ingest_user_table import ingest_data, ingest_user_data
 
 RAW_DATA = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)),
+    CURRENT_DIR,
     "./test_data/nhp_basal_ganglia/AIT115_annotation_sheet.tsv",
 )
 TEST_CONFIG = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)),
+    CURRENT_DIR,
     "./test_data/nhp_basal_ganglia/test_config.yaml",
 )
 RAW_DATAv2 = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)),
+    CURRENT_DIR,
     "./test_data/nhp_basal_ganglia/v2/AIT117_joint_annotation_sheet.tsv",
 )
 TEST_CONFIGv2 = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)),
+    CURRENT_DIR,
     "./test_data/nhp_basal_ganglia/v2/ingestion_config.yaml",
 )
 OUT_FILE = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)),
+    CURRENT_DIR,
     "./test_data/nhp_basal_ganglia/test_result.json",
 )
 
@@ -144,11 +146,11 @@ class CellTypeAnnotationTests(unittest.TestCase):
     def test_data_formatting_wmb(self):
         result = ingest_user_data(
             os.path.join(
-                os.path.dirname(os.path.realpath(__file__)),
+                CURRENT_DIR,
                 "./test_data/wmb/wmb_class_29_annotation.tsv",
             ),
             os.path.join(
-                os.path.dirname(os.path.realpath(__file__)),
+                CURRENT_DIR,
                 "./test_data/wmb/wmb_ingestion_config.yaml",
             ),
             True
@@ -183,3 +185,46 @@ class CellTypeAnnotationTests(unittest.TestCase):
         data = result.as_dictionary()
         print(json.dumps(data, indent=2))
 
+    def test_data_formatting_bg_ait119_macaque(self):
+        result = ingest_user_data(os.path.join(CURRENT_DIR, "./test_data/nhp_basal_ganglia/v3_ait119/Macaque_AIBS_AIT11-9_anno_table.tsv"),
+                             os.path.join(CURRENT_DIR, "./test_data/nhp_basal_ganglia/v3_ait119/macaque_ingestion_config.yaml"),
+                             True, "AIT119")
+
+        self.assertTrue(result)
+        self.assertTrue(result.author_name)
+        self.assertEqual("Nelson Johansen", result.author_name)
+
+        self.assertIsNotNone(result.title)
+        self.assertEqual("NHP Basal Ganglia AIT119 taxonomy", result.title)
+
+        self.assertIsNotNone(result.annotations)
+        self.assertEqual(544, len(result.annotations))
+        # print(result["annotations"][:10])
+
+        test_annotation = [x for x in result.annotations if x.cell_label == "Cluster_440"][0]
+        # print(test_annotation.get("parent_cell_set_accession"))
+        self.assertEqual('AIT119_440', test_annotation.cell_set_accession)
+        self.assertEqual('AIT119_516', test_annotation.parent_cell_set_accession)
+        self.assertEqual("BAM", test_annotation.parent_cell_set_name)
+        parent_annotation = [
+            x
+            for x in result.annotations
+            if x.cell_label == test_annotation.parent_cell_set_name
+        ][0]
+        self.assertEqual("BAM", parent_annotation.cell_label)
+        self.assertEqual("Group", parent_annotation.labelset)
+        self.assertEqual('AIT119_516', parent_annotation.cell_set_accession)
+        self.assertEqual('AIT119_515', parent_annotation.parent_cell_set_accession)
+
+
+    # def test_data_formatting_ait119_macaque(self):
+    #     result = ingest_data("/Users/hk9/Downloads/Macaque_AIBS_AIT11-9_anno_table.tsv",
+    #                          "/Users/hk9/Downloads/macaque_ingestion_config.yaml",
+    #                          "/Users/hk9/Downloads/Macaque_AIBS_AIT11-9.json",
+    #                          "json", True, True)
+    #
+    # def test_data_formatting_ait119_human(self):
+    #     result = ingest_data("/Users/hk9/Downloads/Human_AIBS_AIT19-5_anno_table.tsv",
+    #                          "/Users/hk9/Downloads/human_ingestion_config.yaml",
+    #                          "/Users/hk9/Downloads/Human_AIBS_AIT19-5.json",
+    #                          "json", True, True)
