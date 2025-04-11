@@ -188,23 +188,23 @@ class CellTypeAnnotationTests(unittest.TestCase):
     def test_data_formatting_bg_ait119_macaque(self):
         result = ingest_user_data(os.path.join(CURRENT_DIR, "./test_data/nhp_basal_ganglia/v3_ait119/Macaque_AIBS_AIT11-9_anno_table.tsv"),
                              os.path.join(CURRENT_DIR, "./test_data/nhp_basal_ganglia/v3_ait119/macaque_ingestion_config.yaml"),
-                             True, "AIT119")
+                             True)
 
         self.assertTrue(result)
         self.assertTrue(result.author_name)
         self.assertEqual("Nelson Johansen", result.author_name)
 
         self.assertIsNotNone(result.title)
-        self.assertEqual("NHP Basal Ganglia AIT119 taxonomy", result.title)
+        self.assertEqual("Basal Ganglia AIT119 taxonomy", result.title)
 
         self.assertIsNotNone(result.annotations)
-        self.assertEqual(544, len(result.annotations))
+        self.assertEqual(543, len(result.annotations))
         # print(result["annotations"][:10])
 
-        test_annotation = [x for x in result.annotations if x.cell_label == "Cluster_440"][0]
+        test_annotation = [x for x in result.annotations if x.cell_label == "Macaque-440"][0]
         # print(test_annotation.get("parent_cell_set_accession"))
-        self.assertEqual('AIT119_440', test_annotation.cell_set_accession)
-        self.assertEqual('AIT119_516', test_annotation.parent_cell_set_accession)
+        self.assertEqual('CS20250428_CLUST_0578', test_annotation.cell_set_accession)
+        self.assertEqual('CS20250428_GRUP_71', test_annotation.parent_cell_set_accession)
         self.assertEqual("BAM", test_annotation.parent_cell_set_name)
         parent_annotation = [
             x
@@ -213,18 +213,60 @@ class CellTypeAnnotationTests(unittest.TestCase):
         ][0]
         self.assertEqual("BAM", parent_annotation.cell_label)
         self.assertEqual("Group", parent_annotation.labelset)
-        self.assertEqual('AIT119_516', parent_annotation.cell_set_accession)
-        self.assertEqual('AIT119_515', parent_annotation.parent_cell_set_accession)
+        self.assertEqual('CS20250428_GRUP_71', parent_annotation.cell_set_accession)
+        self.assertEqual('CS20250428_SUBC_39', parent_annotation.parent_cell_set_accession)
 
+    def test_data_formatting_bg_ait195_human(self):
+        result = ingest_user_data(os.path.join(CURRENT_DIR, "./test_data/nhp_basal_ganglia/v3_ait119/Human_AIBS_AIT19-5_anno_table.tsv"),
+                             os.path.join(CURRENT_DIR, "./test_data/nhp_basal_ganglia/v3_ait119/human_ingestion_config.yaml"),
+                             True)
 
+        self.assertTrue(result)
+        self.assertTrue(result.author_name)
+        self.assertEqual("Nelson Johansen", result.author_name)
+
+        self.assertIsNotNone(result.title)
+        self.assertEqual("Basal Ganglia AIT195 taxonomy", result.title)
+
+        self.assertIsNotNone(result.annotations)
+        self.assertEqual(584, len(result.annotations))
+        # print(result["annotations"][:10])
+
+        test_annotation = [x for x in result.annotations if x.cell_label == "Human-143"][0]
+        # print(test_annotation.get("parent_cell_set_accession"))
+        self.assertEqual('CS20250428_CLUST_0161', test_annotation.cell_set_accession)
+        self.assertEqual('CS20250428_GRUP_1', test_annotation.parent_cell_set_accession)
+        self.assertEqual("BG Astrocyte", test_annotation.parent_cell_set_name)
+        parent_annotation = [
+            x
+            for x in result.annotations
+            if x.cell_label == test_annotation.parent_cell_set_name
+        ][0]
+        self.assertEqual("BG Astrocyte", parent_annotation.cell_label)
+        self.assertEqual("Group", parent_annotation.labelset)
+        self.assertEqual('CS20250428_GRUP_1', parent_annotation.cell_set_accession)
+        self.assertEqual('CS20250428_SUBC_1', parent_annotation.parent_cell_set_accession)
+
+        test_annotation = [x for x in result.annotations if x.cell_set_accession == "CS20250428_SUBC_1"][0]
+        # print(test_annotation.get("parent_cell_set_accession"))
+        self.assertEqual('Astrocyte', test_annotation.cell_label)
+        self.assertEqual('CS20250428_CLAS_1', test_annotation.parent_cell_set_accession)
+        self.assertEqual("Astro-Epen", test_annotation.parent_cell_set_name)
+
+        test_annotation = [x for x in result.annotations if x.cell_set_accession == "CS20250428_GRUP_70"][0]
+        # print(test_annotation.get("parent_cell_set_accession"))
+        self.assertEqual('VLMC', test_annotation.cell_label)
+        self.assertEqual('CS20250428_SUBC_38', test_annotation.parent_cell_set_accession)
+        self.assertEqual("VLMC", test_annotation.parent_cell_set_name)
+
+    # def test_data_formatting_ait195_human(self):
+    #     result = ingest_data("/Users/hk9/Downloads/Human_AIBS_AIT19-5_anno_table.tsv",
+    #                          "/Users/hk9/Downloads/human_ingestion_config.yaml",
+    #                          "/Users/hk9/Downloads/Human_AIBS_AIT19-5.json",
+    #                          "json", True, True)
+    #
     # def test_data_formatting_ait119_macaque(self):
     #     result = ingest_data("/Users/hk9/Downloads/Macaque_AIBS_AIT11-9_anno_table.tsv",
     #                          "/Users/hk9/Downloads/macaque_ingestion_config.yaml",
     #                          "/Users/hk9/Downloads/Macaque_AIBS_AIT11-9.json",
-    #                          "json", True, True)
-    #
-    # def test_data_formatting_ait119_human(self):
-    #     result = ingest_data("/Users/hk9/Downloads/Human_AIBS_AIT19-5_anno_table.tsv",
-    #                          "/Users/hk9/Downloads/human_ingestion_config.yaml",
-    #                          "/Users/hk9/Downloads/Human_AIBS_AIT19-5.json",
     #                          "json", True, True)

@@ -31,6 +31,12 @@ definitions:
       rank:
         description: "Use this to number hierarchical cell sets, starting at 0 for cluster (leaf nodes)"
         type: number
+      accession_prefix:
+        description: "Prefix for the cell set accession. Specifying this here will override the default accession_prefix in the config."
+        type: string
+      accession_start:
+        description: "Starting number for the incremental cell set accession generation."
+        type: number
 
   annotation_column_definition:
     required: [ 'column_name', 'column_type' ]
@@ -96,6 +102,10 @@ properties:
     type: array
     items: { type: string }
     description: "Names of the brain regions of this taxonomy"
+
+  accession_prefix:
+    type: string
+    description: "Prefix for the cell set accession."
 
   fields:
     type: array

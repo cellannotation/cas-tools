@@ -39,9 +39,7 @@ def ingest_data(
     :param generate_accession_ids: determines if incrementally generate accession_ids for all annotations that don't have an id.
     :return: output data as dict
     """
-    config = read_config(config_file)
-    accession_prefix = config.get("taxonomy_id").strip()
-    cas = ingest_user_data(data_file, config_file, generate_accession_ids, accession_prefix)
+    cas = ingest_user_data(data_file, config_file, generate_accession_ids)
 
     if format == "json":
         write_json_file(cas, out_file, print_undefined)
@@ -56,13 +54,12 @@ def ingest_data(
     return cas.to_dict()
 
 
-def ingest_user_data(data_file: str, config_file: str, generate_accession_ids: bool = False, accession_prefix: str = '') -> CellTypeAnnotation:
+def ingest_user_data(data_file: str, config_file: str, generate_accession_ids: bool = False) -> CellTypeAnnotation:
     """
     Ingest given user data into standard cell annotation schema data structure using the given configuration.
     :param data_file: Unformatted user data in tsv/csv format.
     :param config_file: configuration file path.
     :param generate_accession_ids: determines if incrementally generate accession_ids for all annotations that don't have an id.
-    :param accession_prefix: optional prefix for the generated accession ids.
     """
     config = read_config(config_file)
     is_config_valid = validate(config)
@@ -76,6 +73,7 @@ def ingest_user_data(data_file: str, config_file: str, generate_accession_ids: b
     labelset_ranks = populate_labelsets(cas, config_fields)
     ao_names = dict()
     utilized_columns = set()
+    cluster_accession_prefix = config.get("accession_prefix", "").strip()
     for record_index in records:
         record = records[record_index]
         if not all(value == "" for value in record.values()):  # skip empty rows
@@ -89,8 +87,10 @@ def ingest_user_data(data_file: str, config_file: str, generate_accession_ids: b
                     utilized_columns.add(field["column_name"])
                 elif field["column_type"] == "cluster_id":
                     cell_set_accession = str(record[field["column_name"]])
-                    if accession_prefix and not cell_set_accession.startswith(accession_prefix):
-                        cell_set_accession = accession_prefix + "_" + cell_set_accession
+                    if field.get("accession_prefix"):
+                        cluster_accession_prefix = field.get("accession_prefix")
+                    if cluster_accession_prefix and not cell_set_accession.startswith(cluster_accession_prefix):
+                        cell_set_accession = cluster_accession_prefix + "_" + cell_set_accession
                     ao.cell_set_accession = cell_set_accession
                     ao.rank = int(str(field["rank"]).strip())
                     utilized_columns.add(field["column_name"])
@@ -111,23 +111,60 @@ def ingest_user_data(data_file: str, config_file: str, generate_accession_ids: b
                         setattr(ao, field["column_type"], record[field["column_name"]])
                     utilized_columns.add(field["column_name"])
 
-        add_user_annotations(ao, headers, record, utilized_columns)
-        add_parent_node_names(ao, ao_names, cas, parents)
+            add_user_annotations(ao, headers, record, utilized_columns)
+            add_parent_node_names(ao, ao_names, cas, parents)
 
-        ao_names[ao.labelset + NAME_SEPERATOR + ao.cell_label] = ao
-        cas.add_annotation_object(ao)
+            ao_names[ao.labelset + NAME_SEPERATOR + ao.cell_label] = ao
+            cas.add_annotation_object(ao)
 
     if generate_accession_ids:
-        cas = generate_ids_for_annotations(cas, config)
+        cas = generate_ids_for_annotations(cas, config, labelset_ranks)
     return cas
 
 
-def generate_ids_for_annotations(cas: CellTypeAnnotation, config: dict) -> CellTypeAnnotation:
+def generate_ids_for_annotations(cas: CellTypeAnnotation, config: dict, labelset_ranks: dict) -> CellTypeAnnotation:
     """
     Generates unique IDs for the annotations in the given CellTypeAnnotation object.
     :param cas: CellTypeAnnotation object
     :param config: ingestion configuration dictionary
+    :param labelset_ranks: ranks of the labelsets
     :return: CellTypeAnnotation object with generated IDs.
+    """
+    accession_managers = init_accession_managers(cas, config)
+
+    label_to_accession = dict()
+    for annotation in cas.annotations:
+        if not annotation.cell_set_accession:
+            accession_manager = accession_managers.get(annotation.labelset)
+            annotation.cell_set_accession = accession_manager.generate_accession_id()
+        if annotation.cell_label not in label_to_accession:
+            label_to_accession[annotation.cell_label] = []
+        label_to_accession[annotation.cell_label].append(annotation)
+
+    for annotation in cas.annotations:
+        if annotation.parent_cell_set_name:
+            parent_candidates = label_to_accession.get(annotation.parent_cell_set_name, None)
+            parent_candidates_sorted = sorted(
+                parent_candidates, key=lambda x: labelset_ranks.get(x.labelset, float('inf'))
+            )
+            # Assign the first parent with a rank greater than the current annotation's rank
+            for parent_annotation in parent_candidates_sorted:
+                if (
+                        labelset_ranks.get(parent_annotation.labelset, float('inf')) >
+                        labelset_ranks.get(annotation.labelset, float('inf'))
+                ):
+                    annotation.parent_cell_set_accession = parent_annotation.cell_set_accession
+                    break
+
+    return cas
+
+
+def init_accession_managers(cas: CellTypeAnnotation, config: dict) -> dict:
+    """
+    Initializes IncrementalAccessionManager for each labelset in the config.
+    :param cas: CellTypeAnnotation object
+    :param config: ingestion configuration dictionary
+    :return: dictionary of IncrementalAccessionManager objects
     """
     example_accession = None
     max_value = -1
@@ -144,24 +181,27 @@ def generate_ids_for_annotations(cas: CellTypeAnnotation, config: dict) -> CellT
                     max_value = value
 
     if "_" not in example_accession:
-        accession_prefix = config.get("taxonomy_id", "").strip()
+        accession_prefix = config.get("accession_prefix", "").strip()
         if not accession_prefix.endswith("_"):
             accession_prefix += "_"
     else:
-        accession_prefix = example_accession.split("_")[0] + "_"
-    accession_manager = IncrementalAccessionManager(accession_prefix, max_value)
+        if "_" in example_accession:
+            accession_prefix = example_accession.split("_")[0] + "_"
+        else:
+            accession_prefix = ""
+    default_accession_manager = IncrementalAccessionManager(accession_prefix, max_value)
 
-    label_to_accession = dict()
-    for annotation in cas.annotations:
-        if not annotation.cell_set_accession:
-            annotation.cell_set_accession = accession_manager.generate_accession_id()
-        label_to_accession[annotation.cell_label] = annotation.cell_set_accession
+    labelset_accession_managers = dict()
+    for field in config["fields"]:
+        if field["column_type"] in {"cluster_name", "cell_set"}:
+            if field.get("accession_prefix"):
+                prefix = field.get("accession_prefix", accession_prefix)
+                labelset_accession_managers[field["column_name"]] = IncrementalAccessionManager(
+                    prefix, int(field.get("accession_start", 0)),)
+            else:
+                labelset_accession_managers[field["column_name"]] = default_accession_manager
+    return labelset_accession_managers
 
-    for annotation in cas.annotations:
-        if annotation.parent_cell_set_name:
-            annotation.parent_cell_set_accession = label_to_accession.get(annotation.parent_cell_set_name, None)
-
-    return cas
 
 
 def register_parent(field, labelset_ranks, parent_ao, parents):
