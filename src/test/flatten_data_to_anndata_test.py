@@ -1,3 +1,4 @@
+import os
 import unittest
 from unittest.mock import patch
 
@@ -20,9 +21,7 @@ from cas.utils.conversion_utils import (
 
 class TestAnnotationMethods(unittest.TestCase):
     def setUp(self):
-        self.anndata_file_path = (
-            "src/test/test_data/cas_cap_roundtrip/test_flatten_dataset.h5ad"
-        )
+        self.anndata_file_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "./test_data/cas_cap_roundtrip/test_flatten_dataset.h5ad")
         # This is the synthetic CAS JSON for testing
         self.cas_json = {
             "author_name": "Jordan Lee",

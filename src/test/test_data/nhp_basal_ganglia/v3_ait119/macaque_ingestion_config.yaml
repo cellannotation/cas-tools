@@ -1,0 +1,41 @@
+taxonomy_id: AIT119
+brain_region_names:
+  - Basal Ganglia
+species_names:
+  - Macaca Mulatta
+author_name: Nelson Johansen
+title: Basal Ganglia AIT119 taxonomy
+
+fields:
+  - column_name: accession_cluster
+    column_type: cluster_id
+    rank: 0
+    accession_prefix: CS20250428_CLUST_
+
+  - column_name: Cluster
+    column_type: cluster_name
+    rank: 0
+
+  - column_name: Group
+    column_type: cell_set
+    rank: 1
+    accession_prefix: CS20250428_GRUP_
+    accession_start: 70
+
+  - column_name: Subclass
+    column_type: cell_set
+    rank: 2
+    accession_prefix: CS20250428_SUBC_
+    accession_start: 38
+
+  - column_name: Class
+    column_type: cell_set
+    rank: 3
+    accession_prefix: CS20250428_CLAS_
+    accession_start: 11
+
+  - column_name: Neighborhood
+    column_type: cell_set
+    rank: 4
+    accession_prefix: CS20250428_NBHD_
+    accession_start: 4

@@ -236,6 +236,8 @@ def generate_annotation_table(accession_prefix, cta, out_folder):
             record["synonyms"] = list_to_string(annotation_object.get("synonyms", []))
             if annotation_object.get("author_annotation_fields"):
                 for key, value in annotation_object["author_annotation_fields"].items():
+                    if normalize_column_name(key) in record:
+                        raise ValueError("Duplicate column name: " + key)
                     record[normalize_column_name(key)] = value
             # record["cell_ids"] = annotation_object.get("cell_ids", "")
             std_records.append(record)
