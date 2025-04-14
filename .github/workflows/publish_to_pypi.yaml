@@ -9,28 +9,31 @@ jobs:
   build-and-publish:
     name: Publish Python distributions to PyPI
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.10']
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.10
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
 
-    - name: Install Poetry
-      run: |
-        curl -sSL https://install.python-poetry.org | python3 -
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
 
-    - name: Install dependencies
-      run: |
-        poetry install --without dev
+      - name: Install dependencies
+        run: |
+          poetry install --without dev
 
-    - name: Package Distribution
-      run: |
-        poetry build
+      - name: Package Distribution
+        run: |
+          poetry build
 
-    - name: Publish Package
-      uses: pypa/gh-action-pypi-publish@release/v1
-      with:
-        password: ${{ secrets.PYPI_API_TOKEN }}
+      - name: Publish Package
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
