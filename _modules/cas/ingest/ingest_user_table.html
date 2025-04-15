@@ -140,7 +140,6 @@
 <span class="sd">    :param config_file: configuration file path.</span>
 <span class="sd">    :param generate_accession_ids: determines if incrementally generate accession_ids for all annotations that don&#39;t have an id.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="n">config</span> <span class="o">=</span> <span class="n">read_config</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
     <span class="n">is_config_valid</span> <span class="o">=</span> <span class="n">validate</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">is_config_valid</span><span class="p">:</span>
@@ -153,6 +152,7 @@
     <span class="n">labelset_ranks</span> <span class="o">=</span> <span class="n">populate_labelsets</span><span class="p">(</span><span class="n">cas</span><span class="p">,</span> <span class="n">config_fields</span><span class="p">)</span>
     <span class="n">ao_names</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="n">utilized_columns</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">cluster_accession_prefix</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;accession_prefix&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">record_index</span> <span class="ow">in</span> <span class="n">records</span><span class="p">:</span>
         <span class="n">record</span> <span class="o">=</span> <span class="n">records</span><span class="p">[</span><span class="n">record_index</span><span class="p">]</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">value</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">record</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>  <span class="c1"># skip empty rows</span>
@@ -165,7 +165,12 @@
                     <span class="n">ao</span><span class="o">.</span><span class="n">cell_label</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">]])</span>
                     <span class="n">utilized_columns</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">])</span>
                 <span class="k">elif</span> <span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;cluster_id&quot;</span><span class="p">:</span>
-                    <span class="n">ao</span><span class="o">.</span><span class="n">cell_set_accession</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">]])</span>
+                    <span class="n">cell_set_accession</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">]])</span>
+                    <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;accession_prefix&quot;</span><span class="p">):</span>
+                        <span class="n">cluster_accession_prefix</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;accession_prefix&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">cluster_accession_prefix</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">cell_set_accession</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">cluster_accession_prefix</span><span class="p">):</span>
+                        <span class="n">cell_set_accession</span> <span class="o">=</span> <span class="n">cluster_accession_prefix</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">cell_set_accession</span>
+                    <span class="n">ao</span><span class="o">.</span><span class="n">cell_set_accession</span> <span class="o">=</span> <span class="n">cell_set_accession</span>
                     <span class="n">ao</span><span class="o">.</span><span class="n">rank</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
                     <span class="n">utilized_columns</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">])</span>
                 <span class="k">elif</span> <span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;cell_set&quot;</span><span class="p">:</span>
@@ -185,28 +190,67 @@
                         <span class="nb">setattr</span><span class="p">(</span><span class="n">ao</span><span class="p">,</span> <span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_type&quot;</span><span class="p">],</span> <span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">]])</span>
                     <span class="n">utilized_columns</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">])</span>
 
-        <span class="n">add_user_annotations</span><span class="p">(</span><span class="n">ao</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">utilized_columns</span><span class="p">)</span>
-        <span class="n">add_parent_node_names</span><span class="p">(</span><span class="n">ao</span><span class="p">,</span> <span class="n">ao_names</span><span class="p">,</span> <span class="n">cas</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>
+            <span class="n">add_user_annotations</span><span class="p">(</span><span class="n">ao</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">utilized_columns</span><span class="p">)</span>
+            <span class="n">add_parent_node_names</span><span class="p">(</span><span class="n">ao</span><span class="p">,</span> <span class="n">ao_names</span><span class="p">,</span> <span class="n">cas</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span>
 
-        <span class="n">ao_names</span><span class="p">[</span><span class="n">ao</span><span class="o">.</span><span class="n">labelset</span> <span class="o">+</span> <span class="n">NAME_SEPERATOR</span> <span class="o">+</span> <span class="n">ao</span><span class="o">.</span><span class="n">cell_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">ao</span>
-        <span class="n">cas</span><span class="o">.</span><span class="n">add_annotation_object</span><span class="p">(</span><span class="n">ao</span><span class="p">)</span>
+            <span class="n">ao_names</span><span class="p">[</span><span class="n">ao</span><span class="o">.</span><span class="n">labelset</span> <span class="o">+</span> <span class="n">NAME_SEPERATOR</span> <span class="o">+</span> <span class="n">ao</span><span class="o">.</span><span class="n">cell_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">ao</span>
+            <span class="n">cas</span><span class="o">.</span><span class="n">add_annotation_object</span><span class="p">(</span><span class="n">ao</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">generate_accession_ids</span><span class="p">:</span>
-        <span class="n">cas</span> <span class="o">=</span> <span class="n">generate_ids_for_annotations</span><span class="p">(</span><span class="n">cas</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+        <span class="n">cas</span> <span class="o">=</span> <span class="n">generate_ids_for_annotations</span><span class="p">(</span><span class="n">cas</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">labelset_ranks</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">cas</span></div>
 
 
 
 <div class="viewcode-block" id="generate_ids_for_annotations">
 <a class="viewcode-back" href="../../../source/cas.ingest.html#cas.ingest.ingest_user_table.generate_ids_for_annotations">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">generate_ids_for_annotations</span><span class="p">(</span><span class="n">cas</span><span class="p">:</span> <span class="n">CellTypeAnnotation</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CellTypeAnnotation</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_ids_for_annotations</span><span class="p">(</span><span class="n">cas</span><span class="p">:</span> <span class="n">CellTypeAnnotation</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">labelset_ranks</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CellTypeAnnotation</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates unique IDs for the annotations in the given CellTypeAnnotation object.</span>
 <span class="sd">    :param cas: CellTypeAnnotation object</span>
 <span class="sd">    :param config: ingestion configuration dictionary</span>
+<span class="sd">    :param labelset_ranks: ranks of the labelsets</span>
 <span class="sd">    :return: CellTypeAnnotation object with generated IDs.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">max_accession</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">accession_managers</span> <span class="o">=</span> <span class="n">init_accession_managers</span><span class="p">(</span><span class="n">cas</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+
+    <span class="n">label_to_accession</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">cas</span><span class="o">.</span><span class="n">annotations</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">annotation</span><span class="o">.</span><span class="n">cell_set_accession</span><span class="p">:</span>
+            <span class="n">accession_manager</span> <span class="o">=</span> <span class="n">accession_managers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">annotation</span><span class="o">.</span><span class="n">labelset</span><span class="p">)</span>
+            <span class="n">annotation</span><span class="o">.</span><span class="n">cell_set_accession</span> <span class="o">=</span> <span class="n">accession_manager</span><span class="o">.</span><span class="n">generate_accession_id</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">annotation</span><span class="o">.</span><span class="n">cell_label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">label_to_accession</span><span class="p">:</span>
+            <span class="n">label_to_accession</span><span class="p">[</span><span class="n">annotation</span><span class="o">.</span><span class="n">cell_label</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">label_to_accession</span><span class="p">[</span><span class="n">annotation</span><span class="o">.</span><span class="n">cell_label</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">annotation</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">cas</span><span class="o">.</span><span class="n">annotations</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">annotation</span><span class="o">.</span><span class="n">parent_cell_set_name</span><span class="p">:</span>
+            <span class="n">parent_candidates</span> <span class="o">=</span> <span class="n">label_to_accession</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">annotation</span><span class="o">.</span><span class="n">parent_cell_set_name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">parent_candidates_sorted</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+                <span class="n">parent_candidates</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">labelset_ranks</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">labelset</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">))</span>
+            <span class="p">)</span>
+            <span class="c1"># Assign the first parent with a rank greater than the current annotation&#39;s rank</span>
+            <span class="k">for</span> <span class="n">parent_annotation</span> <span class="ow">in</span> <span class="n">parent_candidates_sorted</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span>
+                        <span class="n">labelset_ranks</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">parent_annotation</span><span class="o">.</span><span class="n">labelset</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">))</span> <span class="o">&gt;</span>
+                        <span class="n">labelset_ranks</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">annotation</span><span class="o">.</span><span class="n">labelset</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">))</span>
+                <span class="p">):</span>
+                    <span class="n">annotation</span><span class="o">.</span><span class="n">parent_cell_set_accession</span> <span class="o">=</span> <span class="n">parent_annotation</span><span class="o">.</span><span class="n">cell_set_accession</span>
+                    <span class="k">break</span>
+
+    <span class="k">return</span> <span class="n">cas</span></div>
+
+
+
+<div class="viewcode-block" id="init_accession_managers">
+<a class="viewcode-back" href="../../../source/cas.ingest.html#cas.ingest.ingest_user_table.init_accession_managers">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">init_accession_managers</span><span class="p">(</span><span class="n">cas</span><span class="p">:</span> <span class="n">CellTypeAnnotation</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initializes IncrementalAccessionManager for each labelset in the config.</span>
+<span class="sd">    :param cas: CellTypeAnnotation object</span>
+<span class="sd">    :param config: ingestion configuration dictionary</span>
+<span class="sd">    :return: dictionary of IncrementalAccessionManager objects</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">example_accession</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">max_value</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 
@@ -220,24 +264,29 @@
                 <span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">last_part</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="n">max_value</span><span class="p">:</span>
                     <span class="n">max_value</span> <span class="o">=</span> <span class="n">value</span>
-                    <span class="n">max_accession</span> <span class="o">=</span> <span class="n">accession</span>
 
-    <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-    <span class="k">if</span> <span class="s2">&quot;_&quot;</span> <span class="ow">in</span> <span class="n">example_accession</span><span class="p">:</span>
-        <span class="n">prefix</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;taxonomy_id&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-    <span class="n">accession_manager</span> <span class="o">=</span> <span class="n">IncrementalAccessionManager</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">max_value</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">&quot;_&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">example_accession</span><span class="p">:</span>
+        <span class="n">accession_prefix</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;accession_prefix&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">accession_prefix</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">):</span>
+            <span class="n">accession_prefix</span> <span class="o">+=</span> <span class="s2">&quot;_&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;_&quot;</span> <span class="ow">in</span> <span class="n">example_accession</span><span class="p">:</span>
+            <span class="n">accession_prefix</span> <span class="o">=</span> <span class="n">example_accession</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">accession_prefix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">default_accession_manager</span> <span class="o">=</span> <span class="n">IncrementalAccessionManager</span><span class="p">(</span><span class="n">accession_prefix</span><span class="p">,</span> <span class="n">max_value</span><span class="p">)</span>
 
-    <span class="n">label_to_accession</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">cas</span><span class="o">.</span><span class="n">annotations</span><span class="p">:</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">annotation</span><span class="o">.</span><span class="n">cell_set_accession</span><span class="p">:</span>
-            <span class="n">annotation</span><span class="o">.</span><span class="n">cell_set_accession</span> <span class="o">=</span> <span class="n">accession_manager</span><span class="o">.</span><span class="n">generate_accession_id</span><span class="p">()</span>
-        <span class="n">label_to_accession</span><span class="p">[</span><span class="n">annotation</span><span class="o">.</span><span class="n">cell_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">annotation</span><span class="o">.</span><span class="n">cell_set_accession</span>
+    <span class="n">labelset_accession_managers</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;fields&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_type&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;cluster_name&quot;</span><span class="p">,</span> <span class="s2">&quot;cell_set&quot;</span><span class="p">}:</span>
+            <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;accession_prefix&quot;</span><span class="p">):</span>
+                <span class="n">prefix</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;accession_prefix&quot;</span><span class="p">,</span> <span class="n">accession_prefix</span><span class="p">)</span>
+                <span class="n">labelset_accession_managers</span><span class="p">[</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">IncrementalAccessionManager</span><span class="p">(</span>
+                    <span class="n">prefix</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;accession_start&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">labelset_accession_managers</span><span class="p">[</span><span class="n">field</span><span class="p">[</span><span class="s2">&quot;column_name&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">default_accession_manager</span>
+    <span class="k">return</span> <span class="n">labelset_accession_managers</span></div>
 
-    <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">cas</span><span class="o">.</span><span class="n">annotations</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">annotation</span><span class="o">.</span><span class="n">parent_cell_set_name</span><span class="p">:</span>
-            <span class="n">annotation</span><span class="o">.</span><span class="n">parent_cell_set_accession</span> <span class="o">=</span> <span class="n">label_to_accession</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">annotation</span><span class="o">.</span><span class="n">parent_cell_set_name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">cas</span></div>
 
 
 

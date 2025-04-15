@@ -194,14 +194,40 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="cas.ingest.ingest_user_table.generate_ids_for_annotations">
-<span class="sig-prename descclassname"><span class="pre">cas.ingest.ingest_user_table.</span></span><span class="sig-name descname"><span class="pre">generate_ids_for_annotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/ingest/ingest_user_table.html#generate_ids_for_annotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.ingest.ingest_user_table.generate_ids_for_annotations" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">cas.ingest.ingest_user_table.</span></span><span class="sig-name descname"><span class="pre">generate_ids_for_annotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelset_ranks</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/ingest/ingest_user_table.html#generate_ids_for_annotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.ingest.ingest_user_table.generate_ids_for_annotations" title="Link to this definition"></a></dt>
 <dd><p>Generates unique IDs for the annotations in the given CellTypeAnnotation object.
 :type cas: <span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="cas.html#cas.model.CellTypeAnnotation" title="cas.model.CellTypeAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">CellTypeAnnotation</span></code></a></span>
 :param cas: CellTypeAnnotation object
 :type config: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></span>
 :param config: ingestion configuration dictionary
+:type labelset_ranks: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></span>
+:param labelset_ranks: ranks of the labelsets
 :rtype: <span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="cas.html#cas.model.CellTypeAnnotation" title="cas.model.CellTypeAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">CellTypeAnnotation</span></code></a></span>
 :return: CellTypeAnnotation object with generated IDs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cas</strong> (<a class="reference internal" href="cas.html#cas.model.CellTypeAnnotation" title="cas.model.CellTypeAnnotation"><em>CellTypeAnnotation</em></a>)</p></li>
+<li><p><strong>config</strong> (<em>dict</em>)</p></li>
+<li><p><strong>labelset_ranks</strong> (<em>dict</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="cas.html#cas.model.CellTypeAnnotation" title="cas.model.CellTypeAnnotation"><em>CellTypeAnnotation</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cas.ingest.ingest_user_table.init_accession_managers">
+<span class="sig-prename descclassname"><span class="pre">cas.ingest.ingest_user_table.</span></span><span class="sig-name descname"><span class="pre">init_accession_managers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/ingest/ingest_user_table.html#init_accession_managers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.ingest.ingest_user_table.init_accession_managers" title="Link to this definition"></a></dt>
+<dd><p>Initializes IncrementalAccessionManager for each labelset in the config.
+:type cas: <span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="cas.html#cas.model.CellTypeAnnotation" title="cas.model.CellTypeAnnotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">CellTypeAnnotation</span></code></a></span>
+:param cas: CellTypeAnnotation object
+:type config: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></span>
+:param config: ingestion configuration dictionary
+:rtype: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></span>
+:return: dictionary of IncrementalAccessionManager objects</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -210,7 +236,7 @@
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="cas.html#cas.model.CellTypeAnnotation" title="cas.model.CellTypeAnnotation"><em>CellTypeAnnotation</em></a></p>
+<dd class="field-even"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>

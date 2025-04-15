@@ -120,6 +120,7 @@
 <li class="toctree-l3"><a class="reference internal" href="cas.ingest.html#cas.ingest.ingest_user_table.ingest_data"><code class="docutils literal notranslate"><span class="pre">ingest_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cas.ingest.html#cas.ingest.ingest_user_table.ingest_user_data"><code class="docutils literal notranslate"><span class="pre">ingest_user_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cas.ingest.html#cas.ingest.ingest_user_table.generate_ids_for_annotations"><code class="docutils literal notranslate"><span class="pre">generate_ids_for_annotations()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cas.ingest.html#cas.ingest.ingest_user_table.init_accession_managers"><code class="docutils literal notranslate"><span class="pre">init_accession_managers()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cas.ingest.html#cas.ingest.ingest_user_table.register_parent"><code class="docutils literal notranslate"><span class="pre">register_parent()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cas.ingest.html#cas.ingest.ingest_user_table.get_annotation"><code class="docutils literal notranslate"><span class="pre">get_annotation()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cas.ingest.html#cas.ingest.ingest_user_table.add_user_annotations"><code class="docutils literal notranslate"><span class="pre">add_user_annotations()</span></code></a></li>
@@ -1342,7 +1343,7 @@ provides values for the CAS JSON’s top-level properties and cell
 annotation metadata.</p></li>
 <li><p><strong>cas_dict</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]</span>) – A dictionary of CAS annotation sets, each representing an annotation
 structure used to populate the CAS JSON annotations.</p></li>
-<li><p><strong>schema_name</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – An optional schema name to retrieve the schema for building
+<li><p><strong>schema_name</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – An optional schema name to retrieve the schema for building
 the CAS JSON. If not provided, defaults to “cap”.</p></li>
 </ul>
 </dd>
@@ -2012,7 +2013,7 @@ role. An example list; John Smith|Cody Miller|Sarah Jones.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>show_cell_ids</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – identifies if result have ‘cell_ids’ column. Default value is false</p></li>
-<li><p><strong>labels</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></span>) – list of key(labelset), value(cell_label) pairs to filter annotations</p></li>
+<li><p><strong>labels</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>]</span>) – list of key(labelset), value(cell_label) pairs to filter annotations</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -2103,7 +2104,7 @@ If None, the labelset with rank ‘0’ is used.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>cas</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></span>) – CAS JSON object</p></li>
 <li><p><strong>ad_obs</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">CapAnnDataDF</span></code>]</span>) – Obs DataFrame extracted from an AnnData object.</p></li>
-<li><p><strong>labelsets</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></span>) – List of labelsets to update with IDs from AnnData. If value is null, rank ‘0’ labelset is used. The</p></li>
+<li><p><strong>labelsets</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>]</span>) – List of labelsets to update with IDs from AnnData. If value is null, rank ‘0’ labelset is used. The</p></li>
 <li><p><strong>order</strong> (<em>labelsets should be provided in</em>)</p></li>
 <li><p><strong>0</strong> (<em>starting from rank</em>)</p></li>
 <li><p><strong>validate</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, runs validation checks to ensure labelset consistency.
@@ -2119,11 +2120,11 @@ The program wil`l exit with an error if validation fails. Defaults to False.</p>
 <dd><p>Anndata files may use different column names to uniquely identify Clusters. Get the cluster identifier column name for the current file.
 :type obs_keys: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>
 :param obs_keys: Anndata observation keys.
-:type labelsets: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></span>
+:type labelsets: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>]</span>
 :param labelsets: List of labelsets to update with IDs from AnnData. The labelsets should be provided in order,
 :param starting from rank 0:
 :type starting from rank 0: leaf nodes
-:type rank_zero_labelset: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>
+:type rank_zero_labelset: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>
 :param rank_zero_labelset: rank 0 labelset name</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -2132,8 +2133,8 @@ The program wil`l exit with an error if validation fails. Defaults to False.</p>
 <dt class="field-even">Parameters<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>obs_keys</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>)</p></li>
-<li><p><strong>labelsets</strong> (<em>list</em>)</p></li>
-<li><p><strong>rank_zero_labelset</strong> (<em>str</em>)</p></li>
+<li><p><strong>labelsets</strong> (<em>list</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>rank_zero_labelset</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -2151,7 +2152,7 @@ The program wil`l exit with an error if validation fails. Defaults to False.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>cas</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></span>) – Cell Annotation Schema json object.</p></li>
 <li><p><strong>show_cell_ids</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – identifies if result have ‘cell_ids’ column. Default value is false</p></li>
-<li><p><strong>labels</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></span>) – list of key(labelset), value(cell_label) pairs to filter annotations</p></li>
+<li><p><strong>labels</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>]</span>) – list of key(labelset), value(cell_label) pairs to filter annotations</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
