@@ -1,0 +1,39 @@
+taxonomy_id: CS20250428
+author_name: Nelson Johansen
+title: HMBA Basal Ganglia Consensus Taxonomy
+
+fields:
+  - column_name: accession_group
+    column_type: cluster_id
+    rank: 0
+
+  - column_name: Group
+    column_type: cluster_name
+    rank: 0
+
+  - column_name: Subclass
+    column_type: cell_set
+    rank: 1
+    accession_column: accession_subclass
+
+  - column_name: Class
+    column_type: cell_set
+    rank: 2
+    accession_column: accession_class
+
+  - column_name: Neighborhood
+    column_type: cell_set
+    rank: 3
+    accession_column: accession_neighborhood
+
+  - column_name: literature_name
+    column_type: synonyms
+
+  - column_name: literature_support
+    column_type: rationale
+
+  - column_name: curated_markers
+    column_type: marker_gene_evidence
+
+#  - column_name: "CL:ID_class"
+#    column_type: cell_ontology_term_id

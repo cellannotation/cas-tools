@@ -5,7 +5,7 @@ from rdflib import Graph, URIRef
 
 from cas.cas_to_rdf import export_to_rdf
 
-CAS_NS = "https://cellular-semantics.sanger.ac.uk/ontology/CAS/"
+CAS_NS = "https://purl.brain-bican.org/taxonomy/"
 taxonomy_type = URIRef(CAS_NS + "Taxonomy")
 annotation_type = URIRef("http://purl.obolibrary.org/obo/PCL_0010001")
 labelset_type = URIRef(CAS_NS + "Labelset")
@@ -80,7 +80,7 @@ class CAStoRDFTestCase(unittest.TestCase):
 
         rdf_graph = export_to_rdf(
             # cas_schema="bican",
-            cas_schema="https://raw.githubusercontent.com/Cellular-Semantics/cell-annotation-schema/refs/tags/v0.0.11/build/BICAN_schema.yaml",
+            cas_schema="https://raw.githubusercontent.com/Cellular-Semantics/cell-annotation-schema/refs/tags/v0.0.15/build/BICAN_schema.yaml",
             # data=os.path.join(TESTDATA, "CS202210140.json"),
             data=os.path.join(TESTDATA, "Siletti_all_non_neuronal_cells.json"),
             ontology_namespace=ontology_namespace,

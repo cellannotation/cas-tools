@@ -37,6 +37,9 @@ definitions:
       accession_start:
         description: "Starting number for the incremental cell set accession generation."
         type: number
+      accession_column:
+        description: "Column name in the original spreadsheet/tsv that contains the cell set accession."
+        type: string
 
   annotation_column_definition:
     required: [ 'column_name', 'column_type' ]
