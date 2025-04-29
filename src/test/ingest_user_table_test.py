@@ -259,6 +259,41 @@ class CellTypeAnnotationTests(unittest.TestCase):
         self.assertEqual('CS20250428_SUBC_38', test_annotation.parent_cell_set_accession)
         self.assertEqual("VLMC", test_annotation.parent_cell_set_name)
 
+    def test_user_annotation_ingestion(self):
+        result = ingest_user_data(os.path.join(CURRENT_DIR, "./test_data/nhp_basal_ganglia/consensus/HMBA_BG_consensus_annotation.tsv"),
+                             os.path.join(CURRENT_DIR, "./test_data/nhp_basal_ganglia/consensus/ingestion_config.yaml"),
+                             True)
+
+        self.assertTrue(result)
+        self.assertTrue(result.author_name)
+        self.assertEqual("Nelson Johansen", result.author_name)
+
+        self.assertIsNotNone(result.title)
+        self.assertEqual("HMBA Basal Ganglia Consensus Taxonomy", result.title)
+
+        self.assertIsNotNone(result.annotations)
+        self.assertEqual(117, len(result.annotations))
+
+        test_annotation = [x for x in result.annotations if x.cell_label == "BAM"][0]
+        self.assertEqual('CS20250428_GROUP_0001', test_annotation.cell_set_accession)
+        self.assertEqual("Group", test_annotation.labelset)
+        self.assertTrue("BAM (Border-associated macrophages)" in test_annotation.synonyms)
+        self.assertEqual("Yao et al. 2023", test_annotation.rationale)
+        self.assertCountEqual(["CD163", "MRC1"], test_annotation.marker_gene_evidence)
+        # self.assertEqual("CL:0000842", test_annotation.cell_ontology_term_id)
+        self.assertEqual('CS20250428_SUBCL_0018', test_annotation.parent_cell_set_accession)
+        self.assertEqual("Macrophage", test_annotation.parent_cell_set_name)
+        parent_annotation = [
+            x
+            for x in result.annotations
+            if x.cell_label == test_annotation.parent_cell_set_name
+        ][0]
+        self.assertEqual("Macrophage", parent_annotation.cell_label)
+        self.assertEqual("Subclass", parent_annotation.labelset)
+        self.assertEqual('CS20250428_SUBCL_0018', parent_annotation.cell_set_accession)
+        self.assertEqual('CS20250428_CLASS_0008', parent_annotation.parent_cell_set_accession)
+
+
     # def test_data_formatting_ait195_human(self):
     #     result = ingest_data("/Users/hk9/Downloads/Human_AIBS_AIT19-5_anno_table.tsv",
     #                          "/Users/hk9/Downloads/human_ingestion_config.yaml",
@@ -269,4 +304,10 @@ class CellTypeAnnotationTests(unittest.TestCase):
     #     result = ingest_data("/Users/hk9/Downloads/Macaque_AIBS_AIT11-9_anno_table.tsv",
     #                          "/Users/hk9/Downloads/macaque_ingestion_config.yaml",
     #                          "/Users/hk9/Downloads/Macaque_AIBS_AIT11-9.json",
+    #                          "json", True, True)
+    #
+    # def test_data_formatting_bg_consensus(self):
+    #     result = ingest_data(os.path.join(CURRENT_DIR, "./test_data/nhp_basal_ganglia/consensus/HMBA_BG_consensus_annotation.tsv"),
+    #                          os.path.join(CURRENT_DIR, "./test_data/nhp_basal_ganglia/consensus/ingestion_config.yaml"),
+    #                          "/Users/hk9/Downloads/HMBA_BG_consensus_annotation.json",
     #                          "json", True, True)

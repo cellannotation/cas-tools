@@ -97,6 +97,11 @@ def ingest_user_data(data_file: str, config_file: str, generate_accession_ids: b
                 elif field["column_type"] == "cell_set":
                     if record[field["column_name"]]:
                         parent_ao = get_annotation(ao_names, field, record)
+                        if field.get("accession_column"):
+                            accession = str(record[field["accession_column"]]).strip()
+                            if not accession:
+                                raise ValueError("Accession is empty for {0}({1})".format(parent_ao.cell_label, parent_ao.labelset))
+                            parent_ao.cell_set_accession = accession
                         register_parent(field, labelset_ranks, parent_ao, parents)
                     utilized_columns.add(field["column_name"])
                 else:
@@ -104,8 +109,8 @@ def ingest_user_data(data_file: str, config_file: str, generate_accession_ids: b
                     if "typing.List[str]" in str(
                         get_type_hints(ao)[field["column_type"]]
                     ):
-                        list_value = str(record[field["column_name"]]).split(",")
-                        stripped = list(map(str.strip, list_value))
+                        list_value = re.split(r'[,|]', str(record[field["column_name"]]))
+                        stripped = [s.strip() for s in map(str.strip, list_value) if s]
                         setattr(ao, field["column_type"], stripped)
                     else:
                         setattr(ao, field["column_type"], record[field["column_name"]])
