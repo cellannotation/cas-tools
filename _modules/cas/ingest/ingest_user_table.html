@@ -347,8 +347,8 @@
         <span class="n">column_name</span> <span class="k">for</span> <span class="n">column_name</span> <span class="ow">in</span> <span class="n">headers</span> <span class="k">if</span> <span class="n">column_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">utilized_columns</span>
     <span class="p">]</span>
     <span class="k">for</span> <span class="n">not_utilized_column</span> <span class="ow">in</span> <span class="n">not_utilized_columns</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">record</span><span class="p">[</span><span class="n">not_utilized_column</span><span class="p">]:</span>
-            <span class="n">ao</span><span class="o">.</span><span class="n">add_user_annotation</span><span class="p">(</span><span class="n">not_utilized_column</span><span class="p">,</span> <span class="n">record</span><span class="p">[</span><span class="n">not_utilized_column</span><span class="p">])</span></div>
+        <span class="c1"># if record[not_utilized_column]:</span>
+        <span class="n">ao</span><span class="o">.</span><span class="n">add_user_annotation</span><span class="p">(</span><span class="n">not_utilized_column</span><span class="p">,</span> <span class="n">record</span><span class="p">[</span><span class="n">not_utilized_column</span><span class="p">])</span></div>
 
 
 
