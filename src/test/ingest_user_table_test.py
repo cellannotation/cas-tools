@@ -69,7 +69,7 @@ class CellTypeAnnotationTests(unittest.TestCase):
         self.assertTrue("GULP1" in test_annotation["marker_gene_evidence"])
 
         self.assertTrue("author_annotation_fields" in test_annotation)
-        self.assertEqual(6, len(test_annotation["author_annotation_fields"]))
+        self.assertEqual(10, len(test_annotation["author_annotation_fields"]))
 
     def test_data_formatting_nhp_v2(self):
         result = ingest_user_data(
@@ -310,4 +310,9 @@ class CellTypeAnnotationTests(unittest.TestCase):
     #     result = ingest_data(os.path.join(CURRENT_DIR, "./test_data/nhp_basal_ganglia/consensus/HMBA_BG_consensus_annotation.tsv"),
     #                          os.path.join(CURRENT_DIR, "./test_data/nhp_basal_ganglia/consensus/ingestion_config.yaml"),
     #                          "/Users/hk9/Downloads/HMBA_BG_consensus_annotation.json",
+    #                          "json", True, True)
+    # def test_data_formatting_bg_consensus(self):
+    #     result = ingest_data("/Users/hk9/Downloads/tdt_cloud_rltbl/basal_ganglia_consensus_taxonomy/ingestion_data/HMBA_BG_consensus_annotation.tsv",
+    #                          "/Users/hk9/Downloads/tdt_cloud_rltbl/basal_ganglia_consensus_taxonomy/ingestion_data/ingestion_config.yaml",
+    #                          "/Users/hk9/Downloads/tdt_cloud_rltbl/basal_ganglia_consensus_taxonomy/ingestion_data/HMBA_BG_consensus_annotation.json",
     #                          "json", True, True)

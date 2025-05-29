@@ -253,8 +253,8 @@ def add_user_annotations(ao, headers, record, utilized_columns):
         column_name for column_name in headers if column_name not in utilized_columns
     ]
     for not_utilized_column in not_utilized_columns:
-        if record[not_utilized_column]:
-            ao.add_user_annotation(not_utilized_column, record[not_utilized_column])
+        # if record[not_utilized_column]:
+        ao.add_user_annotation(not_utilized_column, record[not_utilized_column])
 
 
 def add_parent_node_names(ao, ao_names, cas, parents):
