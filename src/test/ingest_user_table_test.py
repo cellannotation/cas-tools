@@ -311,8 +311,8 @@ class CellTypeAnnotationTests(unittest.TestCase):
     #                          os.path.join(CURRENT_DIR, "./test_data/nhp_basal_ganglia/consensus/ingestion_config.yaml"),
     #                          "/Users/hk9/Downloads/HMBA_BG_consensus_annotation.json",
     #                          "json", True, True)
-    def test_data_formatting_bg_consensus(self):
-        result = ingest_data("/Users/hk9/Downloads/tdt_cloud_rltbl/basal_ganglia_consensus_taxonomy/ingestion_data/HMBA_BG_consensus_annotation.tsv",
-                             "/Users/hk9/Downloads/tdt_cloud_rltbl/basal_ganglia_consensus_taxonomy/ingestion_data/ingestion_config.yaml",
-                             "/Users/hk9/Downloads/tdt_cloud_rltbl/basal_ganglia_consensus_taxonomy/ingestion_data/HMBA_BG_consensus_annotation.json",
-                             "json", True, True)
+    # def test_data_formatting_bg_consensus(self):
+    #     result = ingest_data("/Users/hk9/Downloads/tdt_cloud_rltbl/basal_ganglia_consensus_taxonomy/ingestion_data/HMBA_BG_consensus_annotation.tsv",
+    #                          "/Users/hk9/Downloads/tdt_cloud_rltbl/basal_ganglia_consensus_taxonomy/ingestion_data/ingestion_config.yaml",
+    #                          "/Users/hk9/Downloads/tdt_cloud_rltbl/basal_ganglia_consensus_taxonomy/ingestion_data/HMBA_BG_consensus_annotation.json",
+    #                          "json", True, True)
