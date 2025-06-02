@@ -9,6 +9,7 @@ from cas.utils.conversion_utils import (
     calculate_labelset,
     generate_parent_cell_lookup,
     get_authors_from_doi,
+    create_accession_mapping
 )
 
 
@@ -17,6 +18,7 @@ def anndata2cas(
     labelsets: List[str],
     output_file_path: str,
     include_hierarchy: bool,
+    accession_columns: List[str] = None,
 ):
     """
     Convert an AnnData file to Cell Annotation Schema (CAS) JSON.
@@ -28,17 +30,23 @@ def anndata2cas(
         to higher ranks.
         output_file_path (str): Output CAS file name.
         include_hierarchy (bool): Flag indicating whether to include hierarchy in the output.
+        accession_columns (List[str], optional): List of columns in the AnnData obs that contain accession information.
+            If provided, these columns will be used to populate the 'cell_set_accession' field in the CAS annotations.
+            Otherwise, accession IDs will be automatically generated using a hash of the cells in each cell set.
+            Defaults to None.
     """
 
     anndata = read_anndata_file(anndata_file_path)
 
     labelset_dict = calculate_labelset(anndata.obs, labelsets)
 
+    accessions_mapping = create_accession_mapping(anndata.obs, labelsets, accession_columns)
+
     cas = generate_cas_metadata(dict(anndata.uns))
 
     add_labelsets_to_cas(cas, labelset_dict)
 
-    parent_cell_look_up = generate_parent_cell_lookup(anndata, labelset_dict)
+    parent_cell_look_up = generate_parent_cell_lookup(anndata, labelset_dict, accessions_mapping)
 
     add_annotations_to_cas(cas, labelset_dict, parent_cell_look_up)
 
