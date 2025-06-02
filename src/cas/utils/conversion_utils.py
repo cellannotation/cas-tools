@@ -213,7 +213,7 @@ def generate_parent_cell_lookup(anndata, labelset_dict, accessions_mapping: Dict
                               including metadata in anndata.obs.
         labelset_dict (Dict[str, Any]): A dictionary where keys are labelset names and values
                                         are dictionaries containing members and their ranks.
-        accessions_mapping (List[str], optional): Mapping of cellset names to accession IDs.
+        accessions_mapping (Dict[str, str], optional): Mapping of cellset names to accession IDs.
         (To enable usage of same names accross different labelsets, key is identified as labelset:cell_label).
 
     Returns:
