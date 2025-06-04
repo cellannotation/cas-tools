@@ -86,7 +86,7 @@
 <a class="viewcode-back" href="../../../source/cas.accession.html#cas.accession.base_accession_manager.BaseAccessionManager.generate_accession_id">[docs]</a>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">generate_accession_id</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">id_recommendation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">labelset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">id_recommendation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">labelset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cellset_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generates an auto-increment based accession id. If the recommended accession_id is available, uses it.</span>
@@ -94,6 +94,7 @@
 <span class="sd">            id_recommendation: accession id recommendation. Function uses this id if it is available,</span>
 <span class="sd">            provides an auto-incremented id otherwise.</span>
 <span class="sd">            labelset: Labelset name. If provided, uses it as a prefix to the accession id.</span>
+<span class="sd">            cellset_name: Name of the cell set for which the accession ID is being generated.</span>
 <span class="sd">        Return: accession_id</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span></div>

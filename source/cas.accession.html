@@ -114,7 +114,7 @@
 <p>Abstract Accession ID generator.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="cas.accession.base_accession_manager.BaseAccessionManager.generate_accession_id">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate_accession_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_recommendation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/accession/base_accession_manager.html#BaseAccessionManager.generate_accession_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.accession.base_accession_manager.BaseAccessionManager.generate_accession_id" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate_accession_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_recommendation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cellset_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/accession/base_accession_manager.html#BaseAccessionManager.generate_accession_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.accession.base_accession_manager.BaseAccessionManager.generate_accession_id" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span></p>
@@ -123,6 +123,7 @@
 <dd class="field-even"><ul class="simple">
 <li><p><strong>id_recommendation</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
 <li><p><strong>labelset</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>cellset_name</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -131,7 +132,8 @@ Params:</p>
 <blockquote>
 <div><p>id_recommendation: accession id recommendation. Function uses this id if it is available,
 provides an auto-incremented id otherwise.
-labelset: Labelset name. If provided, uses it as a prefix to the accession id.</p>
+labelset: Labelset name. If provided, uses it as a prefix to the accession id.
+cellset_name: Name of the cell set for which the accession ID is being generated.</p>
 </div></blockquote>
 <p>Return: accession_id</p>
 </dd></dl>
@@ -147,7 +149,7 @@ labelset: Labelset name. If provided, uses it as a prefix to the accession id.</
 <dd><p>Bases: <a class="reference internal" href="#cas.accession.base_accession_manager.BaseAccessionManager" title="cas.accession.base_accession_manager.BaseAccessionManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseAccessionManager</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="cas.accession.hash_accession_manager.HashAccessionManager.generate_accession_id">
-<span class="sig-name descname"><span class="pre">generate_accession_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_recommendation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suppress_warnings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/accession/hash_accession_manager.html#HashAccessionManager.generate_accession_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.accession.hash_accession_manager.HashAccessionManager.generate_accession_id" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">generate_accession_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_recommendation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suppress_warnings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cellset_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/accession/hash_accession_manager.html#HashAccessionManager.generate_accession_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.accession.hash_accession_manager.HashAccessionManager.generate_accession_id" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span></p>
@@ -157,6 +159,7 @@ labelset: Labelset name. If provided, uses it as a prefix to the accession id.</
 <li><p><strong>id_recommendation</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
 <li><p><strong>cell_ids</strong> (<em>List</em><em> | </em><em>None</em>)</p></li>
 <li><p><strong>labelset</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>cellset_name</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -167,7 +170,8 @@ Params:</p>
 valid accession id.
 cell_ids: Cell IDs list. Algorithm sorts cell ids internally.
 labelset: Labelset name. If provided, uses it as a prefix to the accession id.
-suppress_warnings: If True, suppresses warnings.</p>
+suppress_warnings: If True, suppresses warnings.
+cellset_name: this parameter is not utilized in this implementation.</p>
 </div></blockquote>
 <p>Return: accession_id</p>
 </dd></dl>
@@ -198,7 +202,7 @@ suppress_warnings: If True, suppresses warnings.</p>
 <p>Numerically incremental Accession ID generator.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="cas.accession.incremental_accession_manager.IncrementalAccessionManager.generate_accession_id">
-<span class="sig-name descname"><span class="pre">generate_accession_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_recommendation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/accession/incremental_accession_manager.html#IncrementalAccessionManager.generate_accession_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.accession.incremental_accession_manager.IncrementalAccessionManager.generate_accession_id" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">generate_accession_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_recommendation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cellset_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/accession/incremental_accession_manager.html#IncrementalAccessionManager.generate_accession_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.accession.incremental_accession_manager.IncrementalAccessionManager.generate_accession_id" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span></p>
@@ -207,6 +211,7 @@ suppress_warnings: If True, suppresses warnings.</p>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>id_recommendation</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
 <li><p><strong>labelset</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>cellset_name</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -215,7 +220,8 @@ Params:</p>
 <blockquote>
 <div><p>id_recommendation: accession id recommendation. Function uses this id if it is available,
 provides an auto-incremented id otherwise.
-labelset: this parameter is not utilized in this implementation.</p>
+labelset: this parameter is not utilized in this implementation.
+cellset_name: this parameter is not utilized in this implementation.</p>
 </div></blockquote>
 <p>Return: accession_id</p>
 </dd></dl>

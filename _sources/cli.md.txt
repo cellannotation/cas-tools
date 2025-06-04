@@ -125,6 +125,10 @@ cas anndata2cas --anndata path/to/anndata.h5ad --labelsets item1 item2 item3 --o
     names. The labelsets should be provided in order, starting from rank 0 (leaf nodes) and ascending to higher ranks.
 - `--output` : Output CAS file name (default: output.json).
 - `--hierarchy`: Flag indicating whether to include hierarchy in the output.
+- `--accession_columns`: List of columns in the AnnData obs that contain accession ID information.
+            This list should match the order and length of the labelsets argument.
+            If not provided, accession IDs will be automatically generated using a hash of the cells in each cell set.
+            Defaults to None.
 
 ## Convert ABC to CAS
 

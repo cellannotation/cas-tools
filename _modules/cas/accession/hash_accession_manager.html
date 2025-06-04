@@ -96,7 +96,7 @@
 <div class="viewcode-block" id="HashAccessionManager.generate_accession_id">
 <a class="viewcode-back" href="../../../source/cas.accession.html#cas.accession.hash_accession_manager.HashAccessionManager.generate_accession_id">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">generate_accession_id</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">id_recommendation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cell_ids</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">labelset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">False</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">id_recommendation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cell_ids</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">labelset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cellset_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generates a Blake2b hashing algorithm based hash for the given cell IDs.</span>
@@ -106,6 +106,7 @@
 <span class="sd">            cell_ids: Cell IDs list. Algorithm sorts cell ids internally.</span>
 <span class="sd">            labelset: Labelset name. If provided, uses it as a prefix to the accession id.</span>
 <span class="sd">            suppress_warnings: If True, suppresses warnings.</span>
+<span class="sd">            cellset_name: this parameter is not utilized in this implementation.</span>
 <span class="sd">        Return: accession_id</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">id_recommendation</span> <span class="ow">and</span> <span class="n">labelset</span> <span class="ow">and</span> <span class="s2">&quot;:&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">id_recommendation</span><span class="p">:</span>

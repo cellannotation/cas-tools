@@ -69,6 +69,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#cas.utils.conversion_utils.copy_and_update_file_path"><code class="docutils literal notranslate"><span class="pre">copy_and_update_file_path()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#cas.utils.conversion_utils.fetch_anndata"><code class="docutils literal notranslate"><span class="pre">fetch_anndata()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#cas.utils.conversion_utils.retrieve_schema"><code class="docutils literal notranslate"><span class="pre">retrieve_schema()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cas.utils.conversion_utils.create_accession_mapping"><code class="docutils literal notranslate"><span class="pre">create_accession_mapping()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-cas.utils.validation_utils">cas.utils.validation_utils module</a><ul>
@@ -258,7 +259,7 @@ mapping parent cell set accessions to sets of corresponding cell IDs.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="cas.utils.conversion_utils.generate_parent_cell_lookup">
-<span class="sig-prename descclassname"><span class="pre">cas.utils.conversion_utils.</span></span><span class="sig-name descname"><span class="pre">generate_parent_cell_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anndata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelset_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/utils/conversion_utils.html#generate_parent_cell_lookup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.utils.conversion_utils.generate_parent_cell_lookup" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">cas.utils.conversion_utils.</span></span><span class="sig-name descname"><span class="pre">generate_parent_cell_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anndata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelset_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">accessions_mapping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/utils/conversion_utils.html#generate_parent_cell_lookup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.utils.conversion_utils.generate_parent_cell_lookup" title="Link to this definition"></a></dt>
 <dd><p>Generates a lookup dictionary mapping cell labels to various metadata, including cell IDs, rank,
 and cell ontology terms. This function is designed to precompute the lookup information needed for
 CAS annotation generation, especially useful when hierarchy inclusion is desired.</p>
@@ -269,6 +270,9 @@ CAS annotation generation, especially useful when hierarchy inclusion is desired
 including metadata in anndata.obs.</p></li>
 <li><p><strong>labelset_dict</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – A dictionary where keys are labelset names and values
 are dictionaries containing members and their ranks.</p></li>
+<li><p><strong>accessions_mapping</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Mapping of cellset names to accession IDs.</p></li>
+<li><p><strong>labelsets</strong> (<em>(</em><em>To enable usage</em><em> of </em><em>same names accross different</em>) – cell_label).</p></li>
+<li><p><strong>labelset</strong> (<em>key is identified as</em>) – cell_label).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -437,6 +441,31 @@ If not provided, the current working directory is used.</p></li>
 <dt class="sig sig-object py" id="cas.utils.conversion_utils.retrieve_schema">
 <span class="sig-prename descclassname"><span class="pre">cas.utils.conversion_utils.</span></span><span class="sig-name descname"><span class="pre">retrieve_schema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/utils/conversion_utils.html#retrieve_schema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.utils.conversion_utils.retrieve_schema" title="Link to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cas.utils.conversion_utils.create_accession_mapping">
+<span class="sig-prename descclassname"><span class="pre">cas.utils.conversion_utils.</span></span><span class="sig-name descname"><span class="pre">create_accession_mapping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adata_obs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">accession_columns</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/utils/conversion_utils.html#create_accession_mapping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.utils.conversion_utils.create_accession_mapping" title="Link to this definition"></a></dt>
+<dd><p>Creates a mapping of cellset names to accession IDs based on the provided labelsets and accession columns.
+:type adata_obs: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>
+:param adata_obs: The observations DataFrame (<cite>obs</cite>) of an AnnData object containing the dataset.
+:type labelsets: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></span>
+:param labelsets: List of labelset names to be used for mapping.
+:type accession_columns: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></span>
+:param accession_columns: List of columns in the AnnData obs that contain accession information.</p>
+<p>Returns: Map of cellset names to accession IDs, where keys are formatted as “labelset:cell_label”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>adata_obs</strong> (<em>DataFrame</em>)</p></li>
+<li><p><strong>labelsets</strong> (<em>list</em>)</p></li>
+<li><p><strong>accession_columns</strong> (<em>list</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="module-cas.utils.validation_utils">

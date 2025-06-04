@@ -85,6 +85,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">cas_schema</span><span class="w"> </span><span class="kn">import</span> <span class="n">schemas</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">cas.accession.hash_accession_manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">HashAccessionManager</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cas.accession.mapped_accession_manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">MappedAccessionManager</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">cas.dataset_retrieval.dataset_retriever</span><span class="w"> </span><span class="kn">import</span> <span class="n">DatasetRetriever</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">cas.file_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_cas_schema_names</span>
 
@@ -295,7 +296,7 @@
 
 <div class="viewcode-block" id="generate_parent_cell_lookup">
 <a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.conversion_utils.generate_parent_cell_lookup">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">generate_parent_cell_lookup</span><span class="p">(</span><span class="n">anndata</span><span class="p">,</span> <span class="n">labelset_dict</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_parent_cell_lookup</span><span class="p">(</span><span class="n">anndata</span><span class="p">,</span> <span class="n">labelset_dict</span><span class="p">,</span> <span class="n">accessions_mapping</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates a lookup dictionary mapping cell labels to various metadata, including cell IDs, rank,</span>
 <span class="sd">    and cell ontology terms. This function is designed to precompute the lookup information needed for</span>
@@ -306,13 +307,18 @@
 <span class="sd">                              including metadata in anndata.obs.</span>
 <span class="sd">        labelset_dict (Dict[str, Any]): A dictionary where keys are labelset names and values</span>
 <span class="sd">                                        are dictionaries containing members and their ranks.</span>
+<span class="sd">        accessions_mapping (Dict[str, str], optional): Mapping of cellset names to accession IDs.</span>
+<span class="sd">        (To enable usage of same names accross different labelsets, key is identified as labelset:cell_label).</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Dict[str, Any]: A dictionary where each key is a cell label and each value is another</span>
 <span class="sd">                        dictionary containing keys for &#39;cell_ids&#39; (a set of cell IDs associated</span>
 <span class="sd">                        with the label), &#39;rank&#39;, &#39;cell_ontology_term_id&#39;, and &#39;cell_ontology_term&#39;.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">accession_manager</span> <span class="o">=</span> <span class="n">HashAccessionManager</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">accessions_mapping</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">accession_manager</span> <span class="o">=</span> <span class="n">HashAccessionManager</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">accession_manager</span> <span class="o">=</span> <span class="n">MappedAccessionManager</span><span class="p">(</span><span class="n">accession_map</span><span class="o">=</span><span class="n">accessions_mapping</span><span class="p">)</span>
     <span class="n">parent_cell_look_up</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">labelset_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">v</span><span class="p">[</span><span class="s2">&quot;members&quot;</span><span class="p">]:</span>
@@ -321,7 +327,7 @@
             <span class="p">)</span>
             <span class="n">cell_ids</span> <span class="o">=</span> <span class="n">get_cell_ids</span><span class="p">(</span><span class="n">anndata</span><span class="o">.</span><span class="n">obs</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
             <span class="n">cell_set_accession</span> <span class="o">=</span> <span class="n">accession_manager</span><span class="o">.</span><span class="n">generate_accession_id</span><span class="p">(</span>
-                <span class="n">cell_ids</span><span class="o">=</span><span class="n">cell_ids</span><span class="p">,</span> <span class="n">labelset</span><span class="o">=</span><span class="n">k</span>
+                <span class="n">cell_ids</span><span class="o">=</span><span class="n">cell_ids</span><span class="p">,</span> <span class="n">labelset</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">cellset_name</span><span class="o">=</span><span class="n">label</span>
             <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">parent_cell_look_up</span><span class="p">:</span>
@@ -429,7 +435,6 @@
             <span class="c1"># Add parent data to the annotation</span>
             <span class="n">annotation</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
                 <span class="p">{</span>
-                    <span class="s2">&quot;parent_cell_set_name&quot;</span><span class="p">:</span> <span class="n">parent</span><span class="p">,</span>
                     <span class="s2">&quot;parent_cell_set_accession&quot;</span><span class="p">:</span> <span class="n">p_accession</span><span class="p">,</span>
                 <span class="p">}</span>
             <span class="p">)</span>
@@ -604,6 +609,37 @@
     <span class="k">with</span> <span class="n">schema_file</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;rt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">schema</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
     <span class="k">return</span> <span class="n">schema</span></div>
+
+
+
+<div class="viewcode-block" id="create_accession_mapping">
+<a class="viewcode-back" href="../../../source/cas.utils.html#cas.utils.conversion_utils.create_accession_mapping">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_accession_mapping</span><span class="p">(</span><span class="n">adata_obs</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">labelsets</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">accession_columns</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a mapping of cellset names to accession IDs based on the provided labelsets and accession columns.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        adata_obs: The observations DataFrame (`obs`) of an AnnData object containing the dataset.</span>
+<span class="sd">        labelsets: List of labelset names to be used for mapping.</span>
+<span class="sd">        accession_columns: List of columns in the AnnData obs that contain accession information.</span>
+
+<span class="sd">    Returns: Map of cellset names to accession IDs, where keys are formatted as &quot;labelset:cell_label&quot;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">accession_columns</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">labelsets</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">accession_columns</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The labelsets and accession_columns lists must have the same length.&quot;</span><span class="p">)</span>
+
+        <span class="n">mapping</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">labelset</span><span class="p">,</span> <span class="n">acc_col</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">labelsets</span><span class="p">,</span> <span class="n">accession_columns</span><span class="p">):</span>
+            <span class="c1"># Group the obs by the labelset column and get unique values from the corresponding accession column.</span>
+            <span class="n">groups</span> <span class="o">=</span> <span class="n">adata_obs</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">labelset</span><span class="p">)[</span><span class="n">acc_col</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">cellset_name</span><span class="p">,</span> <span class="n">acc_vals</span> <span class="ow">in</span> <span class="n">groups</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">acc_vals</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Non one-to-one mapping for &#39;</span><span class="si">{</span><span class="n">labelset</span><span class="si">}</span><span class="s2">&#39; value &#39;</span><span class="si">{</span><span class="n">cellset_name</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+                <span class="c1"># Create a combined key to enable usage of same names across different labelsets</span>
+                <span class="n">mapping</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">labelset</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">cellset_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">acc_vals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">mapping</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
 
 </pre></div>
 

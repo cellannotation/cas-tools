@@ -97,7 +97,7 @@
 <div class="viewcode-block" id="IncrementalAccessionManager.generate_accession_id">
 <a class="viewcode-back" href="../../../source/cas.accession.html#cas.accession.incremental_accession_manager.IncrementalAccessionManager.generate_accession_id">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">generate_accession_id</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">id_recommendation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">labelset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">id_recommendation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">labelset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cellset_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generates an auto-increment based accession id. If the recommended accession_id is available, uses it.</span>
@@ -105,6 +105,7 @@
 <span class="sd">            id_recommendation: accession id recommendation. Function uses this id if it is available,</span>
 <span class="sd">            provides an auto-incremented id otherwise.</span>
 <span class="sd">            labelset: this parameter is not utilized in this implementation.</span>
+<span class="sd">            cellset_name: this parameter is not utilized in this implementation.</span>
 <span class="sd">        Return: accession_id</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">id_recommendation</span><span class="p">:</span>

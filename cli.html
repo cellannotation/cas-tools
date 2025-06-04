@@ -245,6 +245,10 @@ the order of the fields specified in the CELL LABELSET NAME column.</p></li>
 names. The labelsets should be provided in order, starting from rank 0 (leaf nodes) and ascending to higher ranks.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--output</span></code> : Output CAS file name (default: output.json).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--hierarchy</span></code>: Flag indicating whether to include hierarchy in the output.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--accession_columns</span></code>: List of columns in the AnnData obs that contain accession ID information.
+This list should match the order and length of the labelsets argument.
+If not provided, accession IDs will be automatically generated using a hash of the cells in each cell set.
+Defaults to None.</p></li>
 </ul>
 </section>
 <section id="convert-abc-to-cas">
