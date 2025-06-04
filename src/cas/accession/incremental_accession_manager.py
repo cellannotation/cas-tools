@@ -19,7 +19,7 @@ class IncrementalAccessionManager(BaseAccessionManager):
         self.accession_ids = list()
 
     def generate_accession_id(
-        self, id_recommendation: str = None, labelset: str = None
+        self, id_recommendation: str = None, labelset: str = None, cellset_name: str = None
     ) -> str:
         """
         Generates an auto-increment based accession id. If the recommended accession_id is available, uses it.
@@ -27,6 +27,7 @@ class IncrementalAccessionManager(BaseAccessionManager):
             id_recommendation: accession id recommendation. Function uses this id if it is available,
             provides an auto-incremented id otherwise.
             labelset: this parameter is not utilized in this implementation.
+            cellset_name: this parameter is not utilized in this implementation.
         Return: accession_id
         """
         if id_recommendation:

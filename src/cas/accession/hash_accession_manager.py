@@ -18,7 +18,7 @@ class HashAccessionManager(BaseAccessionManager):
         self.accession_ids = list()
 
     def generate_accession_id(
-        self, id_recommendation: str = None, cell_ids: List = None, labelset: str = None, suppress_warnings=False
+        self, id_recommendation: str = None, cell_ids: List = None, labelset: str = None, suppress_warnings=False, cellset_name: str = None
     ) -> str:
         """
         Generates a Blake2b hashing algorithm based hash for the given cell IDs.
@@ -28,6 +28,7 @@ class HashAccessionManager(BaseAccessionManager):
             cell_ids: Cell IDs list. Algorithm sorts cell ids internally.
             labelset: Labelset name. If provided, uses it as a prefix to the accession id.
             suppress_warnings: If True, suppresses warnings.
+            cellset_name: this parameter is not utilized in this implementation.
         Return: accession_id
         """
         if id_recommendation and labelset and ":" not in id_recommendation:

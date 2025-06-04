@@ -184,7 +184,7 @@ class TestConversionUtils(unittest.TestCase):
                 "cell_ontology_term_id": "CL:1234567",
                 "labelset": "labelset1",
                 "parent_cell_set_accession": "P_123",
-                "parent_cell_set_name": "P",
+                # "parent_cell_set_name": "P",
             }
         ]
 

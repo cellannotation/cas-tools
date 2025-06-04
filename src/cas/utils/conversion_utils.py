@@ -11,6 +11,7 @@ import requests
 from cas_schema import schemas
 
 from cas.accession.hash_accession_manager import HashAccessionManager
+from cas.accession.mapped_accession_manager import MappedAccessionManager
 from cas.dataset_retrieval.dataset_retriever import DatasetRetriever
 from cas.file_utils import get_cas_schema_names
 
@@ -201,7 +202,7 @@ def collect_parent_cell_ids(cas: Dict[str, Any]) -> Dict[str, Set]:
     return parent_cell_ids
 
 
-def generate_parent_cell_lookup(anndata, labelset_dict):
+def generate_parent_cell_lookup(anndata, labelset_dict, accessions_mapping: Dict[str, str] = None,):
     """
     Generates a lookup dictionary mapping cell labels to various metadata, including cell IDs, rank,
     and cell ontology terms. This function is designed to precompute the lookup information needed for
@@ -212,13 +213,18 @@ def generate_parent_cell_lookup(anndata, labelset_dict):
                               including metadata in anndata.obs.
         labelset_dict (Dict[str, Any]): A dictionary where keys are labelset names and values
                                         are dictionaries containing members and their ranks.
+        accessions_mapping (Dict[str, str], optional): Mapping of cellset names to accession IDs.
+        (To enable usage of same names accross different labelsets, key is identified as labelset:cell_label).
 
     Returns:
         Dict[str, Any]: A dictionary where each key is a cell label and each value is another
                         dictionary containing keys for 'cell_ids' (a set of cell IDs associated
                         with the label), 'rank', 'cell_ontology_term_id', and 'cell_ontology_term'.
     """
-    accession_manager = HashAccessionManager()
+    if accessions_mapping is None:
+        accession_manager = HashAccessionManager()
+    else:
+        accession_manager = MappedAccessionManager(accession_map=accessions_mapping)
     parent_cell_look_up = {}
     for k, v in labelset_dict.items():
         for label in v["members"]:
@@ -227,7 +233,7 @@ def generate_parent_cell_lookup(anndata, labelset_dict):
             )
             cell_ids = get_cell_ids(anndata.obs, k, label)
             cell_set_accession = accession_manager.generate_accession_id(
-                cell_ids=cell_ids, labelset=k
+                cell_ids=cell_ids, labelset=k, cellset_name=label
             )
 
             if label in parent_cell_look_up:
@@ -326,7 +332,6 @@ def add_parent_hierarchy_to_annotations(
             # Add parent data to the annotation
             annotation.update(
                 {
-                    "parent_cell_set_name": parent,
                     "parent_cell_set_accession": p_accession,
                 }
             )
@@ -483,3 +488,31 @@ def retrieve_schema(schema_name):
     with schema_file.open("rt") as f:
         schema = json.loads(f.read())
     return schema
+
+
+def create_accession_mapping(adata_obs: pd.DataFrame, labelsets: list, accession_columns: list) -> Optional[Dict[str, str]]:
+    """
+    Creates a mapping of cellset names to accession IDs based on the provided labelsets and accession columns.
+    Args:
+        adata_obs: The observations DataFrame (`obs`) of an AnnData object containing the dataset.
+        labelsets: List of labelset names to be used for mapping.
+        accession_columns: List of columns in the AnnData obs that contain accession information.
+
+    Returns: Map of cellset names to accession IDs, where keys are formatted as "labelset:cell_label".
+    """
+    if accession_columns:
+        if len(labelsets) != len(accession_columns):
+            raise ValueError("The labelsets and accession_columns lists must have the same length.")
+
+        mapping = {}
+        for labelset, acc_col in zip(labelsets, accession_columns):
+            # Group the obs by the labelset column and get unique values from the corresponding accession column.
+            groups = adata_obs.groupby(labelset)[acc_col].unique()
+            for cellset_name, acc_vals in groups.items():
+                if len(acc_vals) != 1:
+                    raise ValueError(f"Non one-to-one mapping for '{labelset}' value '{cellset_name}'.")
+                # Create a combined key to enable usage of same names across different labelsets
+                mapping[f"{labelset}:{cellset_name}"] = acc_vals[0]
+        return mapping
+    else:
+        return None

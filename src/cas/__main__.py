@@ -107,8 +107,9 @@ def main():
         labelsets = args.labelsets
         output_file_path = args.output
         include_hierarchy = args.hierarchy
+        accession_columns = args.accession_columns
 
-        anndata2cas(anndata_file_path, labelsets, output_file_path, include_hierarchy)
+        anndata2cas(anndata_file_path, labelsets, output_file_path, include_hierarchy, accession_columns)
     elif args.action == "abc2cas":
         args = parser.parse_args()
         cat_set_file_path = args.catset
@@ -390,6 +391,10 @@ def create_anndata2cas_operation_parser(subparsers):
 
     --output        : Output CAS file name (default: output.json).
     --hierarchy     : Flag indicating whether to include hierarchy in the output.
+    --accession_columns : List of columns in the AnnData obs that contain accession information.
+            This list should match the order and length of the labelsets argument.
+            If not provided, accession IDs will be automatically generated using a hash of the cells in each cell set.
+            Defaults to None.
 
 
     Usage Example:
@@ -426,6 +431,14 @@ def create_anndata2cas_operation_parser(subparsers):
         "--hierarchy",
         action="store_true",
         help="Include hierarchy in the output.",
+    )
+    parser_anndata2cas.add_argument(
+        "--accession_columns",
+        nargs="+",
+        default=None,
+        help="An optional list of accession_id columns to populate cell_set_accession. "
+             "This list should match the order and length of the labelsets argument. "
+             "If not provided, accession IDs will be automatically generated using a hash of the cells in each cell set.",
     )
 
 
