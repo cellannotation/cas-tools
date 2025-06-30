@@ -234,6 +234,13 @@ def generate_annotation_table(accession_prefix, cta, out_folder):
                 annotation_object.get("marker_gene_evidence", [])
             )
             record["synonyms"] = list_to_string(annotation_object.get("synonyms", []))
+            record["neurotransmitter_accession"] = annotation_object.get(
+                "neurotransmitter_accession", "")
+            record["neurotransmitter_rationale"] = annotation_object.get(
+                "neurotransmitter_rationale", "")
+            record["neurotransmitter_marker_gene_evidence"] = list_to_string(
+                annotation_object.get("neurotransmitter_marker_gene_evidence", [])
+            )
             if annotation_object.get("author_annotation_fields"):
                 for key, value in annotation_object["author_annotation_fields"].items():
                     if normalize_column_name(key) in record:
