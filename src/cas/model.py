@@ -173,6 +173,15 @@ class Annotation(EncoderMixin):
     """"A dictionary of author defined key value pairs annotating the cell set. The names and aims of these fields MUST 
     not clash with official annotation fields."""
 
+    neurotransmitter_accession: Optional[str] = None
+    """Accessions of cell neurotransmitter associated with this cell set."""
+
+    neurotransmitter_rationale: Optional[str] = None
+    """The free-text rationale which users provide as justification/evidence for supporting the neurotransmitter association."""
+
+    neurotransmitter_marker_gene_evidence: Optional[List[str]] = None
+    """List of gene names used as evidence for neurotransmitter association. Each gene MUST be included in the matrix of the AnnData/Seurat file."""
+
     transferred_annotations: Optional[List[AnnotationTransfer]] = None
 
     reviews: Optional[List[Review]] = None
