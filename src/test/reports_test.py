@@ -23,17 +23,17 @@ class ReportsTests(unittest.TestCase):
 
         df = cas.get_all_annotations()
         self.assertEqual(89, df.shape[0])
-        self.assertEqual(15, df.shape[1])
+        self.assertEqual(18, df.shape[1])
 
         cas = asdict(cas)
         df = get_all_annotations(cas)
         # print(df)
         self.assertEqual(89, df.shape[0])
-        self.assertEqual(15, df.shape[1])
+        self.assertEqual(18, df.shape[1])
 
         df = get_all_annotations(cas, show_cell_ids=True)
         self.assertEqual(89, df.shape[0])
-        self.assertEqual(16, df.shape[1])
+        self.assertEqual(19, df.shape[1])
 
     def test_annotations_listing_with_pairs(self):
         cas = read_cas_json_file(TEST_JSON)
@@ -49,7 +49,7 @@ class ReportsTests(unittest.TestCase):
         )
         print(df)
         self.assertEqual(3, df.shape[0])
-        self.assertEqual(15, df.shape[1])
+        self.assertEqual(18, df.shape[1])
 
     def test_cell_ids_not_existing(self):
         cas = read_cas_json_file(TEST_JSON)
@@ -61,4 +61,4 @@ class ReportsTests(unittest.TestCase):
         df = get_all_annotations(cas)
         # print(df)
         self.assertEqual(89, df.shape[0])
-        self.assertEqual(15, df.shape[1])
+        self.assertEqual(18, df.shape[1])
