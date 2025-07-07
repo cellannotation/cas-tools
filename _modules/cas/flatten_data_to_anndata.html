@@ -472,10 +472,11 @@
         <span class="p">)</span>
     <span class="p">]</span>
     <span class="c1"># Handle rankless labelsets</span>
-    <span class="n">rankless_labelsets</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">labelset</span> <span class="k">for</span> <span class="n">labelset</span> <span class="ow">in</span> <span class="n">cas_json</span><span class="p">[</span><span class="n">LABELSETS</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;rank&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">labelset</span>
-    <span class="p">]</span>
-    <span class="n">updated_cas</span><span class="p">[</span><span class="n">LABELSETS</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">rankless_labelsets</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">cas_json</span><span class="p">:</span>
+        <span class="n">rankless_labelsets</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">labelset</span> <span class="k">for</span> <span class="n">labelset</span> <span class="ow">in</span> <span class="n">cas_json</span><span class="p">[</span><span class="n">LABELSETS</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;rank&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">labelset</span>
+        <span class="p">]</span>
+        <span class="n">updated_cas</span><span class="p">[</span><span class="n">LABELSETS</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">rankless_labelsets</span><span class="p">)</span>
     <span class="c1"># Discard flattened obs</span>
     <span class="n">flattened_columns</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">col</span>

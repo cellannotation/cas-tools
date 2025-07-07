@@ -264,6 +264,15 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;&quot;A dictionary of author defined key value pairs annotating the cell set. The names and aims of these fields MUST </span>
 <span class="sd">    not clash with official annotation fields.&quot;&quot;&quot;</span>
 
+    <span class="n">neurotransmitter_accession</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Accessions of cell neurotransmitter associated with this cell set.&quot;&quot;&quot;</span>
+
+    <span class="n">neurotransmitter_rationale</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The free-text rationale which users provide as justification/evidence for supporting the neurotransmitter association.&quot;&quot;&quot;</span>
+
+    <span class="n">neurotransmitter_marker_gene_evidence</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;List of gene names used as evidence for neurotransmitter association. Each gene MUST be included in the matrix of the AnnData/Seurat file.&quot;&quot;&quot;</span>
+
     <span class="n">transferred_annotations</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">AnnotationTransfer</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="n">reviews</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Review</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
