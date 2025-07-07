@@ -1,6 +1,6 @@
 import unittest
 import warnings
-from test.spreadsheet_to_cas_test import generate_mock_dataset
+from src.test.spreadsheet_to_cas_test import generate_mock_dataset
 
 import pandas as pd
 

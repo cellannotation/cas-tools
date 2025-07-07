@@ -378,10 +378,11 @@ def unflatten_obs(
         )
     ]
     # Handle rankless labelsets
-    rankless_labelsets = [
-        labelset for labelset in cas_json[LABELSETS] if "rank" not in labelset
-    ]
-    updated_cas[LABELSETS].extend(rankless_labelsets)
+    if cas_json:
+        rankless_labelsets = [
+            labelset for labelset in cas_json[LABELSETS] if "rank" not in labelset
+        ]
+        updated_cas[LABELSETS].extend(rankless_labelsets)
     # Discard flattened obs
     flattened_columns = [
         col
