@@ -1207,23 +1207,41 @@ missing values will be replaced with pd.NA; if False, they will remain as empty 
 <dl class="py function">
 <dt class="sig sig-object py" id="cas.flatten_data_to_anndata.process_annotations">
 <span class="sig-prename descclassname"><span class="pre">cas.flatten_data_to_anndata.</span></span><span class="sig-name descname"><span class="pre">process_annotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">annotations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obs_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_cell_ids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_na</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cas/flatten_data_to_anndata.html#process_annotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cas.flatten_data_to_anndata.process_annotations" title="Link to this definition"></a></dt>
-<dd><p>Processes annotations and generates flattened data for obs dataset.</p>
+<dd><p>Process CAS annotations into flattened obs fields for an AnnData object.</p>
+<p>This function maps cell-level annotations (from CAS JSON) onto the AnnData
+<cite>obs</cite> index. For each annotation, it creates or updates a column in the
+flattened data and assigns the annotation value to the matching cell IDs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>annotations</strong> (<em>list</em>) – List of annotations.</p></li>
-<li><p><strong>obs_index</strong> (<em>np.ndarray</em>) – Array representing the index of the obs dataset.</p></li>
-<li><p><strong>parent_cell_ids</strong> (<em>dict</em>) – Dictionary containing parent cell ids.</p></li>
-<li><p><strong>fill_na</strong> (<em>bool</em>)</p></li>
+<li><p><strong>annotations</strong> (<em>list</em><em>[</em><em>dict</em><em>]</em>) – List of CAS annotation dictionaries. Each annotation may contain
+cell IDs (<cite>CELL_IDS</cite>), a labelset (<cite>LABELSET</cite>), a label (<cite>CELL_LABEL</cite>),
+and other metadata fields.</p></li>
+<li><p><strong>obs_index</strong> (<em>np.ndarray</em>) – Array of cell IDs representing the index of the AnnData <cite>obs</cite> dataset.</p></li>
+<li><p><strong>parent_cell_ids</strong> (<em>dict</em>) – Mapping from <cite>cell_set_accession</cite> to lists of parent cell IDs,
+used when <cite>CELL_IDS</cite> are not explicitly present in the annotation.</p></li>
+<li><p><strong>fill_na</strong> (<em>bool</em>) – If True, ensures missing values remain as <cite>pd.NA</cite>.
+Otherwise missing entries may stay as empty strings.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dictionary containing flattened data.</p>
+<dd class="field-even"><p>A dictionary where keys are annotation-derived column names and
+values are pandas Series aligned to <cite>obs_index</cite>. Each Series is
+categorical, containing the annotation values or <cite>pd.NA</cite> for cells
+without an assigned value.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict</p>
+<dd class="field-odd"><p>dict[str, pd.Series]</p>
 </dd>
 </dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Each annotation only updates rows corresponding to its <cite>cell_ids</cite>.</p></li>
+<li><p>Columns are initialized with <cite>pd.NA</cite> and never overwritten with NA
+in subsequent iterations, so multiple class values are preserved.</p></li>
+<li><p>Categories in the resulting categorical Series are derived from
+the unique non-null values observed for each column.</p></li>
+</ul>
 </dd></dl>
 
 <dl class="py function">

@@ -238,45 +238,63 @@
 <div class="viewcode-block" id="process_annotations">
 <a class="viewcode-back" href="../../source/cas.html#cas.flatten_data_to_anndata.process_annotations">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">process_annotations</span><span class="p">(</span><span class="n">annotations</span><span class="p">,</span> <span class="n">obs_index</span><span class="p">,</span> <span class="n">parent_cell_ids</span><span class="p">,</span> <span class="n">fill_na</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Processes annotations and generates flattened data for obs dataset.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Process CAS annotations into flattened obs fields for an AnnData object.</span>
+
+<span class="sd">    This function maps cell-level annotations (from CAS JSON) onto the AnnData</span>
+<span class="sd">    `obs` index. For each annotation, it creates or updates a column in the</span>
+<span class="sd">    flattened data and assigns the annotation value to the matching cell IDs.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        annotations (list): List of annotations.</span>
-<span class="sd">        obs_index (np.ndarray): Array representing the index of the obs dataset.</span>
-<span class="sd">        parent_cell_ids (dict): Dictionary containing parent cell ids.</span>
+<span class="sd">        annotations (list[dict]):</span>
+<span class="sd">            List of CAS annotation dictionaries. Each annotation may contain</span>
+<span class="sd">            cell IDs (`CELL_IDS`), a labelset (`LABELSET`), a label (`CELL_LABEL`),</span>
+<span class="sd">            and other metadata fields.</span>
+<span class="sd">        obs_index (np.ndarray):</span>
+<span class="sd">            Array of cell IDs representing the index of the AnnData `obs` dataset.</span>
+<span class="sd">        parent_cell_ids (dict):</span>
+<span class="sd">            Mapping from `cell_set_accession` to lists of parent cell IDs,</span>
+<span class="sd">            used when `CELL_IDS` are not explicitly present in the annotation.</span>
 <span class="sd">        fill_na (bool):</span>
+<span class="sd">            If True, ensures missing values remain as `pd.NA`.</span>
+<span class="sd">            Otherwise missing entries may stay as empty strings.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        dict: Dictionary containing flattened data.</span>
+<span class="sd">        dict[str, pd.Series]:</span>
+<span class="sd">            A dictionary where keys are annotation-derived column names and</span>
+<span class="sd">            values are pandas Series aligned to `obs_index`. Each Series is</span>
+<span class="sd">            categorical, containing the annotation values or `pd.NA` for cells</span>
+<span class="sd">            without an assigned value.</span>
+
+<span class="sd">    Notes:</span>
+<span class="sd">        - Each annotation only updates rows corresponding to its `cell_ids`.</span>
+<span class="sd">        - Columns are initialized with `pd.NA` and never overwritten with NA</span>
+<span class="sd">          in subsequent iterations, so multiple class values are preserved.</span>
+<span class="sd">        - Categories in the resulting categorical Series are derived from</span>
+<span class="sd">          the unique non-null values observed for each column.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">accession_manager</span> <span class="o">=</span> <span class="n">HashAccessionManager</span><span class="p">()</span>
     <span class="n">flatten_data</span> <span class="o">=</span> <span class="p">{}</span>
+
     <span class="k">for</span> <span class="n">ann</span> <span class="ow">in</span> <span class="n">annotations</span><span class="p">:</span>
         <span class="n">cell_ids</span> <span class="o">=</span> <span class="n">ann</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">CELL_IDS</span><span class="p">,</span> <span class="p">[])</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">cell_ids</span><span class="p">:</span>
             <span class="n">cell_ids</span> <span class="o">=</span> <span class="n">parent_cell_ids</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ann</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">,</span> <span class="p">[]))</span>
 
         <span class="n">author_annotations</span> <span class="o">=</span> <span class="n">ann</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">AUTHOR_ANNOTATION_FIELDS</span><span class="p">,</span> <span class="p">{})</span>
-        <span class="c1"># TODO Do we still need/want this?</span>
-        <span class="n">author_annotations</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-            <span class="p">{</span>
-                <span class="n">CELLHASH</span><span class="p">:</span> <span class="n">ann</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">is_hash_accession</span><span class="p">(</span><span class="n">ann</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
-                <span class="k">else</span> <span class="n">accession_manager</span><span class="o">.</span><span class="n">generate_accession_id</span><span class="p">(</span>
-                    <span class="n">cell_ids</span><span class="o">=</span><span class="n">cell_ids</span><span class="p">,</span> <span class="n">labelset</span><span class="o">=</span><span class="n">ann</span><span class="p">[</span><span class="n">LABELSET</span><span class="p">],</span> <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">True</span>
-                <span class="p">)</span>
-            <span class="p">}</span>
-        <span class="p">)</span>
+        <span class="n">author_annotations</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+            <span class="n">CELLHASH</span><span class="p">:</span> <span class="n">ann</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">is_hash_accession</span><span class="p">(</span><span class="n">ann</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cell_set_accession&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+            <span class="k">else</span> <span class="n">accession_manager</span><span class="o">.</span><span class="n">generate_accession_id</span><span class="p">(</span>
+                <span class="n">cell_ids</span><span class="o">=</span><span class="n">cell_ids</span><span class="p">,</span> <span class="n">labelset</span><span class="o">=</span><span class="n">ann</span><span class="p">[</span><span class="n">LABELSET</span><span class="p">],</span> <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+        <span class="p">})</span>
         <span class="n">ann</span><span class="p">[</span><span class="n">AUTHOR_ANNOTATION_FIELDS</span><span class="p">]</span> <span class="o">=</span> <span class="n">author_annotations</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">cell_ids</span><span class="p">:</span>
-            <span class="c1"># This can occur in cases of multiple inheritance (e.g., basal ganglia data)</span>
-            <span class="c1"># or when the labelset is rankless.</span>
             <span class="k">continue</span>
-        <span class="c1"># Convert cell_ids to a list if it&#39;s not already for np.isin</span>
+
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cell_ids</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="n">cell_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cell_ids</span><span class="p">)</span>
+
         <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">obs_index</span><span class="p">,</span> <span class="n">cell_ids</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">ann</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -284,25 +302,25 @@
                 <span class="k">continue</span>
 
             <span class="n">key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ann</span><span class="p">[</span><span class="n">LABELSET</span><span class="p">]</span><span class="si">}</span><span class="s2">--</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="n">CELL_LABEL</span> <span class="k">else</span> <span class="n">ann</span><span class="p">[</span><span class="n">LABELSET</span><span class="p">]</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                <span class="nb">sorted</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">v</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)])</span>
-            <span class="p">)</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">v</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)]))</span>
 
+            <span class="c1"># init once with NA (not empty string)</span>
             <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">flatten_data</span><span class="p">:</span>
-                <span class="n">flatten_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">obs_index</span><span class="p">)</span>
-            <span class="n">flatten_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
-            <span class="k">if</span> <span class="n">fill_na</span><span class="p">:</span>
-                <span class="n">flatten_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">NA</span>
+                <span class="n">flatten_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">obs_index</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;object&quot;</span><span class="p">)</span>
 
-    <span class="c1"># Convert relevant columns to categorical after the loop</span>
+            <span class="n">flatten_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="c1"># Post-processing</span>
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">flatten_data</span><span class="p">:</span>
-        <span class="c1"># Get unique values and convert the Series to categorical</span>
-        <span class="n">unique_values</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">flatten_data</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
-        <span class="n">unique_values</span> <span class="o">=</span> <span class="n">unique_values</span><span class="p">[</span><span class="o">~</span><span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">unique_values</span><span class="p">)]</span>
-        <span class="n">flatten_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
-            <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">(</span><span class="n">flatten_data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">categories</span><span class="o">=</span><span class="n">unique_values</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="n">obs_index</span>
-        <span class="p">)</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="n">flatten_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">fill_na</span><span class="p">:</span>
+            <span class="n">col</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">NA</span><span class="p">)</span>
+
+        <span class="n">cats</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">col</span><span class="o">.</span><span class="n">dropna</span><span class="p">()))</span>
+        <span class="n">flatten_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">categories</span><span class="o">=</span><span class="n">cats</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="n">col</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">flatten_data</span></div>
+
 
 
 
