@@ -153,45 +153,63 @@ def export_cas_object2cap(
 
 
 def process_annotations(annotations, obs_index, parent_cell_ids, fill_na):
-    """
-    Processes annotations and generates flattened data for obs dataset.
+    """Process CAS annotations into flattened obs fields for an AnnData object.
+
+    This function maps cell-level annotations (from CAS JSON) onto the AnnData
+    `obs` index. For each annotation, it creates or updates a column in the
+    flattened data and assigns the annotation value to the matching cell IDs.
 
     Args:
-        annotations (list): List of annotations.
-        obs_index (np.ndarray): Array representing the index of the obs dataset.
-        parent_cell_ids (dict): Dictionary containing parent cell ids.
+        annotations (list[dict]):
+            List of CAS annotation dictionaries. Each annotation may contain
+            cell IDs (`CELL_IDS`), a labelset (`LABELSET`), a label (`CELL_LABEL`),
+            and other metadata fields.
+        obs_index (np.ndarray):
+            Array of cell IDs representing the index of the AnnData `obs` dataset.
+        parent_cell_ids (dict):
+            Mapping from `cell_set_accession` to lists of parent cell IDs,
+            used when `CELL_IDS` are not explicitly present in the annotation.
         fill_na (bool):
+            If True, ensures missing values remain as `pd.NA`.
+            Otherwise missing entries may stay as empty strings.
 
     Returns:
-        dict: Dictionary containing flattened data.
+        dict[str, pd.Series]:
+            A dictionary where keys are annotation-derived column names and
+            values are pandas Series aligned to `obs_index`. Each Series is
+            categorical, containing the annotation values or `pd.NA` for cells
+            without an assigned value.
+
+    Notes:
+        - Each annotation only updates rows corresponding to its `cell_ids`.
+        - Columns are initialized with `pd.NA` and never overwritten with NA
+          in subsequent iterations, so multiple class values are preserved.
+        - Categories in the resulting categorical Series are derived from
+          the unique non-null values observed for each column.
     """
     accession_manager = HashAccessionManager()
     flatten_data = {}
+
     for ann in annotations:
         cell_ids = ann.get(CELL_IDS, [])
         if not cell_ids:
             cell_ids = parent_cell_ids.get(ann.get("cell_set_accession", []))
 
         author_annotations = ann.get(AUTHOR_ANNOTATION_FIELDS, {})
-        # TODO Do we still need/want this?
-        author_annotations.update(
-            {
-                CELLHASH: ann.get("cell_set_accession")
-                if is_hash_accession(ann.get("cell_set_accession", None))
-                else accession_manager.generate_accession_id(
-                    cell_ids=cell_ids, labelset=ann[LABELSET], suppress_warnings=True
-                )
-            }
-        )
+        author_annotations.update({
+            CELLHASH: ann.get("cell_set_accession") if is_hash_accession(ann.get("cell_set_accession", None))
+            else accession_manager.generate_accession_id(
+                cell_ids=cell_ids, labelset=ann[LABELSET], suppress_warnings=True
+            )
+        })
         ann[AUTHOR_ANNOTATION_FIELDS] = author_annotations
 
         if not cell_ids:
-            # This can occur in cases of multiple inheritance (e.g., basal ganglia data)
-            # or when the labelset is rankless.
             continue
-        # Convert cell_ids to a list if it's not already for np.isin
+
         if not isinstance(cell_ids, list):
             cell_ids = list(cell_ids)
+
         mask = np.isin(obs_index, cell_ids)
 
         for k, v in ann.items():
@@ -199,25 +217,25 @@ def process_annotations(annotations, obs_index, parent_cell_ids, fill_na):
                 continue
 
             key = f"{ann[LABELSET]}--{k}" if k != CELL_LABEL else ann[LABELSET]
-            value = ", ".join(
-                sorted([str(value) for value in v] if isinstance(v, list) else [str(v)])
-            )
+            value = ", ".join(sorted([str(x) for x in v] if isinstance(v, list) else [str(v)]))
 
+            # init once with NA (not empty string)
             if key not in flatten_data:
-                flatten_data[key] = pd.Series("", index=obs_index)
-            flatten_data[key].loc[mask] = value
-            if fill_na:
-                flatten_data[key].loc[~mask] = pd.NA
+                flatten_data[key] = pd.Series(pd.NA, index=obs_index, dtype="object")
 
-    # Convert relevant columns to categorical after the loop
+            flatten_data[key].loc[mask] = value
+
+    # Post-processing
     for key in flatten_data:
-        # Get unique values and convert the Series to categorical
-        unique_values = pd.unique(flatten_data[key])
-        unique_values = unique_values[~pd.isna(unique_values)]
-        flatten_data[key] = pd.Series(
-            pd.Categorical(flatten_data[key], categories=unique_values), index=obs_index
-        )
+        col = flatten_data[key]
+        if fill_na:
+            col = col.replace("", pd.NA)
+
+        cats = pd.Index(pd.unique(col.dropna()))
+        flatten_data[key] = pd.Series(pd.Categorical(col, categories=cats), index=col.index)
+
     return flatten_data
+
 
 
 def generate_uns_json(input_json):
